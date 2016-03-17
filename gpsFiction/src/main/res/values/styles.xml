@@ -1,0 +1,92 @@
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+    <!--<style name="AppTheme" parent="Theme.AppCompat.Light" />-->
+    <style name="MyAppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!--      <item name="windowNoTitle">true</item>-->
+        <!--      <item name="windowActionBar">false</item>-->
+        <item name="colorPrimary">#ff5fb71a</item>
+        <item name="colorPrimaryDark">#512DA8</item>
+        <item name="colorAccent">#FF4081</item>
+    </style>
+
+    <style name="TabTheme">
+        <item name="android:minHeight">@dimen/tabMinHeight</item>
+        <!-- 	    <item name="android:background">@color/background4menu</item> -->
+        <item name="android:textSize">@dimen/titleTextSize</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="TabCompassDraw">
+        <item name="android:layout_width">@dimen/compassSize</item>
+        <item name="android:layout_height">@dimen/compassSize</item>
+        <item name="android:gravity">left</item>
+        <item name="android:background">@color/compassbackground</item>
+    </style>
+
+    <style name="TabOneLineTitle">
+        <item name="android:minHeight">@dimen/titleMinHeight</item>
+        <item name="android:textStyle">bold|italic</item>
+        <item name="android:textSize">@dimen/titleTextSize</item>
+        <item name="android:paddingLeft">@dimen/titleTextPadding</item>
+        <item name="android:background">@color/tabnameofzone</item>
+    </style>
+
+    <style name="TabOneLineMiniCompass">
+        <!-- 	    <item name="android:minWidth">@dimen/miniCompassSize</item> -->
+        <item name="android:layout_width">@dimen/miniCompassSize</item>
+        <!--    	<item name="android:minHeight">@dimen/miniCompassSize</item> -->
+        <item name="android:layout_height">@dimen/miniCompassSize</item>
+        <item name="android:gravity">left</item>
+        <item name="android:background">@color/minicompassbackground</item>
+    </style>
+
+    <style name="TabOneLineText">
+        <item name="android:paddingLeft">@dimen/normalTextPadding</item>
+        <item name="android:textSize">@dimen/normalTextSize</item>
+    </style>
+
+    <style name="DialogTitle">
+        <item name="android:textSize">@dimen/bigTextSize</item>
+    </style>
+
+    <style name="DialogText">
+        <item name="android:textSize">@dimen/normalTextSize</item>
+    </style>
+
+    <style name="DialogButton">
+        <!-- 	    <item name="android:textStyle">bold|italic</item> -->
+        <item name="android:textSize">@dimen/dialogButtonTextSize</item>
+        <item name="android:paddingLeft">@dimen/dialogButtonPadding</item>
+        <item name="android:paddingRight">@dimen/dialogButtonPadding</item>
+    </style>
+
+    <style name="TabCompassOther">
+        <item name="android:paddingLeft">@dimen/normalTextPadding</item>
+        <item name="android:textSize">@dimen/normalTextSize</item>
+        <item name="android:gravity">center</item>
+    </style>
+
+    <style name="NavigationView">
+        <item name="android:textSize">@dimen/normalTextSize</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:itemBackground">@drawable/background4menu</item>
+    </style>
+
+    <!--<integer name="compassFont">@raw/font_dancing</integer>-->
+    <dimen name="compassLineWidth">5dip</dimen>
+    <dimen name="miniCompassSize">80dip</dimen>
+    <dimen name="compassSize">300dip</dimen>
+    <dimen name="titleTextSize">18sp</dimen>
+    <dimen name="normalTextSize">18sp</dimen>
+    <dimen name="bigTextSize">24sp</dimen>
+    <dimen name="tabMinHeight">40dp</dimen>
+    <dimen name="titleMinHeight">28dp</dimen>
+    <dimen name="normalTextPadding">60dip</dimen>
+    <dimen name="titleTextPadding">30dip</dimen>
+    <dimen name="dialogButtonTextSize">18sp</dimen>
+    <dimen name="dialogButtonPadding">30dip</dimen>
+    <dimen name="navigation_drawer_width">240dip</dimen>
+    <dimen name="action_button_margin">16dip</dimen>
+
+    <dimen name="buttonsVehiculesPadding">10dip</dimen>
+    <dimen name="mapzoneborderwidth">1dip</dimen>
+</resources>

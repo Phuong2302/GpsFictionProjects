@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="zeroIds" format="boolean" type="bool">true</item>
+    <array name="vehicules_array">
+        <item>@drawable/compass</item>
+        <item>@drawable/pieton</item>
+        <item>@drawable/cycle</item>
+        <item>@drawable/auto</item>
+    </array>
+    <string-array name="fragmentsNames">
+        <item>Zones</item>
+        <item>Inventory</item>
+        <item>Compass</item>
+        <item>Map</item>
+        <item>Tasks</item>
+    </string-array>
+    <integer-array name="menuItems">
+        <item>@id/Zones</item>
+        <item>@id/Inventory</item>
+        <item>@id/Compass</item>
+        <item>@id/Map</item>
+        <item>@id/Tasks</item>
+    </integer-array>
+</resources>

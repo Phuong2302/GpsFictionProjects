@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="grey">#aaaaaa</color>
+    <color name="white">#ffffff</color>
+    <color name="tabnameofzone">#AAA</color>
+    <color name="tabnameofzoneselected">#A66</color>
+    <color name="minicompassbackground">#FFFFFF</color>
+    <color name="minicompassarrow">#ff0000</color>
+    <color name="minicompasscenter">#000000</color>
+    <color name="compassbackground">#FFFFFF</color>
+    <color name="compassarrow">#ff0000</color>
+    <color name="compassrose">#80CD853F</color>
+    <color name="compasscircle">#80095228</color>
+    <color name="compasscenter">#000000</color>
+    <color name="compasstext">#000000</color>
+    <color name="mapzoneborder">#500000FF</color>
+    <color name="mapzoneselectedborder">#50FF0000</color>
+</resources>

@@ -1,0 +1,11 @@
+<resources>
+
+    <dimen name="compassLineWidth">5dip</dimen>
+    <dimen name="miniCompassSize">80dip</dimen>
+    <dimen name="titleTextSize">24sp</dimen>
+    <dimen name="normalTextSize">24sp</dimen>
+    <dimen name="tabMinHeight">55dp</dimen>
+    <dimen name="titleMinHeight">38dp</dimen>
+    <dimen name="normalTextPadding">60dip</dimen>
+    <dimen name="titleTextPadding">30dip</dimen>
+</resources>

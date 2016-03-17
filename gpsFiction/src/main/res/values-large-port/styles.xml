@@ -1,0 +1,4 @@
+<resources>
+
+    <dimen name="compassSize">800dip</dimen>
+</resources>

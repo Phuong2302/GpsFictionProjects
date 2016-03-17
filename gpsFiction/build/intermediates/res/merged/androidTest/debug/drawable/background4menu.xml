@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android" android:id="@+id/background4menu">
+    <item android:drawable="@color/white" android:state_activated="true" />
+    <item android:drawable="@color/white" android:state_selected="true" />
+    <item android:drawable="@color/white" android:state_focused="true" />
+    <item android:drawable="@color/white" android:state_pressed="true" />
+    <item android:drawable="@color/grey" />
+</selector>
+<!-- From: file:/cryptodev/sam/git/android_studio/workspace/GpsFictionProjects/gpsFiction/src/main/res/drawable/background4menu.xml --><!-- From: file:/cryptodev/sam/git/android_studio/workspace/GpsFictionProjects/gpsFiction/build/intermediates/bundles/debug/res/drawable/background4menu.xml -->

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/contentForEachZone"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+
+    <LinearLayout
+        android:id="@+id/contentTextForEachZone"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/textNameOfZone"
+            style="@style/TabOneLineTitle"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical" />
+
+        <LinearLayout
+            android:id="@+id/contentDistanceDirectionForEachZone"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <com.sdesimeur.android.gpsfiction.views.MiniCompassView
+                android:id="@+id/miniCompassDirection"
+                style="@style/TabOneLineMiniCompass" />
+
+            <com.sdesimeur.android.gpsfiction.views.ZoneDistance4ListView
+                android:id="@+id/textDistance"
+                style="@style/TabOneLineText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout><!-- From: file:/cryptodev/sam/git/android_studio/workspace/GpsFictionProjects/gpsFiction/src/main/res/layout/zones_one_item_view.xml --><!-- From: file:/cryptodev/sam/git/android_studio/workspace/GpsFictionProjects/gpsFiction/build/intermediates/bundles/debug/res/layout/zones_one_item_view.xml -->

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Mission Destruction</string>
+    <string name="title_activity_main">Mission Destruction</string>
+    
+    <string name="rulesDef">Your mission:\n
+        * find the key that opens the boxes containing weapons, ammunition and explosives.\n
+        * find your weapon.\n
+        * find ammunition.\n
+        * find explosives.\n
+        * kill the enemies that approach (your firearm and ammunition required).\n
+        * destroy enemies bases with explosives.\n
+        Be careful, you will avoid the mines laid in different places by your enemies.\n</string>
+    <string name="dialogFirstTaskTitle">To start...</string>
+    <string name="dialogFirstTaskText">First place you at the center of the playing area, then confirm</string>
+    <string name="rulesName">Mission Destruction</string>
+
+    <string name="zoneGlobale">The playfield</string>
+    <string name="zoneMunitions">The area where the munitions are</string>
+    <string name="zoneArme">The area where the weapon is</string>
+    <string name="zoneExplosifs">The area where the explosives are</string>
+    <string name="zoneClef">The area where the key is</string>
+    <string name="zonePrendreClef">The key</string>
+
+    <string name="zoneMine">Mine n°%%%%</string>
+
+    <string name="zoneEnnemi">Enemy n°%%%%</string>
+
+    <string name="zoneCibleEnnemi">Enemy\'s target n°%%%%</string>
+    <string-array name="numeros">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+    </string-array>
+
+</resources>

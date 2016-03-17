@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merger version="3"><dataSet config="main"><source path="/cryptodev/sam/git/android_studio/workspace/GpsFictionProjects/gpsFiction/src/main/res"><file path="/cryptodev/sam/git/android_studio/workspace/GpsFictionProjects/gpsFiction/src/main/res/values-large-land/styles.xml" qualifiers="large-land"><dimen name="compassSize">600dip</dimen></file><file path="/cryptodev/sam/git/android_studio/workspace/GpsFictionProjects/gpsFiction/src/main/res/values/colors.xml" qualifiers=""><color name="mapzoneselectedborder">#50FF0000</color><color name="compasscenter">#000000</color><color name="mapzoneborder">#500000FF</color><color name="tabnameofzone">#AAA</color><color name="minicompasscenter">#000000</color><color name="compassarrow">#ff0000</color><color name="tabnameofzoneselected">#A66</color><color name="minicompassarrow">#ff0000</color><color name="grey">#aaaaaa</color><color name="compassrose">#80CD853F</color><color name="white">#ffffff</color><color name="compasscircle">#80095228</color><color name="minicompassbackground">#FFFFFF</color><color name="compasstext">#000000</color><color name="compassbackground">#FFFFFF</color></file><file path="/cryptodev/sam/git/android_studio/workspace/GpsFictionProjects/gpsFiction/src/main/res/values/styles.xml" qualifiers=""><dimen name="miniCompassSize">80dip</dimen><style name="MyAppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!--      <item name="windowNoTitle">true</item>-->
+        <!--      <item name="windowActionBar">false</item>-->
+        <item name="colorPrimary">#ff5fb71a</item>
+        <item name="colorPrimaryDark">#512DA8</item>
+        <item name="colorAccent">#FF4081</item>
+    </style><dimen name="titleMinHeight">28dp</dimen><dimen name="buttonsVehiculesPadding">10dip</dimen><style name="NavigationView">
+        <item name="android:textSize">@dimen/normalTextSize</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:itemBackground">@drawable/background4menu</item>
+    </style><style name="TabOneLineTitle">
+        <item name="android:minHeight">@dimen/titleMinHeight</item>
+        <item name="android:textStyle">bold|italic</item>
+        <item name="android:textSize">@dimen/titleTextSize</item>
+        <item name="android:paddingLeft">@dimen/titleTextPadding</item>
+        <item name="android:background">@color/tabnameofzone</item>
+    </style><dimen name="normalTextSize">18sp</dimen><dimen name="tabMinHeight">40dp</dimen><style name="TabCompassDraw">
+        <item name="android:layout_width">@dimen/compassSize</item>
+        <item name="android:layout_height">@dimen/compassSize</item>
+        <item name="android:gravity">left</item>
+        <item name="android:background">@color/compassbackground</item>
+    </style><style name="TabOneLineText">
+        <item name="android:paddingLeft">@dimen/normalTextPadding</item>
+        <item name="android:textSize">@dimen/normalTextSize</item>
+    </style><dimen name="compassLineWidth">5dip</dimen><dimen name="navigation_drawer_width">240dip</dimen><dimen name="action_button_margin">16dip</dimen><style name="TabOneLineMiniCompass">
+        <!-- 	    <item name="android:minWidth">@dimen/miniCompassSize</item> -->
+        <item name="android:layout_width">@dimen/miniCompassSize</item>
+        <!--    	<item name="android:minHeight">@dimen/miniCompassSize</item> -->
+        <item name="android:layout_height">@dimen/miniCompassSize</item>
+        <item name="android:gravity">left</item>
+        <item name="android:background">@color/minicompassbackground</item>
+    </style><dimen name="normalTextPadding">60dip</dimen><style name="TabTheme">
+        <item name="android:minHeight">@dimen/tabMinHeight</item>
+        <!-- 	    <item name="android:background">@color/background4menu</item> -->
+        <item name="android:textSize">@dimen/titleTextSize</item>
+        <item name="android:textStyle">bold</item>
+    </style><dimen name="bigTextSize">24sp</dimen><dimen name="dialogButtonPadding">30dip</dimen><style name="DialogText">
+        <item name="android:textSize">@dimen/normalTextSize</item>
+    </style><dimen name="dialogButtonTextSize">18sp</dimen><dimen name="titleTextSize">18sp</dimen><dimen name="titleTextPadding">30dip</dimen><dimen name="compassSize">300dip</dimen><style name="TabCompassOther">
+        <item name="android:paddingLeft">@dimen/normalTextPadding</item>
+        <item name="android:textSize">@dimen/normalTextSize</item>
+        <item name="android:gravity">center</item>
+    </style><style name="DialogButton">
+        <!-- 	    <item name="android:textStyle">bold|italic</item> -->
+        <item name="android:textSize">@dimen/dialogButtonTextSize</item>
+        <item name="android:paddingLeft">@dimen/dialogButtonPadding</item>
+        <item name="android:paddingRight">@dimen/dialogButtonPadding</item>
+    </style><style name="DialogTitle">
+        <item name="android:textSize">@dimen/bigTextSize</item>
+    </style><dimen name="mapzoneborderwidth">1dip</dimen></file><file path="/cryptodev/sam/git/android_studio/workspace/GpsFictionProjects/gpsFiction/src/main/res/values/texts.xml" qualifiers=""><string name="err_parse_lat_lon">Sorry, c:geo can\'t parse latitude or longitude.</string><string name="titleInventory">Your inventory.</string><string name="title_activity_gps_fiction_main">GPS Fiction</string><string name="dialogCloseTaskText">Save this game ?</string><string name="dialogButtonValidate">Validate</string><string name="dialogButtonCancel">Cancel</string><string name="noZoneBearing">--- °</string><string name="noZoneTitle">You don\'t select an area.</string><string name="titleZones">The places.</string><string name="nullstring"/><string name="rulesName">Rules.</string><string name="dialogButtonYes">Yes</string><string name="err_invalid_lat_lon">Sorry, invalid latitude or longitude.</string><string name="err_parse_lat">Sorry, c:geo can\'t parse latitude.</string><string name="noZoneDistance">---</string><string name="inventory">My Inventory</string><string name="distanceNull">You are in this area.</string><string name="err_parse_lon">Sorry, c:geo can\'t parse longitude.</string><string name="titleCharacters">The characters.</string><string name="titleCompass">The Compass.</string><string name="titleMap">The Map.</string><string name="app_name">GpsFiction</string><string name="distance_initiale">100 m</string><string name="dialogButtonNo">No</string><string name="titleTasks">What you have to do.</string><string name="err_parse_dist">Sorry, c:geo can\'t parse distance.</string><string-array name="pointscardinaux">
+        <item>N</item>
+        <item>NE</item>
+        <item>E</item>
+        <item>SE</item>
+        <item>S</item>
+        <item>SW</item>
+        <item>W</item>
+        <item>NW</item>
+    </string-array><string name="dialogCloseTaskTitle">To finish...</string><string name="titleItems">The items.</string></file><file path="/cryptodev/sam/git/android_studio/workspace/GpsFictionProjects/gpsFiction/src/main/res/values/reglages.xml" qualifiers=""><integer-array name="menuItems">
+        <item>@id/Zones</item>
+        <item>@id/Inventory</item>
+        <item>@id/Compass</item>
+        <item>@id/Map</item>
+        <item>@id/Tasks</item>
+    </integer-array><array name="vehicules_array">
+        <item>@drawable/compass</item>
+        <item>@drawable/pieton</item>
+        <item>@drawable/cycle</item>
+        <item>@drawable/auto</item>
+    </array><string-array name="fragmentsNames">
+        <item>Zones</item>
+        <item>Inventory</item>
+        <item>Compass</item>
+        <item>Map</item>
+        <item>Tasks</item>
+    </string-array><item format="boolean" name="zeroIds" type="bool">true</item></file><file name="compass_view" path="/cryptodev/sam/git/android_studio/workspace/GpsFictionProjects/gpsFiction/src/main/res/layout-large-port/compass_view.xml" qualifiers="large-port" type="layout"/><file name="ic_action_search" path="/cryptodev/sam/git/android_studio/workspace/GpsFictionProjects/gpsFiction/src/main/res/drawable-hdpi/ic_action_search.png" qualifiers="hdpi" type="drawable"/><file name="ic_launcher" path="/cryptodev/sam/git/android_studio/workspace/GpsFictionProjects/gpsFiction/src/main/res/drawable-hdpi/ic_launcher.png" qualifiers="hdpi" type="drawable"/><file path="/cryptodev/sam/git/android_studio/workspace/GpsFictionProjects/gpsFiction/src/main/res/values-large-port/styles.xml" qualifiers="large-port"><dimen name="compassSize">800dip</dimen></file><file path="/cryptodev/sam/git/android_studio/workspace/GpsFictionProjects/gpsFiction/src/main/res/values-large/styles.xml" qualifiers="large"><dimen name="normalTextSize">24sp</dimen><dimen name="miniCompassSize">80dip</dimen><dimen name="normalTextPadding">60dip</dimen><dimen name="titleTextPadding">30dip</dimen><dimen name="titleMinHeight">38dp</dimen><dimen name="tabMinHeight">55dp</dimen><dimen name="titleTextSize">24sp</dimen><dimen name="compassLineWidth">5dip</dimen></file><file name="auto" path="/cryptodev/sam/git/android_studio/workspace/GpsFictionProjects/gpsFiction/src/main/res/drawable/auto.png" qualifiers="" type="drawable"/><file name="pieton" path="/cryptodev/sam/git/android_studio/workspace/GpsFictionProjects/gpsFiction/src/main/res/drawable/pieton.png" qualifiers="" type="drawable"/><file name="cycle" path="/cryptodev/sam/git/android_studio/workspace/GpsFictionProjects/gpsFiction/src/main/res/drawable/cycle.png" qualifiers="" type="drawable"/><file name="player_marker" path="/cryptodev/sam/git/android_studio/workspace/GpsFictionProjects/gpsFiction/src/main/res/drawable/player_marker.png" qualifiers="" type="drawable"/><file name="flag_green" path="/cryptodev/sam/git/android_studio/workspace/GpsFictionProjects/gpsFiction/src/main/res/drawable/flag_green.png" qualifiers="" type="drawable"/><file name="compass" path="/cryptodev/sam/git/android_studio/workspace/GpsFictionProjects/gpsFiction/src/main/res/drawable/compass.png" qualifiers="" type="drawable"/><file name="background4menu" path="/cryptodev/sam/git/android_studio/workspace/GpsFictionProjects/gpsFiction/src/main/res/drawable/background4menu.xml" qualifiers="" type="drawable"/><file name="font_alex_brush_regular_otf" path="/cryptodev/sam/git/android_studio/workspace/GpsFictionProjects/gpsFiction/src/main/res/raw/font_alex_brush_regular_otf.otf" qualifiers="" type="raw"/><file name="font_alex_brush_regular" path="/cryptodev/sam/git/android_studio/workspace/GpsFictionProjects/gpsFiction/src/main/res/raw/font_alex_brush_regular.ttf" qualifiers="" type="raw"/><file name="font_dancing" path="/cryptodev/sam/git/android_studio/workspace/GpsFictionProjects/gpsFiction/src/main/res/raw/font_dancing.ttf" qualifiers="" type="raw"/><file name="font_fally" path="/cryptodev/sam/git/android_studio/workspace/GpsFictionProjects/gpsFiction/src/main/res/raw/font_fally.ttf" qualifiers="" type="raw"/><file name="ic_action_search" path="/cryptodev/sam/git/android_studio/workspace/GpsFictionProjects/gpsFiction/src/main/res/drawable-mdpi/ic_action_search.png" qualifiers="mdpi" type="drawable"/><file name="ic_launcher" path="/cryptodev/sam/git/android_studio/workspace/GpsFictionProjects/gpsFiction/src/main/res/drawable-mdpi/ic_launcher.png" qualifiers="mdpi" type="drawable"/><file name="compass_view" path="/cryptodev/sam/git/android_studio/workspace/GpsFictionProjects/gpsFiction/src/main/res/layout/compass_view.xml" qualifiers="" type="layout"/><file name="map_view" path="/cryptodev/sam/git/android_studio/workspace/GpsFictionProjects/gpsFiction/src/main/res/layout/map_view.xml" qualifiers="" type="layout"/><file name="zones_one_item_view" path="/cryptodev/sam/git/android_studio/workspace/GpsFictionProjects/gpsFiction/src/main/res/layout/zones_one_item_view.xml" qualifiers="" type="layout"/><file name="tab_map_scalebar" path="/cryptodev/sam/git/android_studio/workspace/GpsFictionProjects/gpsFiction/src/main/res/layout/tab_map_scalebar.xml" qualifiers="" type="layout"/><file name="tab_map_zoom_buttons" path="/cryptodev/sam/git/android_studio/workspace/GpsFictionProjects/gpsFiction/src/main/res/layout/tab_map_zoom_buttons.xml" qualifiers="" type="layout"/><file name="dialog_view" path="/cryptodev/sam/git/android_studio/workspace/GpsFictionProjects/gpsFiction/src/main/res/layout/dialog_view.xml" qualifiers="" type="layout"/><file name="tab_map_vehicules_buttons" path="/cryptodev/sam/git/android_studio/workspace/GpsFictionProjects/gpsFiction/src/main/res/layout/tab_map_vehicules_buttons.xml" qualifiers="" type="layout"/><file name="tasks_view" path="/cryptodev/sam/git/android_studio/workspace/GpsFictionProjects/gpsFiction/src/main/res/layout/tasks_view.xml" qualifiers="" type="layout"/><file name="main_view" path="/cryptodev/sam/git/android_studio/workspace/GpsFictionProjects/gpsFiction/src/main/res/layout/main_view.xml" qualifiers="" type="layout"/><file name="dialog_buttons" path="/cryptodev/sam/git/android_studio/workspace/GpsFictionProjects/gpsFiction/src/main/res/layout/dialog_buttons.xml" qualifiers="" type="layout"/><file name="inventory_view" path="/cryptodev/sam/git/android_studio/workspace/GpsFictionProjects/gpsFiction/src/main/res/layout/inventory_view.xml" qualifiers="" type="layout"/><file name="zones_view" path="/cryptodev/sam/git/android_studio/workspace/GpsFictionProjects/gpsFiction/src/main/res/layout/zones_view.xml" qualifiers="" type="layout"/><file name="main_menu" path="/cryptodev/sam/git/android_studio/workspace/GpsFictionProjects/gpsFiction/src/main/res/menu/main_menu.xml" qualifiers="" type="menu"/><file name="ic_action_search" path="/cryptodev/sam/git/android_studio/workspace/GpsFictionProjects/gpsFiction/src/main/res/drawable-xhdpi/ic_action_search.png" qualifiers="xhdpi" type="drawable"/><file name="ic_launcher" path="/cryptodev/sam/git/android_studio/workspace/GpsFictionProjects/gpsFiction/src/main/res/drawable-xhdpi/ic_launcher.png" qualifiers="xhdpi" type="drawable"/><file path="/cryptodev/sam/git/android_studio/workspace/GpsFictionProjects/gpsFiction/src/main/res/values-fr/texts.xml" qualifiers="fr"><string name="dialogButtonNo">Non</string><string name="distanceNull">Vous êtes dans la zone.</string><string name="distance_initiale">100 m</string><string name="rulesName">Règles.</string><string name="err_invalid_lat_lon">Désolé, latitude ou longitude invalide.</string><string name="dialogButtonYes">Oui</string><string-array name="pointscardinaux">
+        <item>N</item>
+        <item>NE</item>
+        <item>E</item>
+        <item>SE</item>
+        <item>S</item>
+        <item>SO</item>
+        <item>O</item>
+        <item>NO</item>
+    </string-array><string name="inventory">Mon Inventaire</string><string name="err_parse_lat_lon">Désolé, c:geo n\'arrive pas à lire la latitude ou la longitude.</string><string name="titleInventory">Votre inventaire.</string><string name="nullstring"/><string name="titleItems">Les Objets.</string><string name="titleTasks">Ce que vous avez à faire.</string><string name="titleCompass">La boussole.</string><string name="err_parse_lat">Désolé, c:geo n\'arrive pas à lire la latitude.</string><string name="titleMap">La carte.</string><string name="titleCharacters">Les personnages.</string><string name="dialogCloseTaskText">Sauvegarder la partie ?</string><string name="dialogButtonValidate">Valider</string><string name="err_parse_lon">Désolé, c:geo n\'arrive pas à lire la longitude.</string><string name="noZoneTitle">Vous n\'avez sélectionné aucun lieu.</string><string name="dialogCloseTaskTitle">Pour finir...</string><string name="titleZones">Zone du jeu.</string><string name="title_activity_gps_fiction_main">GPS Fiction</string><string name="err_parse_dist">Désolé, c:geo n\'arrive pas à lire la distance.</string><string name="dialogButtonCancel">Annuler</string></file><file name="ic_launcher" path="/cryptodev/sam/git/android_studio/workspace/GpsFictionProjects/gpsFiction/src/main/res/drawable-ldpi/ic_launcher.png" qualifiers="ldpi" type="drawable"/><file name="compass_view" path="/cryptodev/sam/git/android_studio/workspace/GpsFictionProjects/gpsFiction/src/main/res/layout-large-land/compass_view.xml" qualifiers="large-land" type="layout"/></source><source path="/cryptodev/sam/git/android_studio/workspace/GpsFictionProjects/gpsFiction/build/generated/res/rs/release"/><source path="/cryptodev/sam/git/android_studio/workspace/GpsFictionProjects/gpsFiction/build/generated/res/resValues/release"/></dataSet><dataSet config="release"><source path="/cryptodev/sam/git/android_studio/workspace/GpsFictionProjects/gpsFiction/src/release/res"/></dataSet><mergedItems/></merger>

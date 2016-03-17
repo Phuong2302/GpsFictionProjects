@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- From: file:/cryptodev/sam/git/android_studio/workspace/GpsFictionProjects/gpsFiction/src/main/res/values-fr/texts.xml -->
+    <eat-comment/>
+    <string-array name="pointscardinaux">
+        <item>N</item>
+        <item>NE</item>
+        <item>E</item>
+        <item>SE</item>
+        <item>S</item>
+        <item>SO</item>
+        <item>O</item>
+        <item>NO</item>
+    </string-array>
+    <string name="dialogButtonCancel">Annuler</string>
+    <string name="dialogButtonNo">Non</string>
+    <string name="dialogButtonValidate">Valider</string>
+    <string name="dialogButtonYes">Oui</string>
+    <string name="dialogCloseTaskText">Sauvegarder la partie ?</string>
+    <string name="dialogCloseTaskTitle">Pour finir...</string>
+    <string name="distanceNull">Vous êtes dans la zone.</string>
+    <string name="distance_initiale">100 m</string>
+    <string name="err_invalid_lat_lon">Désolé, latitude ou longitude invalide.</string>
+    <string name="err_parse_dist">Désolé, c:geo n\'arrive pas à lire la distance.</string>
+    <string name="err_parse_lat">Désolé, c:geo n\'arrive pas à lire la latitude.</string>
+    <string name="err_parse_lat_lon">Désolé, c:geo n\'arrive pas à lire la latitude ou la longitude.</string>
+    <string name="err_parse_lon">Désolé, c:geo n\'arrive pas à lire la longitude.</string>
+    <string name="inventory">Mon Inventaire</string>
+    <string name="noZoneTitle">Vous n\'avez sélectionné aucun lieu.</string>
+    <string name="nullstring"/>
+    <string name="rulesName">Règles.</string>
+    <string name="titleCharacters">Les personnages.</string>
+    <string name="titleCompass">La boussole.</string>
+    <string name="titleInventory">Votre inventaire.</string>
+    <string name="titleItems">Les Objets.</string>
+    <string name="titleMap">La carte.</string>
+    <string name="titleTasks">Ce que vous avez à faire.</string>
+    <string name="titleZones">Zone du jeu.</string>
+    <string name="title_activity_gps_fiction_main">GPS Fiction</string>
+</resources>

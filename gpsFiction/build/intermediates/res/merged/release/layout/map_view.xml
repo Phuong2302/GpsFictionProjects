@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/layoutMapView"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <com.sdesimeur.android.gpsfiction.views.RotateView
+        android:id="@+id/mapRotateView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    </com.sdesimeur.android.gpsfiction.views.RotateView>
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/forVehiculesButtons"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:orientation="horizontal"></LinearLayout>
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/forScaleBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:orientation="horizontal"></LinearLayout>
+    <!--	<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/forZoomButtons"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:orientation="horizontal">-->
+    <ZoomControls
+        android:id="@+id/zoomControls"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_marginBottom="10dp" />
+    <!--	</LinearLayout>-->
+
+
+</RelativeLayout>
+<!-- From: file:/cryptodev/sam/git/android_studio/workspace/GpsFictionProjects/gpsFiction/src/main/res/layout/map_view.xml -->

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ListView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/listZones"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+
+</ListView><!-- From: file:/cryptodev/sam/git/android_studio/workspace/GpsFictionProjects/gpsFiction/src/main/res/layout/zones_view.xml --><!-- From: file:/cryptodev/sam/git/android_studio/workspace/GpsFictionProjects/missionDestruction/build/intermediates/exploded-aar/GpsFictionProjects/gpsFiction/unspecified/res/layout/zones_view.xml -->

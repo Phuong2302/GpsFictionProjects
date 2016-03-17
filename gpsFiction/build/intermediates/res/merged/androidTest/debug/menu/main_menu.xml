@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/Zones"
+            android:title="@string/titleZones" />
+        <item
+            android:id="@+id/Inventory"
+            android:title="@string/titleInventory" />
+        <item
+            android:id="@+id/Compass"
+            android:title="@string/titleCompass" />
+        <item
+            android:id="@+id/Map"
+            android:title="@string/titleMap" />
+        <item
+            android:id="@+id/Tasks"
+            android:title="@string/titleTasks" />
+    </group>
+
+</menu>
+<!-- From: file:/cryptodev/sam/git/android_studio/workspace/GpsFictionProjects/gpsFiction/src/main/res/menu/main_menu.xml --><!-- From: file:/cryptodev/sam/git/android_studio/workspace/GpsFictionProjects/gpsFiction/build/intermediates/bundles/debug/res/menu/main_menu.xml -->
