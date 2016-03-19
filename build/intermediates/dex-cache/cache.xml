@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        jar="/divers/AndroidStudio/workspace/GpsFictionProjects/missionDestruction/build/intermediates/exploded-aar/GpsFictionProjects/gpsFiction/unspecified/jars/classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="b47fc83ba1f099b226d0c0ab0a31ef4a800783c1">
+        <dex dex="/divers/AndroidStudio/workspace/GpsFictionProjects/missionDestruction/build/intermediates/pre-dexed/debug/classes-cd05262d910f7ddd8badc84ff6e514b2b97e6611.jar" />
+    </item>
+
+</items>
