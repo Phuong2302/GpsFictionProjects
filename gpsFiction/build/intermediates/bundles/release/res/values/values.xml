@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- From: file:/cryptodev/sam/git/android_studio/workspace/GpsFictionProjects/gpsFiction/src/main/res/values/reglages.xml -->
+    <!-- From: file:/divers/AndroidStudio/workspace/GpsFictionProjects/gpsFiction/src/main/res/values/reglages.xml -->
     <eat-comment/>
     <string-array name="fragmentsNames">
         <item>Zones</item>
@@ -16,7 +16,7 @@
         <item>@id/Map</item>
         <item>@id/Tasks</item>
     </integer-array>
-    <!-- From: file:/cryptodev/sam/git/android_studio/workspace/GpsFictionProjects/gpsFiction/src/main/res/values/texts.xml -->
+    <!-- From: file:/divers/AndroidStudio/workspace/GpsFictionProjects/gpsFiction/src/main/res/values/texts.xml -->
     <eat-comment/>
     <string-array name="pointscardinaux">
         <item>N</item>
@@ -28,7 +28,7 @@
         <item>W</item>
         <item>NW</item>
     </string-array>
-    <!-- From: file:/cryptodev/sam/git/android_studio/workspace/GpsFictionProjects/gpsFiction/src/main/res/values/reglages.xml -->
+    <!-- From: file:/divers/AndroidStudio/workspace/GpsFictionProjects/gpsFiction/src/main/res/values/reglages.xml -->
     <eat-comment/>
     <array name="vehicules_array">
         <item>@drawable/compass</item>
@@ -37,7 +37,7 @@
         <item>@drawable/auto</item>
     </array>
     <item format="boolean" name="zeroIds" type="bool">true</item>
-    <!-- From: file:/cryptodev/sam/git/android_studio/workspace/GpsFictionProjects/gpsFiction/src/main/res/values/colors.xml -->
+    <!-- From: file:/divers/AndroidStudio/workspace/GpsFictionProjects/gpsFiction/src/main/res/values/colors.xml -->
     <eat-comment/>
     <color name="compassarrow">#ff0000</color>
     <color name="compassbackground">#FFFFFF</color>
@@ -54,7 +54,7 @@
     <color name="tabnameofzone">#AAA</color>
     <color name="tabnameofzoneselected">#A66</color>
     <color name="white">#ffffff</color>
-    <!-- From: file:/cryptodev/sam/git/android_studio/workspace/GpsFictionProjects/gpsFiction/src/main/res/values/styles.xml -->
+    <!-- From: file:/divers/AndroidStudio/workspace/GpsFictionProjects/gpsFiction/src/main/res/values/styles.xml -->
     <eat-comment/>
     <dimen name="action_button_margin">16dip</dimen>
     <dimen name="bigTextSize">24sp</dimen>
@@ -72,7 +72,7 @@
     <dimen name="titleMinHeight">28dp</dimen>
     <dimen name="titleTextPadding">30dip</dimen>
     <dimen name="titleTextSize">18sp</dimen>
-    <!-- From: file:/cryptodev/sam/git/android_studio/workspace/GpsFictionProjects/gpsFiction/src/main/res/values/texts.xml -->
+    <!-- From: file:/divers/AndroidStudio/workspace/GpsFictionProjects/gpsFiction/src/main/res/values/texts.xml -->
     <eat-comment/>
     <string name="app_name">GpsFiction</string>
     <string name="dialogButtonCancel">Cancel</string>
@@ -102,7 +102,7 @@
     <string name="titleTasks">What you have to do.</string>
     <string name="titleZones">The places.</string>
     <string name="title_activity_gps_fiction_main">GPS Fiction</string>
-    <!-- From: file:/cryptodev/sam/git/android_studio/workspace/GpsFictionProjects/gpsFiction/src/main/res/values/styles.xml -->
+    <!-- From: file:/divers/AndroidStudio/workspace/GpsFictionProjects/gpsFiction/src/main/res/values/styles.xml -->
     <eat-comment/>
     <style name="DialogButton">
         <!-- 	    <item name="android:textStyle">bold|italic</item> -->

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- From: file:/cryptodev/sam/git/android_studio/workspace/GpsFictionProjects/missionDestruction/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.1.0/res/values-large/values-large.xml -->
+    <!-- From: file:/divers/AndroidStudio/workspace/GpsFictionProjects/missionDestruction/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.1.0/res/values-large/values-large.xml -->
     <eat-comment/>
     <bool name="abc_action_bar_embed_tabs_pre_jb">true</bool>
     <bool name="abc_config_allowActionMenuItemTextWithIcon">true</bool>
@@ -12,7 +12,7 @@
     <item name="abc_dialog_min_width_major" type="dimen">55%</item>
     <item name="abc_dialog_min_width_minor" type="dimen">80%</item>
     <dimen name="abc_search_view_text_min_width">192dip</dimen>
-    <!-- From: file:/cryptodev/sam/git/android_studio/workspace/GpsFictionProjects/missionDestruction/build/intermediates/exploded-aar/GpsFictionProjects/gpsFiction/unspecified/res/values-large/values-large.xml -->
+    <!-- From: file:/divers/AndroidStudio/workspace/GpsFictionProjects/missionDestruction/build/intermediates/exploded-aar/GpsFictionProjects/gpsFiction/unspecified/res/values-large/values-large.xml -->
     <eat-comment/>
     <dimen name="compassLineWidth">5dip</dimen>
     <dimen name="miniCompassSize">80dip</dimen>
@@ -22,7 +22,7 @@
     <dimen name="titleMinHeight">38dp</dimen>
     <dimen name="titleTextPadding">30dip</dimen>
     <dimen name="titleTextSize">24sp</dimen>
-    <!-- From: file:/cryptodev/sam/git/android_studio/workspace/GpsFictionProjects/missionDestruction/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.1.0/res/values-large/values-large.xml -->
+    <!-- From: file:/divers/AndroidStudio/workspace/GpsFictionProjects/missionDestruction/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.1.0/res/values-large/values-large.xml -->
     <eat-comment/>
     <integer name="abc_max_action_buttons">4</integer>
     <style name="Base.Theme.AppCompat.DialogWhenLarge" parent="Base.Theme.AppCompat.Dialog.FixedSize"/>

@@ -31,4 +31,4 @@
             android:layout_height="wrap_content"
             android:gravity="center_horizontal" />
     </LinearLayout>
-</LinearLayout><!-- From: file:/cryptodev/sam/git/android_studio/workspace/GpsFictionProjects/gpsFiction/src/main/res/layout/compass_view.xml --><!-- From: file:/cryptodev/sam/git/android_studio/workspace/GpsFictionProjects/missionDestruction/build/intermediates/exploded-aar/GpsFictionProjects/gpsFiction/unspecified/res/layout/compass_view.xml -->
+</LinearLayout><!-- From: file:/divers/AndroidStudio/workspace/GpsFictionProjects/gpsFiction/src/main/res/layout/compass_view.xml --><!-- From: file:/divers/AndroidStudio/workspace/GpsFictionProjects/missionDestruction/build/intermediates/exploded-aar/GpsFictionProjects/gpsFiction/unspecified/res/layout/compass_view.xml -->

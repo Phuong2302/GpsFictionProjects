@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- From: file:/cryptodev/sam/git/android_studio/workspace/GpsFictionProjects/gpsFiction/src/main/res/values/reglages.xml -->
+    <!-- From: file:/divers/AndroidStudio/workspace/GpsFictionProjects/gpsFiction/src/main/res/values/reglages.xml -->
     <eat-comment/>
     <string-array name="fragmentsNames">
         <item>Zones</item>
@@ -16,7 +16,7 @@
         <item>@id/Map</item>
         <item>@id/Tasks</item>
     </integer-array>
-    <!-- From: file:/cryptodev/sam/git/android_studio/workspace/GpsFictionProjects/gpsFiction/src/main/res/values/texts.xml -->
+    <!-- From: file:/divers/AndroidStudio/workspace/GpsFictionProjects/gpsFiction/src/main/res/values/texts.xml -->
     <eat-comment/>
     <string-array name="pointscardinaux">
         <item>N</item>
@@ -28,7 +28,7 @@
         <item>W</item>
         <item>NW</item>
     </string-array>
-    <!-- From: file:/cryptodev/sam/git/android_studio/workspace/GpsFictionProjects/gpsFiction/src/main/res/values/reglages.xml -->
+    <!-- From: file:/divers/AndroidStudio/workspace/GpsFictionProjects/gpsFiction/src/main/res/values/reglages.xml -->
     <eat-comment/>
     <array name="vehicules_array">
         <item>@drawable/compass</item>
@@ -36,7 +36,7 @@
         <item>@drawable/cycle</item>
         <item>@drawable/auto</item>
     </array>
-    <!-- From: file:/cryptodev/sam/git/android_studio/workspace/GpsFictionProjects/gpsFiction/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.1.0/res/values/values.xml -->
+    <!-- From: file:/divers/AndroidStudio/workspace/GpsFictionProjects/gpsFiction/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.1.0/res/values/values.xml -->
     <eat-comment/>
     <attr format="reference" name="drawerArrowStyle"/>
     <attr format="dimension" name="height"/>
@@ -50,10 +50,10 @@
     <bool name="abc_config_allowActionMenuItemTextWithIcon">false</bool>
     <bool name="abc_config_closeDialogWhenTouchOutside">true</bool>
     <bool name="abc_config_showMenuShortcutsWhenKeyboardPresent">false</bool>
-    <!-- From: file:/cryptodev/sam/git/android_studio/workspace/GpsFictionProjects/gpsFiction/src/main/res/values/reglages.xml -->
+    <!-- From: file:/divers/AndroidStudio/workspace/GpsFictionProjects/gpsFiction/src/main/res/values/reglages.xml -->
     <eat-comment/>
     <item format="boolean" name="zeroIds" type="bool">true</item>
-    <!-- From: file:/cryptodev/sam/git/android_studio/workspace/GpsFictionProjects/gpsFiction/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.1.0/res/values/values.xml -->
+    <!-- From: file:/divers/AndroidStudio/workspace/GpsFictionProjects/gpsFiction/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.1.0/res/values/values.xml -->
     <eat-comment/>
     <color name="abc_input_method_navigation_guard">@android:color/black</color>
     <color name="abc_search_url_text_normal">#7fa87f</color>
@@ -73,7 +73,7 @@
     <color name="bright_foreground_material_light">@android:color/black</color>
     <color name="button_material_dark">#ff5a595b</color>
     <color name="button_material_light">#ffd6d7d7</color>
-    <!-- From: file:/cryptodev/sam/git/android_studio/workspace/GpsFictionProjects/gpsFiction/src/main/res/values/colors.xml -->
+    <!-- From: file:/divers/AndroidStudio/workspace/GpsFictionProjects/gpsFiction/src/main/res/values/colors.xml -->
     <eat-comment/>
     <color name="compassarrow">#ff0000</color>
     <color name="compassbackground">#FFFFFF</color>
@@ -81,7 +81,7 @@
     <color name="compasscircle">#80095228</color>
     <color name="compassrose">#80CD853F</color>
     <color name="compasstext">#000000</color>
-    <!-- From: file:/cryptodev/sam/git/android_studio/workspace/GpsFictionProjects/gpsFiction/build/intermediates/exploded-aar/com.android.support/design/23.1.0/res/values/values.xml -->
+    <!-- From: file:/divers/AndroidStudio/workspace/GpsFictionProjects/gpsFiction/build/intermediates/exploded-aar/com.android.support/design/23.1.0/res/values/values.xml -->
     <eat-comment/>
     <color name="design_fab_shadow_end_color">@android:color/transparent</color>
     <color name="design_fab_shadow_mid_color">#14000000</color>
@@ -92,7 +92,7 @@
     <color name="design_fab_stroke_top_outer_color">#2EFFFFFF</color>
     <color name="design_snackbar_background_color">#323232</color>
     <color name="design_textinput_error_color">#FFDD2C00</color>
-    <!-- From: file:/cryptodev/sam/git/android_studio/workspace/GpsFictionProjects/gpsFiction/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.1.0/res/values/values.xml -->
+    <!-- From: file:/divers/AndroidStudio/workspace/GpsFictionProjects/gpsFiction/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.1.0/res/values/values.xml -->
     <eat-comment/>
     <color name="dim_foreground_disabled_material_dark">#80bebebe</color>
     <color name="dim_foreground_disabled_material_light">#80323232</color>
@@ -100,20 +100,20 @@
     <color name="dim_foreground_material_light">#ff323232</color>
     <color name="foreground_material_dark">@android:color/white</color>
     <color name="foreground_material_light">@android:color/black</color>
-    <!-- From: file:/cryptodev/sam/git/android_studio/workspace/GpsFictionProjects/gpsFiction/src/main/res/values/colors.xml -->
+    <!-- From: file:/divers/AndroidStudio/workspace/GpsFictionProjects/gpsFiction/src/main/res/values/colors.xml -->
     <eat-comment/>
     <color name="grey">#aaaaaa</color>
-    <!-- From: file:/cryptodev/sam/git/android_studio/workspace/GpsFictionProjects/gpsFiction/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.1.0/res/values/values.xml -->
+    <!-- From: file:/divers/AndroidStudio/workspace/GpsFictionProjects/gpsFiction/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.1.0/res/values/values.xml -->
     <eat-comment/>
     <color name="highlighted_text_material_dark">#6680cbc4</color>
     <color name="highlighted_text_material_light">#66009688</color>
     <color name="hint_foreground_material_dark">@color/bright_foreground_disabled_material_dark</color>
     <color name="hint_foreground_material_light">@color/bright_foreground_disabled_material_light</color>
-    <!-- From: file:/cryptodev/sam/git/android_studio/workspace/GpsFictionProjects/gpsFiction/src/main/res/values/colors.xml -->
+    <!-- From: file:/divers/AndroidStudio/workspace/GpsFictionProjects/gpsFiction/src/main/res/values/colors.xml -->
     <eat-comment/>
     <color name="mapzoneborder">#500000FF</color>
     <color name="mapzoneselectedborder">#50FF0000</color>
-    <!-- From: file:/cryptodev/sam/git/android_studio/workspace/GpsFictionProjects/gpsFiction/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.1.0/res/values/values.xml -->
+    <!-- From: file:/divers/AndroidStudio/workspace/GpsFictionProjects/gpsFiction/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.1.0/res/values/values.xml -->
     <eat-comment/>
     <color name="material_blue_grey_800">#ff37474f</color>
     <color name="material_blue_grey_900">#ff263238</color>
@@ -127,12 +127,12 @@
     <color name="material_grey_800">#ff424242</color>
     <color name="material_grey_850">#ff303030</color>
     <color name="material_grey_900">#ff212121</color>
-    <!-- From: file:/cryptodev/sam/git/android_studio/workspace/GpsFictionProjects/gpsFiction/src/main/res/values/colors.xml -->
+    <!-- From: file:/divers/AndroidStudio/workspace/GpsFictionProjects/gpsFiction/src/main/res/values/colors.xml -->
     <eat-comment/>
     <color name="minicompassarrow">#ff0000</color>
     <color name="minicompassbackground">#FFFFFF</color>
     <color name="minicompasscenter">#000000</color>
-    <!-- From: file:/cryptodev/sam/git/android_studio/workspace/GpsFictionProjects/gpsFiction/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.1.0/res/values/values.xml -->
+    <!-- From: file:/divers/AndroidStudio/workspace/GpsFictionProjects/gpsFiction/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.1.0/res/values/values.xml -->
     <eat-comment/>
     <color name="primary_dark_material_dark">@android:color/black</color>
     <color name="primary_dark_material_light">@color/material_grey_600</color>
@@ -152,7 +152,7 @@
     <color name="switch_thumb_disabled_material_light">#ffbdbdbd</color>
     <color name="switch_thumb_normal_material_dark">#ffbdbdbd</color>
     <color name="switch_thumb_normal_material_light">#fff1f1f1</color>
-    <!-- From: file:/cryptodev/sam/git/android_studio/workspace/GpsFictionProjects/gpsFiction/src/main/res/values/colors.xml -->
+    <!-- From: file:/divers/AndroidStudio/workspace/GpsFictionProjects/gpsFiction/src/main/res/values/colors.xml -->
     <eat-comment/>
     <color name="tabnameofzone">#AAA</color>
     <color name="tabnameofzoneselected">#A66</color>
@@ -200,7 +200,7 @@
     <declare-styleable name="View"><attr format="dimension" name="paddingStart"/><attr format="dimension" name="paddingEnd"/><attr name="android:focusable"/><attr format="reference" name="theme"/><attr name="android:theme"/></declare-styleable>
     <declare-styleable name="ViewBackgroundHelper"><attr name="android:background"/><attr format="color" name="backgroundTint"/><attr name="backgroundTintMode"><enum name="src_over" value="3"/><enum name="src_in" value="5"/><enum name="src_atop" value="9"/><enum name="multiply" value="14"/><enum name="screen" value="15"/></attr></declare-styleable>
     <declare-styleable name="ViewStubCompat"><attr name="android:layout"/><attr name="android:inflatedId"/><attr name="android:id"/></declare-styleable>
-    <!-- From: file:/cryptodev/sam/git/android_studio/workspace/GpsFictionProjects/gpsFiction/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.1.0/res/values/values.xml -->
+    <!-- From: file:/divers/AndroidStudio/workspace/GpsFictionProjects/gpsFiction/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.1.0/res/values/values.xml -->
     <eat-comment/>
     <dimen name="abc_action_bar_content_inset_material">16dp</dimen>
     <dimen name="abc_action_bar_default_height_material">56dp</dimen>
@@ -269,14 +269,14 @@
     <dimen name="abc_text_size_subtitle_material_toolbar">16dp</dimen>
     <dimen name="abc_text_size_title_material">20sp</dimen>
     <dimen name="abc_text_size_title_material_toolbar">20dp</dimen>
-    <!-- From: file:/cryptodev/sam/git/android_studio/workspace/GpsFictionProjects/gpsFiction/src/main/res/values/styles.xml -->
+    <!-- From: file:/divers/AndroidStudio/workspace/GpsFictionProjects/gpsFiction/src/main/res/values/styles.xml -->
     <eat-comment/>
     <dimen name="action_button_margin">16dip</dimen>
     <dimen name="bigTextSize">24sp</dimen>
     <dimen name="buttonsVehiculesPadding">10dip</dimen>
     <dimen name="compassLineWidth">5dip</dimen>
     <dimen name="compassSize">300dip</dimen>
-    <!-- From: file:/cryptodev/sam/git/android_studio/workspace/GpsFictionProjects/gpsFiction/build/intermediates/exploded-aar/com.android.support/design/23.1.0/res/values/values.xml -->
+    <!-- From: file:/divers/AndroidStudio/workspace/GpsFictionProjects/gpsFiction/build/intermediates/exploded-aar/com.android.support/design/23.1.0/res/values/values.xml -->
     <eat-comment/>
     <dimen name="design_appbar_elevation">4dp</dimen>
     <dimen name="design_fab_border_width">0.5dp</dimen>
@@ -306,39 +306,39 @@
     <dimen name="design_tab_scrollable_min_width">72dp</dimen>
     <dimen name="design_tab_text_size">14sp</dimen>
     <dimen name="design_tab_text_size_2line">12sp</dimen>
-    <!-- From: file:/cryptodev/sam/git/android_studio/workspace/GpsFictionProjects/gpsFiction/src/main/res/values/styles.xml -->
+    <!-- From: file:/divers/AndroidStudio/workspace/GpsFictionProjects/gpsFiction/src/main/res/values/styles.xml -->
     <eat-comment/>
     <dimen name="dialogButtonPadding">30dip</dimen>
     <dimen name="dialogButtonTextSize">18sp</dimen>
-    <!-- From: file:/cryptodev/sam/git/android_studio/workspace/GpsFictionProjects/gpsFiction/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.1.0/res/values/values.xml -->
+    <!-- From: file:/divers/AndroidStudio/workspace/GpsFictionProjects/gpsFiction/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.1.0/res/values/values.xml -->
     <eat-comment/>
     <item format="float" name="disabled_alpha_material_dark" type="dimen">0.30</item>
     <item format="float" name="disabled_alpha_material_light" type="dimen">0.26</item>
     <item format="float" name="highlight_alpha_material_colored" type="dimen">0.26</item>
     <item format="float" name="highlight_alpha_material_dark" type="dimen">0.20</item>
     <item format="float" name="highlight_alpha_material_light" type="dimen">0.12</item>
-    <!-- From: file:/cryptodev/sam/git/android_studio/workspace/GpsFictionProjects/gpsFiction/build/intermediates/exploded-aar/com.android.support/recyclerview-v7/23.1.0/res/values/values.xml -->
+    <!-- From: file:/divers/AndroidStudio/workspace/GpsFictionProjects/gpsFiction/build/intermediates/exploded-aar/com.android.support/recyclerview-v7/23.1.0/res/values/values.xml -->
     <eat-comment/>
     <dimen name="item_touch_helper_max_drag_scroll_per_frame">20dp</dimen>
-    <!-- From: file:/cryptodev/sam/git/android_studio/workspace/GpsFictionProjects/gpsFiction/src/main/res/values/styles.xml -->
+    <!-- From: file:/divers/AndroidStudio/workspace/GpsFictionProjects/gpsFiction/src/main/res/values/styles.xml -->
     <eat-comment/>
     <dimen name="mapzoneborderwidth">1dip</dimen>
     <dimen name="miniCompassSize">80dip</dimen>
     <dimen name="navigation_drawer_width">240dip</dimen>
     <dimen name="normalTextPadding">60dip</dimen>
     <dimen name="normalTextSize">18sp</dimen>
-    <!-- From: file:/cryptodev/sam/git/android_studio/workspace/GpsFictionProjects/gpsFiction/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.1.0/res/values/values.xml -->
+    <!-- From: file:/divers/AndroidStudio/workspace/GpsFictionProjects/gpsFiction/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.1.0/res/values/values.xml -->
     <eat-comment/>
     <dimen name="notification_large_icon_height">64dp</dimen>
     <dimen name="notification_large_icon_width">64dp</dimen>
     <dimen name="notification_subtext_size">12dp</dimen>
-    <!-- From: file:/cryptodev/sam/git/android_studio/workspace/GpsFictionProjects/gpsFiction/src/main/res/values/styles.xml -->
+    <!-- From: file:/divers/AndroidStudio/workspace/GpsFictionProjects/gpsFiction/src/main/res/values/styles.xml -->
     <eat-comment/>
     <dimen name="tabMinHeight">40dp</dimen>
     <dimen name="titleMinHeight">28dp</dimen>
     <dimen name="titleTextPadding">30dip</dimen>
     <dimen name="titleTextSize">18sp</dimen>
-    <!-- From: file:/cryptodev/sam/git/android_studio/workspace/GpsFictionProjects/gpsFiction/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.1.0/res/values/values.xml -->
+    <!-- From: file:/divers/AndroidStudio/workspace/GpsFictionProjects/gpsFiction/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.1.0/res/values/values.xml -->
     <eat-comment/>
     <drawable name="notification_template_icon_bg">#3333B5E5</drawable>
     <item name="action_bar_activity_content" type="id"/>
@@ -346,28 +346,28 @@
     <item name="action_menu_divider" type="id"/>
     <item name="action_menu_presenter" type="id"/>
     <item name="home" type="id"/>
-    <!-- From: file:/cryptodev/sam/git/android_studio/workspace/GpsFictionProjects/gpsFiction/build/intermediates/exploded-aar/com.android.support/recyclerview-v7/23.1.0/res/values/values.xml -->
+    <!-- From: file:/divers/AndroidStudio/workspace/GpsFictionProjects/gpsFiction/build/intermediates/exploded-aar/com.android.support/recyclerview-v7/23.1.0/res/values/values.xml -->
     <eat-comment/>
     <item name="item_touch_helper_previous_elevation" type="id"/>
-    <!-- From: file:/cryptodev/sam/git/android_studio/workspace/GpsFictionProjects/gpsFiction/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.1.0/res/values/values.xml -->
+    <!-- From: file:/divers/AndroidStudio/workspace/GpsFictionProjects/gpsFiction/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.1.0/res/values/values.xml -->
     <eat-comment/>
     <item name="progress_circular" type="id"/>
     <item name="progress_horizontal" type="id"/>
     <item name="split_action_bar" type="id"/>
     <item name="up" type="id"/>
-    <!-- From: file:/cryptodev/sam/git/android_studio/workspace/GpsFictionProjects/gpsFiction/build/intermediates/exploded-aar/com.android.support/design/23.1.0/res/values/values.xml -->
+    <!-- From: file:/divers/AndroidStudio/workspace/GpsFictionProjects/gpsFiction/build/intermediates/exploded-aar/com.android.support/design/23.1.0/res/values/values.xml -->
     <eat-comment/>
     <item name="view_offset_helper" type="id"/>
-    <!-- From: file:/cryptodev/sam/git/android_studio/workspace/GpsFictionProjects/gpsFiction/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.1.0/res/values/values.xml -->
+    <!-- From: file:/divers/AndroidStudio/workspace/GpsFictionProjects/gpsFiction/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.1.0/res/values/values.xml -->
     <eat-comment/>
     <integer name="abc_config_activityDefaultDur">220</integer>
     <integer name="abc_config_activityShortDur">150</integer>
     <integer name="abc_max_action_buttons">2</integer>
     <integer name="cancel_button_image_alpha">127</integer>
-    <!-- From: file:/cryptodev/sam/git/android_studio/workspace/GpsFictionProjects/gpsFiction/build/intermediates/exploded-aar/com.android.support/design/23.1.0/res/values/values.xml -->
+    <!-- From: file:/divers/AndroidStudio/workspace/GpsFictionProjects/gpsFiction/build/intermediates/exploded-aar/com.android.support/design/23.1.0/res/values/values.xml -->
     <eat-comment/>
     <integer name="design_snackbar_text_max_lines">2</integer>
-    <!-- From: file:/cryptodev/sam/git/android_studio/workspace/GpsFictionProjects/gpsFiction/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.1.0/res/values/values.xml -->
+    <!-- From: file:/divers/AndroidStudio/workspace/GpsFictionProjects/gpsFiction/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.1.0/res/values/values.xml -->
     <eat-comment/>
     <integer name="status_bar_notification_info_maxnum">999</integer>
     <string name="abc_action_bar_home_description">Navigate home</string>
@@ -389,14 +389,14 @@
     <string name="abc_shareactionprovider_share_with">Share with</string>
     <string name="abc_shareactionprovider_share_with_application">Share with %s</string>
     <string name="abc_toolbar_collapse_description">Collapse</string>
-    <!-- From: file:/cryptodev/sam/git/android_studio/workspace/GpsFictionProjects/gpsFiction/src/main/res/values/texts.xml -->
+    <!-- From: file:/divers/AndroidStudio/workspace/GpsFictionProjects/gpsFiction/src/main/res/values/texts.xml -->
     <eat-comment/>
     <string name="app_name">GpsFiction</string>
-    <!-- From: file:/cryptodev/sam/git/android_studio/workspace/GpsFictionProjects/gpsFiction/build/intermediates/exploded-aar/com.android.support/design/23.1.0/res/values/values.xml -->
+    <!-- From: file:/divers/AndroidStudio/workspace/GpsFictionProjects/gpsFiction/build/intermediates/exploded-aar/com.android.support/design/23.1.0/res/values/values.xml -->
     <eat-comment/>
     <string name="appbar_scrolling_view_behavior" translatable="false">android.support.design.widget.AppBarLayout$ScrollingViewBehavior</string>
     <string name="character_counter_pattern" translatable="false">%1$d/%2$d</string>
-    <!-- From: file:/cryptodev/sam/git/android_studio/workspace/GpsFictionProjects/gpsFiction/src/main/res/values/texts.xml -->
+    <!-- From: file:/divers/AndroidStudio/workspace/GpsFictionProjects/gpsFiction/src/main/res/values/texts.xml -->
     <eat-comment/>
     <string name="dialogButtonCancel">Cancel</string>
     <string name="dialogButtonNo">No</string>
@@ -417,10 +417,10 @@
     <string name="noZoneTitle">You don\'t select an area.</string>
     <string name="nullstring"/>
     <string name="rulesName">Rules.</string>
-    <!-- From: file:/cryptodev/sam/git/android_studio/workspace/GpsFictionProjects/gpsFiction/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.1.0/res/values/values.xml -->
+    <!-- From: file:/divers/AndroidStudio/workspace/GpsFictionProjects/gpsFiction/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.1.0/res/values/values.xml -->
     <eat-comment/>
     <string name="status_bar_notification_info_overflow">999+</string>
-    <!-- From: file:/cryptodev/sam/git/android_studio/workspace/GpsFictionProjects/gpsFiction/src/main/res/values/texts.xml -->
+    <!-- From: file:/divers/AndroidStudio/workspace/GpsFictionProjects/gpsFiction/src/main/res/values/texts.xml -->
     <eat-comment/>
     <string name="titleCharacters">The characters.</string>
     <string name="titleCompass">The Compass.</string>
@@ -430,7 +430,7 @@
     <string name="titleTasks">What you have to do.</string>
     <string name="titleZones">The places.</string>
     <string name="title_activity_gps_fiction_main">GPS Fiction</string>
-    <!-- From: file:/cryptodev/sam/git/android_studio/workspace/GpsFictionProjects/gpsFiction/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.1.0/res/values/values.xml -->
+    <!-- From: file:/divers/AndroidStudio/workspace/GpsFictionProjects/gpsFiction/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.1.0/res/values/values.xml -->
     <eat-comment/>
     <style name="AlertDialog.AppCompat" parent="Base.AlertDialog.AppCompat"/>
     <style name="AlertDialog.AppCompat.Light" parent="Base.AlertDialog.AppCompat.Light"/>
@@ -1371,7 +1371,7 @@
         <item name="android:minWidth">56dp</item>
         <item name="android:scaleType">center</item>
     </style>
-    <!-- From: file:/cryptodev/sam/git/android_studio/workspace/GpsFictionProjects/gpsFiction/build/intermediates/exploded-aar/com.android.support/design/23.1.0/res/values/values.xml -->
+    <!-- From: file:/divers/AndroidStudio/workspace/GpsFictionProjects/gpsFiction/build/intermediates/exploded-aar/com.android.support/design/23.1.0/res/values/values.xml -->
     <eat-comment/>
     <style name="Base.Widget.Design.TabLayout" parent="android:Widget">
         <item name="tabMaxWidth">@dimen/design_tab_max_width</item>
@@ -1383,7 +1383,7 @@
         <item name="tabTextAppearance">@style/TextAppearance.Design.Tab</item>
         <item name="tabSelectedTextColor">?android:textColorPrimary</item>
     </style>
-    <!-- From: file:/cryptodev/sam/git/android_studio/workspace/GpsFictionProjects/gpsFiction/src/main/res/values/styles.xml -->
+    <!-- From: file:/divers/AndroidStudio/workspace/GpsFictionProjects/gpsFiction/src/main/res/values/styles.xml -->
     <eat-comment/>
     <style name="DialogButton">
         <!-- 	    <item name="android:textStyle">bold|italic</item> -->
@@ -1409,7 +1409,7 @@
         <item name="android:textStyle">bold</item>
         <item name="android:itemBackground">@drawable/background4menu</item>
     </style>
-    <!-- From: file:/cryptodev/sam/git/android_studio/workspace/GpsFictionProjects/gpsFiction/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.1.0/res/values/values.xml -->
+    <!-- From: file:/divers/AndroidStudio/workspace/GpsFictionProjects/gpsFiction/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.1.0/res/values/values.xml -->
     <eat-comment/>
     <style name="Platform.AppCompat" parent="android:Theme">
         <item name="android:windowNoTitle">true</item>
@@ -1555,7 +1555,7 @@
         <item name="android:paddingLeft">@dimen/abc_action_bar_overflow_padding_start_material</item>
         <item name="android:paddingRight">@dimen/abc_action_bar_overflow_padding_end_material</item>
     </style>
-    <!-- From: file:/cryptodev/sam/git/android_studio/workspace/GpsFictionProjects/gpsFiction/src/main/res/values/styles.xml -->
+    <!-- From: file:/divers/AndroidStudio/workspace/GpsFictionProjects/gpsFiction/src/main/res/values/styles.xml -->
     <eat-comment/>
     <style name="TabCompassDraw">
         <item name="android:layout_width">@dimen/compassSize</item>
@@ -1593,7 +1593,7 @@
         <item name="android:textSize">@dimen/titleTextSize</item>
         <item name="android:textStyle">bold</item>
     </style>
-    <!-- From: file:/cryptodev/sam/git/android_studio/workspace/GpsFictionProjects/gpsFiction/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.1.0/res/values/values.xml -->
+    <!-- From: file:/divers/AndroidStudio/workspace/GpsFictionProjects/gpsFiction/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.1.0/res/values/values.xml -->
     <eat-comment/>
     <style name="TextAppearance.AppCompat" parent="Base.TextAppearance.AppCompat"/>
     <style name="TextAppearance.AppCompat.Body1" parent="Base.TextAppearance.AppCompat.Body1"/>
@@ -1651,7 +1651,7 @@
     </style>
     <style name="TextAppearance.AppCompat.Widget.Switch" parent="Base.TextAppearance.AppCompat.Widget.Switch"/>
     <style name="TextAppearance.AppCompat.Widget.TextView.SpinnerItem" parent="Base.TextAppearance.AppCompat.Widget.TextView.SpinnerItem"/>
-    <!-- From: file:/cryptodev/sam/git/android_studio/workspace/GpsFictionProjects/gpsFiction/build/intermediates/exploded-aar/com.android.support/design/23.1.0/res/values/values.xml -->
+    <!-- From: file:/divers/AndroidStudio/workspace/GpsFictionProjects/gpsFiction/build/intermediates/exploded-aar/com.android.support/design/23.1.0/res/values/values.xml -->
     <eat-comment/>
     <style name="TextAppearance.Design.CollapsingToolbar.Expanded" parent="TextAppearance.AppCompat.Display1">
         <item name="android:textColor">?android:attr/textColorPrimary</item>
@@ -1677,7 +1677,7 @@
         <item name="android:textColor">?android:textColorSecondary</item>
         <item name="textAllCaps">true</item>
     </style>
-    <!-- From: file:/cryptodev/sam/git/android_studio/workspace/GpsFictionProjects/gpsFiction/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.1.0/res/values/values.xml -->
+    <!-- From: file:/divers/AndroidStudio/workspace/GpsFictionProjects/gpsFiction/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.1.0/res/values/values.xml -->
     <eat-comment/>
     <style name="TextAppearance.StatusBar.EventContent" parent=""/>
     <style name="TextAppearance.StatusBar.EventContent.Info" parent=""/>
@@ -1810,7 +1810,7 @@
     <style name="Widget.AppCompat.TextView.SpinnerItem" parent="Base.Widget.AppCompat.TextView.SpinnerItem"/>
     <style name="Widget.AppCompat.Toolbar" parent="Base.Widget.AppCompat.Toolbar"/>
     <style name="Widget.AppCompat.Toolbar.Button.Navigation" parent="Base.Widget.AppCompat.Toolbar.Button.Navigation"/>
-    <!-- From: file:/cryptodev/sam/git/android_studio/workspace/GpsFictionProjects/gpsFiction/build/intermediates/exploded-aar/com.android.support/design/23.1.0/res/values/values.xml -->
+    <!-- From: file:/divers/AndroidStudio/workspace/GpsFictionProjects/gpsFiction/build/intermediates/exploded-aar/com.android.support/design/23.1.0/res/values/values.xml -->
     <eat-comment/>
     <style name="Widget.Design.AppBarLayout" parent="android:Widget">
         <item name="elevation">@dimen/design_appbar_elevation</item>

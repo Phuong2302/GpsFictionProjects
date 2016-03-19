@@ -1,2 +1,2 @@
 <?xml version="1.0" encoding="utf-8"?>
-<merger version="3"><dataSet config="main"><source path="/cryptodev/sam/git/android_studio/workspace/GpsFictionProjects/gpsFiction/src/main/assets"/></dataSet><dataSet config="release"><source path="/cryptodev/sam/git/android_studio/workspace/GpsFictionProjects/gpsFiction/src/release/assets"/></dataSet></merger>
+<merger version="3"><dataSet config="main"><source path="/divers/AndroidStudio/workspace/GpsFictionProjects/gpsFiction/src/main/assets"/></dataSet><dataSet config="release"><source path="/divers/AndroidStudio/workspace/GpsFictionProjects/gpsFiction/src/release/assets"/></dataSet></merger>

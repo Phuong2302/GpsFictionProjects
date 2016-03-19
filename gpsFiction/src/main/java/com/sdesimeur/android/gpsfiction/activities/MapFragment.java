@@ -91,7 +91,7 @@ public class MapFragment extends MyTabFragment implements PlayerLocationListener
     private TileCache tileCache;
     private GraphHopper hopper;
     //private GraphHopperAPI hopper;
-    private String currentArea = "picardie";
+    private String currentArea = "jeu";
     private volatile boolean shortestPathRunning = false;
     private volatile boolean shortestPathRunningFirst = false;
     private volatile boolean prepareInProgress = false;
@@ -172,9 +172,9 @@ public class MapFragment extends MyTabFragment implements PlayerLocationListener
             } else {
                 dir = Environment.getExternalStorageDirectory();
             }
-            dir = new File (dir, "/GpsFictionProjects/");
+            dir = new File (dir, "/sdesimeur/");
             this.mapsFolder = new File (dir , "/mapsforge/");
-            this.ghFolder = new File (dir , "/graphhoppper/");
+            this.ghFolder = new File (dir , "/graphhopper/");
             MapDataStore mapDataStore = new MapFile(new File(mapsFolder, currentArea + ".map"));
 //            this.mapFile = new File(areaFolder, this.currentArea + ".map");
 //        }
@@ -271,7 +271,8 @@ public class MapFragment extends MyTabFragment implements PlayerLocationListener
                 //if (vehiculeSelectedId == R.drawable.auto) encoder = new CarFlagEncoder();
                 //hopper.setEncodingManager(new EncodingManager(encoder));
                 //hopper.setCHEnable(false);
-                hopper.setOSMFile(ghFolder + "/" + currentArea + "-gh/" + currentArea + ".pbf");
+                //hopper.setOSMFile(ghFolder + "/" + currentArea + "-gh/" + currentArea + ".pbf");
+                hopper.setOSMFile(ghFolder + "/" + currentArea + ".pbf");
                 hopper.setEncodingManager(new EncodingManager("FOOT,BIKE,CAR"));
                 hopper.setCHWeighting("fastest");
                 //hopper.load(new File(mapsFolder, currentArea).getAbsolutePath());

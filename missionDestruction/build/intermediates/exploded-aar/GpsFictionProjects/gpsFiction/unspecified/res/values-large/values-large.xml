@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- From: file:/cryptodev/sam/git/android_studio/workspace/GpsFictionProjects/gpsFiction/src/main/res/values-large/styles.xml -->
+    <!-- From: file:/divers/AndroidStudio/workspace/GpsFictionProjects/gpsFiction/src/main/res/values-large/styles.xml -->
     <eat-comment/>
     <dimen name="compassLineWidth">5dip</dimen>
     <dimen name="miniCompassSize">80dip</dimen>

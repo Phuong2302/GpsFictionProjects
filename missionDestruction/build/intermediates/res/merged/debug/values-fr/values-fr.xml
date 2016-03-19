@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- From: file:/cryptodev/sam/git/android_studio/workspace/GpsFictionProjects/missionDestruction/src/main/res/values-fr/mytexts.xml -->
+    <!-- From: file:/divers/AndroidStudio/workspace/GpsFictionProjects/missionDestruction/src/main/res/values-fr/mytexts.xml -->
     <eat-comment/>
     <string-array name="numeros">
         <item>1</item>
@@ -9,7 +9,7 @@
         <item>4</item>
         <item>5</item>
     </string-array>
-    <!-- From: file:/cryptodev/sam/git/android_studio/workspace/GpsFictionProjects/missionDestruction/build/intermediates/exploded-aar/GpsFictionProjects/gpsFiction/unspecified/res/values-fr/values-fr.xml -->
+    <!-- From: file:/divers/AndroidStudio/workspace/GpsFictionProjects/missionDestruction/build/intermediates/exploded-aar/GpsFictionProjects/gpsFiction/unspecified/res/values-fr/values-fr.xml -->
     <eat-comment/>
     <string-array name="pointscardinaux">
         <item>N</item>
@@ -21,7 +21,7 @@
         <item>O</item>
         <item>NO</item>
     </string-array>
-    <!-- From: file:/cryptodev/sam/git/android_studio/workspace/GpsFictionProjects/missionDestruction/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.1.0/res/values-fr/values-fr.xml -->
+    <!-- From: file:/divers/AndroidStudio/workspace/GpsFictionProjects/missionDestruction/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.1.0/res/values-fr/values-fr.xml -->
     <eat-comment/>
     <string msgid="4600421777120114993" name="abc_action_bar_home_description">"Revenir à l\'accueil"</string>
     <string msgid="1397052879051804371" name="abc_action_bar_home_description_format">"%1$s, %2$s"</string>
@@ -42,10 +42,10 @@
     <string msgid="3421042268587513524" name="abc_shareactionprovider_share_with">"Partager avec"</string>
     <string msgid="7165123711973476752" name="abc_shareactionprovider_share_with_application">"Partager avec %s"</string>
     <string msgid="1603543279005712093" name="abc_toolbar_collapse_description">"Réduire"</string>
-    <!-- From: file:/cryptodev/sam/git/android_studio/workspace/GpsFictionProjects/missionDestruction/src/main/res/values-fr/mytexts.xml -->
+    <!-- From: file:/divers/AndroidStudio/workspace/GpsFictionProjects/missionDestruction/src/main/res/values-fr/mytexts.xml -->
     <eat-comment/>
     <string name="app_name">Mission Destruction</string>
-    <!-- From: file:/cryptodev/sam/git/android_studio/workspace/GpsFictionProjects/missionDestruction/build/intermediates/exploded-aar/GpsFictionProjects/gpsFiction/unspecified/res/values-fr/values-fr.xml -->
+    <!-- From: file:/divers/AndroidStudio/workspace/GpsFictionProjects/missionDestruction/build/intermediates/exploded-aar/GpsFictionProjects/gpsFiction/unspecified/res/values-fr/values-fr.xml -->
     <eat-comment/>
     <string name="dialogButtonCancel">Annuler</string>
     <string name="dialogButtonNo">Non</string>
@@ -53,11 +53,11 @@
     <string name="dialogButtonYes">Oui</string>
     <string name="dialogCloseTaskText">Sauvegarder la partie ?</string>
     <string name="dialogCloseTaskTitle">Pour finir...</string>
-    <!-- From: file:/cryptodev/sam/git/android_studio/workspace/GpsFictionProjects/missionDestruction/src/main/res/values-fr/mytexts.xml -->
+    <!-- From: file:/divers/AndroidStudio/workspace/GpsFictionProjects/missionDestruction/src/main/res/values-fr/mytexts.xml -->
     <eat-comment/>
     <string name="dialogFirstTaskText">Placez vous tout d\'abord au centre de la zone de jeu, puis validez</string>
     <string name="dialogFirstTaskTitle">Pour commencer...</string>
-    <!-- From: file:/cryptodev/sam/git/android_studio/workspace/GpsFictionProjects/missionDestruction/build/intermediates/exploded-aar/GpsFictionProjects/gpsFiction/unspecified/res/values-fr/values-fr.xml -->
+    <!-- From: file:/divers/AndroidStudio/workspace/GpsFictionProjects/missionDestruction/build/intermediates/exploded-aar/GpsFictionProjects/gpsFiction/unspecified/res/values-fr/values-fr.xml -->
     <eat-comment/>
     <string name="distanceNull">Vous êtes dans la zone.</string>
     <string name="distance_initiale">100 m</string>
@@ -69,7 +69,7 @@
     <string name="inventory">Mon Inventaire</string>
     <string name="noZoneTitle">Vous n\'avez sélectionné aucun lieu.</string>
     <string name="nullstring"/>
-    <!-- From: file:/cryptodev/sam/git/android_studio/workspace/GpsFictionProjects/missionDestruction/src/main/res/values-fr/mytexts.xml -->
+    <!-- From: file:/divers/AndroidStudio/workspace/GpsFictionProjects/missionDestruction/src/main/res/values-fr/mytexts.xml -->
     <eat-comment/>
     <string name="rulesDef">Votre mission:\n
         * trouver la clef qui ouvre les coffrets contenant les armes, les munitions et les explosifs.\n
@@ -80,10 +80,10 @@
         * détruire le maximum de bases ennemis avec les explosifs.\n
         Attention, vous devrez éviter les mines déposées à différents endroits par vos ennemis.\n</string>
     <string name="rulesName">Mission Destruction</string>
-    <!-- From: file:/cryptodev/sam/git/android_studio/workspace/GpsFictionProjects/missionDestruction/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.1.0/res/values-fr/values-fr.xml -->
+    <!-- From: file:/divers/AndroidStudio/workspace/GpsFictionProjects/missionDestruction/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.1.0/res/values-fr/values-fr.xml -->
     <eat-comment/>
     <string msgid="2869576371154716097" name="status_bar_notification_info_overflow">">999"</string>
-    <!-- From: file:/cryptodev/sam/git/android_studio/workspace/GpsFictionProjects/missionDestruction/build/intermediates/exploded-aar/GpsFictionProjects/gpsFiction/unspecified/res/values-fr/values-fr.xml -->
+    <!-- From: file:/divers/AndroidStudio/workspace/GpsFictionProjects/missionDestruction/build/intermediates/exploded-aar/GpsFictionProjects/gpsFiction/unspecified/res/values-fr/values-fr.xml -->
     <eat-comment/>
     <string name="titleCharacters">Les personnages.</string>
     <string name="titleCompass">La boussole.</string>
@@ -93,7 +93,7 @@
     <string name="titleTasks">Ce que vous avez à faire.</string>
     <string name="titleZones">Zone du jeu.</string>
     <string name="title_activity_gps_fiction_main">GPS Fiction</string>
-    <!-- From: file:/cryptodev/sam/git/android_studio/workspace/GpsFictionProjects/missionDestruction/src/main/res/values-fr/mytexts.xml -->
+    <!-- From: file:/divers/AndroidStudio/workspace/GpsFictionProjects/missionDestruction/src/main/res/values-fr/mytexts.xml -->
     <eat-comment/>
     <string name="title_activity_main">Mission Destruction</string>
     <string name="zoneArme">La zone où se trouve l\'arme</string>
