@@ -2,11 +2,102 @@
 <items version="2" >
 
     <item
+        jar="/divers/AndroidStudio/workspace/GpsFictionProjects/enigmeALaon/build/intermediates/exploded-aar/com.android.support/support-v4/23.1.0/jars/classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="ddde541c289c8b816a8f8fd6c325d80788c522a6">
+        <dex dex="/divers/AndroidStudio/workspace/GpsFictionProjects/enigmeALaon/build/intermediates/pre-dexed/debug/classes-b57de9ee820491f83da8b1d957083b67d616e5ff.jar" />
+    </item>
+    <item
+        jar="/divers/AndroidStudio/workspace/GpsFictionProjects/enigmeALaon/build/intermediates/exploded-aar/com.android.support/design/23.1.0/jars/classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="19026d31f5d3ae868db81319671a642be5fbba08">
+        <dex dex="/divers/AndroidStudio/workspace/GpsFictionProjects/enigmeALaon/build/intermediates/pre-dexed/debug/classes-a1b2d3f210e86481dbd5993738c0daf90c2ba91e.jar" />
+    </item>
+    <item
+        jar="/divers/AndroidStudio/workspace/GpsFictionProjects/enigmeALaon/build/intermediates/exploded-aar/GpsFictionProjects/gpsFiction/unspecified/jars/libs/mapsforge-map-android.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="605df50050f52cb1eb50a862fa6cb5a8c4a04a02">
+        <dex dex="/divers/AndroidStudio/workspace/GpsFictionProjects/enigmeALaon/build/intermediates/pre-dexed/debug/mapsforge-map-android-b7a0d1913285f39138abf87f9a7dc071af479956.jar" />
+    </item>
+    <item
+        jar="/divers/AndroidStudio/workspace/GpsFictionProjects/enigmeALaon/build/intermediates/exploded-aar/com.android.support/recyclerview-v7/23.1.0/jars/classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="3f151e49c316a5ab2c065969a3b3b55ef9b393fc">
+        <dex dex="/divers/AndroidStudio/workspace/GpsFictionProjects/enigmeALaon/build/intermediates/pre-dexed/debug/classes-39d6beb414900fe522013e36b66229dda3661f7a.jar" />
+    </item>
+    <item
+        jar="/divers/AndroidStudio/workspace/GpsFictionProjects/enigmeALaon/build/intermediates/exploded-aar/GpsFictionProjects/gpsFiction/unspecified/jars/classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="b47fc83ba1f099b226d0c0ab0a31ef4a800783c1">
+        <dex dex="/divers/AndroidStudio/workspace/GpsFictionProjects/enigmeALaon/build/intermediates/pre-dexed/debug/classes-a5a11ba5e16dc5f3f03087a3994c2db8050b6786.jar" />
+    </item>
+    <item
         jar="/divers/AndroidStudio/workspace/GpsFictionProjects/missionDestruction/build/intermediates/exploded-aar/GpsFictionProjects/gpsFiction/unspecified/jars/classes.jar"
         jumboMode="false"
         revision="23.0.1"
         sha1="b47fc83ba1f099b226d0c0ab0a31ef4a800783c1">
         <dex dex="/divers/AndroidStudio/workspace/GpsFictionProjects/missionDestruction/build/intermediates/pre-dexed/debug/classes-cd05262d910f7ddd8badc84ff6e514b2b97e6611.jar" />
+    </item>
+    <item
+        jar="/divers/AndroidStudio/workspace/GpsFictionProjects/enigmeALaon/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.1.0/jars/classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="57ae0d750ff83f0c738d21720224ac7ea866a094">
+        <dex dex="/divers/AndroidStudio/workspace/GpsFictionProjects/enigmeALaon/build/intermediates/pre-dexed/debug/classes-1056dea86b2fec27ba4027eadbe8103a512835bc.jar" />
+    </item>
+    <item
+        jar="/divers/AndroidStudio/workspace/GpsFictionProjects/enigmeALaon/build/intermediates/exploded-aar/GpsFictionProjects/gpsFiction/unspecified/jars/libs/mapsforge-map-reader.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="ca23271eda6ac37cfc66a17201a144e9ec988121">
+        <dex dex="/divers/AndroidStudio/workspace/GpsFictionProjects/enigmeALaon/build/intermediates/pre-dexed/debug/mapsforge-map-reader-6ff39e233fd07e596b290445cc1963b046b9da17.jar" />
+    </item>
+    <item
+        jar="/divers/AndroidStudio/workspace/GpsFictionProjects/enigmeALaon/build/intermediates/exploded-aar/com.android.support/support-v4/23.1.0/jars/libs/internal_impl-23.1.0.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="8716243bf04bae8d6c9ca94d27b9a9be7236f0a3">
+        <dex dex="/divers/AndroidStudio/workspace/GpsFictionProjects/enigmeALaon/build/intermediates/pre-dexed/debug/internal_impl-23.1.0-02568e41379f410e66119c7d27b550395d9afe21.jar" />
+    </item>
+    <item
+        jar="/divers/AndroidStudio/workspace/GpsFictionProjects/enigmeALaon/build/intermediates/exploded-aar/GpsFictionProjects/gpsFiction/unspecified/jars/libs/mapsforge-core.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="9d5d2f320fe74f980d07d85542423b80ff534cd2">
+        <dex dex="/divers/AndroidStudio/workspace/GpsFictionProjects/enigmeALaon/build/intermediates/pre-dexed/debug/mapsforge-core-aa62deb3681abefb442e2e25c9eeb901ebdedc26.jar" />
+    </item>
+    <item
+        jar="/divers/AndroidStudio/workspace/GpsFictionProjects/enigmeALaon/build/intermediates/exploded-aar/GpsFictionProjects/gpsFiction/unspecified/jars/libs/androidsvg-1.2.1.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="d0cb3453e18fffeb053e9b7f052af3dcec9f75b4">
+        <dex dex="/divers/AndroidStudio/workspace/GpsFictionProjects/enigmeALaon/build/intermediates/pre-dexed/debug/androidsvg-1.2.1-deff9e49c8c7f22aadcfd997667d85f955aeb312.jar" />
+    </item>
+    <item
+        jar="/divers/AndroidStudio/workspace/GpsFictionProjects/enigmeALaon/build/intermediates/exploded-aar/GpsFictionProjects/gpsFiction/unspecified/jars/libs/mapsforge-map.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="753eb62aab8c3516956e40c4a09a201ed6a2e6f1">
+        <dex dex="/divers/AndroidStudio/workspace/GpsFictionProjects/enigmeALaon/build/intermediates/pre-dexed/debug/mapsforge-map-ac9e616e13f2b541b0a82734f5da4fd9222827ce.jar" />
+    </item>
+    <item
+        jar="/opt/android/android-sdk-linux/extras/android/m2repository/com/android/support/support-annotations/23.1.0/support-annotations-23.1.0.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="92e3fc113ec3ee36b64603a38857b95700025633">
+        <dex dex="/divers/AndroidStudio/workspace/GpsFictionProjects/enigmeALaon/build/intermediates/pre-dexed/debug/support-annotations-23.1.0-2eebed8f8430c58c21efcd69bf1d448aced83875.jar" />
+    </item>
+    <item
+        jar="/divers/AndroidStudio/workspace/GpsFictionProjects/enigmeALaon/build/intermediates/exploded-aar/GpsFictionProjects/gpsFiction/unspecified/jars/libs/graphhopper-SNAPSHOT-android.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="8fe3fd8c4f0e9b78220362f4ad207bb0bd61d2ea">
+        <dex dex="/divers/AndroidStudio/workspace/GpsFictionProjects/enigmeALaon/build/intermediates/pre-dexed/debug/graphhopper-SNAPSHOT-android-31f911c77de9e8ae34955b4e620ae81f83b286a6.jar" />
     </item>
 
 </items>
