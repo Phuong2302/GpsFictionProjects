@@ -23,10 +23,9 @@ Goal: Create a basic software (usable as a library) that allows you to create ga
 
 <img src="Screenshots/Screenshot_2016-03-21-14-05-47.png" width="200">
 <img src="Screenshots/Screenshot_2016-03-21-14-06-08.png" width="200">
-
 <img src="Screenshots/Screenshot_2016-03-21-14-19-29.png" width="200">
-<img src="Screenshots/Screenshot_2016-03-21-14-06-43.png" width="200">
 
+<img src="Screenshots/Screenshot_2016-03-21-14-06-43.png" width="200">
 <img src="Screenshots/Screenshot_2016-03-21-14-06-23.png" width="200">
 <img src="Screenshots/Screenshot_2016-03-21-14-22-54.png" width="200">
 
