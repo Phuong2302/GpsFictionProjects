@@ -21,13 +21,13 @@ Goal: Create a basic software (usable as a library) that allows you to create ga
 
 ### Screenshots
 
-![Alt text](Screenshots/Screenshot_2016-03-21-14-05-47.png "List of the areas" =240x )
-![Alt text](Screenshots/Screenshot_2016-03-21-14-06-08.png "List of the areas with selected area" =240x ) 
+![image](Screenshots/Screenshot_2016-03-21-14-05-47.png "List of the areas") {: width=200px}
+![image](Screenshots/Screenshot_2016-03-21-14-06-08.png "List of the areas with selected area") {: width=200px}
 
-![Alt text](Screenshots/Screenshot_2016-03-21-14-19-29.png "Menu" =240x )
-![Alt text](Screenshots/Screenshot_2016-03-21-14-06-43.png "Map to see the areas and selected area" =240x )
+![image](Screenshots/Screenshot_2016-03-21-14-19-29.png "Menu") {: width=200px}
+![image](Screenshots/Screenshot_2016-03-21-14-06-43.png "Map to see the areas and selected area") {: width=200px}
 
-![Alt text](Screenshots/Screenshot_2016-03-21-14-06-23.png "Compass to keep the direction of the selected area" =240x )
-![Alt text](Screenshots/Screenshot_2016-03-21-14-22-54.png "Compass view when you are in the target's area" =240x )
+![image](Screenshots/Screenshot_2016-03-21-14-06-23.png "Compass to keep the direction of the selected area") {: width=200px}
+![image](Screenshots/Screenshot_2016-03-21-14-22-54.png "Compass view when you are in the target's area") {: width=200px}
 
 
