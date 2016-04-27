@@ -1,1 +1,1 @@
-include ':app', ':gpsFiction', ':missionDestruction', ':enigmeALaon'
+include ':app', ':gpsFiction', ':missionDestruction', ':enigmeALaon', ':omim:android'

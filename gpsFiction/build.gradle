@@ -34,4 +34,5 @@ dependencies {
     compile files('libs/mapsforge-map-reader.jar')
     compile 'com.android.support:design:23.1.0'
     compile files('libs/graphhopper-SNAPSHOT-android.jar')
+    compile project(':omim:android')
 }
