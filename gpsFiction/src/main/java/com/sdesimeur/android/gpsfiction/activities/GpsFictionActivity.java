@@ -7,6 +7,7 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
@@ -28,8 +29,6 @@ import com.sdesimeur.android.gpsfiction.gpx.beans.GPX;
 import com.sdesimeur.android.gpsfiction.gpx.beans.Track;
 import com.sdesimeur.android.gpsfiction.gpx.beans.Waypoint;
 
-import org.mapsforge.map.android.graphics.AndroidGraphicFactory;
-
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -47,26 +46,21 @@ public class GpsFictionActivity extends AppCompatActivity /*implements TabListen
     protected FragmentManager fragmentManager;
     protected HashSet<MyDialogFragment> dialogFragments = new HashSet<MyDialogFragment>();
     private MyLocationListener myLocationListener = null;
-    //	private GpsFictionFragment gpsFictionFragment = null;
-//    private AppSectionsPagerAdapter mAppSectionsPagerAdapter = null;
     private ViewPager mViewPager = null;
     private NavigationView navigationView;
     private DrawerLayout drawerLayout;
-    private HashMap<Integer, MyTabFragment> menuItem2Fragments;
+    private HashMap<Integer, MyTabFragmentImpl> menuItem2Fragments;
     private int selectedFragmentId = R.id.Zones;
 
-    /*    public AppSectionsPagerAdapter getmAppSectionsPagerAdapter() {
-            return mAppSectionsPagerAdapter;
-        }*/
     private void defineFragments(String lastSelectedFragmentName) {
-        menuItem2Fragments = new HashMap<Integer, MyTabFragment>();
+        menuItem2Fragments = new HashMap<Integer, MyTabFragmentImpl>();
         String[] fragmentNames = getResources().getStringArray(R.array.fragmentsNames);
         TypedArray menuItems = getResources().obtainTypedArray(R.array.menuItems);
         for (int i = 0; i < fragmentNames.length; i++) {
             String s = fragmentNames[i];
             try {
                 Class myclass = Class.forName("com.sdesimeur.android.gpsfiction.activities." + s + "Fragment");
-                MyTabFragment myTabFragment = (MyTabFragment) (myclass.newInstance());
+                MyTabFragmentImpl myTabFragment = (MyTabFragmentImpl) (myclass.newInstance());
                 Integer id = menuItems.getResourceId(i, 0);
                 menuItem2Fragments.put(id, myTabFragment);
                 myTabFragment.register(this);
@@ -87,37 +81,12 @@ public class GpsFictionActivity extends AppCompatActivity /*implements TabListen
         }
         menuItems.recycle();
     }
-/*
-    private void createFragmentTabs () {
-		if (this.mAppSectionsPagerAdapter == null)
-			this.mAppSectionsPagerAdapter = new AppSectionsPagerAdapter(getSupportFragmentManager());
-		this.mAppSectionsPagerAdapter.setGpsFictionActivity(this);
-		TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
-        this.mViewPager = (ViewPager) this.findViewById(R.id.pager);
-        this.mViewPager.setAdapter(this.mAppSectionsPagerAdapter);
-		tabLayout.setVisibility(View.VISIBLE);
-		tabLayout.setupWithViewPager(this.mViewPager);
-	}
-    @Override
-    public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
-    }
-    @Override
-    public void onTabSelected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
-        // When the given tab is selected, switch to the corresponding page in the ViewPager.
-        this.mViewPager.setCurrentItem(tab.getPosition());
-    }
-
-    @Override
-    public void onTabReselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
-    }
-*/
 
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         //this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        AndroidGraphicFactory.createInstance(this.getApplication());
         if (this.myLocationListener == null) this.myLocationListener = new MyLocationListener();
         this.myLocationListener.init(this);
         if (this.gpsFictionData == null) {
@@ -179,7 +148,7 @@ public class GpsFictionActivity extends AppCompatActivity /*implements TabListen
 
     public void setFragmentInContainer() {
         FragmentTransaction fragTransaction = fragmentManager.beginTransaction();
-        fragTransaction.replace(R.id.container, menuItem2Fragments.get(selectedFragmentId));
+        fragTransaction.replace(R.id.container, (Fragment)menuItem2Fragments.get(selectedFragmentId));
         fragTransaction.commit();
         //	navigationView.getMenu().findItem(selectedFragmentId).setChecked(true);
     }
@@ -290,11 +259,11 @@ public class GpsFictionActivity extends AppCompatActivity /*implements TabListen
         Typeface tf = null;
         InputStream is = null;
         try {
-            is = this.getResources().openRawResource(resource);
+            is = getResources().openRawResource(resource);
         } catch (NotFoundException e) {
             Log.e(TAGFONT, "Could not find font in resources!");
         }
-        String outPath = this.getCacheDir() + "/tmp" + System.currentTimeMillis() + ".raw";
+        String outPath = getCacheDir() + "/tmp" + System.currentTimeMillis() + ".raw";
         try {
             byte[] buffer = new byte[is.available()];
             BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(outPath));
@@ -319,7 +288,7 @@ public class GpsFictionActivity extends AppCompatActivity /*implements TabListen
     }
 
     public void setResourcedZones(int gpxRes) {
-        InputStream in = this.getResources().openRawResource(gpxRes);
+        InputStream in = getResources().openRawResource(gpxRes);
         GPXParser p = new GPXParser();
         Zone zn = null;
         try {
@@ -331,7 +300,7 @@ public class GpsFictionActivity extends AppCompatActivity /*implements TabListen
                 ArrayList<Waypoint> wpts = tr.getTrackPoints();
                 wpts.remove(0);
                 String name = "zone" + tr.getName();
-                int res = this.getResources().getIdentifier(name, "string", getPackageName());
+                int res = getResources().getIdentifier(name, "string", getPackageName());
                 zn = new Zone();
                 zn.init(this);
                 zn.setId(res);

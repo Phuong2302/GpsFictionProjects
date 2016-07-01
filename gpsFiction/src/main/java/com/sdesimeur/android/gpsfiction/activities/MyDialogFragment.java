@@ -105,7 +105,8 @@ public class MyDialogFragment extends DialogFragment {
 
     private void returnButton(int buttonId) {
         this.gpsFictionActivity.getReponseFromMyDialogFragment(titleId, (Integer) (buttonId));
-        this.dismissAllowingStateLoss();
+        this.dismiss();
+        //this.dismissAllowingStateLoss();
     }
 
     @Override

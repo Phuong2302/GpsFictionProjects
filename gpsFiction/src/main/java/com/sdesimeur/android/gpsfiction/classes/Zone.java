@@ -298,12 +298,7 @@ public class Zone extends Container implements ZoneEnterOrExitInterface, PlayerL
     public void registerInListeners() {
         this.createMarker();
         this.createPolyline();
-		/*GpsFictionActivity gpsFictionActivity = this.getGpsFictionActivity();
-		AppSectionsPagerAdapter aspa = gpsFictionActivity.getmAppSectionsPagerAdapter();
-		MapFragment mf = (MapFragment) (aspa.getFragment("Map"));
-		mf.registerZone(this);*/
         getGpsFictionActivity().getGpsFictionData().addZoneSelectListener(GpsFictionData.REGISTER.ZONE, this);
-        //this.getGpsFictionActivity().getMapFragment().changeZoneVisibility(this);
         getGpsFictionActivity().getMyLocationListener().addPlayerLocationListener(MyLocationListener.REGISTER.ZONE, this);
         getGpsFictionActivity().getMyLocationListener().addPlayerBearingListener(MyLocationListener.REGISTER.ZONE, this);
     }

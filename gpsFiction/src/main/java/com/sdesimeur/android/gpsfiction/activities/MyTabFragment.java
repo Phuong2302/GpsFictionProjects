@@ -5,7 +5,7 @@ import android.support.v4.app.Fragment;
 import android.view.View;
 
 
-public abstract class MyTabFragment extends Fragment {
+public abstract class MyTabFragment extends Fragment implements MyTabFragmentImpl {
     private int nameId;
     private View rootView = null;
     private GpsFictionActivity gpsFictionActivity = null;
@@ -32,12 +32,6 @@ public abstract class MyTabFragment extends Fragment {
         this.rootView = rootView;
     }
 
-    /*public int getNameId () {
-        return this.nameId;
-    }
-    public void setNameId (int nameId) {
-        this.nameId=nameId;
-    }*/
     @Override
     public void onDestroyView() {
         super.onDestroy();
@@ -46,13 +40,5 @@ public abstract class MyTabFragment extends Fragment {
 
     public void register(GpsFictionActivity gpsFictionActivity) {
         this.gpsFictionActivity = gpsFictionActivity;
-        //this.getGpsFictionActivity().getGpsFictionData().addZoneSelectListener(GpsFictionData.REGISTER.FRAGMENT,this);
-        //this.getGpsFictionActivity().getMyLocationListener().addPlayerLocationListener(MyLocationListener.REGISTER.FRAGMENT,this);
-        //this.getGpsFictionActivity().getMyLocationListener().addPlayerBearingListener(MyLocationListener.REGISTER.FRAGMENT,this);
     }
-    //public void unRegister() {
-    //this.getGpsFictionActivity().getGpsFictionData().removeZoneSelectListener(GpsFictionData.REGISTER.FRAGMENT,this);
-    //this.getGpsFictionActivity().getMyLocationListener().removePlayerLocationListener(MyLocationListener.REGISTER.FRAGMENT,this);
-    //this.getGpsFictionActivity().getMyLocationListener().removePlayerBearingListener(MyLocationListener.REGISTER.FRAGMENT,this);
-    //}
 }

@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <!-- From: file:/divers/AndroidStudio/workspace/GpsFictionProjects/gpsFiction/src/main/res/values-large-port/styles.xml -->
-    <eat-comment/>
-    <dimen name="compassSize">800dip</dimen>
-</resources>

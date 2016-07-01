@@ -1,0 +1,16 @@
+#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/divers/AndroidStudio/workspace/GpsFictionProjects/omim/3party/osrm/osrm-backend/util/mercator.cpp
+mercator.hpp
+/divers/AndroidStudio/workspace/GpsFictionProjects/omim/3party/osrm/osrm-backend/util/mercator.hpp
+cmath
+-
+
+/divers/AndroidStudio/workspace/GpsFictionProjects/omim/3party/osrm/osrm-backend/util/mercator.hpp
+

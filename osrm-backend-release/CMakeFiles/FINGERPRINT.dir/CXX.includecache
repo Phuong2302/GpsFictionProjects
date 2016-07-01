@@ -1,0 +1,36 @@
+#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/divers/AndroidStudio/workspace/GpsFictionProjects/omim/3party/osrm/osrm-backend/util/fingerprint.cpp
+fingerprint.hpp
+/divers/AndroidStudio/workspace/GpsFictionProjects/omim/3party/osrm/osrm-backend/util/fingerprint.hpp
+fingerprint_impl.hpp
+/divers/AndroidStudio/workspace/GpsFictionProjects/omim/3party/osrm/osrm-backend/util/fingerprint_impl.hpp
+
+/divers/AndroidStudio/workspace/GpsFictionProjects/omim/3party/osrm/osrm-backend/util/fingerprint.hpp
+boost/uuid/uuid.hpp
+-
+
+/divers/AndroidStudio/workspace/GpsFictionProjects/omim/3party/osrm/osrm-backend/util/fingerprint_impl.hpp
+osrm_exception.hpp
+/divers/AndroidStudio/workspace/GpsFictionProjects/omim/3party/osrm/osrm-backend/util/osrm_exception.hpp
+boost/uuid/name_generator.hpp
+-
+cstring
+-
+algorithm
+-
+string
+-
+
+/divers/AndroidStudio/workspace/GpsFictionProjects/omim/3party/osrm/osrm-backend/util/osrm_exception.hpp
+exception
+-
+string
+-
+

@@ -5,4 +5,3 @@
     android:layout_height="wrap_content"
     android:layout_gravity="top|right"
     android:orientation="horizontal"></LinearLayout>
-<!-- From: file:/cryptodev/sam/git/android_studio/workspace/GpsFictionProjects/gpsFiction/src/main/res/layout/tab_map_vehicules_buttons.xml -->

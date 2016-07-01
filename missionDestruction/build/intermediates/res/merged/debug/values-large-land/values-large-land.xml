@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <!-- From: file:/divers/AndroidStudio/workspace/GpsFictionProjects/missionDestruction/build/intermediates/exploded-aar/GpsFictionProjects/gpsFiction/unspecified/res/values-large-land/values-large-land.xml -->
-    <eat-comment/>
-    <dimen name="compassSize">600dip</dimen>
-</resources>

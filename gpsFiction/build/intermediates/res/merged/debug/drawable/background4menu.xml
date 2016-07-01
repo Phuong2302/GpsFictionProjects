@@ -6,4 +6,3 @@
     <item android:drawable="@color/white" android:state_pressed="true" />
     <item android:drawable="@color/grey" />
 </selector>
-<!-- From: file:/cryptodev/sam/git/android_studio/workspace/GpsFictionProjects/gpsFiction/src/main/res/drawable/background4menu.xml -->
