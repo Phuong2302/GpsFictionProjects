@@ -4,7 +4,7 @@
         <item>Zones</item>
         <item>Inventory</item>
         <item>Compass</item>
-        <item>Map</item>
+        <item>MapOmim</item>
         <item>Tasks</item>
     </string-array>
     <integer-array name="menuItems">
