@@ -1,13 +1,11 @@
-apply plugin: 'com.android.application'
+apply plugin: 'com.android.library'
 
 android {
-    compileSdkVersion 23
+    compileSdkVersion 22
     buildToolsVersion "23.0.1"
-
     defaultConfig {
-        applicationId "com.sdesimeur.android.gpsfiction.enigmealaon"
-        minSdkVersion 10
-        targetSdkVersion 23
+        minSdkVersion 15
+        targetSdkVersion 22
         versionCode 1
         versionName "1.0"
     }
@@ -19,6 +17,8 @@ android {
     }
     dexOptions {
         incremental false
+    }
+    productFlavors {
     }
 }
 

@@ -15,6 +15,7 @@ import android.app.Activity;
         import android.view.ViewGroup;
 
         import com.mapswithme.maps.base.BaseMwmFragment;
+        import com.mapswithme.maps.BuildConfig;
         import com.mapswithme.util.UiUtils;
 
 public class MapOmimFragment extends BaseMwmFragment
@@ -75,7 +76,7 @@ public class MapOmimFragment extends BaseMwmFragment
     }
 
     public GpsFictionActivity getGpsFictionActivity() {
-        return null;
+        return gpsFictionActivity;
     }
 
     interface MapRenderingListener
