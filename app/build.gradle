@@ -27,3 +27,8 @@ dependencies {
     compile 'com.android.support:appcompat-v7:22.2.1'
     compile project(':missionDestruction')
 }
+repositories {
+    flatDir {
+        dirs 'omim/omim/android/build/outputs/aar'
+    }
+}

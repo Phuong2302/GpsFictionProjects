@@ -1,5 +1,4 @@
 apply plugin: 'com.android.library'
-
 android {
     compileSdkVersion 22
     buildToolsVersion '22.0.1'
@@ -28,6 +27,11 @@ dependencies {
     compile 'com.android.support:support-v4:22.2.1'
     compile 'com.android.support:appcompat-v7:22.2.1'
     compile 'com.android.support:design:22.2.1'
+    compile 'com.android.support:cardview-v7:22.2.1'
+    //   compile files ('omim/omim/android/build/outputs/aar/android-debug.aar')
+    //    compile files('omim/omim/android/build/intermediates/bundles/release/classes.jar')
+    compile project(':BottomSheet-release')
+    compile project(':omim')
     compile files('libs/mapsforge-map.jar')
     compile files('libs/mapsforge-map-reader.jar')
     compile files('libs/mapsforge-map-android.jar')
@@ -36,3 +40,4 @@ dependencies {
     compile files('libs/commons-lang3-3.0.1.jar')
     compile files('libs/androidsvg-1.2.1.jar')
 }
+

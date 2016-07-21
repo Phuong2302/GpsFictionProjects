@@ -1,2 +1,1 @@
-include ':app', ':gpsFiction', ':missionDestruction', ':enigmeALaon', ':omim:android', ':BottomSheet'
-project(':BottomSheet').projectDir = new File('omim/android/3rd_party/BottomSheet')
+include ':app', ':gpsFiction', ':missionDestruction', ':enigmeALaon', ':omim', ':BottomSheet-release'

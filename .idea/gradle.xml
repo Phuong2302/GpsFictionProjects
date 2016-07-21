@@ -9,25 +9,23 @@
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
+            <option value="$PROJECT_DIR$/BottomSheet-release" />
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/enigmeALaon" />
             <option value="$PROJECT_DIR$/gpsFiction" />
             <option value="$PROJECT_DIR$/missionDestruction" />
             <option value="$PROJECT_DIR$/omim" />
-            <option value="$PROJECT_DIR$/omim/android" />
-            <option value="$PROJECT_DIR$/omim/android/3rd_party/BottomSheet" />
           </set>
         </option>
         <option name="myModules">
           <set>
             <option value="$PROJECT_DIR$" />
+            <option value="$PROJECT_DIR$/BottomSheet-release" />
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/enigmeALaon" />
             <option value="$PROJECT_DIR$/gpsFiction" />
             <option value="$PROJECT_DIR$/missionDestruction" />
             <option value="$PROJECT_DIR$/omim" />
-            <option value="$PROJECT_DIR$/omim/android" />
-            <option value="$PROJECT_DIR$/omim/android/3rd_party/BottomSheet" />
           </set>
         </option>
       </GradleProjectSettings>

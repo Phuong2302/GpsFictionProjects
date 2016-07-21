@@ -1,22 +1,24 @@
 package com.sdesimeur.android.gpsfiction.activities;
-import android.app.Activity;
-        import android.content.DialogInterface;
-        import android.graphics.Rect;
-        import android.os.Bundle;
-        import android.support.annotation.Nullable;
-        import android.support.v7.app.AlertDialog;
-        import android.util.DisplayMetrics;
-        import android.view.LayoutInflater;
-        import android.view.MotionEvent;
-        import android.view.Surface;
-        import android.view.SurfaceHolder;
-        import android.view.SurfaceView;
-        import android.view.View;
-        import android.view.ViewGroup;
 
-        import com.mapswithme.maps.base.BaseMwmFragment;
-        import com.mapswithme.maps.BuildConfig;
-        import com.mapswithme.util.UiUtils;
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.graphics.Rect;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.util.DisplayMetrics;
+import android.view.LayoutInflater;
+import android.view.MotionEvent;
+import android.view.Surface;
+import android.view.SurfaceHolder;
+import android.view.SurfaceView;
+import android.view.View;
+import android.view.ViewGroup;
+
+import com.mapswithme.maps.BuildConfig;
+import com.mapswithme.maps.MwmActivity;
+import com.mapswithme.maps.base.BaseMwmFragment;
+import com.mapswithme.util.UiUtils;
 
 public class MapOmimFragment extends BaseMwmFragment
         implements View.OnTouchListener,
@@ -176,7 +178,7 @@ public class MapOmimFragment extends BaseMwmFragment
         getActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
         final float exactDensityDpi = metrics.densityDpi;
 
-        mFirstStart = ((MwmActivity) getMwmActivity()).isFirstStart();
+        //mFirstStart = ((MwmActivity) getMwmActivity()).isFirstStart();
         mEngineCreated = nativeCreateEngine(surface, (int) exactDensityDpi, mFirstStart);
         if (!mEngineCreated)
         {
