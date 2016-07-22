@@ -1,4 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.sdesimeur.android.gpsfiction"
     android:versionCode="1"
     android:versionName="1.0">
@@ -12,9 +13,8 @@
     <application
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/MyAppTheme">
-        <!--        android:label="@string/app_name"-->
-        <!--        android:theme="@style/Theme.AppCompat.Light"-->
+        android:theme="@style/MwmTheme">
+        <!--android:theme="@style/MyAppTheme">-->
         <activity
             android:name="com.sdesimeur.android.gpsfiction.activities.GpsFictionActivity"
             android:alwaysRetainTaskState="true"

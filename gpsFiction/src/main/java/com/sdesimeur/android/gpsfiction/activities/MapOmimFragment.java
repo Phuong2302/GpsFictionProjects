@@ -14,11 +14,10 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
-
 import com.mapswithme.maps.BuildConfig;
-import com.mapswithme.maps.MwmActivity;
 import com.mapswithme.maps.base.BaseMwmFragment;
 import com.mapswithme.util.UiUtils;
+import com.mapswithme.maps.R;
 
 public class MapOmimFragment extends BaseMwmFragment
         implements View.OnTouchListener,
