@@ -5,6 +5,10 @@ android {
     defaultConfig {
         minSdkVersion 15
         targetSdkVersion 22
+        ndk {
+            moduleName "mapswithme"
+        }
+
     }
     buildTypes {
         release {
@@ -26,12 +30,13 @@ android {
 dependencies {
     compile 'com.android.support:support-v4:22.2.1'
     compile 'com.android.support:appcompat-v7:22.2.1'
+    compile 'com.android.support:recyclerview-v7:22.2.1'
     compile 'com.android.support:design:22.2.1'
     compile 'com.android.support:cardview-v7:22.2.1'
     //   compile files ('omim/omim/android/build/outputs/aar/android-debug.aar')
     //    compile files('omim/omim/android/build/intermediates/bundles/release/classes.jar')
-    compile project(':BottomSheet-release')
-    compile project(':omim')
+    compile project(':gpsFiction:BottomSheet-lib')
+    compile project(':gpsFiction:omim-lib')
     compile files('libs/mapsforge-map.jar')
     compile files('libs/mapsforge-map-reader.jar')
     compile files('libs/mapsforge-map-android.jar')

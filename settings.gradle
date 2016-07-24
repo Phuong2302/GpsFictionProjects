@@ -1,1 +1,1 @@
-include ':app', ':gpsFiction', ':missionDestruction', ':enigmeALaon', ':omim', ':BottomSheet-release'
+include ':app', ':gpsFiction', ':missionDestruction', ':enigmeALaon', ':gpsFiction:omim-lib', ':gpsFiction:BottomSheet-lib'

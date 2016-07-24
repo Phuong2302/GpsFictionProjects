@@ -55,7 +55,7 @@ public class MapOmimFragment extends BaseMwmFragment
     private int mWidth;
     private boolean mRequireResize;
     private boolean mEngineCreated;
-    private boolean mFirstStart;
+    //private boolean mFirstStart;
     private static boolean sWasCopyrightDisplayed;
     private GpsFictionActivity gpsFictionActivity;
     private View rootView;
@@ -178,6 +178,7 @@ public class MapOmimFragment extends BaseMwmFragment
         final float exactDensityDpi = metrics.densityDpi;
 
         //mFirstStart = ((MwmActivity) getMwmActivity()).isFirstStart();
+        boolean mFirstStart = false;
         mEngineCreated = nativeCreateEngine(surface, (int) exactDensityDpi, mFirstStart);
         if (!mEngineCreated)
         {
@@ -291,14 +292,14 @@ public class MapOmimFragment extends BaseMwmFragment
                 return true;
         }
     }
-
+/*
     boolean isFirstStart()
     {
         boolean res = mFirstStart;
         mFirstStart = false;
         return res;
     }
-
+*/
     static native void nativeCompassUpdated(double magneticNorth, double trueNorth, boolean forceRedraw);
     static native void nativeScalePlus();
     static native void nativeScaleMinus();
