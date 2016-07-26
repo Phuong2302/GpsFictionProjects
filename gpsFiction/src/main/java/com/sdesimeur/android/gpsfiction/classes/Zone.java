@@ -9,15 +9,11 @@ import com.sdesimeur.android.gpsfiction.gpx.beans.Waypoint;
 import com.sdesimeur.android.gpsfiction.polygon.MyPolygon;
 
 import org.mapsforge.core.graphics.Paint;
-import org.mapsforge.core.graphics.Style;
-import org.mapsforge.core.model.LatLong;
-import org.mapsforge.map.android.graphics.AndroidGraphicFactory;
 import org.mapsforge.map.layer.overlay.Marker;
 import org.mapsforge.map.layer.overlay.Polyline;
 
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
 
 public class Zone extends Container implements ZoneEnterOrExitInterface, PlayerLocationListener, PlayerBearingListener, ZoneSelectListener {
     private final static double RAPPORT = 2 * Math.PI / 0.005;
@@ -315,20 +311,17 @@ public class Zone extends Container implements ZoneEnterOrExitInterface, PlayerL
     }
 
     private void createPolyline() {
+        /*
         this.paintStroke = AndroidGraphicFactory.INSTANCE.createPaint();
         this.paintStroke.setStyle(Style.FILL);
         this.onZoneSelectChanged(null);
-        //paintStroke.setDashPathEffect(new float[] { 25, 15 });
         this.paintStroke.setStrokeWidth(getResources().getDimension(R.dimen.mapzoneborderwidth));
-        //paintStroke.setStrokeWidth(8);
-        // TODO: new mapsforge version wants an mapsforge-paint, not an android paint.
-        // This doesn't seem to support transparceny
-        //paintStroke.setAlpha(128);
         Polyline line = new Polyline(this.paintStroke, AndroidGraphicFactory.INSTANCE);
         List<LatLong> geoPoints = line.getLatLongs();
         geoPoints.addAll(this.getShape());
         this.zonePolyline = line;
         this.zonePolyline.setVisible(this.isVisible());
+        */
     }
 
     public void setVisible(boolean visible) {
@@ -352,9 +345,9 @@ public class Zone extends Container implements ZoneEnterOrExitInterface, PlayerL
     public void setSelectedZone(boolean isSelectedZone) {
         this.isSelectedZone = isSelectedZone;
         if (this.isSelectedZone) {
-            this.paintStroke.setColor(getResources().getColor(R.color.mapzoneselectedborder));
+//            this.paintStroke.setColor(getResources().getColor(R.color.mapzoneselectedborder));
         } else {
-            this.paintStroke.setColor(getResources().getColor(R.color.mapzoneborder));
+//            this.paintStroke.setColor(getResources().getColor(R.color.mapzoneborder));
         }
     }
 
