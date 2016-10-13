@@ -18,19 +18,14 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 import android.widget.ZoomControls;
 
 import com.graphhopper.GHRequest;
 import com.graphhopper.GHResponse;
 import com.graphhopper.GraphHopper;
-import com.graphhopper.GraphHopperAPI;
 import com.graphhopper.routing.AlgorithmOptions;
-import com.graphhopper.routing.util.BikeFlagEncoder;
-import com.graphhopper.routing.util.CarFlagEncoder;
 import com.graphhopper.routing.util.EncodingManager;
 import com.graphhopper.routing.util.FlagEncoder;
-import com.graphhopper.routing.util.FootFlagEncoder;
 import com.graphhopper.util.PointList;
 import com.graphhopper.util.StopWatch;
 import com.sdesimeur.android.gpsfiction.R;
@@ -40,7 +35,6 @@ import com.sdesimeur.android.gpsfiction.classes.MyLocationListener;
 import com.sdesimeur.android.gpsfiction.classes.PlayerLocationEvent;
 import com.sdesimeur.android.gpsfiction.classes.PlayerLocationListener;
 import com.sdesimeur.android.gpsfiction.classes.PlayerRotatingMarker;
-import com.sdesimeur.android.gpsfiction.classes.RotatingMarker;
 import com.sdesimeur.android.gpsfiction.classes.Zone;
 import com.sdesimeur.android.gpsfiction.classes.ZoneSelectListener;
 import com.sdesimeur.android.gpsfiction.geopoint.GeoPoint;
@@ -49,20 +43,9 @@ import com.sdesimeur.android.gpsfiction.views.MyMapScaleBarView;
 import com.sdesimeur.android.gpsfiction.views.MyMapView;
 import com.sdesimeur.android.gpsfiction.views.RotateView;
 
-import org.mapsforge.core.graphics.Bitmap;
-import org.mapsforge.core.graphics.Paint;
-import org.mapsforge.core.graphics.Style;
-import org.mapsforge.core.model.LatLong;
-import org.mapsforge.map.android.graphics.AndroidGraphicFactory;
-import org.mapsforge.map.android.util.AndroidUtil;
-import org.mapsforge.map.layer.Layer;
-import org.mapsforge.map.layer.cache.TileCache;
-import org.mapsforge.map.layer.overlay.Marker;
-import org.mapsforge.map.layer.overlay.Polyline;
-import org.mapsforge.map.layer.renderer.TileRendererLayer;
-import org.mapsforge.map.reader.MapDataStore;
-import org.mapsforge.map.reader.MapFile;
-import org.mapsforge.map.rendertheme.InternalRenderTheme;
+import org.oscim.android.cache.TileCache;
+import org.oscim.layers.Layer;
+import org.oscim.layers.marker.MarkerSymbol;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -71,7 +54,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 
-import static android.view.ViewGroup.*;
+import static android.view.ViewGroup.LayoutParams;
 
 
 public class MapFragment extends MyTabFragment implements PlayerLocationListener, ZoneSelectListener {
@@ -95,7 +78,8 @@ public class MapFragment extends MyTabFragment implements PlayerLocationListener
     private volatile boolean shortestPathRunning = false;
     private volatile boolean shortestPathRunningFirst = false;
     private volatile boolean prepareInProgress = false;
-    private RotatingMarker playerMarker;
+    //private RotatingMarker playerMarker;
+    private MyMarkerSymbol playerMarker;
     //private boolean layoutMapViewRotateInitialized = false;
     private RotateView rotateView = null;
     private ViewGroup viewGroupForVehiculesButtons = null;

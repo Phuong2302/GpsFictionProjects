@@ -4,12 +4,11 @@ import android.location.Location;
 
 import com.sdesimeur.android.gpsfiction.gpx.beans.Waypoint;
 
-import org.mapsforge.core.model.LatLong;
 
 /**
  * Abstraction of geographic point.
  */
-public class GeoPoint extends LatLong {
+public class GeoPoint extends org.oscim.core.GeoPoint {
     /**
      *
      */
@@ -120,30 +119,12 @@ public class GeoPoint extends LatLong {
 */
 
     /**
-     * Get latitude in degree.
-     *
-     * @return latitude
-     */
-    public Double getLatitude() {
-        return this.latitude;
-    }
-
-    /**
      * Get latitude in microdegree.
      *
      * @return latitude
      */
     public int getLatitudeE6() {
-        return ((int) (Math.round(this.latitude * 1e6)));
-    }
-
-    /**
-     * Get longitude in degree.
-     *
-     * @return longitude
-     */
-    public Double getLongitude() {
-        return this.longitude;
+        return (this.getLatitudeE6());
     }
 
     /**
@@ -152,7 +133,7 @@ public class GeoPoint extends LatLong {
      * @return longitude
      */
     public int getLongitudeE6() {
-        return ((int) (Math.round(this.longitude * 1e6)));
+        return (this.getLongitudeE6());
     }
 
     /**

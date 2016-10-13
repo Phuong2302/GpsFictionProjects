@@ -8,12 +8,7 @@ import com.sdesimeur.android.gpsfiction.geopoint.GeoPoint;
 import com.sdesimeur.android.gpsfiction.gpx.beans.Waypoint;
 import com.sdesimeur.android.gpsfiction.polygon.MyPolygon;
 
-import org.mapsforge.core.graphics.Paint;
-import org.mapsforge.core.graphics.Style;
-import org.mapsforge.core.model.LatLong;
-import org.mapsforge.map.android.graphics.AndroidGraphicFactory;
-import org.mapsforge.map.layer.overlay.Marker;
-import org.mapsforge.map.layer.overlay.Polyline;
+import org.oscim.backend.canvas.Paint;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -24,14 +19,14 @@ public class Zone extends Container implements ZoneEnterOrExitInterface, PlayerL
     private final static int NB_MIN_DE_COTES = 8;
     private final boolean transportable = false;
     private Paint paintStroke = null;
-    private GeoPoint nearestPoint2Player = new GeoPoint();
+    private GeoPoint nearestPoint2Player = new GeoPoint(0,0);
     private float distance2Player = 0;
     private float bearingPlayer = 0;
     private float bearing2Zone = 0;
     private float anglePlayer2Zone = 0;
     private boolean playerIsInThisZone = false;
     private Polyline zonePolyline = null;
-    private RotatingMarker zoneMarker = null;
+    private MyMarker zoneMarker = null;
     private boolean isSelectedZone = false;
     //	private boolean circularZone = false;
     private float radius = 0; // distance max entre points de zone et centre de zone ou rayon pour une zone circulaire.
@@ -307,7 +302,7 @@ public class Zone extends Container implements ZoneEnterOrExitInterface, PlayerL
         //Drawable drawable = getResources().getDrawable(this.getIconId());
         //Bitmap bitmap = AndroidGraphicFactory.convertToBitmap(drawable);
         //this.zoneMarker =  new Marker(this.getCenterPoint(), bitmap, -bitmap.getWidth()/2+1, -bitmap.getHeight()/2+1);
-        zoneMarker = new RotatingMarker(getCenterPoint(), getResources(), this.getIconId());
+        zoneMarker = new MyMarker(getCenterPoint(), getResources(), this.getIconId());
         //this.zoneMarker = new RotatingMarker(this.centerPoint);
         //this.zoneMarker.setResource(getResources(), this.getIconId());
         zoneMarker.setVisible(this.isVisible());

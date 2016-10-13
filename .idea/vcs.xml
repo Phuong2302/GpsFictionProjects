@@ -2,8 +2,8 @@
 <project version="4">
   <component name="VcsDirectoryMappings">
     <mapping directory="$PROJECT_DIR$" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/omim/3party/Alohalytics" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/omim/tools/kothic" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/omim/tools/osmctools" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/omim/3party/Alohalytics" vcs="" />
+    <mapping directory="$PROJECT_DIR$/omim/tools/kothic" vcs="" />
+    <mapping directory="$PROJECT_DIR$/omim/tools/osmctools" vcs="" />
   </component>
 </project>

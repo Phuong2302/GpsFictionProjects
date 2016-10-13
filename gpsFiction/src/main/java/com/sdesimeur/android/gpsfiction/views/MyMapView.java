@@ -15,10 +15,7 @@ import com.sdesimeur.android.gpsfiction.classes.PlayerLocationListener;
 import com.sdesimeur.android.gpsfiction.classes.Zone;
 import com.sdesimeur.android.gpsfiction.classes.ZoneSelectListener;
 import com.sdesimeur.android.gpsfiction.geopoint.GeoPoint;
-
-import org.mapsforge.core.model.LatLong;
-import org.mapsforge.map.android.view.MapView;
-import org.mapsforge.map.layer.Layers;
+import org.oscim.android.MapView;
 
 public class MyMapView extends MapView implements PlayerLocationListener, ZoneSelectListener, PlayerBearingListener {
 

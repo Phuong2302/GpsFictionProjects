@@ -6,29 +6,29 @@ import android.graphics.Matrix;
 import android.graphics.drawable.BitmapDrawable;
 
 import com.sdesimeur.android.gpsfiction.activities.GpsFictionActivity;
+import com.sdesimeur.android.gpsfiction.geopoint.GeoPoint;
 
-import org.mapsforge.core.graphics.Bitmap;
-import org.mapsforge.core.model.LatLong;
-import org.mapsforge.map.android.graphics.AndroidGraphicFactory;
-import org.mapsforge.map.layer.overlay.Marker;
+import org.oscim.backend.canvas.Bitmap;
+import org.oscim.layers.marker.MarkerItem;
+import org.oscim.layers.marker.MarkerSymbol;
 
-public class RotatingMarker extends Marker implements PlayerBearingListener {
+public class MyMarkerItem extends MarkerItem implements PlayerBearingListener {
 
     protected GpsFictionActivity gpsFictionActivity;
     private float playerBearing = 0;
     private Resources resources = null;
     private int resource = 0;
 
-    public RotatingMarker(LatLong latLong, Bitmap bitmap, int horizontalOffset, int verticalOffset) {
+    public MyMarkerItem(GeoPoint latLong, Bitmap bitmap, int horizontalOffset, int verticalOffset) {
         super(latLong, bitmap, horizontalOffset, verticalOffset);
         // TODO Auto-generated constructor stub
     }
 
-    public RotatingMarker(LatLong latLong) {
+    public MyMarkerItem(GeoPoint latLong) {
         super(latLong, null, 0, 0);
     }
 
-    public RotatingMarker(LatLong latLong, Resources resources, int resource) {
+    public MyMarkerItem(GeoPoint latLong, Resources resources, int resource) {
         super(latLong, null, 0, 0);
         this.setResource(resources, resource);
     }
