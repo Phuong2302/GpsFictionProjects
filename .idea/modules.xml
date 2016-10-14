@@ -3,12 +3,10 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/GpsFictionProjects.iml" filepath="$PROJECT_DIR$/GpsFictionProjects.iml" />
-      <module fileurl="file://$PROJECT_DIR$/omim/android/android.iml" filepath="$PROJECT_DIR$/omim/android/android.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/enigmeALaon/enigmeALaon.iml" filepath="$PROJECT_DIR$/enigmeALaon/enigmeALaon.iml" />
       <module fileurl="file://$PROJECT_DIR$/gpsFiction/gpsFiction.iml" filepath="$PROJECT_DIR$/gpsFiction/gpsFiction.iml" />
       <module fileurl="file://$PROJECT_DIR$/missionDestruction/missionDestruction.iml" filepath="$PROJECT_DIR$/missionDestruction/missionDestruction.iml" />
-      <module fileurl="file://$PROJECT_DIR$/omim/omim.iml" filepath="$PROJECT_DIR$/omim/omim.iml" />
     </modules>
   </component>
 </project>

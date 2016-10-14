@@ -24,8 +24,11 @@ import com.graphhopper.GHRequest;
 import com.graphhopper.GHResponse;
 import com.graphhopper.GraphHopper;
 import com.graphhopper.routing.AlgorithmOptions;
+import com.graphhopper.routing.util.BikeFlagEncoder;
+import com.graphhopper.routing.util.CarFlagEncoder;
 import com.graphhopper.routing.util.EncodingManager;
 import com.graphhopper.routing.util.FlagEncoder;
+import com.graphhopper.routing.util.FootFlagEncoder;
 import com.graphhopper.util.PointList;
 import com.graphhopper.util.StopWatch;
 import com.sdesimeur.android.gpsfiction.R;
@@ -45,6 +48,7 @@ import com.sdesimeur.android.gpsfiction.views.RotateView;
 
 import org.oscim.android.cache.TileCache;
 import org.oscim.layers.Layer;
+import org.oscim.layers.marker.MarkerItem;
 import org.oscim.layers.marker.MarkerSymbol;
 
 import java.io.File;
@@ -55,6 +59,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import static android.view.ViewGroup.LayoutParams;
+import static org.oscim.android.canvas.AndroidGraphics.drawableToBitmap;
 
 
 public class MapFragment extends MyTabFragment implements PlayerLocationListener, ZoneSelectListener {
@@ -63,15 +68,14 @@ public class MapFragment extends MyTabFragment implements PlayerLocationListener
     private static final int UNSELECTEDBUTTON = 100;
     //private Drawable vehiculeSelectedDrawable = null;
     private int vehiculeSelectedId = R.drawable.pieton;
-    private TileRendererLayer tileRendererLayer = null;
-//    private File mapFile = null;
-    private MyMapView mapView = null;
-    private HashSet<Layer> saveLayers = new HashSet<Layer>();
-    private Polyline route = null;
-    private MyMapScaleBarView mapScaleBarView;
+//    private TileRendererLayer tileRendererLayer = null;
+//    private MyMapView mapView = null;
+//    private HashSet<Layer> saveLayers = new HashSet<Layer>();
+//    private Polyline route = null;
+//    private MyMapScaleBarView mapScaleBarView;
     private File mapsFolder;
     private File ghFolder;
-    private TileCache tileCache;
+//    private TileCache tileCache;
     private GraphHopper hopper;
     //private GraphHopperAPI hopper;
     private String currentArea = "jeu";
@@ -79,18 +83,19 @@ public class MapFragment extends MyTabFragment implements PlayerLocationListener
     private volatile boolean shortestPathRunningFirst = false;
     private volatile boolean prepareInProgress = false;
     //private RotatingMarker playerMarker;
-    private MyMarkerSymbol playerMarker;
+    private MarkerItem playerMarkerItem;
     //private boolean layoutMapViewRotateInitialized = false;
     private RotateView rotateView = null;
     private ViewGroup viewGroupForVehiculesButtons = null;
     private Zone selectedZone = null;
     private GeoPoint playerLocation = null;
-    private HashMap<Integer,String> vehiculeGHEncoding = new HashMap <Integer, String> () {{
+    private HashMap<Integer,FlagEncoder> vehiculeGHEncoding = new HashMap <Integer, FlagEncoder> () {{
         put(R.drawable.compass, null);
-        put(R.drawable.pieton, EncodingManager.FOOT);
-        put(R.drawable.cycle, EncodingManager.BIKE);
-        put(R.drawable.auto, EncodingManager.CAR);
+        put(R.drawable.pieton, new FootFlagEncoder());
+        put(R.drawable.cycle, new BikeFlagEncoder());
+        put(R.drawable.auto, new CarFlagEncoder());
     }};
+    private MarkerSymbol playerMarkerSymbol;
 
     public MapFragment() {
         super();
@@ -139,16 +144,18 @@ public class MapFragment extends MyTabFragment implements PlayerLocationListener
 		this.rotateView.addView(this.mapView);
 */
         this.playerLocation = this.getGpsFictionActivity().getMyLocationListener().getPlayerGeoPoint();
-        if (this.playerMarker == null) {
-            this.playerMarker = new PlayerRotatingMarker(this.playerLocation, getResources(), R.drawable.player_marker);
+        if (this.playerMarkerItem == null) {
+            this.playerMarkerItem = new MarkerItem("Player","",playerLocation);
+            playerMarkerSymbol = new MarkerSymbol(drawableToBitmap(getResources(), R.drawable.player_marker), MarkerSymbol.HotspotPlace.BOTTOM_CENTER);
+            playerMarkerItem.setMarker(playerMarkerSymbol);
+//            this.playerMarkerItem = new PlayerRotatingMarker(this.playerLocation, getResources(), R.drawable.player_marker);
             //this.playerMarker = new PlayerRotatingMarker  (playerPosition);
             //this.playerMarker.setResource(getResources(), R.drawable.player_marker);
-            this.playerMarker.register(this.getGpsFictionActivity());
+            //this.playerMarker.register(this.getGpsFictionActivity());
             this.mapView.getLayers().add(this.playerMarker);
         } else {
-            this.playerMarker.setLatLong(this.playerLocation);
+            this.playerMarkerItem.setLatLong(this.playerLocation);
         }
-//        if (this.mapFile == null) {
             boolean greaterOrEqKitkat = Build.VERSION.SDK_INT >= 19;
             File dir = null;
             if (greaterOrEqKitkat) {
@@ -160,8 +167,6 @@ public class MapFragment extends MyTabFragment implements PlayerLocationListener
             this.mapsFolder = new File (dir , "/mapsforge/");
             this.ghFolder = new File (dir , "/graphhopper/");
             MapDataStore mapDataStore = new MapFile(new File(mapsFolder, currentArea + ".map"));
-//            this.mapFile = new File(areaFolder, this.currentArea + ".map");
-//        }
         if (this.tileCache == null)
             this.tileCache = AndroidUtil.createTileCache(this.getActivity(), getClass().getSimpleName(),
                     this.mapView.getModel().displayModel.getTileSize(), 1f,
@@ -191,20 +196,11 @@ public class MapFragment extends MyTabFragment implements PlayerLocationListener
     @Override
     public void onStart() {
         super.onStart();
-/*		this.mapView.setClickable(true);
-		this.mapView.getMapScaleBar().setVisible(true);
-		this.mapView.setBuiltInZoomControls(true);
-		this.mapView.getMapZoomControls().setZoomLevelMin((byte) 10);
-		this.mapView.getMapZoomControls().setZoomLevelMax((byte) 20);*/
     }
-    //	inflater.inflate(R.layout.tab_map_scalebar, vg, true);
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         this.setRootView(inflater.inflate(R.layout.map_view, container, false));
         ViewGroup vg = (ViewGroup) this.getRootView();
-        //LayoutParams lp = new LayoutParams(LayoutParams.MATCH_PARENT,LayoutParams.MATCH_PARENT);
-        //vg.setLayoutParams(lp);
-        //vg.addView(this.rotateView);
         this.addRotateView(vg);
         this.addViewGroupForVehiculesButtons(vg);
         this.addViewGroupMapSCaleBar(vg);

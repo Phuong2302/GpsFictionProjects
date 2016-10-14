@@ -9,10 +9,14 @@ import com.sdesimeur.android.gpsfiction.gpx.beans.Waypoint;
 import com.sdesimeur.android.gpsfiction.polygon.MyPolygon;
 
 import org.oscim.backend.canvas.Paint;
+import org.oscim.layers.marker.MarkerItem;
+import org.oscim.layers.marker.MarkerSymbol;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+
+import static org.oscim.android.canvas.AndroidGraphics.drawableToBitmap;
 
 public class Zone extends Container implements ZoneEnterOrExitInterface, PlayerLocationListener, PlayerBearingListener, ZoneSelectListener {
     private final static double RAPPORT = 2 * Math.PI / 0.005;
@@ -26,12 +30,13 @@ public class Zone extends Container implements ZoneEnterOrExitInterface, PlayerL
     private float anglePlayer2Zone = 0;
     private boolean playerIsInThisZone = false;
     private Polyline zonePolyline = null;
-    private MyMarker zoneMarker = null;
+    private MarkerItem zoneMarkerItem = null;
     private boolean isSelectedZone = false;
     //	private boolean circularZone = false;
     private float radius = 0; // distance max entre points de zone et centre de zone ou rayon pour une zone circulaire.
     private GeoPoint centerPoint = null; // moyenne des points ou centre d'une zone circulaire,
     private MyPolygon shape = new MyPolygon(); // contour de zone
+    private MarkerSymbol zoneMarkerSymbol = null;
 
     /*    static final Parcelable.Creator<Zone> CREATOR = new Parcelable.Creator<Zone>() {
             public Zone createFromParcel(Parcel in) {
@@ -299,19 +304,17 @@ public class Zone extends Container implements ZoneEnterOrExitInterface, PlayerL
     }
 
     private void createMarker() {
-        //Drawable drawable = getResources().getDrawable(this.getIconId());
-        //Bitmap bitmap = AndroidGraphicFactory.convertToBitmap(drawable);
-        //this.zoneMarker =  new Marker(this.getCenterPoint(), bitmap, -bitmap.getWidth()/2+1, -bitmap.getHeight()/2+1);
-        zoneMarker = new MyMarker(getCenterPoint(), getResources(), this.getIconId());
-        //this.zoneMarker = new RotatingMarker(this.centerPoint);
-        //this.zoneMarker.setResource(getResources(), this.getIconId());
-        zoneMarker.setVisible(this.isVisible());
-        zoneMarker.register(this.getGpsFictionActivity());
+        zoneMarkerItem = new MarkerItem(this.getName(),"",getCenterPoint());
+        zoneMarkerSymbol = new MarkerSymbol(drawableToBitmap(getResources(),this.getIconId()), MarkerSymbol.HotspotPlace.BOTTOM_CENTER);
+        zoneMarkerItem.setMarker(zoneMarkerSymbol);
+//        zoneMarker = new MyMarker(getCenterPoint(), getResources(), this.getIconId());
+//        zoneMarker.setVisible(this.isVisible());
+//        zoneMarker.register(this.getGpsFictionActivity());
     }
 
     private void createPolyline() {
         this.paintStroke = AndroidGraphicFactory.INSTANCE.createPaint();
-        this.paintStroke.setStyle(Style.FILL);
+        this.paintStroke.setStyle(Paint.Style.FILL);
         this.onZoneSelectChanged(null);
         //paintStroke.setDashPathEffect(new float[] { 25, 15 });
         this.paintStroke.setStrokeWidth(getResources().getDimension(R.dimen.mapzoneborderwidth));
@@ -328,7 +331,7 @@ public class Zone extends Container implements ZoneEnterOrExitInterface, PlayerL
 
     public void setVisible(boolean visible) {
         super.setVisible(visible);
-        if (this.zoneMarker != null) this.zoneMarker.setVisible(visible);
+        if (zoneMarkerItem != null) zoneMarkerItem.setMarker(visible?zoneMarkerSymbol:null);
         if (this.zonePolyline != null) this.zonePolyline.setVisible(visible);
     }
 
@@ -336,8 +339,8 @@ public class Zone extends Container implements ZoneEnterOrExitInterface, PlayerL
         return this.zonePolyline;
     }
 
-    public Marker getZoneMarker() {
-        return this.zoneMarker;
+    public MarkerItem getZoneMarkerItem() {
+        return this.zoneMarkerItem;
     }
 
     public boolean isSelectedZone() {

@@ -22,7 +22,7 @@ public class MyMapView extends MapView implements PlayerLocationListener, ZoneSe
     private static final float SQ2 = 1.414213562373095f;
     private float playerBearing = 0;
     private boolean centerOnPlayer = true;
-    private LatLong centerMap = null;
+    private GeoPoint centerMap = null;
     private byte zoomLevel = 15;
     private GpsFictionActivity gpsFictionActivity;
 
@@ -74,14 +74,14 @@ public class MyMapView extends MapView implements PlayerLocationListener, ZoneSe
         // TODO Auto-generated method stub
         //if (this.centerMap == this.playerPosition) {
         if (this.centerOnPlayer) {
-            this.centerMap = new LatLong(playerLocationEvent.getLocationOfPlayer().getLatitude(), playerLocationEvent.getLocationOfPlayer().getLongitude());
-            this.getModel().mapViewPosition.setCenter(this.centerMap);
+            this.centerMap = playerLocationEvent.getLocationOfPlayer();
+            this.set.getModel().mapViewPosition.setCenter(this.centerMap);
         }
         //this.getLayers().get(0).requestRedraw();
         this.invalidate();
     }
 
-
+/*
     @Override
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
         // TODO Auto-generated method stub
@@ -97,7 +97,7 @@ public class MyMapView extends MapView implements PlayerLocationListener, ZoneSe
             view.layout(childLeft, childTop, childLeft + childWidth, childTop + childHeight);
         }
     }
-
+*/
     /*	@Override
         protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
             int w = getDefaultSize(getSuggestedMinimumWidth(), widthMeasureSpec);
