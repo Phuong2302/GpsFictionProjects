@@ -2402,7 +2402,7 @@ containing a value of this type.
         public static int listTasks=0x7f0d0091;
         public static int listZones=0x7f0d0096;
         public static int list_item=0x7f0d0041;
-        public static int mapRotateView=0x7f0d007f;
+        public static int mapView=0x7f0d007f;
         public static int media_actions=0x7f0d0086;
         public static int middle=0x7f0d0032;
         public static int mini=0x7f0d0030;

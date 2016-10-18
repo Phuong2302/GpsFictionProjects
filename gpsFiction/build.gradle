@@ -2,7 +2,7 @@ apply plugin: 'com.android.library'
 
 android {
     compileSdkVersion 23
-    buildToolsVersion '24.0.0'
+    buildToolsVersion '24.0.3'
     defaultConfig {
         minSdkVersion 15
         targetSdkVersion 23
@@ -39,4 +39,5 @@ dependencies {
     compile 'org.mapsforge:vtm-android:0.6.0-rc1'
     compile 'com.caverock:androidsvg:1.2.2-beta-1'
     compile files('libs/graphhopper-core-0.8-SNAPSHOT.jar')
+    compile 'org.mapsforge:vtm-themes:0.6.0-rc2'
 }

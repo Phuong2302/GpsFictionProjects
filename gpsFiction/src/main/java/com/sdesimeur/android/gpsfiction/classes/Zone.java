@@ -14,7 +14,6 @@ import org.oscim.layers.marker.MarkerSymbol;
 
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
 
 import static org.oscim.android.canvas.AndroidGraphics.drawableToBitmap;
 
@@ -29,10 +28,9 @@ public class Zone extends Container implements ZoneEnterOrExitInterface, PlayerL
     private float bearing2Zone = 0;
     private float anglePlayer2Zone = 0;
     private boolean playerIsInThisZone = false;
-    private Polyline zonePolyline = null;
+//    private Polyline zonePolyline = null;
     private MarkerItem zoneMarkerItem = null;
     private boolean isSelectedZone = false;
-    //	private boolean circularZone = false;
     private float radius = 0; // distance max entre points de zone et centre de zone ou rayon pour une zone circulaire.
     private GeoPoint centerPoint = null; // moyenne des points ou centre d'une zone circulaire,
     private MyPolygon shape = new MyPolygon(); // contour de zone
@@ -313,31 +311,28 @@ public class Zone extends Container implements ZoneEnterOrExitInterface, PlayerL
     }
 
     private void createPolyline() {
+        /*
         this.paintStroke = AndroidGraphicFactory.INSTANCE.createPaint();
         this.paintStroke.setStyle(Paint.Style.FILL);
         this.onZoneSelectChanged(null);
-        //paintStroke.setDashPathEffect(new float[] { 25, 15 });
         this.paintStroke.setStrokeWidth(getResources().getDimension(R.dimen.mapzoneborderwidth));
-        //paintStroke.setStrokeWidth(8);
-        // TODO: new mapsforge version wants an mapsforge-paint, not an android paint.
-        // This doesn't seem to support transparceny
-        //paintStroke.setAlpha(128);
         Polyline line = new Polyline(this.paintStroke, AndroidGraphicFactory.INSTANCE);
         List<LatLong> geoPoints = line.getLatLongs();
         geoPoints.addAll(this.getShape());
         this.zonePolyline = line;
         this.zonePolyline.setVisible(this.isVisible());
+        */
     }
 
     public void setVisible(boolean visible) {
         super.setVisible(visible);
         if (zoneMarkerItem != null) zoneMarkerItem.setMarker(visible?zoneMarkerSymbol:null);
-        if (this.zonePolyline != null) this.zonePolyline.setVisible(visible);
+//        if (this.zonePolyline != null) this.zonePolyline.setVisible(visible);
     }
 
-    public Polyline getZonePolyline() {
-        return this.zonePolyline;
-    }
+//    public Polyline getZonePolyline() {
+//        return this.zonePolyline;
+//    }
 
     public MarkerItem getZoneMarkerItem() {
         return this.zoneMarkerItem;

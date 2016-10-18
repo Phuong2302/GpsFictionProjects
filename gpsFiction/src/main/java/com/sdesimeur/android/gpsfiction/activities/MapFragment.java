@@ -3,9 +3,7 @@ package com.sdesimeur.android.gpsfiction.activities;
 
 import android.app.Activity;
 import android.content.res.TypedArray;
-import android.graphics.Color;
 import android.graphics.Path;
-import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -23,13 +21,12 @@ import android.widget.ZoomControls;
 import com.graphhopper.GHRequest;
 import com.graphhopper.GHResponse;
 import com.graphhopper.GraphHopper;
-import com.graphhopper.routing.AlgorithmOptions;
 import com.graphhopper.routing.util.BikeFlagEncoder;
 import com.graphhopper.routing.util.CarFlagEncoder;
 import com.graphhopper.routing.util.EncodingManager;
 import com.graphhopper.routing.util.FlagEncoder;
 import com.graphhopper.routing.util.FootFlagEncoder;
-import com.graphhopper.util.PointList;
+import com.graphhopper.util.Parameters;
 import com.graphhopper.util.StopWatch;
 import com.sdesimeur.android.gpsfiction.R;
 import com.sdesimeur.android.gpsfiction.classes.GpsFictionData;
@@ -37,24 +34,30 @@ import com.sdesimeur.android.gpsfiction.classes.GpsFictionThing;
 import com.sdesimeur.android.gpsfiction.classes.MyLocationListener;
 import com.sdesimeur.android.gpsfiction.classes.PlayerLocationEvent;
 import com.sdesimeur.android.gpsfiction.classes.PlayerLocationListener;
-import com.sdesimeur.android.gpsfiction.classes.PlayerRotatingMarker;
 import com.sdesimeur.android.gpsfiction.classes.Zone;
 import com.sdesimeur.android.gpsfiction.classes.ZoneSelectListener;
 import com.sdesimeur.android.gpsfiction.geopoint.GeoPoint;
 import com.sdesimeur.android.gpsfiction.views.ImageViewWithId;
-import com.sdesimeur.android.gpsfiction.views.MyMapScaleBarView;
-import com.sdesimeur.android.gpsfiction.views.MyMapView;
 import com.sdesimeur.android.gpsfiction.views.RotateView;
 
-import org.oscim.android.cache.TileCache;
-import org.oscim.layers.Layer;
+import org.oscim.android.MapPreferences;
+import org.oscim.android.MapView;
+import org.oscim.core.MapPosition;
+import org.oscim.core.Tile;
+import org.oscim.layers.marker.ItemizedLayer;
 import org.oscim.layers.marker.MarkerItem;
 import org.oscim.layers.marker.MarkerSymbol;
+import org.oscim.layers.tile.buildings.BuildingLayer;
+import org.oscim.layers.tile.vector.VectorTileLayer;
+import org.oscim.layers.tile.vector.labeling.LabelLayer;
+import org.oscim.map.Map;
+import org.oscim.theme.VtmThemes;
+import org.oscim.tiling.source.mapfile.MapFileTileSource;
+import org.oscim.tiling.source.mapfile.MapInfo;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 
@@ -62,7 +65,10 @@ import static android.view.ViewGroup.LayoutParams;
 import static org.oscim.android.canvas.AndroidGraphics.drawableToBitmap;
 
 
-public class MapFragment extends MyTabFragment implements PlayerLocationListener, ZoneSelectListener {
+public class MapFragment extends MyTabFragment implements PlayerLocationListener, ZoneSelectListener, ItemizedLayer.OnItemGestureListener<MarkerItem> {
+    MapView mapView;
+    Map mMap;
+    MapPreferences mPrefs;
     //private MapPosition mapPosition = null;
     private static final int SELECTEDBUTTON = 255;
     private static final int UNSELECTEDBUTTON = 100;
@@ -102,7 +108,7 @@ public class MapFragment extends MyTabFragment implements PlayerLocationListener
         //	this.setNameId(R.string.tabMapTitle);
     }
 
-    public MyMapView getMapView() {
+    public MapView getMapView() {
         return this.mapView;
     }
 
@@ -132,29 +138,22 @@ public class MapFragment extends MyTabFragment implements PlayerLocationListener
         super.onAttach(activity);
         //this.vehiculeSelectedDrawable = this.getResources().getDrawable(R.drawable.compass);
         prepareInProgress = true;
-        if (this.mapView == null) {
-            this.mapView = new MyMapView(activity);
-        }
-        this.mapView.init(this.getGpsFictionActivity());
-
-/*		if ( this.rotateView == null ) {
-            this.rotateView = new RotateView(activity);
-		}
-		this.rotateView.init(this.getGpsFictionActivity());
-		this.rotateView.addView(this.mapView);
-*/
         this.playerLocation = this.getGpsFictionActivity().getMyLocationListener().getPlayerGeoPoint();
-        if (this.playerMarkerItem == null) {
-            this.playerMarkerItem = new MarkerItem("Player","",playerLocation);
-            playerMarkerSymbol = new MarkerSymbol(drawableToBitmap(getResources(), R.drawable.player_marker), MarkerSymbol.HotspotPlace.BOTTOM_CENTER);
+        if (playerMarkerItem == null) {
+            playerMarkerItem = new MarkerItem("Player","",playerLocation);
+            playerMarkerSymbol = new MarkerSymbol(drawableToBitmap(getResources(), R.drawable.player_marker), MarkerSymbol.HotspotPlace.CENTER);
             playerMarkerItem.setMarker(playerMarkerSymbol);
+            ItemizedLayer<MarkerItem> markerLayer = new ItemizedLayer <> (mMap, new ArrayList<MarkerItem>(),(MarkerSymbol) null, this);
+            mMap.layers().add(markerLayer);
+            List<MarkerItem> pts = new ArrayList<>();
+            pts.add(playerMarkerItem);
+            markerLayer.addItems(pts);
 //            this.playerMarkerItem = new PlayerRotatingMarker(this.playerLocation, getResources(), R.drawable.player_marker);
             //this.playerMarker = new PlayerRotatingMarker  (playerPosition);
             //this.playerMarker.setResource(getResources(), R.drawable.player_marker);
             //this.playerMarker.register(this.getGpsFictionActivity());
-            this.mapView.getLayers().add(this.playerMarker);
         } else {
-            this.playerMarkerItem.setLatLong(this.playerLocation);
+            playerMarkerItem.geoPoint= playerLocation;
         }
             boolean greaterOrEqKitkat = Build.VERSION.SDK_INT >= 19;
             File dir = null;
@@ -166,20 +165,6 @@ public class MapFragment extends MyTabFragment implements PlayerLocationListener
             dir = new File (dir, "/sdesimeur/");
             this.mapsFolder = new File (dir , "/mapsforge/");
             this.ghFolder = new File (dir , "/graphhopper/");
-            MapDataStore mapDataStore = new MapFile(new File(mapsFolder, currentArea + ".map"));
-        if (this.tileCache == null)
-            this.tileCache = AndroidUtil.createTileCache(this.getActivity(), getClass().getSimpleName(),
-                    this.mapView.getModel().displayModel.getTileSize(), 1f,
-                    this.mapView.getModel().frameBufferModel.getOverdrawFactor());
-        if (this.tileRendererLayer == null) {
-            this.tileRendererLayer = new TileRendererLayer(this.tileCache, mapDataStore,
-                    this.mapView.getModel().mapViewPosition, true, true, AndroidGraphicFactory.INSTANCE);
-            this.tileRendererLayer.setTextScale(1f);
-            this.tileRendererLayer.setXmlRenderTheme(InternalRenderTheme.OSMARENDER);
-            this.mapView.getLayers().add(0, this.tileRendererLayer);
-        }
-        this.mapView.getLayers().addAll(this.saveLayers);
-        this.saveLayers.clear();
     }
 
     @Override
@@ -199,16 +184,50 @@ public class MapFragment extends MyTabFragment implements PlayerLocationListener
     }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        this.setRootView(inflater.inflate(R.layout.map_view, container, false));
-        ViewGroup vg = (ViewGroup) this.getRootView();
-        this.addRotateView(vg);
-        this.addViewGroupForVehiculesButtons(vg);
-        this.addViewGroupMapSCaleBar(vg);
-        this.addViewGroupForZoomButtons(vg);
-        this.loadGraphStorage();
-        return this.getRootView();
+        setRootView(inflater.inflate(R.layout.map_view, container, false));
+        mapView=(MapView) this.getRootView().findViewById(R.id.mapView);
+        mMap = mapView.map();
+        mPrefs = new MapPreferences(MapFragment.class.getName(), this.getContext());
+        MapFileTileSource tileSource = new MapFileTileSource();
+            tileSource.setPreferredLanguage("en");
+            File file = new File(mapsFolder, currentArea + ".map");
+            if (tileSource.setMapFile(file.toString())) {
+
+                VectorTileLayer l = mMap.setBaseMap(tileSource);
+                mMap.setTheme(VtmThemes.DEFAULT);
+
+                mMap.layers().add(new BuildingLayer(mMap, l));
+                mMap.layers().add(new LabelLayer(mMap, l));
+
+                MapInfo info = tileSource.getMapInfo();
+                MapPosition pos = new MapPosition();
+                pos.setByBoundingBox(info.boundingBox, Tile.SIZE * 4, Tile.SIZE * 4);
+                mMap.setMapPosition(pos);
+
+                mPrefs.clear();
+            }
+        ViewGroup vg = (ViewGroup) getRootView();
+        addViewGroupForVehiculesButtons(vg);
+        addViewGroupMapSCaleBar(vg);
+        addViewGroupForZoomButtons(vg);
+        loadGraphStorage();
+        return getRootView();
+    }
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        mPrefs.load(mapView.map());
+        mapView.onResume();
     }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+
+        mapView.onPause();
+        mPrefs.save(mapView.map());
+    }
     @Override
     public void onStop() {
         super.onStop();
@@ -228,12 +247,7 @@ public class MapFragment extends MyTabFragment implements PlayerLocationListener
 
     @Override
     public void onDetach() {
-        this.tileCache.destroy();
-        //if (this.hopper != null) this.hopper.close();
         this.hopper = null;
-        this.mapView.getLayers().remove(this.tileRendererLayer);
-        this.tileCache.destroy();
-        this.tileRendererLayer = null;
         // necessary?
         System.gc();
         super.onDetach();
@@ -252,7 +266,7 @@ public class MapFragment extends MyTabFragment implements PlayerLocationListener
                 //hopper.setEncodingManager(new EncodingManager(encoder));
                 //hopper.setCHEnable(false);
                 //hopper.setOSMFile(ghFolder + "/" + currentArea + "-gh/" + currentArea + ".pbf");
-                hopper.setOSMFile(ghFolder + "/" + currentArea + ".pbf");
+                hopper.setDataReaderFile(ghFolder + "/" + currentArea + ".pbf");
                 hopper.setEncodingManager(new EncodingManager("FOOT,BIKE,CAR"));
                 hopper.setCHWeighting("fastest");
                 //hopper.load(new File(mapsFolder, currentArea).getAbsolutePath());
@@ -277,31 +291,28 @@ public class MapFragment extends MyTabFragment implements PlayerLocationListener
 
     public void registerZone(Zone zn) {
         if (this.mapView == null) {
-            this.saveLayers.add(zn.getZoneMarker());
-            this.saveLayers.add(zn.getZonePolyline());
+//            this.saveLayers.add(zn.getZoneMarker());
+//            this.saveLayers.add(zn.getZonePolyline());
         } else {
-            if (!this.mapView.getLayers().contains(zn.getZoneMarker()))
-                this.mapView.getLayers().add(zn.getZoneMarker());
-            if (!this.mapView.getLayers().contains(zn.getZonePolyline()))
-                this.mapView.getLayers().add(zn.getZonePolyline());
+//            if (!this.mapView.getLayers().contains(zn.getZoneMarker()))
+//                this.mapView.getLayers().add(zn.getZoneMarker());
+//            if (!this.mapView.getLayers().contains(zn.getZonePolyline()))
+//                this.mapView.getLayers().add(zn.getZonePolyline());
         }
     }
 
     private void addViewGroupForZoomButtons(ViewGroup vg) {
-        //	inflater.inflate(R.layout.tab_map_zoom_buttons, vg, true);
-        //View v = inflater.inflate(R.layout.tab_map_vehicules_buttons, vg, true);
-        //vg.addView(v);
         ZoomControls zoom = (ZoomControls) vg.findViewById(R.id.zoomControls);
         zoom.setOnZoomInClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mapView.getModel().mapViewPosition.zoomIn();
+                mMap.getMapPosition().setZoomLevel(mMap.getMapPosition().getZoomLevel()+1);
             }
         });
         zoom.setOnZoomOutClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mapView.getModel().mapViewPosition.zoomOut();
+                mMap.getMapPosition().setZoomLevel(mMap.getMapPosition().getZoomLevel()-1);
             }
         });
     }
@@ -316,22 +327,15 @@ public class MapFragment extends MyTabFragment implements PlayerLocationListener
             }
             int res = ((ImageViewWithId) v).getDrawableId();
             vehiculeSelectedId = res;
-            //loadGraphStorage();
             this.calcPath();
         }
     }
 
     private void addViewGroupForVehiculesButtons(ViewGroup vg) {
-        //	inflater.inflate(R.layout.tab_map_vehicules_buttons, vg, true);
-        //View v = inflater.inflate(R.layout.tab_map_vehicules_buttons, vg, true);
-        //vg.addView(v);
         viewGroupForVehiculesButtons = (ViewGroup) vg.findViewById(R.id.forVehiculesButtons);
         TypedArray vehicules = getResources().obtainTypedArray(R.array.vehicules_array);
         for (int index = 0; index < vehicules.length(); index++) {
-            //int res = vehicules.getResourceId(index, -1);
-            //Drawable d = this.getResources().getDrawable(res);
             int res = vehicules.getResourceId(index, -1);
-            //int alpha = ((d == this.vehiculeSelectedDrawable)?MapFragment.SELECTEDBUTTON:MapFragment.UNSELECTEDBUTTON);
             ImageViewWithId img = new ImageViewWithId(getActivity());
             int pad = getResources().getDimensionPixelSize(R.dimen.buttonsVehiculesPadding);
             img.setPadding(pad, pad, pad, pad);
@@ -356,30 +360,12 @@ public class MapFragment extends MyTabFragment implements PlayerLocationListener
     }
 
     private void addViewGroupMapSCaleBar(ViewGroup vg) {
-        //	inflater.inflate(R.layout.tab_map_scalebar, vg, true);
         LinearLayout l = (LinearLayout) vg.findViewById(R.id.forScaleBar);
-        mapScaleBarView = new MyMapScaleBarView(getActivity());
-        mapScaleBarView.init(mapView);
         RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
         lp.addRule(RelativeLayout.ALIGN_LEFT | RelativeLayout.ALIGN_BOTTOM);
-        mapScaleBarView.setLayoutParams(lp);
-        l.addView(mapScaleBarView);
-        //vg.addView(this.mapScaleBarView);
     }
 
-    private void addRotateView(ViewGroup vg) {
-        rotateView = (RotateView) vg.findViewById(R.id.mapRotateView);
-        rotateView.init(this.getGpsFictionActivity());
-        rotateView.addView(mapView);
-    }
-
-    private Marker createMarker(LatLong p, int resource) {
-        Drawable drawable = getResources().getDrawable(resource);
-        Bitmap bitmapRotated = AndroidGraphicFactory.convertToBitmap(drawable);
-        Marker marker = new Marker(p, bitmapRotated, -bitmapRotated.getHeight() / 2 + 1, bitmapRotated.getWidth() / 2 + 1);
-        return marker;
-    }
-
+    /*
     private Polyline createPolyline(List<LatLong> listOfPoints) {
         Paint paintStroke = AndroidGraphicFactory.INSTANCE.createPaint();
         paintStroke.setStyle(Style.STROKE);
@@ -403,7 +389,7 @@ public class MapFragment extends MyTabFragment implements PlayerLocationListener
         // TODO Auto-generated method stub
         return this.createPolyline(listOfPoints);
     }
-
+*/
     public void calcRoutePath(final double fromLat, final double fromLon, final double toLat, final double toLon ) {
         shortestPathRunning = true;
         new AsyncTask<Void, Void, GHResponse>() {
@@ -413,8 +399,8 @@ public class MapFragment extends MyTabFragment implements PlayerLocationListener
                 while ( ! (isReady()))  {}
                 StopWatch sw = new StopWatch().start();
                 GHRequest req = new GHRequest(fromLat, fromLon, toLat, toLon)
-                        .setAlgorithm(AlgorithmOptions.DIJKSTRA_BI);
-                req.setVehicle(vehiculeGHEncoding.get(vehiculeSelectedId));
+                        .setAlgorithm(Parameters.Algorithms.DIJKSTRA_BI);
+                req.setVehicle(vehiculeGHEncoding.get(vehiculeSelectedId).toString());
                 req.getHints().put("instructions", "false");
                 hopper.getGraphHopperStorage();
                 GHResponse resp = hopper.route(req);
@@ -424,19 +410,18 @@ public class MapFragment extends MyTabFragment implements PlayerLocationListener
 
             protected void onPostExecute( GHResponse resp ) {
                 if (!resp.hasErrors()) {
-                    addRoute(createPolyline(resp));
+//                    addRoute(createPolyline(resp));
                     shortestPathRunningFirst = false;
-                    //mapView.redraw();
                 } else { }
                 shortestPathRunning = false;
             }
         }.execute();
     }
     private void calcLinePath (){
-        ArrayList<LatLong> listOfPoints = new ArrayList<LatLong>();
-        listOfPoints.add((LatLong) this.playerLocation);
-        listOfPoints.add((LatLong) this.selectedZone.getCenterPoint());
-        addRoute(createPolyline(listOfPoints));
+        ArrayList<GeoPoint> listOfPoints = new ArrayList<GeoPoint>();
+        listOfPoints.add(this.playerLocation);
+        listOfPoints.add(this.selectedZone.getCenterPoint());
+//        addRoute(createPolyline(listOfPoints));
     }
     private void calcPath() {
         if (vehiculeSelectedId == R.drawable.compass) {
@@ -451,16 +436,15 @@ public class MapFragment extends MyTabFragment implements PlayerLocationListener
             if (! (shortestPathRunning)) calcRoutePath(fromLat, fromLon, toLat, toLon);
         }
     }
-
+/*
     private void addRoute(Polyline newroute) {
         if (mapView != null) {
             if (route != null) mapView.getLayers().remove(route);
             route=newroute;
             mapView.getLayers().add(route);
-            //mapView.invalidate();
         }
     }
-
+*/
     @Override
     public void onZoneSelectChanged(Zone sZn) {
         // TODO Auto-generated method stub
@@ -472,6 +456,19 @@ public class MapFragment extends MyTabFragment implements PlayerLocationListener
     public void onLocationPlayerChanged(PlayerLocationEvent playerLocationEvent) {
         // TODO Auto-generated method stub
         playerLocation = playerLocationEvent.getLocationOfPlayer();
+        MapPosition pos = mMap.getMapPosition();
+        pos.setPosition(playerLocation);
+        mMap.setMapPosition(pos);
         if ((playerLocation != null) && (selectedZone != null)) calcPath();
+    }
+
+    @Override
+    public boolean onItemSingleTapUp(int index, MarkerItem item) {
+        return false;
+    }
+
+    @Override
+    public boolean onItemLongPress(int index, MarkerItem item) {
+        return false;
     }
 }
