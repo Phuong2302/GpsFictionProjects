@@ -5,6 +5,10 @@ import android.os.Bundle;
 
 import com.sdesimeur.android.gpsfiction.R;
 import com.sdesimeur.android.gpsfiction.activities.GpsFictionActivity;
+import com.sdesimeur.android.gpsfiction.activities.MapFragment;
+
+import org.oscim.layers.marker.ItemizedLayer;
+import org.oscim.layers.marker.MarkerItem;
 
 public class GpsFictionThing {
     private GpsFictionActivity gpsFictionActivity = null;
@@ -25,6 +29,7 @@ public class GpsFictionThing {
             true,
             true
     };
+    protected MapFragment mapFragment=null;
 
     public GpsFictionThing() {
     }
@@ -237,5 +242,8 @@ public class GpsFictionThing {
     public static class VALBOOL {
         static int visible = 0;
         static int active = 1;
+    }
+    public void registerMapFragment(MapFragment mf) {
+        mapFragment = mf;
     }
 }

@@ -38,12 +38,10 @@ import com.sdesimeur.android.gpsfiction.classes.Zone;
 import com.sdesimeur.android.gpsfiction.classes.ZoneSelectListener;
 import com.sdesimeur.android.gpsfiction.geopoint.GeoPoint;
 import com.sdesimeur.android.gpsfiction.views.ImageViewWithId;
-import com.sdesimeur.android.gpsfiction.views.RotateView;
 
 import org.oscim.android.MapPreferences;
 import org.oscim.android.MapView;
 import org.oscim.core.MapPosition;
-import org.oscim.core.Tile;
 import org.oscim.layers.marker.ItemizedLayer;
 import org.oscim.layers.marker.MarkerItem;
 import org.oscim.layers.marker.MarkerSymbol;
@@ -53,13 +51,11 @@ import org.oscim.layers.tile.vector.labeling.LabelLayer;
 import org.oscim.map.Map;
 import org.oscim.theme.VtmThemes;
 import org.oscim.tiling.source.mapfile.MapFileTileSource;
-import org.oscim.tiling.source.mapfile.MapInfo;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 
 import static android.view.ViewGroup.LayoutParams;
 import static org.oscim.android.canvas.AndroidGraphics.drawableToBitmap;
@@ -70,6 +66,7 @@ public class MapFragment extends MyTabFragment implements PlayerLocationListener
     Map mMap;
     MapPreferences mPrefs;
     //private MapPosition mapPosition = null;
+    private static final int INITZOOMLEVEL = 14;
     private static final int SELECTEDBUTTON = 255;
     private static final int UNSELECTEDBUTTON = 100;
     //private Drawable vehiculeSelectedDrawable = null;
@@ -91,7 +88,6 @@ public class MapFragment extends MyTabFragment implements PlayerLocationListener
     //private RotatingMarker playerMarker;
     private MarkerItem playerMarkerItem;
     //private boolean layoutMapViewRotateInitialized = false;
-    private RotateView rotateView = null;
     private ViewGroup viewGroupForVehiculesButtons = null;
     private Zone selectedZone = null;
     private GeoPoint playerLocation = null;
@@ -102,6 +98,12 @@ public class MapFragment extends MyTabFragment implements PlayerLocationListener
         put(R.drawable.auto, new CarFlagEncoder());
     }};
     private MarkerSymbol playerMarkerSymbol;
+
+    public ItemizedLayer<MarkerItem> getMarkerLayer() {
+        return markerLayer;
+    }
+
+    private ItemizedLayer<MarkerItem> markerLayer=null;
 
     public MapFragment() {
         super();
@@ -129,8 +131,6 @@ public class MapFragment extends MyTabFragment implements PlayerLocationListener
     }
     public void register(GpsFictionActivity gpsFictionActivity) {
         super.register(gpsFictionActivity);
-        this.getGpsFictionActivity().getMyLocationListener().addPlayerLocationListener(MyLocationListener.REGISTER.FRAGMENT, this);
-        this.getGpsFictionActivity().getGpsFictionData().addZoneSelectListener(GpsFictionData.REGISTER.FRAGMENT, this);
     }
 
     @Override
@@ -138,27 +138,11 @@ public class MapFragment extends MyTabFragment implements PlayerLocationListener
         super.onAttach(activity);
         //this.vehiculeSelectedDrawable = this.getResources().getDrawable(R.drawable.compass);
         prepareInProgress = true;
-        this.playerLocation = this.getGpsFictionActivity().getMyLocationListener().getPlayerGeoPoint();
-        if (playerMarkerItem == null) {
-            playerMarkerItem = new MarkerItem("Player","",playerLocation);
-            playerMarkerSymbol = new MarkerSymbol(drawableToBitmap(getResources(), R.drawable.player_marker), MarkerSymbol.HotspotPlace.CENTER);
-            playerMarkerItem.setMarker(playerMarkerSymbol);
-            ItemizedLayer<MarkerItem> markerLayer = new ItemizedLayer <> (mMap, new ArrayList<MarkerItem>(),(MarkerSymbol) null, this);
-            mMap.layers().add(markerLayer);
-            List<MarkerItem> pts = new ArrayList<>();
-            pts.add(playerMarkerItem);
-            markerLayer.addItems(pts);
-//            this.playerMarkerItem = new PlayerRotatingMarker(this.playerLocation, getResources(), R.drawable.player_marker);
-            //this.playerMarker = new PlayerRotatingMarker  (playerPosition);
-            //this.playerMarker.setResource(getResources(), R.drawable.player_marker);
-            //this.playerMarker.register(this.getGpsFictionActivity());
-        } else {
-            playerMarkerItem.geoPoint= playerLocation;
-        }
             boolean greaterOrEqKitkat = Build.VERSION.SDK_INT >= 19;
             File dir = null;
             if (greaterOrEqKitkat) {
-                dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+                //dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+                dir = Environment.getExternalStorageDirectory();
             } else {
                 dir = Environment.getExternalStorageDirectory();
             }
@@ -170,12 +154,6 @@ public class MapFragment extends MyTabFragment implements PlayerLocationListener
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Zone zone;
-        Iterator<GpsFictionThing> itZone = this.getGpsFictionActivity().getGpsFictionData().getGpsFictionThing(Zone.class).iterator();
-        while (itZone.hasNext()) {
-            zone = (Zone) itZone.next();
-            this.registerZone(zone);
-        }
     }
 
     @Override
@@ -187,25 +165,26 @@ public class MapFragment extends MyTabFragment implements PlayerLocationListener
         setRootView(inflater.inflate(R.layout.map_view, container, false));
         mapView=(MapView) this.getRootView().findViewById(R.id.mapView);
         mMap = mapView.map();
+        markerLayer = new ItemizedLayer<>(mMap, new ArrayList<MarkerItem>(), (MarkerSymbol) null, this);
+        mMap.layers().add(markerLayer);
         mPrefs = new MapPreferences(MapFragment.class.getName(), this.getContext());
         MapFileTileSource tileSource = new MapFileTileSource();
-            tileSource.setPreferredLanguage("en");
-            File file = new File(mapsFolder, currentArea + ".map");
-            if (tileSource.setMapFile(file.toString())) {
-
-                VectorTileLayer l = mMap.setBaseMap(tileSource);
-                mMap.setTheme(VtmThemes.DEFAULT);
-
-                mMap.layers().add(new BuildingLayer(mMap, l));
-                mMap.layers().add(new LabelLayer(mMap, l));
-
-                MapInfo info = tileSource.getMapInfo();
-                MapPosition pos = new MapPosition();
-                pos.setByBoundingBox(info.boundingBox, Tile.SIZE * 4, Tile.SIZE * 4);
-                mMap.setMapPosition(pos);
-
-                mPrefs.clear();
-            }
+        tileSource.setPreferredLanguage("en");
+        File file = new File(mapsFolder, currentArea + ".map");
+        if (tileSource.setMapFile(file.toString())) {
+            VectorTileLayer l = mMap.setBaseMap(tileSource);
+            mMap.setTheme(VtmThemes.DEFAULT);
+            mMap.layers().add(new BuildingLayer(mMap, l));
+            mMap.layers().add(new LabelLayer(mMap, l));
+            mPrefs.clear();
+            MapPosition pos = mMap.getMapPosition();
+            pos.setZoomLevel(INITZOOMLEVEL);
+            mMap.setMapPosition(pos);
+//            MapInfo info = tileSource.getMapInfo();
+//            MapPosition pos = new MapPosition();
+//            pos.setByBoundingBox(info.boundingBox, Tile.SIZE * 4, Tile.SIZE * 4);
+//            mMap.setMapPosition(pos);
+        }
         ViewGroup vg = (ViewGroup) getRootView();
         addViewGroupForVehiculesButtons(vg);
         addViewGroupMapSCaleBar(vg);
@@ -213,31 +192,39 @@ public class MapFragment extends MyTabFragment implements PlayerLocationListener
         loadGraphStorage();
         return getRootView();
     }
+
+    private void registerAllZones(MapFragment mf) {
+        Zone zone=null;
+        Iterator<GpsFictionThing> itZone = this.getGpsFictionActivity().getGpsFictionData().getGpsFictionThing(Zone.class).iterator();
+        while (itZone.hasNext()) {
+            zone = (Zone) itZone.next();
+            zone.registerMapFragment(mf);
+        }
+    }
+
     @Override
     public void onResume() {
         super.onResume();
-
         mPrefs.load(mapView.map());
         mapView.onResume();
+        this.getGpsFictionActivity().getMyLocationListener().addPlayerLocationListener(MyLocationListener.REGISTER.FRAGMENT, this);
+        this.getGpsFictionActivity().getGpsFictionData().addZoneSelectListener(GpsFictionData.REGISTER.FRAGMENT, this);
+        registerAllZones(this);
     }
 
     @Override
     public void onPause() {
         super.onPause();
-
-        mapView.onPause();
-        mPrefs.save(mapView.map());
+        registerAllZones(null);
     }
     @Override
     public void onStop() {
         super.onStop();
-        this.rotateView.removeAllViews();
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        //((ViewGroup) this.getRootView()).removeView(this.mapView);
     }
 
     @Override
@@ -289,30 +276,22 @@ public class MapFragment extends MyTabFragment implements PlayerLocationListener
         }.execute();
     }
 
-    public void registerZone(Zone zn) {
-        if (this.mapView == null) {
-//            this.saveLayers.add(zn.getZoneMarker());
-//            this.saveLayers.add(zn.getZonePolyline());
-        } else {
-//            if (!this.mapView.getLayers().contains(zn.getZoneMarker()))
-//                this.mapView.getLayers().add(zn.getZoneMarker());
-//            if (!this.mapView.getLayers().contains(zn.getZonePolyline()))
-//                this.mapView.getLayers().add(zn.getZonePolyline());
-        }
-    }
-
     private void addViewGroupForZoomButtons(ViewGroup vg) {
         ZoomControls zoom = (ZoomControls) vg.findViewById(R.id.zoomControls);
         zoom.setOnZoomInClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mMap.getMapPosition().setZoomLevel(mMap.getMapPosition().getZoomLevel()+1);
+                MapPosition pos = mMap.getMapPosition();
+                pos.setZoomLevel(pos.getZoomLevel()+1);
+                mMap.setMapPosition(pos);
             }
         });
         zoom.setOnZoomOutClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mMap.getMapPosition().setZoomLevel(mMap.getMapPosition().getZoomLevel()-1);
+                MapPosition pos = mMap.getMapPosition();
+                pos.setZoomLevel(pos.getZoomLevel()-1);
+                mMap.setMapPosition(pos);
             }
         });
     }
@@ -451,15 +430,30 @@ public class MapFragment extends MyTabFragment implements PlayerLocationListener
         selectedZone = sZn;
         if ((playerLocation != null) && (selectedZone != null)) calcPath();
     }
+    private void changePlayerLocation () {
 
+    }
     @Override
     public void onLocationPlayerChanged(PlayerLocationEvent playerLocationEvent) {
         // TODO Auto-generated method stub
         playerLocation = playerLocationEvent.getLocationOfPlayer();
-        MapPosition pos = mMap.getMapPosition();
-        pos.setPosition(playerLocation);
-        mMap.setMapPosition(pos);
-        if ((playerLocation != null) && (selectedZone != null)) calcPath();
+        if (playerLocation != null) {
+            if (playerMarkerItem != null) {
+                markerLayer.removeItem(playerMarkerItem);
+            }
+            playerMarkerItem = new MarkerItem("Player","",playerLocation);
+            playerMarkerSymbol = new MarkerSymbol(drawableToBitmap(getResources(), R.drawable.player_marker), MarkerSymbol.HotspotPlace.CENTER,false);
+            playerMarkerItem.setMarker(playerMarkerSymbol);
+            markerLayer.addItem(playerMarkerItem);
+//            this.playerMarkerItem = new PlayerRotatingMarker(this.playerLocation, getResources(), R.drawable.player_marker);
+                //this.playerMarker = new PlayerRotatingMarker  (playerPosition);
+                //this.playerMarker.setResource(getResources(), R.drawable.player_marker);
+                //this.playerMarker.register(this.getGpsFictionActivity());
+            MapPosition pos = mMap.getMapPosition();
+            pos.setPosition(playerLocation);
+            mMap.setMapPosition(pos);
+            if (selectedZone != null) calcPath();
+        }
     }
 
     @Override

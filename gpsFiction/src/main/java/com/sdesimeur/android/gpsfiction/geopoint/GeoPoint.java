@@ -124,7 +124,7 @@ public class GeoPoint extends org.oscim.core.GeoPoint {
      * @return latitude
      */
     public int getLatitudeE6() {
-        return (this.getLatitudeE6());
+        return (this.latitudeE6);
     }
 
     /**
@@ -133,7 +133,7 @@ public class GeoPoint extends org.oscim.core.GeoPoint {
      * @return longitude
      */
     public int getLongitudeE6() {
-        return (this.getLongitudeE6());
+        return (this.longitudeE6);
     }
 
     /**
