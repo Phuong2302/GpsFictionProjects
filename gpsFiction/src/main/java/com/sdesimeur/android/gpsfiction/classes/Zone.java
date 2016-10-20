@@ -4,18 +4,16 @@ import android.location.Location;
 import android.os.Bundle;
 
 import com.sdesimeur.android.gpsfiction.R;
-import com.sdesimeur.android.gpsfiction.activities.MapFragment;
 import com.sdesimeur.android.gpsfiction.geopoint.GeoPoint;
 import com.sdesimeur.android.gpsfiction.gpx.beans.Waypoint;
 import com.sdesimeur.android.gpsfiction.polygon.MyPolygon;
 
+import org.oscim.layers.PathLayer;
 import org.oscim.layers.marker.MarkerItem;
 import org.oscim.layers.marker.MarkerSymbol;
 
 import java.util.ArrayList;
 import java.util.Iterator;
-
-import static org.oscim.android.canvas.AndroidGraphics.drawableToBitmap;
 
 public class Zone extends Container implements ZoneEnterOrExitInterface, PlayerLocationListener, PlayerBearingListener, ZoneSelectListener {
     private final static double RAPPORT = 2 * Math.PI / 0.005;
@@ -34,6 +32,7 @@ public class Zone extends Container implements ZoneEnterOrExitInterface, PlayerL
     private GeoPoint centerPoint = null; // moyenne des points ou centre d'une zone circulaire,
     private MyPolygon shape = new MyPolygon(); // contour de zone
     private MarkerSymbol zoneMarkerSymbol = null;
+    private PathLayer zonePathLayer = null;
 
     /*    static final Parcelable.Creator<Zone> CREATOR = new Parcelable.Creator<Zone>() {
             public Zone createFromParcel(Parcel in) {
@@ -293,51 +292,18 @@ public class Zone extends Container implements ZoneEnterOrExitInterface, PlayerL
     }
 
     public void registerInListeners() {
-        this.createMarker();
-        this.createPolyline();
         getGpsFictionActivity().getGpsFictionData().addZoneSelectListener(GpsFictionData.REGISTER.ZONE, this);
         getGpsFictionActivity().getMyLocationListener().addPlayerLocationListener(MyLocationListener.REGISTER.ZONE, this);
         getGpsFictionActivity().getMyLocationListener().addPlayerBearingListener(MyLocationListener.REGISTER.ZONE, this);
     }
 
-    private void createMarker() {
-        zoneMarkerItem = new MarkerItem(this.getName(),"",getCenterPoint());
-        zoneMarkerSymbol = new MarkerSymbol(drawableToBitmap(getResources(),this.getIconId()), MarkerSymbol.HotspotPlace.CENTER);
-        zoneMarkerItem.setMarker(zoneMarkerSymbol);
-//        zoneMarker = new MyMarker(getCenterPoint(), getResources(), this.getIconId());
-//        zoneMarker.setVisible(this.isVisible());
-//        zoneMarker.register(this.getGpsFictionActivity());
-    }
 
-    private void createPolyline() {
-        /*
-        this.paintStroke = AndroidGraphicFactory.INSTANCE.createPaint();
-        this.paintStroke.setStyle(Paint.Style.FILL);
-        this.onZoneSelectChanged(null);
-        this.paintStroke.setStrokeWidth(getResources().getDimension(R.dimen.mapzoneborderwidth));
-        Polyline line = new Polyline(this.paintStroke, AndroidGraphicFactory.INSTANCE);
-        List<LatLong> geoPoints = line.getLatLongs();
-        geoPoints.addAll(this.getShape());
-        this.zonePolyline = line;
-        this.zonePolyline.setVisible(this.isVisible());
-        */
-    }
 
     public void setVisible(boolean visible) {
         super.setVisible(visible);
-        if (zoneMarkerItem != null) {
-            zoneMarkerItem.setMarker(visible ? zoneMarkerSymbol : null);
-        }
-//        if (this.zonePolyline != null) this.zonePolyline.setVisible(visible);
+        getGpsFictionActivity().getGpsFictionData().fireZoneChangeListener(this);
     }
 
-//    public Polyline getZonePolyline() {
-//        return this.zonePolyline;
-//    }
-
-    public MarkerItem getZoneMarkerItem() {
-        return this.zoneMarkerItem;
-    }
 
     public boolean isSelectedZone() {
         return this.isSelectedZone;
@@ -345,11 +311,7 @@ public class Zone extends Container implements ZoneEnterOrExitInterface, PlayerL
 
     public void setSelectedZone(boolean isSelectedZone) {
         this.isSelectedZone = isSelectedZone;
-        if (this.isSelectedZone) {
-//            this.paintStroke.setColor(getResources().getColor(R.color.mapzoneselectedborder));
-        } else {
-//            this.paintStroke.setColor(getResources().getColor(R.color.mapzoneborder));
-        }
+        getGpsFictionActivity().getGpsFictionData().fireZoneChangeListener(this);
     }
 
     public void onZoneSelectChanged(Zone selectedZone) {
@@ -368,10 +330,5 @@ public class Zone extends Container implements ZoneEnterOrExitInterface, PlayerL
 
     }
 
-    public void registerMapFragment(MapFragment mf) {
-        super.registerMapFragment(mf);
-        if (mapFragment != null)
-            mapFragment.getMarkerLayer().addItem(zoneMarkerItem);
-    }
 }
 

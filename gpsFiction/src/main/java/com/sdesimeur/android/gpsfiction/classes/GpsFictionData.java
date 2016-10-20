@@ -23,8 +23,9 @@ public class GpsFictionData {
     private int rules;
     private int title;
     private GpsFictionActivity gpsFictionActivity = null;
-    private HashMap<GpsFictionData.REGISTER, HashSet<ZoneSelectListener>> zoneSelectListener = new HashMap<GpsFictionData.REGISTER, HashSet<ZoneSelectListener>>();
-    private HashSet<GpsFictionThing> gpsFictionThings = new HashSet<GpsFictionThing>();
+    private HashMap<GpsFictionData.REGISTER, HashSet<ZoneSelectListener>> zoneSelectListener = new HashMap<>();
+    private HashSet<GpsFictionThing> gpsFictionThings = new HashSet<>();
+    private HashSet<ZoneChangeListener> zoneChangeListener = new HashSet<> ();
 
     public GpsFictionData() {
         for (GpsFictionData.REGISTER i : GpsFictionData.REGISTER.values()) {
@@ -280,6 +281,17 @@ public class GpsFictionData {
         LAYOUT,
         FRAGMENT
     }
+    public void addZoneChangeListener(ZoneChangeListener listener) {
+        this.zoneChangeListener.add(listener);
+    }
 
+    public void removeZoneChangeListener(ZoneChangeListener listener) {
+        this.zoneChangeListener.remove(listener);
+    }
+    public void fireZoneChangeListener(Zone zn) {
+            for (ZoneChangeListener listener : this.zoneChangeListener) {
+                listener.onZoneChanged(zn);
+            }
+    }
 
 }

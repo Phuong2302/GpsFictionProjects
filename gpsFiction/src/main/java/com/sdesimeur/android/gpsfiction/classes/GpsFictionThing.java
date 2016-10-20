@@ -5,10 +5,7 @@ import android.os.Bundle;
 
 import com.sdesimeur.android.gpsfiction.R;
 import com.sdesimeur.android.gpsfiction.activities.GpsFictionActivity;
-import com.sdesimeur.android.gpsfiction.activities.MapFragment;
 
-import org.oscim.layers.marker.ItemizedLayer;
-import org.oscim.layers.marker.MarkerItem;
 
 public class GpsFictionThing {
     private GpsFictionActivity gpsFictionActivity = null;
@@ -19,17 +16,10 @@ public class GpsFictionThing {
             0,
             R.drawable.flag_green
     };
-    //private int id=0;
-    //private int definitionId=0;
-    //private int replacementNameInLongId=0;
-    //private int numInTable4LongId=-1;
-    //private int iconId = R.drawable.flag_green;
-    //private boolean replacementIsATableInLongId=false;
     private boolean[] valbool = {
             true,
             true
     };
-    protected MapFragment mapFragment=null;
 
     public GpsFictionThing() {
     }
@@ -40,8 +30,6 @@ public class GpsFictionThing {
         dest.putIntArray("ValInt", this.valint);
         return dest;
     }
-    //private boolean visible=true; // Parcel
-    //private boolean active=true; // Parcel
 
     public void setByBundle(Bundle in) {
         this.valbool = in.getBooleanArray("ValBool");
@@ -50,51 +38,8 @@ public class GpsFictionThing {
 
     public void init(GpsFictionActivity gpsFictionActivity) {
         this.gpsFictionActivity = gpsFictionActivity;
-        //GpsFictionThing.activity.getResources().getClass().getDeclaredFields()
         this.getGpsFictionActivity().getGpsFictionData().addGpsFictionThing(this);
     }
-    //protected int getLongId() {
-    //	return this.longId;
-    //}
-    //protected void setLongId(int longId) {
-    //	this.longId = longId;
-    //}
-    //protected int getReplacementNameInLongId() {
-    //	return this.replacementNameInLongId;
-    //}
-    //protected void setReplacementNameInLongId(int replacementNameInLongId) {
-    //	this.replacementNameInLongId = replacementNameInLongId;
-    //}
-    //protected boolean isReplacementIsATableInLongId() {
-    //	return this.replacementIsATableInLongId;
-    //}
-    //protected void setReplacementIsATableInLongId(boolean replacementIsATableInLongId) {
-    //	this.replacementIsATableInLongId = replacementIsATableInLongId;
-    //}
-    //protected int getNumInTable4LongId() {
-    //	return numInTable4LongId;
-    //}
-    //protected void setNumInTable4LongId(int numInTable4LongId) {
-    //	this.numInTable4LongId = numInTable4LongId;
-    //}
-
-
-//	public static void setDisplayNameIdMax() {
-//		int max=0;
-//		Field [] fields = R.string.class.getDeclaredFields();
-//		for (int i=0, m = fields.length ; i<m ; i++) {
-//			try {
-//				max=Math.max(max,fields[i].getInt(null));
-//			} catch (IllegalArgumentException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			} catch (IllegalAccessException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			}
-//		}
-//		GpsFictionThing.displayNameIdMax = max+1;
-//	}
 
     public void setAttrs(boolean visible, boolean active) {
         this.valbool[VALBOOL.visible] = visible;
@@ -242,8 +187,5 @@ public class GpsFictionThing {
     public static class VALBOOL {
         static int visible = 0;
         static int active = 1;
-    }
-    public void registerMapFragment(MapFragment mf) {
-        mapFragment = mf;
     }
 }

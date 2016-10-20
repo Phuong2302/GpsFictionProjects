@@ -35,6 +35,7 @@ import com.sdesimeur.android.gpsfiction.classes.MyLocationListener;
 import com.sdesimeur.android.gpsfiction.classes.PlayerLocationEvent;
 import com.sdesimeur.android.gpsfiction.classes.PlayerLocationListener;
 import com.sdesimeur.android.gpsfiction.classes.Zone;
+import com.sdesimeur.android.gpsfiction.classes.ZoneChangeListener;
 import com.sdesimeur.android.gpsfiction.classes.ZoneSelectListener;
 import com.sdesimeur.android.gpsfiction.geopoint.GeoPoint;
 import com.sdesimeur.android.gpsfiction.views.ImageViewWithId;
@@ -42,6 +43,7 @@ import com.sdesimeur.android.gpsfiction.views.ImageViewWithId;
 import org.oscim.android.MapPreferences;
 import org.oscim.android.MapView;
 import org.oscim.core.MapPosition;
+import org.oscim.layers.PathLayer;
 import org.oscim.layers.marker.ItemizedLayer;
 import org.oscim.layers.marker.MarkerItem;
 import org.oscim.layers.marker.MarkerSymbol;
@@ -56,12 +58,13 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 
 import static android.view.ViewGroup.LayoutParams;
 import static org.oscim.android.canvas.AndroidGraphics.drawableToBitmap;
 
 
-public class MapFragment extends MyTabFragment implements PlayerLocationListener, ZoneSelectListener, ItemizedLayer.OnItemGestureListener<MarkerItem> {
+public class MapFragment extends MyTabFragment implements ZoneChangeListener, PlayerLocationListener, ZoneSelectListener, ItemizedLayer.OnItemGestureListener<MarkerItem> {
     MapView mapView;
     Map mMap;
     MapPreferences mPrefs;
@@ -98,12 +101,19 @@ public class MapFragment extends MyTabFragment implements PlayerLocationListener
         put(R.drawable.auto, new CarFlagEncoder());
     }};
     private MarkerSymbol playerMarkerSymbol;
+    private HashMap<Zone,MarkerItem> zoneMarkerItemHashMap =new HashMap<>() ;
 
-    public ItemizedLayer<MarkerItem> getMarkerLayer() {
-        return markerLayer;
+    public List<PathLayer> getmPathLayers() {
+        return mPathLayers;
     }
 
-    private ItemizedLayer<MarkerItem> markerLayer=null;
+    private List<PathLayer> mPathLayers = new ArrayList<>();
+    private ItemizedLayer<MarkerItem> mMarkerLayer=null;
+
+    public ItemizedLayer<MarkerItem> getmMarkerLayer() {
+        return mMarkerLayer;
+    }
+
 
     public MapFragment() {
         super();
@@ -165,8 +175,8 @@ public class MapFragment extends MyTabFragment implements PlayerLocationListener
         setRootView(inflater.inflate(R.layout.map_view, container, false));
         mapView=(MapView) this.getRootView().findViewById(R.id.mapView);
         mMap = mapView.map();
-        markerLayer = new ItemizedLayer<>(mMap, new ArrayList<MarkerItem>(), (MarkerSymbol) null, this);
-        mMap.layers().add(markerLayer);
+        mMarkerLayer = new ItemizedLayer<>(mMap, new ArrayList<MarkerItem>(), (MarkerSymbol) null, this);
+        mMap.layers().add(mMarkerLayer);
         mPrefs = new MapPreferences(MapFragment.class.getName(), this.getContext());
         MapFileTileSource tileSource = new MapFileTileSource();
         tileSource.setPreferredLanguage("en");
@@ -193,12 +203,19 @@ public class MapFragment extends MyTabFragment implements PlayerLocationListener
         return getRootView();
     }
 
-    private void registerAllZones(MapFragment mf) {
+    private void registerAllZones() {
         Zone zone=null;
         Iterator<GpsFictionThing> itZone = this.getGpsFictionActivity().getGpsFictionData().getGpsFictionThing(Zone.class).iterator();
         while (itZone.hasNext()) {
             zone = (Zone) itZone.next();
-            zone.registerMapFragment(mf);
+            onZoneChanged(zone);
+        /*
+        int c = Color.fade(Color.rainbow((float) (lat + 90) / 180), 0.5f);
+        zonePathLayer = new PathLayer(mapFragment.getMapView().map(), c, 6);
+        mapFragment.getMapView().map().layers().add(zonePathLayer);
+        zonePathLayer.setPoints((List<org.oscim.core.GeoPoint>) getShape());
+        mapFragment.getmPathLayers().add(zonePathLayer);
+        */
         }
     }
 
@@ -209,13 +226,12 @@ public class MapFragment extends MyTabFragment implements PlayerLocationListener
         mapView.onResume();
         this.getGpsFictionActivity().getMyLocationListener().addPlayerLocationListener(MyLocationListener.REGISTER.FRAGMENT, this);
         this.getGpsFictionActivity().getGpsFictionData().addZoneSelectListener(GpsFictionData.REGISTER.FRAGMENT, this);
-        registerAllZones(this);
+        registerAllZones();
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        registerAllZones(null);
     }
     @Override
     public void onStop() {
@@ -397,7 +413,7 @@ public class MapFragment extends MyTabFragment implements PlayerLocationListener
         }.execute();
     }
     private void calcLinePath (){
-        ArrayList<GeoPoint> listOfPoints = new ArrayList<GeoPoint>();
+        ArrayList<GeoPoint> listOfPoints = new ArrayList<>();
         listOfPoints.add(this.playerLocation);
         listOfPoints.add(this.selectedZone.getCenterPoint());
 //        addRoute(createPolyline(listOfPoints));
@@ -430,21 +446,18 @@ public class MapFragment extends MyTabFragment implements PlayerLocationListener
         selectedZone = sZn;
         if ((playerLocation != null) && (selectedZone != null)) calcPath();
     }
-    private void changePlayerLocation () {
-
-    }
     @Override
     public void onLocationPlayerChanged(PlayerLocationEvent playerLocationEvent) {
         // TODO Auto-generated method stub
         playerLocation = playerLocationEvent.getLocationOfPlayer();
         if (playerLocation != null) {
             if (playerMarkerItem != null) {
-                markerLayer.removeItem(playerMarkerItem);
+                mMarkerLayer.removeItem(playerMarkerItem);
             }
             playerMarkerItem = new MarkerItem("Player","",playerLocation);
             playerMarkerSymbol = new MarkerSymbol(drawableToBitmap(getResources(), R.drawable.player_marker), MarkerSymbol.HotspotPlace.CENTER,false);
             playerMarkerItem.setMarker(playerMarkerSymbol);
-            markerLayer.addItem(playerMarkerItem);
+            mMarkerLayer.addItem(playerMarkerItem);
 //            this.playerMarkerItem = new PlayerRotatingMarker(this.playerLocation, getResources(), R.drawable.player_marker);
                 //this.playerMarker = new PlayerRotatingMarker  (playerPosition);
                 //this.playerMarker.setResource(getResources(), R.drawable.player_marker);
@@ -464,5 +477,20 @@ public class MapFragment extends MyTabFragment implements PlayerLocationListener
     @Override
     public boolean onItemLongPress(int index, MarkerItem item) {
         return false;
+    }
+
+    @Override
+    public void onZoneChanged(Zone zone) {
+        MarkerSymbol zoneMarkerSymbol = new MarkerSymbol(drawableToBitmap(getResources(),zone.getIconId()), MarkerSymbol.HotspotPlace.CENTER);
+        MarkerItem mi = zoneMarkerItemHashMap.get(zone);
+        if (mi != null) {
+            mMarkerLayer.removeItem(mi);
+            zoneMarkerItemHashMap.remove(zone);
+        }
+        mi = new MarkerItem(zone.getName(),"",zone.getCenterPoint());
+        mi.setMarker(zone.isVisible()? zoneMarkerSymbol : null);
+        mMarkerLayer.addItem(mi);
+        zoneMarkerItemHashMap.put(zone,mi);
+   //     mMap.updateMap(true);
     }
 }
