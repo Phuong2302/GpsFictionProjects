@@ -611,9 +611,10 @@ int drawable design_snackbar_background 0x7f020050
 int drawable flag_green 0x7f020051
 int drawable ic_action_search 0x7f020052
 int drawable ic_launcher 0x7f020053
-int drawable notification_template_icon_bg 0x7f020056
+int drawable notification_template_icon_bg 0x7f020057
 int drawable pieton 0x7f020054
 int drawable player_marker 0x7f020055
+int drawable transparent 0x7f020056
 int id Compass 0x7f0d009a
 int id Inventory 0x7f0d0099
 int id Map 0x7f0d009b

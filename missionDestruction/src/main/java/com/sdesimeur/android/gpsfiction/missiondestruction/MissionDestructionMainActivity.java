@@ -128,7 +128,7 @@ public class MissionDestructionMainActivity extends GpsFictionActivity {
         float radius;
         this.zoneGlobale = new ZoneGlobale();
         this.zoneGlobale.init(this);
-        this.zoneGlobale.setVisible(true);
+        this.zoneGlobale.setVisible(false);
         zoneGlobale.setActive(false);
         this.zoneGlobale.setId(R.string.zoneGlobale);
         newZp = this.getMyLocationListener().getPlayerGeoPoint();
@@ -173,7 +173,7 @@ public class MissionDestructionMainActivity extends GpsFictionActivity {
         zpc = new ZonePrendreClef();
         zpc.init(this);
         zpc.setId(nameId);
-        zpc.setVisible(true);
+        zpc.setVisible(false);
         double distance = (radius_zone_clef - radius_zone_prendre_clef) * Math.random();
         int angle = (int) Math.floor(360 * Math.random());
         newZp = this.zoneClef.getCenterPoint().project(angle, distance);

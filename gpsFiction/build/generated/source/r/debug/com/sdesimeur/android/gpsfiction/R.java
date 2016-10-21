@@ -2310,9 +2310,10 @@ containing a value of this type.
         public static int flag_green=0x7f020051;
         public static int ic_action_search=0x7f020052;
         public static int ic_launcher=0x7f020053;
-        public static int notification_template_icon_bg=0x7f020056;
+        public static int notification_template_icon_bg=0x7f020057;
         public static int pieton=0x7f020054;
         public static int player_marker=0x7f020055;
+        public static int transparent=0x7f020056;
     }
     public static final class id {
         public static int Compass=0x7f0d009a;
@@ -2402,7 +2403,7 @@ containing a value of this type.
         public static int listTasks=0x7f0d0091;
         public static int listZones=0x7f0d0096;
         public static int list_item=0x7f0d0041;
-        public static int mapRotateView=0x7f0d007f;
+        public static int mapView=0x7f0d007f;
         public static int media_actions=0x7f0d0086;
         public static int middle=0x7f0d0032;
         public static int mini=0x7f0d0030;

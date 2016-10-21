@@ -6,19 +6,20 @@ public class PlayerLocationEvent {
     private GeoPoint locationOfPlayer = null;
 
     PlayerLocationEvent(GeoPoint gp) {
-        this.setLocationOfPlayer(gp);
+        locationOfPlayer=gp;
     }
 
     public PlayerLocationEvent() {
         // TODO Auto-generated constructor stub
-        this.locationOfPlayer = new GeoPoint();
+        locationOfPlayer = new GeoPoint();
     }
 
     public GeoPoint getLocationOfPlayer() {
-        return this.locationOfPlayer;
+        return locationOfPlayer;
     }
 
-    public void setLocationOfPlayer(GeoPoint locationOfPlayer) {
-        this.locationOfPlayer = locationOfPlayer;
+    public void setLocationOfPlayer(GeoPoint location) {
+        locationOfPlayer = location;
     }
+
 }
