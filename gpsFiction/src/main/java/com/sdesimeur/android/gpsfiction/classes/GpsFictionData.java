@@ -26,6 +26,7 @@ public class GpsFictionData {
     private HashMap<GpsFictionData.REGISTER, HashSet<ZoneSelectListener>> zoneSelectListener = new HashMap<>();
     private HashSet<GpsFictionThing> gpsFictionThings = new HashSet<>();
     private HashSet<ZoneChangeListener> zoneChangeListener = new HashSet<> ();
+    public boolean toSave=true;
 
     public GpsFictionData() {
         for (GpsFictionData.REGISTER i : GpsFictionData.REGISTER.values()) {

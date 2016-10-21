@@ -42,8 +42,8 @@ public class GpsFictionThing {
     }
 
     public void setAttrs(boolean visible, boolean active) {
-        this.valbool[VALBOOL.visible] = visible;
-        this.valbool[VALBOOL.active] = active;
+        setVisible(visible);
+        setActive(active);
     }
 
     public int[] getUUID() {

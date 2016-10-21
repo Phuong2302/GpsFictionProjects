@@ -1,6 +1,5 @@
 package com.sdesimeur.android.gpsfiction.activities;
 
-import android.app.Activity;
 import android.support.v4.app.Fragment;
 import android.view.View;
 
@@ -14,11 +13,6 @@ public abstract class MyTabFragment extends Fragment implements MyTabFragmentImp
         super();
     }
 
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        this.gpsFictionActivity = (GpsFictionActivity) activity;
-    }
 
     public GpsFictionActivity getGpsFictionActivity() {
         return this.gpsFictionActivity;

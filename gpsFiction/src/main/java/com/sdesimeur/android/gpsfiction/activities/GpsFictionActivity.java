@@ -173,11 +173,13 @@ public class GpsFictionActivity extends AppCompatActivity /*implements TabListen
 
     @Override
     protected void onSaveInstanceState(Bundle savedInstanceState) {
-        Bundle toPass = this.gpsFictionData.getByBundle();
-        savedInstanceState.putBundle("GpsFictionData", toPass);
-        toPass = this.myLocationListener.getByBundle();
-        savedInstanceState.putBundle("MyLocationListener", toPass);
-        savedInstanceState.putString("lastSelectedFragment", menuItem2Fragments.get(selectedFragmentId).getClass().getName());
+        if (gpsFictionData.toSave) {
+            Bundle toPass = this.gpsFictionData.getByBundle();
+            savedInstanceState.putBundle("GpsFictionData", toPass);
+            toPass = this.myLocationListener.getByBundle();
+            savedInstanceState.putBundle("MyLocationListener", toPass);
+            savedInstanceState.putString("lastSelectedFragment", menuItem2Fragments.get(selectedFragmentId).getClass().getName());
+        }
         super.onSaveInstanceState(savedInstanceState);
     }
 
@@ -249,7 +251,7 @@ public class GpsFictionActivity extends AppCompatActivity /*implements TabListen
         if (why == R.string.dialogCloseTaskTitle) {
 //			this.gpsFictionFragment.setRetainInstance(false);
             if (reponse == R.string.dialogButtonNo) {
-                this.gpsFictionData = null;
+                this.gpsFictionData.toSave = false;
                 this.finish();
             }
         }
