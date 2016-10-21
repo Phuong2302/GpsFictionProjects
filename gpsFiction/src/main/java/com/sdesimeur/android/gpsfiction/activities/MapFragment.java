@@ -2,8 +2,12 @@ package com.sdesimeur.android.gpsfiction.activities;
 
 
 import android.content.res.TypedArray;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Matrix;
 import android.graphics.Path;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
 import android.os.AsyncTask;
@@ -46,7 +50,6 @@ import com.sdesimeur.android.gpsfiction.views.ImageViewWithId;
 
 import org.oscim.android.MapPreferences;
 import org.oscim.android.MapView;
-import org.oscim.backend.canvas.Bitmap;
 import org.oscim.core.MapPosition;
 import org.oscim.layers.PathLayer;
 import org.oscim.layers.marker.ItemizedLayer;
@@ -104,6 +107,7 @@ public class MapFragment extends MyTabFragment implements PlayerBearingListener,
     private ItemizedLayer<MarkerItem> mMarkerLayer=null;
     private float playerBearing=0;
     private Drawable playerDrawable = null;
+    private Bitmap playerBitmap = null;
 
     public MapFragment() {
         super();
@@ -159,8 +163,8 @@ public class MapFragment extends MyTabFragment implements PlayerBearingListener,
         mapView=(MapView) this.getRootView().findViewById(R.id.mapView);
         mMap = mapView.map();
         playerDrawable = getResources().getDrawable(R.drawable.player_marker);
-        Bitmap bm=drawableToBitmap(getResources(),R.drawable.transparent);
-        MarkerSymbol ms = new MarkerSymbol(bm, HotspotPlace.CENTER);
+        playerBitmap = BitmapFactory.decodeResource(getResources(),R.drawable.player_marker);
+        MarkerSymbol ms = new MarkerSymbol(drawableToBitmap(getResources(),R.drawable.transparent), HotspotPlace.CENTER);
         mMarkerLayer = new ItemizedLayer<>(mMap, new ArrayList<MarkerItem>(), ms , this);
         mMap.layers().add(mMarkerLayer);
         mPrefs = new MapPreferences(MapFragment.class.getName(), this.getContext());
@@ -506,7 +510,12 @@ public class MapFragment extends MyTabFragment implements PlayerBearingListener,
         MapPosition pos = mMap.getMapPosition();
         pos.setBearing(-playerBearing);
         mMap.setMapPosition(pos);
-        playerMarkerSymbol = new MarkerSymbol(drawableToBitmap(getRotateDrawable(playerDrawable,playerBearing)), HotspotPlace.CENTER, false);
+        Matrix matrix = new Matrix();
+        matrix.postRotate(playerBearing);
+        Bitmap bm = Bitmap.createBitmap(playerBitmap, 0, 0, playerBitmap.getWidth(), playerBitmap.getHeight(), matrix, true);
+        Drawable d = new BitmapDrawable(bm);
+        playerMarkerSymbol = new MarkerSymbol(drawableToBitmap(d), HotspotPlace.CENTER, false);
+     //   playerMarkerSymbol = new MarkerSymbol(drawableToBitmap(getRotateDrawable(playerDrawable,playerBearing)), HotspotPlace.CENTER, false);
         playerMarkerItem.setMarker(playerMarkerSymbol);
         mMarkerLayer.populate();
     }
