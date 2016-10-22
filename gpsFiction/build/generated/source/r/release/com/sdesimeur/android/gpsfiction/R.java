@@ -2310,10 +2310,11 @@ containing a value of this type.
         public static int flag_green=0x7f020051;
         public static int ic_action_search=0x7f020052;
         public static int ic_launcher=0x7f020053;
-        public static int notification_template_icon_bg=0x7f020057;
+        public static int notification_template_icon_bg=0x7f020058;
         public static int pieton=0x7f020054;
         public static int player_marker=0x7f020055;
-        public static int transparent=0x7f020056;
+        public static int playerrotatemarker=0x7f020056;
+        public static int transparent=0x7f020057;
     }
     public static final class id {
         public static int Compass=0x7f0d009a;

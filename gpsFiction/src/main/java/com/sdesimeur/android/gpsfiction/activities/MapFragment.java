@@ -2,12 +2,8 @@ package com.sdesimeur.android.gpsfiction.activities;
 
 
 import android.content.res.TypedArray;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.Matrix;
 import android.graphics.Path;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
 import android.os.AsyncTask;
@@ -45,13 +41,13 @@ import com.sdesimeur.android.gpsfiction.classes.PlayerLocationListener;
 import com.sdesimeur.android.gpsfiction.classes.Zone;
 import com.sdesimeur.android.gpsfiction.classes.ZoneChangeListener;
 import com.sdesimeur.android.gpsfiction.classes.ZoneSelectListener;
+import com.sdesimeur.android.gpsfiction.classes.ZoneViewHelper;
 import com.sdesimeur.android.gpsfiction.geopoint.GeoPoint;
 import com.sdesimeur.android.gpsfiction.views.ImageViewWithId;
 
 import org.oscim.android.MapPreferences;
 import org.oscim.android.MapView;
 import org.oscim.core.MapPosition;
-import org.oscim.layers.PathLayer;
 import org.oscim.layers.marker.ItemizedLayer;
 import org.oscim.layers.marker.MarkerItem;
 import org.oscim.layers.marker.MarkerSymbol;
@@ -66,7 +62,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 
 import static android.view.ViewGroup.LayoutParams;
 import static org.oscim.android.canvas.AndroidGraphics.drawableToBitmap;
@@ -102,12 +97,12 @@ public class MapFragment extends MyTabFragment implements PlayerBearingListener,
         put(R.drawable.auto, new CarFlagEncoder());
     }};
     private MarkerSymbol playerMarkerSymbol;
-    private HashMap<Zone,MarkerItem> zoneMarkerItemHashMap =new HashMap<>() ;
-    private List<PathLayer> mPathLayers = new ArrayList<>();
+    private HashMap<Zone,ZoneViewHelper> zoneViewHelperHashMap =new HashMap<>() ;
     private ItemizedLayer<MarkerItem> mMarkerLayer=null;
     private float playerBearing=0;
     private Drawable playerDrawable = null;
-    private Bitmap playerBitmap = null;
+//    private Bitmap playerBitmap = null;
+//    private RotateDrawable playerRotateDrawable = null;
 
     public MapFragment() {
         super();
@@ -163,7 +158,8 @@ public class MapFragment extends MyTabFragment implements PlayerBearingListener,
         mapView=(MapView) this.getRootView().findViewById(R.id.mapView);
         mMap = mapView.map();
         playerDrawable = getResources().getDrawable(R.drawable.player_marker);
-        playerBitmap = BitmapFactory.decodeResource(getResources(),R.drawable.player_marker);
+//        playerRotateDrawable = (RotateDrawable) getResources().getDrawable(R.drawable.playerrotatemarker);
+//        playerBitmap = BitmapFactory.decodeResource(getResources(),R.drawable.player_marker);
         MarkerSymbol ms = new MarkerSymbol(drawableToBitmap(getResources(),R.drawable.transparent), HotspotPlace.CENTER);
         mMarkerLayer = new ItemizedLayer<>(mMap, new ArrayList<MarkerItem>(), ms , this);
         mMap.layers().add(mMarkerLayer);
@@ -440,7 +436,7 @@ public class MapFragment extends MyTabFragment implements PlayerBearingListener,
     public void onZoneSelectChanged(Zone sZn) {
         // TODO Auto-generated method stub
         selectedZone = sZn;
-        if ((playerLocation != null) && (selectedZone != null)) calcPath();
+//        if ((playerLocation != null) && (selectedZone != null)) calcPath();
     }
     @Override
     public void onLocationPlayerChanged(PlayerLocationEvent playerLocationEvent) {
@@ -482,14 +478,16 @@ public class MapFragment extends MyTabFragment implements PlayerBearingListener,
     @Override
     public void onZoneChanged(Zone zone) {
         MarkerSymbol zoneMarkerSymbol = new MarkerSymbol(drawableToBitmap(getResources(),zone.getIconId()), HotspotPlace.CENTER);
-        MarkerItem mi = zoneMarkerItemHashMap.get(zone);
-        if (mi == null) {
-            mi = new MarkerItem(zone, zone.getName(), "", zone.getCenterPoint());
-            mMarkerLayer.addItem(mi);
-            zoneMarkerItemHashMap.put(zone, mi);
+        ZoneViewHelper zvh = zoneViewHelperHashMap.get(zone);
+        if (zvh == null) {
+            zvh = new ZoneViewHelper();
+            zoneViewHelperHashMap.put(zone,zvh);
         }
-        mi.setMarker(zone.isVisible()?zoneMarkerSymbol:null);
-//        mi.setMarker(zoneMarkerSymbol);
+        if (zvh.markerItem == null) {
+            zvh.markerItem = new MarkerItem(zone, zone.getName(), "", zone.getCenterPoint());
+            mMarkerLayer.addItem(zvh.markerItem);
+        }
+        zvh.markerItem.setMarker(zone.isVisible()?zoneMarkerSymbol:null);
         mMarkerLayer.populate();
     }
     private Drawable getRotateDrawable(final Drawable d, final float angle) {
@@ -504,18 +502,27 @@ public class MapFragment extends MyTabFragment implements PlayerBearingListener,
             }
         };
     }
-    @Override
+
     public void onBearingPlayerChanged(PlayerBearingEvent playerBearingEvent) {
+//        float playerBearingOld = playerBearing;
         playerBearing = (180+playerBearingEvent.getBearing())%360-180;
         MapPosition pos = mMap.getMapPosition();
         pos.setBearing(-playerBearing);
         mMap.setMapPosition(pos);
-        Matrix matrix = new Matrix();
+
+     /*   playerRotateDrawable.setFromDegrees(playerBearingOld);
+        playerRotateDrawable.setToDegrees(playerBearing);
+        playerRotateDrawable.setLevel(5);
+        playerMarkerSymbol = new MarkerSymbol(drawableToBitmap(playerRotateDrawable), HotspotPlace.CENTER, false);
+        */
+     /*   Matrix matrix = new Matrix();
         matrix.postRotate(playerBearing);
         Bitmap bm = Bitmap.createBitmap(playerBitmap, 0, 0, playerBitmap.getWidth(), playerBitmap.getHeight(), matrix, true);
         Drawable d = new BitmapDrawable(bm);
         playerMarkerSymbol = new MarkerSymbol(drawableToBitmap(d), HotspotPlace.CENTER, false);
-     //   playerMarkerSymbol = new MarkerSymbol(drawableToBitmap(getRotateDrawable(playerDrawable,playerBearing)), HotspotPlace.CENTER, false);
+        */
+        playerMarkerSymbol = new MarkerSymbol(drawableToBitmap(getRotateDrawable(playerDrawable,playerBearing)), HotspotPlace.CENTER, false);
+
         playerMarkerItem.setMarker(playerMarkerSymbol);
         mMarkerLayer.populate();
     }
