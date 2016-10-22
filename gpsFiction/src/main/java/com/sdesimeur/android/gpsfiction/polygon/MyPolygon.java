@@ -1,27 +1,32 @@
 package com.sdesimeur.android.gpsfiction.polygon;
 
-import com.sdesimeur.android.gpsfiction.geopoint.GeoPoint;
+import com.sdesimeur.android.gpsfiction.geopoint.MyGeoPoint;
 import com.sdesimeur.android.gpsfiction.math.Vector;
 
+import org.oscim.core.GeoPoint;
+
 import java.util.ArrayList;
+import java.util.List;
 
 @SuppressWarnings("serial")
-public class MyPolygon extends ArrayList<GeoPoint> {
+public class MyPolygon extends ArrayList<MyGeoPoint> {
 
     //private static final int BIG_VALUE = 400000000;
     public MyPolygon() {
         super();
     }
 
-    public void addGeoPoint(GeoPoint gp) {
+    public void addMyGeoPoint(MyGeoPoint gp) {
         this.add(gp);
     }
 
-    public boolean contains(GeoPoint gp) {
+    public boolean contains(MyGeoPoint gp) {
         return this.contains(gp.getX(), gp.getY());
     }
 
-
+    public List<GeoPoint> getAll () {
+        return this.toArray();
+    }
 //       /**
 //        * Test if a high-precision rectangle intersects the shape. This is true
 //        * if any point in the rectangle is in the shape. This implementation is
@@ -266,11 +271,11 @@ public class MyPolygon extends ArrayList<GeoPoint> {
 //    	   }
 //       }
 
-//       public static boolean linesIntersect(GeoPoint pA, GeoPoint pB, GeoPoint pC, GeoPoint pD) {
+//       public static boolean linesIntersect(MyGeoPoint pA, MyGeoPoint pB, MyGeoPoint pC, MyGeoPoint pD) {
 //    	   return MyPolygon.linesIntersect(pA.getX(),pA.getY(),pB.getX(),pB.getY(),pC.getX(),pC.getY(),pD.getX(),pD.getY());
 //       }
-    public GeoPoint pointDistanceMin(GeoPoint pM) {
-        GeoPoint pA, pB, pTemp;
+    public MyGeoPoint pointDistanceMin(MyGeoPoint pM) {
+        MyGeoPoint pA, pB, pTemp;
         float dAM, dBM, dAB, dTemp;
         pA = this.get(0);
         pB = this.get(1);

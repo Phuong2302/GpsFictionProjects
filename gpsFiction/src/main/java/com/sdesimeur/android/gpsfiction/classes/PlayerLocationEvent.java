@@ -1,9 +1,9 @@
 package com.sdesimeur.android.gpsfiction.classes;
 
-import com.sdesimeur.android.gpsfiction.geopoint.GeoPoint;
+import com.sdesimeur.android.gpsfiction.geopoint.MyGeoPoint;
 
 public class PlayerLocationEvent {
-    private GeoPoint locationOfPlayer = null;
+    private MyGeoPoint locationOfPlayer = null;
 
     PlayerLocationEvent(GeoPoint gp) {
         locationOfPlayer=gp;
@@ -11,10 +11,10 @@ public class PlayerLocationEvent {
 
     public PlayerLocationEvent() {
         // TODO Auto-generated constructor stub
-        locationOfPlayer = new GeoPoint();
+        locationOfPlayer = new MyGeoPoint();
     }
 
-    public GeoPoint getLocationOfPlayer() {
+    public MyGeoPoint getLocationOfPlayer() {
         return locationOfPlayer;
     }
 

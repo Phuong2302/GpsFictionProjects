@@ -4,7 +4,7 @@ import android.location.Location;
 import android.os.Bundle;
 
 import com.sdesimeur.android.gpsfiction.R;
-import com.sdesimeur.android.gpsfiction.geopoint.GeoPoint;
+import com.sdesimeur.android.gpsfiction.geopoint.MyGeoPoint;
 import com.sdesimeur.android.gpsfiction.gpx.beans.Waypoint;
 import com.sdesimeur.android.gpsfiction.polygon.MyPolygon;
 
@@ -19,7 +19,7 @@ public class Zone extends Container implements ZoneEnterOrExitInterface, PlayerL
     private final static double RAPPORT = 2 * Math.PI / 0.005;
     private final static int NB_MIN_DE_COTES = 8;
     private final boolean transportable = false;
-    private GeoPoint nearestPoint2Player = new GeoPoint(0,0);
+    private MyGeoPoint nearestPoint2Player = new MyGeoPoint(0,0);
     private float distance2Player = 0;
     private float bearingPlayer = 0;
     private float bearing2Zone = 0;
@@ -29,7 +29,7 @@ public class Zone extends Container implements ZoneEnterOrExitInterface, PlayerL
     private MarkerItem zoneMarkerItem = null;
     private boolean isSelectedZone = false;
     private float radius = 0; // distance max entre points de zone et centre de zone ou rayon pour une zone circulaire.
-    private GeoPoint centerPoint = null; // moyenne des points ou centre d'une zone circulaire,
+    private MyGeoPoint centerPoint = null; // moyenne des points ou centre d'une zone circulaire,
     private MyPolygon shape = new MyPolygon(); // contour de zone
     private MarkerSymbol zoneMarkerSymbol = null;
     private PathLayer zonePathLayer = null;
@@ -61,7 +61,7 @@ public class Zone extends Container implements ZoneEnterOrExitInterface, PlayerL
 //		coord = {this.centerPoint.getLatitude() , this.centerPoint.getLongitude()};
 //		dest.putDoubleArray("centerPoint",coord);
         Iterator<GeoPoint> it = this.shape.iterator();
-        GeoPoint gp = null;
+        MyGeoPoint gp = null;
         dest.putInt("shapeNbPoints", this.shape.size());
         int index = 0;
         while (it.hasNext()) {
@@ -82,11 +82,11 @@ public class Zone extends Container implements ZoneEnterOrExitInterface, PlayerL
 //		this.circularZone = val[1];
 //		this.radius = in.getFloat("radius");
 //		coord = in.getDoubleArray("centerPoint");
-//		this.centerPoint = new GeoPoint(coord[0],coord[1]);
+//		this.centerPoint = new MyGeoPoint(coord[0],coord[1]);
         int nbGeoGointInShape = in.getInt("shapeNbPoints");
         for (int index = 0; index < nbGeoGointInShape; index++) {
             coord = in.getDoubleArray("shapePoint" + index);
-            this.shape.add(new GeoPoint(coord[0], coord[1]));
+            this.shape.add(new MyGeoPoint(coord[0], coord[1]));
         }
         this.registerInListeners();
     }
@@ -124,17 +124,17 @@ public class Zone extends Container implements ZoneEnterOrExitInterface, PlayerL
         Waypoint wpt = null;
         while (it.hasNext()) {
             wpt = it.next();
-            shape.addGeoPoint(new GeoPoint(wpt));
+            shape.addGeoPoint(new MyGeoPoint(wpt));
         }
         this.registerInListeners();
     }
 
     public void setShape(float latitude, float longitude, float radius) {
-        this.setShape(new GeoPoint(latitude, longitude), radius);
+        this.setShape(new MyGeoPoint(latitude, longitude), radius);
     }
 
     public void setShape(float[] point, float radius) {
-        this.setShape(new GeoPoint(point[0], point[1]), radius);
+        this.setShape(new MyGeoPoint(point[0], point[1]), radius);
     }
 
     public void setShape(GeoPoint point, float radius) {
@@ -154,18 +154,18 @@ public class Zone extends Container implements ZoneEnterOrExitInterface, PlayerL
         this.registerInListeners();
     }
 
-    public GeoPoint getCenterPoint() {
+    public MyGeoPoint getCenterPoint() {
         if (centerPoint == null) {
             double sumLatitude = 0;
             double sumLongitude = 0;
             Iterator<GeoPoint> it = this.getShape().iterator();
             while (it.hasNext()) {
-                GeoPoint gp = it.next();
+                MyGeoPoint gp = it.next();
                 sumLatitude += gp.getLatitude();
                 sumLongitude += gp.getLongitude();
             }
             int nb = this.getShape().size();
-            centerPoint = new GeoPoint(sumLatitude / nb, sumLongitude / nb);
+            centerPoint = new MyGeoPoint(sumLatitude / nb, sumLongitude / nb);
         }
         return centerPoint;
     }
@@ -204,7 +204,7 @@ public class Zone extends Container implements ZoneEnterOrExitInterface, PlayerL
     }
 
     public boolean isInThisZone(Location location) {
-        GeoPoint geoPoint = new GeoPoint(location);
+        MyGeoPoint geoPoint = new MyGeoPoint(location);
         return (this.isInThisZone(geoPoint));
     }
 
@@ -212,7 +212,7 @@ public class Zone extends Container implements ZoneEnterOrExitInterface, PlayerL
         return this.playerIsInThisZone;
     }
 
-    /*	public GeoPoint getCenterPoint() {
+    /*	public MyGeoPoint getCenterPoint() {
             return this.centerPoint;
         }
     */
@@ -229,11 +229,11 @@ public class Zone extends Container implements ZoneEnterOrExitInterface, PlayerL
 //		double sumLatitude=0;
 //		double sumLongitude=0;
         for (int i = 0; i < points.length; i++) {
-            shape.addGeoPoint(new GeoPoint(points[i][0], points[i][1]));
+            shape.addGeoPoint(new MyGeoPoint(points[i][0], points[i][1]));
 //			sumLatitude+=points[i][0];
 //			sumLongitude+=points[i][1];
         }
-//		this.setCenterPoint(new GeoPoint(sumLatitude/points.length,sumLongitude/points.length));
+//		this.setCenterPoint(new MyGeoPoint(sumLatitude/points.length,sumLongitude/points.length));
 //		this.setRadius(distanceMaxToShape(this.getCenterPoint()));
         this.registerInListeners();
     }

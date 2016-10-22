@@ -3,6 +3,7 @@ package com.sdesimeur.android.gpsfiction.activities;
 
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Path;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
@@ -42,12 +43,13 @@ import com.sdesimeur.android.gpsfiction.classes.Zone;
 import com.sdesimeur.android.gpsfiction.classes.ZoneChangeListener;
 import com.sdesimeur.android.gpsfiction.classes.ZoneSelectListener;
 import com.sdesimeur.android.gpsfiction.classes.ZoneViewHelper;
-import com.sdesimeur.android.gpsfiction.geopoint.GeoPoint;
+import com.sdesimeur.android.gpsfiction.geopoint.MyGeoPoint;
 import com.sdesimeur.android.gpsfiction.views.ImageViewWithId;
 
 import org.oscim.android.MapPreferences;
 import org.oscim.android.MapView;
 import org.oscim.core.MapPosition;
+import org.oscim.layers.PathLayer;
 import org.oscim.layers.marker.ItemizedLayer;
 import org.oscim.layers.marker.MarkerItem;
 import org.oscim.layers.marker.MarkerSymbol;
@@ -62,6 +64,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 
 import static android.view.ViewGroup.LayoutParams;
 import static org.oscim.android.canvas.AndroidGraphics.drawableToBitmap;
@@ -89,7 +92,7 @@ public class MapFragment extends MyTabFragment implements PlayerBearingListener,
     private MarkerItem playerMarkerItem;
     private ViewGroup viewGroupForVehiculesButtons = null;
     private Zone selectedZone = null;
-    private GeoPoint playerLocation = null;
+    private MyGeoPoint playerLocation = null;
     private HashMap<Integer,FlagEncoder> vehiculeGHEncoding = new HashMap <Integer, FlagEncoder> () {{
         put(R.drawable.compass, null);
         put(R.drawable.pieton, new FootFlagEncoder());
@@ -176,10 +179,6 @@ public class MapFragment extends MyTabFragment implements PlayerBearingListener,
             MapPosition pos = mMap.getMapPosition();
             pos.setZoomLevel(INITZOOMLEVEL);
             mMap.setMapPosition(pos);
-//            MapInfo info = tileSource.getMapInfo();
-//            MapPosition pos = new MapPosition();
-//            pos.setByBoundingBox(info.boundingBox, Tile.SIZE * 4, Tile.SIZE * 4);
-//            mMap.setMapPosition(pos);
         }
         ViewGroup vg = (ViewGroup) getRootView();
         addViewGroupForVehiculesButtons(vg);
@@ -195,13 +194,6 @@ public class MapFragment extends MyTabFragment implements PlayerBearingListener,
         while (itZone.hasNext()) {
             zone = (Zone) itZone.next();
             onZoneChanged(zone);
-        /*
-        int c = Color.fade(Color.rainbow((float) (lat + 90) / 180), 0.5f);
-        zonePathLayer = new PathLayer(mapFragment.getMapView().map(), c, 6);
-        mapFragment.getMapView().map().layers().add(zonePathLayer);
-        zonePathLayer.setPoints((List<org.oscim.core.GeoPoint>) getShape());
-        mapFragment.getmPathLayers().add(zonePathLayer);
-        */
         }
     }
 
@@ -405,7 +397,7 @@ public class MapFragment extends MyTabFragment implements PlayerBearingListener,
         }.execute();
     }
     private void calcLinePath (){
-        ArrayList<GeoPoint> listOfPoints = new ArrayList<>();
+        ArrayList<MyGeoPoint> listOfPoints = new ArrayList<>();
         listOfPoints.add(this.playerLocation);
         listOfPoints.add(this.selectedZone.getCenterPoint());
 //        addRoute(createPolyline(listOfPoints));
@@ -480,14 +472,20 @@ public class MapFragment extends MyTabFragment implements PlayerBearingListener,
         MarkerSymbol zoneMarkerSymbol = new MarkerSymbol(drawableToBitmap(getResources(),zone.getIconId()), HotspotPlace.CENTER);
         ZoneViewHelper zvh = zoneViewHelperHashMap.get(zone);
         if (zvh == null) {
-            zvh = new ZoneViewHelper();
+            zvh = new ZoneViewHelper(zone);
             zoneViewHelperHashMap.put(zone,zvh);
         }
         if (zvh.markerItem == null) {
             zvh.markerItem = new MarkerItem(zone, zone.getName(), "", zone.getCenterPoint());
             mMarkerLayer.addItem(zvh.markerItem);
         }
+        if (zvh.pathLayer == null) {
+            zvh.pathLayer = new PathLayer(mMap,zone.isSelectedZone()?Color.RED:Color.BLUE,1);
+            mMap.layers().add(zvh.pathLayer);
+            zvh.pathLayer.setPoints(zone.getShape().getAll());
+        }
         zvh.markerItem.setMarker(zone.isVisible()?zoneMarkerSymbol:null);
+        zvh.pathLayer.setEnabled(zone.isVisible());
         mMarkerLayer.populate();
     }
     private Drawable getRotateDrawable(final Drawable d, final float angle) {

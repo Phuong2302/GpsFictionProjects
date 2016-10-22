@@ -10,4 +10,9 @@ import org.oscim.layers.marker.MarkerItem;
 public class ZoneViewHelper {
     public MarkerItem markerItem;
     public PathLayer pathLayer;
+    public Zone zone;
+
+    public ZoneViewHelper(Zone zn) {
+        zone = zn;
+    }
 }

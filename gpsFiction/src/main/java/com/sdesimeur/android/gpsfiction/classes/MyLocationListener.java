@@ -15,7 +15,7 @@ import android.support.v4.app.ActivityCompat;
 import android.text.format.Time;
 
 import com.sdesimeur.android.gpsfiction.activities.GpsFictionActivity;
-import com.sdesimeur.android.gpsfiction.geopoint.GeoPoint;
+import com.sdesimeur.android.gpsfiction.geopoint.MyGeoPoint;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -29,9 +29,9 @@ public class MyLocationListener implements LocationListener, SensorEventListener
     private HashMap<MyLocationListener.REGISTER, HashSet<PlayerLocationListener>> playerLocationListener = null;
     //private static final HashSet <PlayerLocationListener> playerLocationListener = new HashSet <PlayerLocationListener> ();
     //private static final HashSet <PlayerLocationListener> playerLocationListenerZone = new HashSet <PlayerLocationListener> ();
-    private GeoPoint lastPlayerGeoPoint = null;
+    private MyGeoPoint lastPlayerGeoPoint = null;
     private Time lastTimePlayerGeoPoint = null;
-    private GeoPoint playerGeoPoint = null;
+    private MyGeoPoint playerGeoPoint = null;
     private Time timePlayerGeoPoint = null;
     private boolean firstLocation;
     private LocationManager locationManager = null;
@@ -54,9 +54,9 @@ public class MyLocationListener implements LocationListener, SensorEventListener
             this.playerBearingListener.put(i, new HashSet<PlayerBearingListener>());
             this.playerLocationListener.put(i, new HashSet<PlayerLocationListener>());
         }
-        this.lastPlayerGeoPoint = new GeoPoint();
+        this.lastPlayerGeoPoint = new MyGeoPoint();
         this.lastTimePlayerGeoPoint = new Time();
-        this.playerGeoPoint = new GeoPoint();
+        this.playerGeoPoint = new MyGeoPoint();
         this.timePlayerGeoPoint = new Time();
         this.playerLocationEvent = new PlayerLocationEvent();
         this.playerBearingEvent = new PlayerBearingEvent();
@@ -94,9 +94,9 @@ public class MyLocationListener implements LocationListener, SensorEventListener
         this.compassBearing = in.getFloat("cb");
         this.locationBearing = in.getFloat("lb");
         double[] coord = in.getDoubleArray("pgp");
-        this.playerGeoPoint = new GeoPoint(coord[0], coord[1]);
+        this.playerGeoPoint = new MyGeoPoint(coord[0], coord[1]);
         coord = in.getDoubleArray("lpgp");
-        this.lastPlayerGeoPoint = new GeoPoint(coord[0], coord[1]);
+        this.lastPlayerGeoPoint = new MyGeoPoint(coord[0], coord[1]);
         this.timePlayerGeoPoint.set(in.getLong("tpgp"));
         this.lastTimePlayerGeoPoint.set(in.getLong("ltpgp"));
     }
@@ -174,14 +174,14 @@ public class MyLocationListener implements LocationListener, SensorEventListener
             this.firstLocation = false;
             this.timePlayerGeoPoint.setToNow();
             //this.playerGeoPoint.setGeoPoint(location);
-            this.playerGeoPoint = new GeoPoint(location);
+            this.playerGeoPoint = new MyGeoPoint(location);
         }
         this.lastTimePlayerGeoPoint.set(this.timePlayerGeoPoint);
         //this.lastPlayerGeoPoint.setGeoPoint(this.playerGeoPoint);
-        this.lastPlayerGeoPoint = new GeoPoint(this.playerGeoPoint);
+        this.lastPlayerGeoPoint = new MyGeoPoint(this.playerGeoPoint);
         this.timePlayerGeoPoint.setToNow();
         //this.playerGeoPoint.setGeoPoint(location);
-        this.playerGeoPoint = new GeoPoint(location);
+        this.playerGeoPoint = new MyGeoPoint(location);
         this.playerLocationEvent.setLocationOfPlayer(this.playerGeoPoint);
         this.locationBearing = this.lastPlayerGeoPoint.bearingTo(this.playerGeoPoint);
         this.setCompassActive();
@@ -214,9 +214,9 @@ public class MyLocationListener implements LocationListener, SensorEventListener
         this.locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 200, 0.5f, this);
         Location location = this.locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
         if (location == null) {
-            this.playerGeoPoint = new GeoPoint(LATITUDE, LONGITUDE);
+            this.playerGeoPoint = new MyGeoPoint(LATITUDE, LONGITUDE);
         } else {
-            this.playerGeoPoint = new GeoPoint(location);
+            this.playerGeoPoint = new MyGeoPoint(location);
         }
         this.lastPlayerGeoPoint = this.playerGeoPoint;
         this.sensorManager = (SensorManager) this.getGpsFictionActivity().getSystemService(Context.SENSOR_SERVICE);
@@ -241,7 +241,7 @@ public class MyLocationListener implements LocationListener, SensorEventListener
         this.locationManager.removeUpdates(this);
     }
 
-    public GeoPoint getPlayerGeoPoint() {
+    public MyGeoPoint getPlayerGeoPoint() {
         return this.playerGeoPoint;
     }
 

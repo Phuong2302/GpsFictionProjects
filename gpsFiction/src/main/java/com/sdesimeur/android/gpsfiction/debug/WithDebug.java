@@ -8,7 +8,7 @@ import com.sdesimeur.android.gpsfiction.classes.MyLocationListener;
 import com.sdesimeur.android.gpsfiction.classes.PlayerBearingListener;
 import com.sdesimeur.android.gpsfiction.classes.PlayerLocationListener;
 import com.sdesimeur.android.gpsfiction.classes.Zone;
-import com.sdesimeur.android.gpsfiction.geopoint.GeoPoint;
+import com.sdesimeur.android.gpsfiction.geopoint.MyGeoPoint;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -78,7 +78,7 @@ public abstract class WithDebug {
         connectToServer();
         if (out != null) {
             //FileWriter fw = new FileWriter(file);
-            GeoPoint geoPoint;
+            MyGeoPoint geoPoint;
             //bw.newLine();
             //Create object of Socket
             String command;
