@@ -6,6 +6,7 @@ import com.sdesimeur.android.gpsfiction.math.Vector;
 import org.oscim.core.GeoPoint;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 @SuppressWarnings("serial")
@@ -24,8 +25,12 @@ public class MyPolygon extends ArrayList<MyGeoPoint> {
         return this.contains(gp.getX(), gp.getY());
     }
 
-    public List<GeoPoint> getAll () {
-        return this.toArray();
+    public List<GeoPoint> getAllGeoPoints () {
+        Iterator<MyGeoPoint> it = this.iterator();
+        List <GeoPoint> res = new ArrayList<>();
+        while (it.hasNext())
+            res.add(it.next());
+        return res;
     }
 //       /**
 //        * Test if a high-precision rectangle intersects the shape. This is true

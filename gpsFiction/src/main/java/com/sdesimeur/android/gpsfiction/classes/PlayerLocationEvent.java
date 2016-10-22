@@ -5,7 +5,7 @@ import com.sdesimeur.android.gpsfiction.geopoint.MyGeoPoint;
 public class PlayerLocationEvent {
     private MyGeoPoint locationOfPlayer = null;
 
-    PlayerLocationEvent(GeoPoint gp) {
+    PlayerLocationEvent(MyGeoPoint gp) {
         locationOfPlayer=gp;
     }
 
@@ -18,7 +18,7 @@ public class PlayerLocationEvent {
         return locationOfPlayer;
     }
 
-    public void setLocationOfPlayer(GeoPoint location) {
+    public void setLocationOfPlayer(MyGeoPoint location) {
         locationOfPlayer = location;
     }
 

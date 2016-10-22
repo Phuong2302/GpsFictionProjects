@@ -4,7 +4,7 @@ import android.os.Bundle;
 
 import com.sdesimeur.android.gpsfiction.activities.GpsFictionActivity;
 import com.sdesimeur.android.gpsfiction.classes.Zone;
-import com.sdesimeur.android.gpsfiction.geopoint.GeoPoint;
+import com.sdesimeur.android.gpsfiction.geopoint.MyGeoPoint;
 
 import java.util.Iterator;
 
@@ -70,7 +70,7 @@ public abstract class ZoneAdverse extends Zone {
             e.printStackTrace();
         }
         double distance;
-        GeoPoint newZp;
+        MyGeoPoint newZp;
         Zone zn;
         double angle;
         boolean valideZoneMultiple = true;

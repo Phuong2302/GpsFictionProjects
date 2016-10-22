@@ -5,7 +5,7 @@ import android.os.Bundle;
 import com.sdesimeur.android.gpsfiction.activities.GpsFictionActivity;
 import com.sdesimeur.android.gpsfiction.activities.MyDialogFragment;
 import com.sdesimeur.android.gpsfiction.classes.Zone;
-import com.sdesimeur.android.gpsfiction.geopoint.GeoPoint;
+import com.sdesimeur.android.gpsfiction.geopoint.MyGeoPoint;
 
 import java.util.HashSet;
 import java.util.Iterator;
@@ -89,16 +89,16 @@ public class MissionDestructionMainActivity extends GpsFictionActivity {
     }
 
     public void createZoneAmi(ZoneAmie zone, float radius) {
-        GeoPoint newZp = this.findNewCenterZoneAmie(radius);
+        MyGeoPoint newZp = this.findNewCenterZoneAmie(radius);
 //		zone.getShape().setCenterPoint(newZp);
 //		zone.setCircularShape();
         zone.setShape(newZp, radius);
         this.zoneMultiples.add(zone);
     }
 
-    private GeoPoint findNewCenterZoneAmie(float radiusNewZone) {
+    private MyGeoPoint findNewCenterZoneAmie(float radiusNewZone) {
         int n;
-        GeoPoint newZp;
+        MyGeoPoint newZp;
         Zone zn;
 
         do
@@ -123,7 +123,7 @@ public class MissionDestructionMainActivity extends GpsFictionActivity {
     }
 
     public void createAllZoneAmi() {
-        GeoPoint newZp;
+        MyGeoPoint newZp;
         int nameId;
         float radius;
         this.zoneGlobale = new ZoneGlobale();

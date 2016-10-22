@@ -126,7 +126,7 @@ public class MyLocationListener implements LocationListener, SensorEventListener
     }
 
     public void removePlayerBearingListener(REGISTER type, PlayerBearingListener listener) {
-        this.playerBearingListener.get(type).add(listener);
+        this.playerBearingListener.get(type).remove(listener);
     }
 
     public void firePlayerLocationListener() {

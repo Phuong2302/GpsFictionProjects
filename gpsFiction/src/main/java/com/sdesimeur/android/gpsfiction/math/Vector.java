@@ -1,11 +1,11 @@
 package com.sdesimeur.android.gpsfiction.math;
 
-import com.sdesimeur.android.gpsfiction.geopoint.GeoPoint;
+import com.sdesimeur.android.gpsfiction.geopoint.MyGeoPoint;
 
 public class Vector {
     private int x, y;
 
-    public Vector(GeoPoint pA, GeoPoint pB) {
+    public Vector(MyGeoPoint pA, MyGeoPoint pB) {
         this.x = pA.getLongitudeE6() - pB.getLongitudeE6();
         this.y = pA.getLatitudeE6() - pB.getLatitudeE6();
     }
@@ -45,12 +45,12 @@ public class Vector {
         return newVector;
     }
 
-    public GeoPoint translate(GeoPoint point) {
+    public MyGeoPoint translate(MyGeoPoint point) {
         int xP = point.getLongitudeE6();
         int yP = point.getLatitudeE6();
         xP += this.x;
         yP += this.y;
-        GeoPoint newPoint = new GeoPoint(yP, xP);
+        MyGeoPoint newPoint = new MyGeoPoint(yP, xP);
         return newPoint;
     }
 

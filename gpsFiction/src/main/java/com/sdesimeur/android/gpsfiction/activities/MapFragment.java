@@ -48,6 +48,8 @@ import com.sdesimeur.android.gpsfiction.views.ImageViewWithId;
 
 import org.oscim.android.MapPreferences;
 import org.oscim.android.MapView;
+import org.oscim.backend.canvas.Paint;
+import org.oscim.core.GeoPoint;
 import org.oscim.core.MapPosition;
 import org.oscim.layers.PathLayer;
 import org.oscim.layers.marker.ItemizedLayer;
@@ -58,6 +60,7 @@ import org.oscim.layers.tile.vector.VectorTileLayer;
 import org.oscim.layers.tile.vector.labeling.LabelLayer;
 import org.oscim.map.Map;
 import org.oscim.theme.VtmThemes;
+import org.oscim.theme.styles.LineStyle;
 import org.oscim.tiling.source.mapfile.MapFileTileSource;
 
 import java.io.File;
@@ -99,8 +102,8 @@ public class MapFragment extends MyTabFragment implements PlayerBearingListener,
         put(R.drawable.cycle, new BikeFlagEncoder());
         put(R.drawable.auto, new CarFlagEncoder());
     }};
-    private MarkerSymbol playerMarkerSymbol;
-    private HashMap<Zone,ZoneViewHelper> zoneViewHelperHashMap =new HashMap<>() ;
+    private MarkerSymbol playerMarkerSymbol = null;
+    private HashMap<Zone,ZoneViewHelper> zoneViewHelperHashMap = null;
     private ItemizedLayer<MarkerItem> mMarkerLayer=null;
     private float playerBearing=0;
     private Drawable playerDrawable = null;
@@ -160,6 +163,7 @@ public class MapFragment extends MyTabFragment implements PlayerBearingListener,
         setRootView(inflater.inflate(R.layout.map_view, container, false));
         mapView=(MapView) this.getRootView().findViewById(R.id.mapView);
         mMap = mapView.map();
+        zoneViewHelperHashMap = new HashMap<>();
         playerDrawable = getResources().getDrawable(R.drawable.player_marker);
 //        playerRotateDrawable = (RotateDrawable) getResources().getDrawable(R.drawable.playerrotatemarker);
 //        playerBitmap = BitmapFactory.decodeResource(getResources(),R.drawable.player_marker);
@@ -235,6 +239,9 @@ public class MapFragment extends MyTabFragment implements PlayerBearingListener,
     @Override
     public void onDetach() {
         this.hopper = null;
+        mMarkerLayer = null;
+        zoneViewHelperHashMap = null;
+        playerMarkerItem = null;
         // necessary?
         System.gc();
         super.onDetach();
@@ -458,13 +465,20 @@ public class MapFragment extends MyTabFragment implements PlayerBearingListener,
 
     @Override
     public boolean onItemSingleTapUp(int index, MarkerItem item) {
-        ((Zone)(item.getUid())).setVisible(false);
+        if (item != playerMarkerItem) {
+            Zone zn = (Zone) (item.getUid());
+            zn.setVisible(!zn.isVisible());
+        }
         return true;
     }
 
     @Override
     public boolean onItemLongPress(int index, MarkerItem item) {
-        return false;
+        if (item != playerMarkerItem) {
+            Zone zn = (Zone) (item.getUid());
+
+        }
+        return true;
     }
 
     @Override
@@ -480,13 +494,28 @@ public class MapFragment extends MyTabFragment implements PlayerBearingListener,
             mMarkerLayer.addItem(zvh.markerItem);
         }
         if (zvh.pathLayer == null) {
-            zvh.pathLayer = new PathLayer(mMap,zone.isSelectedZone()?Color.RED:Color.BLUE,1);
+            zvh.pathLayer = new PathLayer(mMap,Color.TRANSPARENT);
             mMap.layers().add(zvh.pathLayer);
-            zvh.pathLayer.setPoints(zone.getShape().getAll());
         }
         zvh.markerItem.setMarker(zone.isVisible()?zoneMarkerSymbol:null);
-        zvh.pathLayer.setEnabled(zone.isVisible());
         mMarkerLayer.populate();
+
+//        int lineWidth = (zone.isVisible()?2:0);
+        int lineWidth=2;
+        int lineColor = (zone.isVisible()?
+                (zone.isSelectedZone()?Color.RED:Color.BLUE):
+                Color.TRANSPARENT);
+        LineStyle ls = new LineStyle(lineColor, lineWidth, Paint.Cap.BUTT);
+        zvh.pathLayer.setStyle(ls);
+        if (zone.isVisible()) {
+            List<GeoPoint> temp = zone.getShape().getAllGeoPoints();
+            temp.add(temp.get(0));
+            zvh.pathLayer.setPoints(temp);
+        } else {
+            zvh.pathLayer.clearPath();
+
+        }
+        mMap.updateMap(true);
     }
     private Drawable getRotateDrawable(final Drawable d, final float angle) {
         final Drawable[] arD = { d };
