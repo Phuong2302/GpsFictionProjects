@@ -19,6 +19,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 import android.widget.ZoomControls;
 
 import com.graphhopper.GHRequest;
@@ -29,12 +30,16 @@ import com.graphhopper.routing.util.BikeFlagEncoder;
 import com.graphhopper.routing.util.CarFlagEncoder;
 import com.graphhopper.routing.util.FlagEncoder;
 import com.graphhopper.routing.util.FootFlagEncoder;
+import com.graphhopper.util.Instruction;
 import com.graphhopper.util.Parameters;
 import com.graphhopper.util.PointList;
 import com.graphhopper.util.StopWatch;
+import com.graphhopper.util.Translation;
+import com.graphhopper.util.TranslationMap;
 import com.sdesimeur.android.gpsfiction.R;
 import com.sdesimeur.android.gpsfiction.classes.GpsFictionData;
 import com.sdesimeur.android.gpsfiction.classes.GpsFictionThing;
+import com.sdesimeur.android.gpsfiction.classes.InstructionRoutePath;
 import com.sdesimeur.android.gpsfiction.classes.MyLocationListener;
 import com.sdesimeur.android.gpsfiction.classes.PlayerBearingEvent;
 import com.sdesimeur.android.gpsfiction.classes.PlayerBearingListener;
@@ -69,6 +74,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 
 import static android.view.ViewGroup.LayoutParams;
 import static org.oscim.android.canvas.AndroidGraphics.drawableToBitmap;
@@ -108,7 +114,9 @@ public class MapFragment extends MyTabFragment implements PlayerBearingListener,
     private ItemizedLayer<MarkerItem> mMarkerLayer=null;
     private float playerBearing=0;
     private Drawable playerDrawable = null;
-    private PathLayer routePathLayer;
+    private PathLayer routePathLayer = null;
+    private PathWrapper routePath = null;
+    private Translation mTranslation = null;
 //    private Bitmap playerBitmap = null;
 //    private RotateDrawable playerRotateDrawable = null;
 
@@ -163,6 +171,9 @@ public class MapFragment extends MyTabFragment implements PlayerBearingListener,
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         setRootView(inflater.inflate(R.layout.map_view, container, false));
+        TranslationMap trm = new TranslationMap();
+        trm.doImport();
+        mTranslation = trm.getWithFallBack(Locale.getDefault());
         vehiculeSelectedId=R.drawable.compass;
         mapView=(MapView) this.getRootView().findViewById(R.id.mapView);
         mMap = mapView.map();
@@ -256,6 +267,9 @@ public class MapFragment extends MyTabFragment implements PlayerBearingListener,
             protected Path saveDoInBackground(Void... v) {
                 GraphHopper tmpHopp = new GraphHopper().forMobile();
                 hopper = tmpHopp;
+                //hopper.setCHWeightings("fastest","shortest");
+                //hopper.getCHFactoryDecorator().addWeighting("fastest");
+                hopper.getCHFactoryDecorator().addWeighting("shortest");
                 //if (vehiculeSelectedId == R.drawable.pieton) encoder = new FootFlagEncoder();
                 //if (vehiculeSelectedId == R.drawable.cycle) encoder = new BikeFlagEncoder();
                 //if (vehiculeSelectedId == R.drawable.auto) encoder = new CarFlagEncoder();
@@ -353,14 +367,19 @@ public class MapFragment extends MyTabFragment implements PlayerBearingListener,
         lp.addRule(RelativeLayout.ALIGN_LEFT | RelativeLayout.ALIGN_BOTTOM);
     }
 
+    private InstructionRoutePath getNextInstruction () {
+        Instruction nextInstruction = routePath.getInstructions().find(playerLocation.getLatitude(), playerLocation.getLongitude(), 2000);
+        String nextInstructionString = nextInstruction.getTurnDescription(mTranslation);
+        double distanceToNextInstruction = nextInstruction.getDistance();
+        return new InstructionRoutePath(nextInstructionString,distanceToNextInstruction);
+    }
 
     private List<GeoPoint> createRouteGeoPointList(GHResponse resp) {
         ArrayList<GeoPoint> listOfPoints = new ArrayList<>();
-        List<PathWrapper> paths = resp.getAll();
-        for (int i = 0; i < paths.size(); i++) {
-            PointList pointsList = paths.get(i).getPoints();
-            for (int j=0; j<pointsList.size(); j++)
-                listOfPoints.add(new GeoPoint(pointsList.toGHPoint(j).getLat(), pointsList.toGHPoint(j).getLon()));
+        routePath = resp.getBest();
+        PointList pl = routePath.getPoints();
+        for (int i = 0; i < pl.size(); i++) {
+                listOfPoints.add(new GeoPoint(pl.toGHPoint(i).getLat(), pl.toGHPoint(i).getLon()));
         }
         // TODO Auto-generated method stub
         return listOfPoints;
@@ -380,7 +399,6 @@ public class MapFragment extends MyTabFragment implements PlayerBearingListener,
                 req.getHints().put("calc_points", true);
                 req.setLocale(Locale.getDefault());
                 req.setVehicle(vehiculeGHEncoding.get(vehiculeSelectedId).toString());
-                req.setOptimize("true");
                 //req.setWeighting("fastest");
                 //hopper.getGraphHopperStorage();
                 GHResponse resp = hopper.route(req);
@@ -390,7 +408,7 @@ public class MapFragment extends MyTabFragment implements PlayerBearingListener,
 
             protected void onPostExecute( GHResponse resp ) {
                 if (!resp.hasErrors()) {
-                    addRoute(createRouteGeoPointList(resp));
+                    addRouteToPathLayer(createRouteGeoPointList(resp));
                     shortestPathRunningFirst = false;
                 } else { }
                 shortestPathRunning = false;
@@ -401,7 +419,7 @@ public class MapFragment extends MyTabFragment implements PlayerBearingListener,
         List<GeoPoint> listOfPoints = new ArrayList<>();
         listOfPoints.add(this.playerLocation);
         listOfPoints.add(this.selectedZone.getCenterPoint());
-        addRoute(listOfPoints);
+        addRouteToPathLayer(listOfPoints);
     }
     private void calcPath() {
         if ((playerLocation != null) && (selectedZone != null))
@@ -418,7 +436,7 @@ public class MapFragment extends MyTabFragment implements PlayerBearingListener,
         }
     }
 
-    private void addRoute(List<GeoPoint> newroute) {
+    private void addRouteToPathLayer(List<GeoPoint> newroute) {
         if (routePathLayer == null) {
             routePathLayer = new PathLayer(mMap,Color.TRANSPARENT);
             mMap.layers().add(routePathLayer);
@@ -464,6 +482,7 @@ public class MapFragment extends MyTabFragment implements PlayerBearingListener,
     }
 
     private void updateCalcPath() {
+        Toast.makeText(getContext(),getNextInstruction().nextInstructionString,Toast.LENGTH_LONG);
     }
 
     @Override
