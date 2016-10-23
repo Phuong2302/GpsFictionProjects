@@ -44,4 +44,5 @@ dependencies {
     compile files('libs/graphhopper-core-0.8-SNAPSHOT.jar')
     compile 'org.mapsforge:vtm-themes:0.6.0-rc2'
     compile 'org.mapsforge:vtm:0.6.0-rc2'
+    compile 'net.sf.trove4j:trove4j:3.0.3'
 }

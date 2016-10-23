@@ -24,12 +24,13 @@ import android.widget.ZoomControls;
 import com.graphhopper.GHRequest;
 import com.graphhopper.GHResponse;
 import com.graphhopper.GraphHopper;
+import com.graphhopper.PathWrapper;
 import com.graphhopper.routing.util.BikeFlagEncoder;
 import com.graphhopper.routing.util.CarFlagEncoder;
-import com.graphhopper.routing.util.EncodingManager;
 import com.graphhopper.routing.util.FlagEncoder;
 import com.graphhopper.routing.util.FootFlagEncoder;
 import com.graphhopper.util.Parameters;
+import com.graphhopper.util.PointList;
 import com.graphhopper.util.StopWatch;
 import com.sdesimeur.android.gpsfiction.R;
 import com.sdesimeur.android.gpsfiction.classes.GpsFictionData;
@@ -83,7 +84,7 @@ public class MapFragment extends MyTabFragment implements PlayerBearingListener,
     private static final int SELECTEDBUTTON = 255;
     private static final int UNSELECTEDBUTTON = 100;
     //private Drawable vehiculeSelectedDrawable = null;
-    private int vehiculeSelectedId = R.drawable.pieton;
+    private int vehiculeSelectedId = R.drawable.compass;
     private File mapsFolder;
     private File ghFolder;
     private GraphHopper hopper;
@@ -107,6 +108,7 @@ public class MapFragment extends MyTabFragment implements PlayerBearingListener,
     private ItemizedLayer<MarkerItem> mMarkerLayer=null;
     private float playerBearing=0;
     private Drawable playerDrawable = null;
+    private PathLayer routePathLayer;
 //    private Bitmap playerBitmap = null;
 //    private RotateDrawable playerRotateDrawable = null;
 
@@ -161,6 +163,7 @@ public class MapFragment extends MyTabFragment implements PlayerBearingListener,
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         setRootView(inflater.inflate(R.layout.map_view, container, false));
+        vehiculeSelectedId=R.drawable.compass;
         mapView=(MapView) this.getRootView().findViewById(R.id.mapView);
         mMap = mapView.map();
         zoneViewHelperHashMap = new HashMap<>();
@@ -252,7 +255,6 @@ public class MapFragment extends MyTabFragment implements PlayerBearingListener,
             String error = "Pas d'erreur";
             protected Path saveDoInBackground(Void... v) {
                 GraphHopper tmpHopp = new GraphHopper().forMobile();
-                FlagEncoder encoder = null;
                 hopper = tmpHopp;
                 //if (vehiculeSelectedId == R.drawable.pieton) encoder = new FootFlagEncoder();
                 //if (vehiculeSelectedId == R.drawable.cycle) encoder = new BikeFlagEncoder();
@@ -260,11 +262,11 @@ public class MapFragment extends MyTabFragment implements PlayerBearingListener,
                 //hopper.setEncodingManager(new EncodingManager(encoder));
                 //hopper.setCHEnable(false);
                 //hopper.setOSMFile(ghFolder + "/" + currentArea + "-gh/" + currentArea + ".pbf");
-                hopper.setDataReaderFile(ghFolder + "/" + currentArea + ".pbf");
-                hopper.setEncodingManager(new EncodingManager("FOOT,BIKE,CAR"));
-                hopper.setCHWeighting("fastest");
-                //hopper.load(new File(mapsFolder, currentArea).getAbsolutePath());
-                hopper.importOrLoad();
+                //hopper.setDataReaderFile(ghFolder + "/" + currentArea + ".pbf");
+                //hopper.setEncodingManager(new EncodingManager("FOOT,BIKE,CAR"));
+                //hopper.setCHWeighting("fastest");
+                //hopper.importOrLoad();
+                hopper.load(new File(ghFolder, currentArea).getAbsolutePath());
                 return null;
             }
             @Override
@@ -304,24 +306,23 @@ public class MapFragment extends MyTabFragment implements PlayerBearingListener,
     }
 
     private void onVehiculeChange(View v) {
-        if ((this.playerLocation != null) && (this.selectedZone != null)) {
-            for (int position = 0; position < this.viewGroupForVehiculesButtons.getChildCount(); position++) {
-                View vi = this.viewGroupForVehiculesButtons.getChildAt(position);
-                int alpha = ((vi == v) ? MapFragment.SELECTEDBUTTON : MapFragment.UNSELECTEDBUTTON);
-                ((ImageView) vi).getDrawable().setAlpha(alpha);
-                vi.invalidate();
-            }
             int res = ((ImageViewWithId) v).getDrawableId();
-            vehiculeSelectedId = res;
-            this.calcPath();
-        }
+            if (vehiculeSelectedId != res) {
+                vehiculeSelectedId = res;
+                for (int position = 0; position < this.viewGroupForVehiculesButtons.getChildCount(); position++) {
+                    View vi = this.viewGroupForVehiculesButtons.getChildAt(position);
+                    int alpha = ((vi == v) ? MapFragment.SELECTEDBUTTON : MapFragment.UNSELECTEDBUTTON);
+                    ((ImageView) vi).getDrawable().setAlpha(alpha);
+                    vi.invalidate();
+                }
+            }
+            calcPath();
     }
 
     private void addViewGroupForVehiculesButtons(ViewGroup vg) {
         viewGroupForVehiculesButtons = (ViewGroup) vg.findViewById(R.id.forVehiculesButtons);
         TypedArray vehicules = getResources().obtainTypedArray(R.array.vehicules_array);
         for (int index = 0; index < vehicules.length(); index++) {
-            int res = vehicules.getResourceId(index, -1);
             ImageViewWithId img = new ImageViewWithId(getActivity());
             int pad = getResources().getDimensionPixelSize(R.dimen.buttonsVehiculesPadding);
             img.setPadding(pad, pad, pad, pad);
@@ -331,14 +332,15 @@ public class MapFragment extends MyTabFragment implements PlayerBearingListener,
                     onVehiculeChange(v);
                 }
             });
+            int res = vehicules.getResourceId(index, -1);
             img.setDrawableId(res);
             int alpha;
-            if ((playerLocation == null) || (selectedZone == null)) {
-                alpha = MapFragment.UNSELECTEDBUTTON;
-            } else {
+            //if ((playerLocation == null) || (selectedZone == null)) {
+            //    alpha = (res==R.drawable.compass)?MapFragment.SELECTEDBUTTON :MapFragment.UNSELECTEDBUTTON;
+            //} else {
                 alpha = ((res == vehiculeSelectedId) ? MapFragment.SELECTEDBUTTON : MapFragment.UNSELECTEDBUTTON);
                 calcPath();
-            }
+            //}
             img.getDrawable().setAlpha(alpha);
             viewGroupForVehiculesButtons.addView(img);
         }
@@ -351,31 +353,19 @@ public class MapFragment extends MyTabFragment implements PlayerBearingListener,
         lp.addRule(RelativeLayout.ALIGN_LEFT | RelativeLayout.ALIGN_BOTTOM);
     }
 
-    /*
-    private Polyline createPolyline(List<LatLong> listOfPoints) {
-        Paint paintStroke = AndroidGraphicFactory.INSTANCE.createPaint();
-        paintStroke.setStyle(Style.STROKE);
-        paintStroke.setColor(Color.BLUE);
-        paintStroke.setDashPathEffect(new float[]{25, 15});
-        paintStroke.setStrokeWidth(4);
-        // TODO: new mapsforge version wants an mapsforge-paint, not an android paint.
-        // This doesn't seem to support transparceny
-        //paintStroke.setAlpha(128);
-        Polyline line = new Polyline( paintStroke, AndroidGraphicFactory.INSTANCE);
-        line.getLatLongs().addAll(listOfPoints);
-        return line;
-    }
 
-    private Polyline createPolyline(GHResponse resp) {
-        ArrayList<LatLong> listOfPoints = new ArrayList<LatLong>();
-        PointList tmp = resp.getPoints();
-        for (int i = 0; i < tmp.getSize(); i++) {
-            listOfPoints.add(new LatLong(tmp.toGHPoint(i).getLat(), tmp.toGHPoint(i).getLon()));
+    private List<GeoPoint> createRouteGeoPointList(GHResponse resp) {
+        ArrayList<GeoPoint> listOfPoints = new ArrayList<>();
+        List<PathWrapper> paths = resp.getAll();
+        for (int i = 0; i < paths.size(); i++) {
+            PointList pointsList = paths.get(i).getPoints();
+            for (int j=0; j<pointsList.size(); j++)
+                listOfPoints.add(new GeoPoint(pointsList.toGHPoint(j).getLat(), pointsList.toGHPoint(j).getLon()));
         }
         // TODO Auto-generated method stub
-        return this.createPolyline(listOfPoints);
+        return listOfPoints;
     }
-*/
+
     public void calcRoutePath(final double fromLat, final double fromLon, final double toLat, final double toLon ) {
         shortestPathRunning = true;
         new AsyncTask<Void, Void, GHResponse>() {
@@ -384,11 +374,12 @@ public class MapFragment extends MyTabFragment implements PlayerBearingListener,
             protected GHResponse doInBackground( Void... v ) {
                 while ( ! (isReady()))  {}
                 StopWatch sw = new StopWatch().start();
-                GHRequest req = new GHRequest(fromLat, fromLon, toLat, toLon)
-                        .setAlgorithm(Parameters.Algorithms.DIJKSTRA_BI);
+                GHRequest req = new GHRequest(fromLat, fromLon, toLat, toLon);
+                req.setAlgorithm(Parameters.Algorithms.DIJKSTRA_BI);
+                req.getHints().put("instructions", "true");
                 req.setVehicle(vehiculeGHEncoding.get(vehiculeSelectedId).toString());
-                req.getHints().put("instructions", "false");
-                hopper.getGraphHopperStorage();
+                //req.setWeighting("fastest");
+                //hopper.getGraphHopperStorage();
                 GHResponse resp = hopper.route(req);
                 time = sw.stop().getSeconds();
                 return resp;
@@ -396,7 +387,7 @@ public class MapFragment extends MyTabFragment implements PlayerBearingListener,
 
             protected void onPostExecute( GHResponse resp ) {
                 if (!resp.hasErrors()) {
-//                    addRoute(createPolyline(resp));
+                    addRoute(createRouteGeoPointList(resp));
                     shortestPathRunningFirst = false;
                 } else { }
                 shortestPathRunning = false;
@@ -404,12 +395,13 @@ public class MapFragment extends MyTabFragment implements PlayerBearingListener,
         }.execute();
     }
     private void calcLinePath (){
-        ArrayList<MyGeoPoint> listOfPoints = new ArrayList<>();
+        List<GeoPoint> listOfPoints = new ArrayList<>();
         listOfPoints.add(this.playerLocation);
         listOfPoints.add(this.selectedZone.getCenterPoint());
-//        addRoute(createPolyline(listOfPoints));
+        addRoute(listOfPoints);
     }
     private void calcPath() {
+        if ((playerLocation != null) && (selectedZone != null))
         if (vehiculeSelectedId == R.drawable.compass) {
             shortestPathRunningFirst = true;
             calcLinePath();
@@ -422,20 +414,25 @@ public class MapFragment extends MyTabFragment implements PlayerBearingListener,
             if (! (shortestPathRunning)) calcRoutePath(fromLat, fromLon, toLat, toLon);
         }
     }
-/*
-    private void addRoute(Polyline newroute) {
-        if (mapView != null) {
-            if (route != null) mapView.getLayers().remove(route);
-            route=newroute;
-            mapView.getLayers().add(route);
+
+    private void addRoute(List<GeoPoint> newroute) {
+        if (routePathLayer == null) {
+            routePathLayer = new PathLayer(mMap,Color.TRANSPARENT);
+            mMap.layers().add(routePathLayer);
         }
+        routePathLayer.setPoints(newroute);
+        int lineWidth=2;
+        int lineColor = Color.BLUE;
+        LineStyle ls = new LineStyle(lineColor, lineWidth, Paint.Cap.BUTT);
+        routePathLayer.setStyle(ls);
+
     }
-*/
+
     @Override
     public void onZoneSelectChanged(Zone sZn) {
         // TODO Auto-generated method stub
         selectedZone = sZn;
-//        if ((playerLocation != null) && (selectedZone != null)) calcPath();
+        calcPath();
     }
     @Override
     public void onLocationPlayerChanged(PlayerLocationEvent playerLocationEvent) {
@@ -459,8 +456,11 @@ public class MapFragment extends MyTabFragment implements PlayerBearingListener,
             MapPosition pos = mMap.getMapPosition();
             pos.setPosition(playerLocation);
             mMap.setMapPosition(pos);
-            if (selectedZone != null) calcPath();
+            if (selectedZone != null) updateCalcPath();
         }
+    }
+
+    private void updateCalcPath() {
     }
 
     @Override
@@ -476,7 +476,7 @@ public class MapFragment extends MyTabFragment implements PlayerBearingListener,
     public boolean onItemLongPress(int index, MarkerItem item) {
         if (item != playerMarkerItem) {
             Zone zn = (Zone) (item.getUid());
-
+            getGpsFictionActivity().getGpsFictionData().setSelectedZone(zn);
         }
         return true;
     }
@@ -503,7 +503,7 @@ public class MapFragment extends MyTabFragment implements PlayerBearingListener,
 //        int lineWidth = (zone.isVisible()?2:0);
         int lineWidth=2;
         int lineColor = (zone.isVisible()?
-                (zone.isSelectedZone()?Color.RED:Color.BLUE):
+                (zone.isSelectedZone()?Color.RED:Color.YELLOW):
                 Color.TRANSPARENT);
         LineStyle ls = new LineStyle(lineColor, lineWidth, Paint.Cap.BUTT);
         zvh.pathLayer.setStyle(ls);
@@ -513,9 +513,8 @@ public class MapFragment extends MyTabFragment implements PlayerBearingListener,
             zvh.pathLayer.setPoints(temp);
         } else {
             zvh.pathLayer.clearPath();
-
         }
-        mMap.updateMap(true);
+//        mMap.updateMap(true);
     }
     private Drawable getRotateDrawable(final Drawable d, final float angle) {
         final Drawable[] arD = { d };

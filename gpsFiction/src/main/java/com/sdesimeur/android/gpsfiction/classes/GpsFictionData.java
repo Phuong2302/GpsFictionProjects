@@ -235,7 +235,7 @@ public class GpsFictionData {
 
     public void addZoneSelectListener(GpsFictionData.REGISTER type, ZoneSelectListener listener) {
         this.zoneSelectListener.get(type).add(listener);
-        listener.onZoneSelectChanged(this.selectedZone);
+        if (selectedZone != null) listener.onZoneSelectChanged(this.selectedZone);
     }
 
     public void removeZoneSelectListener(GpsFictionData.REGISTER type, ZoneSelectListener listener) {
