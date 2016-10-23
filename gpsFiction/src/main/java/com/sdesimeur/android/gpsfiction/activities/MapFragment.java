@@ -175,7 +175,7 @@ public class MapFragment extends MyTabFragment implements PlayerBearingListener,
         mMap.layers().add(mMarkerLayer);
         mPrefs = new MapPreferences(MapFragment.class.getName(), this.getContext());
         MapFileTileSource tileSource = new MapFileTileSource();
-        tileSource.setPreferredLanguage("en");
+        tileSource.setPreferredLanguage(Locale.getDefault().getLanguage());
         File file = new File(mapsFolder, currentArea + ".map");
         if (tileSource.setMapFile(file.toString())) {
             VectorTileLayer l = mMap.setBaseMap(tileSource);
@@ -378,7 +378,7 @@ public class MapFragment extends MyTabFragment implements PlayerBearingListener,
                 req.setAlgorithm(Parameters.Algorithms.DIJKSTRA_BI);
                 req.getHints().put("instructions", "true");
                 req.getHints().put("calc_points", true);
-                req.setLocale(Locale.FRENCH);
+                req.setLocale(Locale.getDefault());
                 req.setVehicle(vehiculeGHEncoding.get(vehiculeSelectedId).toString());
                 req.setOptimize("true");
                 //req.setWeighting("fastest");
