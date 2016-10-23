@@ -377,7 +377,10 @@ public class MapFragment extends MyTabFragment implements PlayerBearingListener,
                 GHRequest req = new GHRequest(fromLat, fromLon, toLat, toLon);
                 req.setAlgorithm(Parameters.Algorithms.DIJKSTRA_BI);
                 req.getHints().put("instructions", "true");
+                req.getHints().put("calc_points", true);
+                req.setLocale(Locale.FRENCH);
                 req.setVehicle(vehiculeGHEncoding.get(vehiculeSelectedId).toString());
+                req.setOptimize("true");
                 //req.setWeighting("fastest");
                 //hopper.getGraphHopperStorage();
                 GHResponse resp = hopper.route(req);
