@@ -91,6 +91,10 @@ public class MyGeoPoint extends GeoPoint {
     public MyGeoPoint() {
         this(0, 0);
     }
+
+    public MyGeoPoint(GeoPoint gp) {
+        this(gp.getLatitude(),gp.getLongitude());
+    }
     
  /*   
     public void setMyGeoPoint(Location loc) {

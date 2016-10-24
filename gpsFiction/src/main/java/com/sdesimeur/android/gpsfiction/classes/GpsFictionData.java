@@ -28,6 +28,16 @@ public class GpsFictionData {
     private HashSet<ZoneChangeListener> zoneChangeListener = new HashSet<> ();
     public boolean toSave=true;
 
+    public int getVehiculeSelectedId() {
+        return vehiculeSelectedId;
+    }
+
+    public void setVehiculeSelectedId(int vehiculeSelectedId) {
+        this.vehiculeSelectedId = vehiculeSelectedId;
+    }
+
+    private int vehiculeSelectedId = R.drawable.compass;
+
     public GpsFictionData() {
         for (GpsFictionData.REGISTER i : GpsFictionData.REGISTER.values()) {
             this.zoneSelectListener.put(i, new HashSet<ZoneSelectListener>());
@@ -284,6 +294,7 @@ public class GpsFictionData {
     }
     public void addZoneChangeListener(ZoneChangeListener listener) {
         this.zoneChangeListener.add(listener);
+        if (selectedZone != null) listener.onZoneChanged(selectedZone);
     }
 
     public void removeZoneChangeListener(ZoneChangeListener listener) {
