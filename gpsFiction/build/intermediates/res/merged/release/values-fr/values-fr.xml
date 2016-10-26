@@ -46,6 +46,7 @@
     <string name="noZoneTitle">Vous n\'avez sélectionné aucun lieu.</string>
     <string name="nullstring"/>
     <string name="rulesName">Règles.</string>
+    <string msgid="146198913615257606" name="search_menu_title">"Rechercher"</string>
     <string msgid="2869576371154716097" name="status_bar_notification_info_overflow">">999"</string>
     <string name="titleCharacters">Les personnages.</string>
     <string name="titleCompass">La boussole.</string>

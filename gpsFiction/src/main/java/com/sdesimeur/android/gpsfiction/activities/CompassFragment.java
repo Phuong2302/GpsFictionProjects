@@ -18,13 +18,11 @@ public class CompassFragment extends MyTabFragment {
 
     public CompassFragment() {
         super();
-        //	this.setNameId(R.string.tabCompassTitle);
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // Retain this fragment across configuration changes.
     }
 
     @Override
@@ -36,70 +34,8 @@ public class CompassFragment extends MyTabFragment {
         this.textviewDistance.init(this.getGpsFictionActivity());
         this.compassView = (CompassView) (this.getRootView().findViewById(R.id.compassDirection));
         this.compassView.init(this.getGpsFictionActivity());
-        //this.compassView.setTypeface(this.getGpsFictionActivity().getFontFromRes(R.integer.compassFont));
         this.compassView.setTypeface(this.getGpsFictionActivity().getFontFromRes(R.raw.font_dancing));
-        //this.updateTextviewName();
-        //this.updateTextviewDistance();
-        //this.updateCompassView();
         return this.getRootView();
     }
 
-/*
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-        this.setContentView(R.layout.tab_compass);
-        this.textviewName = ((TextView) this.findViewById(R.id.textNameOfZone));
-		this.textviewDistance = ((TextView) this.findViewById(R.id.textDistance));
-		this.setGpsFiction(((GpsFictionActivity)this.getParent()).getGpsFiction());
-		this.onZoneSelectChanged();
-		this.register();
-		((CompassView)this.findViewById(R.id.compassDirection)).register(this.getGpsFiction());
-	}
-*/
-/*	
-	private void updateTextviewDistance () {
-		if (this.textviewDistance != null) {
-			String distanceText = ( this.selectedZone == null ) ?
-					getResources().getString(R.string.noZoneDistance) :
-					this.selectedZone.getStringDistance2Player();
-			this.textviewDistance.setText(distanceText);
-			this.textviewDistance.invalidate();
-		}
-	}
-	private void updateTextviewName () {
-		if (this.textviewName != null) {
-			String nameText = ( this.selectedZone == null ) ?
-				getResources().getString(R.string.noZoneTitle) :
-				this.selectedZone.getName();
-			this.textviewName.setText(nameText);
-			this.textviewName.invalidate();
-		}
-	}
-	private void updateCompassView () {
-		if (this.compassView != null) {
-			this.compassView.setSelectedZone(this.selectedZone);
-			this.compassView.setBearingOfPlayer(this.bearingOfPlayer);
-			this.compassView.invalidate();
-		}
-	}
-	@Override
-	public void onLocationPlayerChanged(PlayerLocationEvent playerLocationEvent) {
-		// TODO Auto-generated method stub
-		this.updateTextviewDistance();
-		this.updateCompassView();
-	}
-	@Override
-	public void onZoneSelectChanged(Zone selectedZone) {
-		// TODO Auto-generated method stub
-		this.selectedZone = selectedZone;
-		this.updateTextviewName();
-		this.updateTextviewDistance();
-		this.updateCompassView();
-	}
-	@Override
-	public void onBearingPlayerChanged(PlayerBearingEvent playerBearingEvent) {
-		this.bearingOfPlayer = playerBearingEvent.getBearing();
-		this.updateCompassView();
-	}
-*/
 }

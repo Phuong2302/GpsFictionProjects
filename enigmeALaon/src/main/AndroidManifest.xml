@@ -3,10 +3,6 @@
     package="com.sdesimeur.android.gpsfiction.enigmealaon" >
     <uses-permission android:name="android.permission.SET_DEBUG_APP" />
 
-    <uses-sdk
-        android:minSdkVersion="7"
-        android:targetSdkVersion="19" />
-
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"

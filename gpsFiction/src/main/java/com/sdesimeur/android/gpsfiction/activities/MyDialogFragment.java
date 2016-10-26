@@ -1,9 +1,9 @@
 package com.sdesimeur.android.gpsfiction.activities;
 
+import android.app.DialogFragment;
+import android.app.FragmentManager;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
-import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -50,7 +50,6 @@ public class MyDialogFragment extends DialogFragment {
         this.gpsFictionActivity.dialogFragments.add(this);
     }
 
-    //public void setTexts (int textId) {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         this.setCancelable(false);
@@ -93,7 +92,6 @@ public class MyDialogFragment extends DialogFragment {
                 }
             });
             this.buttonsLinearLayout.addView(button);
-            //this.buttonsLinearLayout.addView(button, layoutParams);
         }
         return this.dialogView;
     }

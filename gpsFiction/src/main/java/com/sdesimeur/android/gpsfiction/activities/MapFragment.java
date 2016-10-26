@@ -1,7 +1,6 @@
 package com.sdesimeur.android.gpsfiction.activities;
 
 
-import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Path;
@@ -32,13 +31,13 @@ import com.graphhopper.routing.util.FlagEncoder;
 import com.graphhopper.routing.util.FootFlagEncoder;
 import com.graphhopper.util.Instruction;
 import com.graphhopper.util.Parameters;
+import com.graphhopper.util.PointList;
 import com.graphhopper.util.StopWatch;
 import com.graphhopper.util.Translation;
 import com.graphhopper.util.TranslationMap;
 import com.sdesimeur.android.gpsfiction.R;
 import com.sdesimeur.android.gpsfiction.classes.GpsFictionData;
 import com.sdesimeur.android.gpsfiction.classes.GpsFictionThing;
-import com.sdesimeur.android.gpsfiction.classes.InstructionRoutePath;
 import com.sdesimeur.android.gpsfiction.classes.MyLocationListener;
 import com.sdesimeur.android.gpsfiction.classes.PlayerBearingEvent;
 import com.sdesimeur.android.gpsfiction.classes.PlayerBearingListener;
@@ -50,9 +49,7 @@ import com.sdesimeur.android.gpsfiction.classes.ZoneChangeListener;
 import com.sdesimeur.android.gpsfiction.classes.ZoneSelectListener;
 import com.sdesimeur.android.gpsfiction.classes.ZoneViewHelper;
 import com.sdesimeur.android.gpsfiction.geopoint.MyGeoPoint;
-import com.sdesimeur.android.gpsfiction.views.ImageViewWithId;
 
-import org.oscim.android.MapPreferences;
 import org.oscim.android.MapView;
 import org.oscim.backend.canvas.Paint;
 import org.oscim.core.GeoPoint;
@@ -76,6 +73,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 
+import static android.support.v4.content.ContextCompat.getDrawable;
 import static android.view.ViewGroup.LayoutParams;
 import static org.oscim.android.canvas.AndroidGraphics.drawableToBitmap;
 import static org.oscim.layers.marker.MarkerSymbol.HotspotPlace;
@@ -84,21 +82,16 @@ import static org.oscim.layers.marker.MarkerSymbol.HotspotPlace;
 public class MapFragment extends MyTabFragment implements PlayerBearingListener, ZoneChangeListener, PlayerLocationListener, ZoneSelectListener, ItemizedLayer.OnItemGestureListener<MarkerItem> {
     MapView mapView;
     Map mMap;
-    MapPreferences mPrefs;
+    //MapPreferences mPrefs;
     //private MapPosition mapPosition = null;
     private static final int INITZOOMLEVEL = 14;
     private static final int SELECTEDBUTTON = 255;
     private static final int UNSELECTEDBUTTON = 100;
-
-    public int getVehiculeSelectedId() {
-        return getGpsFictionActivity().getGpsFictionData().getVehiculeSelectedId();
-    }
-    public void setVehiculeSelectedId(int id) {
-        getGpsFictionActivity().getGpsFictionData().setVehiculeSelectedId(id);
-    }
+    private String nextInstructionString ="";
 
     //private Drawable vehiculeSelectedDrawable = null;
     private File mapsFolder;
+
     private File ghFolder;
     private GraphHopper hopper;
     //private GraphHopperAPI hopper;
@@ -108,10 +101,33 @@ public class MapFragment extends MyTabFragment implements PlayerBearingListener,
     private MarkerItem playerMarkerItem;
     private ViewGroup viewGroupForVehiculesButtons = null;
 
+    private HashMap<Integer,FlagEncoder> vehiculeGHEncoding = new HashMap <Integer, FlagEncoder> () {{
+        put(R.drawable.compass, null);
+        put(R.drawable.pieton, new FootFlagEncoder());
+        put(R.drawable.cycle, new BikeFlagEncoder());
+        put(R.drawable.auto, new CarFlagEncoder());
+    }};
+
+    private MarkerSymbol playerMarkerSymbol = null;
+    private HashMap<Zone,ZoneViewHelper> zoneViewHelperHashMap = null;
+    private ItemizedLayer<MarkerItem> mMarkerLayer=null;
+    private Drawable playerDrawable = null;
+    private PathLayer routePathLayer = null;
+    private PathWrapper routePath = null;
+    private Translation mTranslation = null;
+    private HashMap<Integer, ImageView> hashMapVehiculesButtonsIdView = null;
+//    private RotateDrawable playerRotateDrawable = null;
+//    private Bitmap playerBitmap = null;
+
+    public int getVehiculeSelectedId() {
+        return getGpsFictionActivity().getGpsFictionData().getVehiculeSelectedId();
+    }
+    public void setVehiculeSelectedId(int id) {
+        getGpsFictionActivity().getGpsFictionData().setVehiculeSelectedId(id);
+    }
     public Zone getSelectedZone() {
         return getGpsFictionActivity().getGpsFictionData().getSelectedZone();
     }
-
     public void setSelectedZone(Zone selectedZone) {
         getGpsFictionActivity().getGpsFictionData().setSelectedZone(selectedZone);
     }
@@ -123,23 +139,6 @@ public class MapFragment extends MyTabFragment implements PlayerBearingListener,
     public float getPlayerBearing() {
         return getGpsFictionActivity().getMyLocationListener().getBearingOfPlayer();
     }
-
-    private HashMap<Integer,FlagEncoder> vehiculeGHEncoding = new HashMap <Integer, FlagEncoder> () {{
-        put(R.drawable.compass, null);
-        put(R.drawable.pieton, new FootFlagEncoder());
-        put(R.drawable.cycle, new BikeFlagEncoder());
-        put(R.drawable.auto, new CarFlagEncoder());
-    }};
-    private MarkerSymbol playerMarkerSymbol = null;
-    private HashMap<Zone,ZoneViewHelper> zoneViewHelperHashMap = null;
-    private ItemizedLayer<MarkerItem> mMarkerLayer=null;
-    private Drawable playerDrawable = null;
-    private PathLayer routePathLayer = null;
-    private PathWrapper routePath = null;
-    private Translation mTranslation = null;
-    private InstructionRoutePath nextInstruction = null;
-//    private Bitmap playerBitmap = null;
-//    private RotateDrawable playerRotateDrawable = null;
 
     public MapFragment() {
         super();
@@ -186,10 +185,6 @@ public class MapFragment extends MyTabFragment implements PlayerBearingListener,
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
-    }
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         setRootView(inflater.inflate(R.layout.map_view, container, false));
         TranslationMap trm = new TranslationMap();
@@ -205,7 +200,7 @@ public class MapFragment extends MyTabFragment implements PlayerBearingListener,
         MarkerSymbol ms = new MarkerSymbol(drawableToBitmap(getResources(),R.drawable.transparent), HotspotPlace.CENTER);
         mMarkerLayer = new ItemizedLayer<>(mMap, new ArrayList<MarkerItem>(), ms , this);
         mMap.layers().add(mMarkerLayer);
-        mPrefs = new MapPreferences(MapFragment.class.getName(), this.getContext());
+        //mPrefs = new MapPreferences(MapFragment.class.getName(), getGpsFictionActivity());
         MapFileTileSource tileSource = new MapFileTileSource();
         tileSource.setPreferredLanguage(Locale.getDefault().getLanguage());
         File file = new File(mapsFolder, currentArea + ".map");
@@ -214,7 +209,7 @@ public class MapFragment extends MyTabFragment implements PlayerBearingListener,
             mMap.setTheme(VtmThemes.DEFAULT);
             mMap.layers().add(new BuildingLayer(mMap, l));
             mMap.layers().add(new LabelLayer(mMap, l));
-            mPrefs.clear();
+            //   mPrefs.clear();
             MapPosition pos = mMap.getMapPosition();
             pos.setZoomLevel(INITZOOMLEVEL);
             mMap.setMapPosition(pos);
@@ -234,21 +229,18 @@ public class MapFragment extends MyTabFragment implements PlayerBearingListener,
         loadGraphStorage();
         return getRootView();
     }
-
-    private void registerAllZones() {
-        Zone zone=null;
-        Iterator<GpsFictionThing> itZone = this.getGpsFictionActivity().getGpsFictionData().getGpsFictionThing(Zone.class).iterator();
-        while (itZone.hasNext()) {
-            zone = (Zone) itZone.next();
-            onZoneChanged(zone);
-        }
+    @Override
+    public void onStart() {
+        super.onStart();
     }
 
     @Override
     public void onResume() {
         super.onResume();
+        int alpha = MapFragment.SELECTEDBUTTON;
+        hashMapVehiculesButtonsIdView.get(getVehiculeSelectedId()).getDrawable().setAlpha(alpha);
         shortestPathRunning = false;
-        mPrefs.load(mapView.map());
+        //mPrefs.load(mapView.map());
         mapView.onResume();
         registerAllZones();
         getGpsFictionActivity().getMyLocationListener().addPlayerLocationListener(MyLocationListener.REGISTER.FRAGMENT, this);
@@ -265,11 +257,11 @@ public class MapFragment extends MyTabFragment implements PlayerBearingListener,
         getGpsFictionActivity().getGpsFictionData().removeZoneSelectListener(GpsFictionData.REGISTER.FRAGMENT, this);
         getGpsFictionActivity().getGpsFictionData().removeZoneChangeListener(this);
     }
+
     @Override
     public void onStop() {
         super.onStop();
     }
-
     @Override
     public void onDestroyView() {
         super.onDestroyView();
@@ -291,6 +283,15 @@ public class MapFragment extends MyTabFragment implements PlayerBearingListener,
         routePathLayer = null;
         //System.gc();
         super.onDetach();
+    }
+
+    private void registerAllZones() {
+        Zone zone=null;
+        Iterator<GpsFictionThing> itZone = this.getGpsFictionActivity().getGpsFictionData().getGpsFictionThing(Zone.class).iterator();
+        while (itZone.hasNext()) {
+            zone = (Zone) itZone.next();
+            onZoneChanged(zone);
+        }
     }
 
     void loadGraphStorage() {
@@ -345,14 +346,16 @@ public class MapFragment extends MyTabFragment implements PlayerBearingListener,
     }
 
     private void onVehiculeChange(View v) {
-            int res = ((ImageViewWithId) v).getDrawableId();
-            if (getVehiculeSelectedId() != res) {
-                setVehiculeSelectedId(res);
-                for (int position = 0; position < this.viewGroupForVehiculesButtons.getChildCount(); position++) {
-                    View vi = this.viewGroupForVehiculesButtons.getChildAt(position);
-                    int alpha = ((vi == v) ? MapFragment.SELECTEDBUTTON : MapFragment.UNSELECTEDBUTTON);
-                    ((ImageView) vi).getDrawable().setAlpha(alpha);
-                    vi.invalidate();
+            ImageView v1 = (ImageView) v;
+            if (hashMapVehiculesButtonsIdView.get(getVehiculeSelectedId()) != v1) {
+                for (int idx : hashMapVehiculesButtonsIdView.keySet()){
+                    ImageView v2 = hashMapVehiculesButtonsIdView.get(idx);
+                    if (v2 == v1) {
+                        setVehiculeSelectedId(idx);
+                    }
+                    int alpha = ((v2 == v1) ? MapFragment.SELECTEDBUTTON : MapFragment.UNSELECTEDBUTTON);
+                    v2.getDrawable().setAlpha(alpha);
+                    v2.invalidate();
                 }
             }
             calcPath();
@@ -360,9 +363,10 @@ public class MapFragment extends MyTabFragment implements PlayerBearingListener,
 
     private void addViewGroupForVehiculesButtons(ViewGroup vg) {
         viewGroupForVehiculesButtons = (ViewGroup) vg.findViewById(R.id.forVehiculesButtons);
-        TypedArray vehicules = getResources().obtainTypedArray(R.array.vehicules_array);
-        for (int index = 0; index < vehicules.length(); index++) {
-            ImageViewWithId img = new ImageViewWithId(getActivity());
+        int[] vehicules = getResources().getIntArray(R.array.vehicules_array);
+        hashMapVehiculesButtonsIdView = new HashMap<>();
+        for (int index = 0; index < vehicules.length; index++) {
+            ImageView img = new ImageView(getActivity());
             int pad = getResources().getDimensionPixelSize(R.dimen.buttonsVehiculesPadding);
             img.setPadding(pad, pad, pad, pad);
             img.setOnClickListener(new OnClickListener() {
@@ -371,19 +375,13 @@ public class MapFragment extends MyTabFragment implements PlayerBearingListener,
                     onVehiculeChange(v);
                 }
             });
-            int res = vehicules.getResourceId(index, -1);
-            img.setDrawableId(res);
-            int alpha;
-            //if ((playerLocation == null) || (selectedZone == null)) {
-            //    alpha = (res==R.drawable.compass)?MapFragment.SELECTEDBUTTON :MapFragment.UNSELECTEDBUTTON;
-            //} else {
-                alpha = ((res == getVehiculeSelectedId()) ? MapFragment.SELECTEDBUTTON : MapFragment.UNSELECTEDBUTTON);
-            //    calcPath();
-            //}
+            int res = vehicules[index];
+            hashMapVehiculesButtonsIdView.put(res,img);
+            img.setImageDrawable(getDrawable(getActivity(),res));
+            int alpha = MapFragment.UNSELECTEDBUTTON;
             img.getDrawable().setAlpha(alpha);
             viewGroupForVehiculesButtons.addView(img);
         }
-        vehicules.recycle();
     }
 
     private void addViewGroupMapSCaleBar(ViewGroup vg) {
@@ -392,12 +390,14 @@ public class MapFragment extends MyTabFragment implements PlayerBearingListener,
         lp.addRule(RelativeLayout.ALIGN_LEFT | RelativeLayout.ALIGN_BOTTOM);
     }
 
-    private InstructionRoutePath getNextInstruction () {
+    private String getNextInstruction () {
         Instruction nextInst = routePath.getInstructions().find(getPlayerLocation().getLatitude(), getPlayerLocation().getLongitude(), 2000);
-        String nextInstructionString = nextInst.getTurnDescription(mTranslation);
-        double distanceToNextInstruction = nextInst.getDistance();
-        nextInstruction = new InstructionRoutePath(nextInstructionString,distanceToNextInstruction);
-        return nextInstruction;
+        PointList pl = nextInst.getPoints();
+        int idx = pl.getSize()-1;
+        MyGeoPoint nxtMyGeoPoint = new MyGeoPoint(pl.getLatitude(idx),pl.getLongitude(idx));
+        int dstToNxt = Math.round(1000 * getPlayerLocation().distanceTo(nxtMyGeoPoint));
+        nextInstructionString =  mTranslation.tr("web.to_hint", new Object[0]) + " " + dstToNxt + " " + mTranslation.tr("m_abbr",new Object[0]) + ", " + nextInst.getTurnDescription(mTranslation);
+        return nextInstructionString;
     }
 
     public PathWrapper getRoutePath() {
@@ -496,7 +496,7 @@ public class MapFragment extends MyTabFragment implements PlayerBearingListener,
         if (getVehiculeSelectedId()==R.drawable.compass) {
             calcLinePath();
         } else {
-            Toast.makeText(getContext(), getNextInstruction().nextInstructionString, Toast.LENGTH_LONG).show();
+            Toast.makeText(getGpsFictionActivity(), getNextInstruction(), Toast.LENGTH_LONG).show();
             //   TODO on s'ecarte du chemin...
 
 

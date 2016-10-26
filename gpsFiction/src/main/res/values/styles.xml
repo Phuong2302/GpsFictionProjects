@@ -1,8 +1,5 @@
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
-    <!--<style name="AppTheme" parent="Theme.AppCompat.Light" />-->
-    <style name="MyAppTheme" parent="Theme.AppCompat.Light.NoActionBar">
-        <!--      <item name="windowNoTitle">true</item>-->
-        <!--      <item name="windowActionBar">false</item>-->
+    <style name="MyAppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="colorPrimary">#ff5fb71a</item>
         <item name="colorPrimaryDark">#512DA8</item>
         <item name="colorAccent">#FF4081</item>

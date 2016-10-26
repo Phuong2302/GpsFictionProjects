@@ -20,30 +20,25 @@ public class ZonesFragment extends MyTabFragment implements PlayerLocationListen
     //TODO add tmpZonesToOrder
     public ZonesFragment() {
         super();
-        //	this.setNameId(R.string.tabZonesTitle);
     }
 
     @Override
     public void onLocationPlayerChanged(PlayerLocationEvent playerLocationEvent) {
-        this.myinvalidate();
+    //    if (this.listZones != null) {
+            /*
+            if (this.adapter != null) {
+                this.listZones.setAdapter(this.adapter);
+                this.adapter.notifyDataSetChanged();
+            }
+            */
+            this.listZones.invalidateViews();
+    //    }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         this.setRootView(inflater.inflate(R.layout.zones_view, container, false));
         this.listZones = (ListView) this.getRootView().findViewById(R.id.listZones);
-        if (this.adapter == null) {
-            this.adapter = new Adapter4TabZones();
-            this.adapter.init(this.getGpsFictionActivity());
-        }
-        /*Iterator<GpsFictionThing> itZone = this.getGpsFictionActivity().getGpsFictionData().getGpsFictionThing(Zone.class).iterator();
-		Zone zone=null;
-		while (itZone.hasNext()) {
-			zone = (Zone) itZone.next();
-			if (zone.isVisible()) this.zonesToOrder.add(zone);
-		}*/
-        this.onLocationPlayerChanged(null);
-        this.fireAll();
         return this.getRootView();
     }
 
@@ -54,29 +49,16 @@ public class ZonesFragment extends MyTabFragment implements PlayerLocationListen
 
     public void onResume() {
         super.onResume();
-    }
-
-    public ListView getListZones() {
-        return this.listZones;
-    }
-
-    private void myinvalidate() {
-        if (this.listZones != null) {
-            if (this.adapter != null) {
-                this.listZones.setAdapter(this.adapter);
-                this.adapter.notifyDataSetChanged();
-            }
-            this.listZones.invalidateViews();
+        if (adapter == null) {
+            adapter = new Adapter4TabZones();
         }
-    }
-
-    private void fireAll() {
-        this.getGpsFictionActivity().getMyLocationListener().firePlayerLocationListener();
-        this.getGpsFictionActivity().getMyLocationListener().firePlayerBearingListener();
-    }
-
-    public void register(GpsFictionActivity gpsFictionActivity) {
-        super.register(gpsFictionActivity);
+        adapter.init(getGpsFictionActivity());
+        listZones.setAdapter(adapter);
         this.getGpsFictionActivity().getMyLocationListener().addPlayerLocationListener(MyLocationListener.REGISTER.FRAGMENT, this);
     }
+/*
+    public void register(GpsFictionActivity gpsFictionActivity) {
+        super.register(gpsFictionActivity);
+    }
+    */
 }

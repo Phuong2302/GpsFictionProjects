@@ -23,9 +23,8 @@ import java.util.LinkedList;
 
 @SuppressWarnings({"unused"})
 public class Adapter4TabZones extends BaseAdapter implements PlayerLocationListener {
-    //	private LayoutInflater mLayoutInflater = null;
-    private HashMap<Zone, View> zone2View = new HashMap<Zone, View>();
-    private LinkedList<Zone> zonesToOrder = new LinkedList<Zone>();
+    private HashMap<Zone, View> zone2View = new HashMap<>();
+    private LinkedList<Zone> zonesToOrder = new LinkedList<>();
     private GpsFictionActivity gpsFictionActivity = null;
 
     public Adapter4TabZones() {
@@ -54,7 +53,6 @@ public class Adapter4TabZones extends BaseAdapter implements PlayerLocationListe
 
         Zone zone;
         Float newDistance;
-        //String[] tabOfTitles=getResources().getStringArray(R.array.names_classes);
         Iterator<GpsFictionThing> itZone = this.getGpsFictionActivity().getGpsFictionData().getGpsFictionThing(Zone.class).iterator();
         int i;
         while (itZone.hasNext()) {
@@ -130,5 +128,6 @@ public class Adapter4TabZones extends BaseAdapter implements PlayerLocationListe
     @Override
     public void onLocationPlayerChanged(PlayerLocationEvent playerLocationEvent) {
         this.reOrderZones();
+        this.notifyDataSetChanged();
     }
 }
