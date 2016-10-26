@@ -13,9 +13,10 @@ import org.oscim.layers.marker.MarkerItem;
 import org.oscim.layers.marker.MarkerSymbol;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Iterator;
 
-public class Zone extends Container implements ZoneEnterOrExitInterface, PlayerLocationListener, PlayerBearingListener, ZoneSelectListener {
+public class Zone extends Container implements ZoneEnterOrExitInterface, PlayerLocationListener, PlayerBearingListener, Comparable<Zone> {
     private final static double RAPPORT = 2 * Math.PI / 0.005;
     private final static int NB_MIN_DE_COTES = 8;
     private final boolean transportable = false;
@@ -27,7 +28,6 @@ public class Zone extends Container implements ZoneEnterOrExitInterface, PlayerL
     private boolean playerIsInThisZone = false;
 //    private Polyline zonePolyline = null;
     private MarkerItem zoneMarkerItem = null;
-    private boolean isSelectedZone = false;
     private float radius = 0; // distance max entre points de zone et centre de zone ou rayon pour une zone circulaire.
     private MyGeoPoint centerPoint = null; // moyenne des points ou centre d'une zone circulaire,
     private MyPolygon shape = new MyPolygon(); // contour de zone
@@ -43,6 +43,12 @@ public class Zone extends Container implements ZoneEnterOrExitInterface, PlayerL
             }
         };
     */
+    public static final Comparator<Zone> DISTANCE2PLAYERINCREASING =
+                                        new Comparator<Zone>() {
+            public int compare(Zone z1, Zone z2) {
+                return ((Float)(z1.getDistance2Player())).compareTo(((Float)z2.getDistance2Player()));
+            }
+    };
     public Zone() {
         super();
         // TODO Auto-generated constructor stub
@@ -53,7 +59,7 @@ public class Zone extends Container implements ZoneEnterOrExitInterface, PlayerL
         Bundle dest = new Bundle();
         dest.putBundle("Parent", toPass);
         double[] coord = null;
-        boolean val = this.isSelectedZone;
+        boolean val = (this == getGpsFictionActivity().getGpsFictionData().getSelectedZone());
         dest.putBoolean("selectedZone", val);
 //    	boolean val [] = { this.isSelectedZone , this.circularZone };
 //		dest.putBooleanArray("selectedZone_circularZone",val);
@@ -76,8 +82,7 @@ public class Zone extends Container implements ZoneEnterOrExitInterface, PlayerL
     public void setByBundle(Bundle in) {
         Bundle toPass = in.getBundle("Parent");
         super.setByBundle(toPass);
-        boolean val = in.getBoolean("selectedZone");
-        this.isSelectedZone = val;
+        boolean isSelectedZone = in.getBoolean("selectedZone");
         double[] coord = null;
 //		this.circularZone = val[1];
 //		this.radius = in.getFloat("radius");
@@ -88,7 +93,8 @@ public class Zone extends Container implements ZoneEnterOrExitInterface, PlayerL
             coord = in.getDoubleArray("shapePoint" + index);
             this.shape.add(new MyGeoPoint(coord[0], coord[1]));
         }
-        this.registerInListeners();
+        this.validate();
+        if (isSelectedZone) getGpsFictionActivity().getGpsFictionData().setSelectedZone(this);
     }
 
     /*public boolean isThisZoneSelected() {
@@ -126,7 +132,7 @@ public class Zone extends Container implements ZoneEnterOrExitInterface, PlayerL
             wpt = it.next();
             shape.addMyGeoPoint(new MyGeoPoint(wpt));
         }
-        this.registerInListeners();
+        getGpsFictionActivity().getGpsFictionData().fireZoneChangeListener(this);
     }
 
     public void setShape(float latitude, float longitude, float radius) {
@@ -151,7 +157,7 @@ public class Zone extends Container implements ZoneEnterOrExitInterface, PlayerL
         for (int i = 0; i < nbDePas; i++) {
             shape.addMyGeoPoint(centerPoint.project((float) (i * 360) / nbDePas, radius));
         }
-        this.registerInListeners();
+        getGpsFictionActivity().getGpsFictionData().fireZoneChangeListener(this);
     }
 
     public MyGeoPoint getCenterPoint() {
@@ -184,6 +190,7 @@ public class Zone extends Container implements ZoneEnterOrExitInterface, PlayerL
     */
     public void setRadius(float radius) {
         this.radius = radius;
+        getGpsFictionActivity().getGpsFictionData().fireZoneChangeListener(this);
     }
 
     /*
@@ -212,30 +219,15 @@ public class Zone extends Container implements ZoneEnterOrExitInterface, PlayerL
         return this.playerIsInThisZone;
     }
 
-    /*	public MyGeoPoint getCenterPoint() {
-            return this.centerPoint;
-        }
-    */
     public MyPolygon getShape() {
         return this.shape;
     }
 
-    /*	public void setShape(ArrayList<GeoPoint> gpts){
-            this.shape.addAll(gpts);
-            this.registerInListeners();
-        }
-        */
     public void setShape(float[][] points) {
-//		double sumLatitude=0;
-//		double sumLongitude=0;
         for (int i = 0; i < points.length; i++) {
             shape.addMyGeoPoint(new MyGeoPoint(points[i][0], points[i][1]));
-//			sumLatitude+=points[i][0];
-//			sumLongitude+=points[i][1];
         }
-//		this.setCenterPoint(new MyGeoPoint(sumLatitude/points.length,sumLongitude/points.length));
-//		this.setRadius(distanceMaxToShape(this.getCenterPoint()));
-        this.registerInListeners();
+        getGpsFictionActivity().getGpsFictionData().fireZoneChangeListener(this);
     }
 
     public String getStringDistance2Player() {
@@ -291,10 +283,12 @@ public class Zone extends Container implements ZoneEnterOrExitInterface, PlayerL
         return bearingPlayer;
     }
 
-    public void registerInListeners() {
-        getGpsFictionActivity().getGpsFictionData().addZoneSelectListener(GpsFictionData.REGISTER.ZONE, this);
+    public void validate() {
+        super.validate();
+       // getGpsFictionActivity().getGpsFictionData().addZoneSelectListener(GpsFictionData.REGISTER.ZONE, this);
         getGpsFictionActivity().getMyLocationListener().addPlayerLocationListener(MyLocationListener.REGISTER.ZONE, this);
         getGpsFictionActivity().getMyLocationListener().addPlayerBearingListener(MyLocationListener.REGISTER.ZONE, this);
+        getGpsFictionActivity().getGpsFictionData().fireZoneChangeListener(this);
     }
 
 
@@ -302,20 +296,6 @@ public class Zone extends Container implements ZoneEnterOrExitInterface, PlayerL
     public void setVisible(boolean visible) {
         super.setVisible(visible);
         getGpsFictionActivity().getGpsFictionData().fireZoneChangeListener(this);
-    }
-
-
-    public boolean isSelectedZone() {
-        return this.isSelectedZone;
-    }
-
-    public void setSelectedZone(boolean isSelectedZone) {
-        this.isSelectedZone = isSelectedZone;
-        getGpsFictionActivity().getGpsFictionData().fireZoneChangeListener(this);
-    }
-
-    public void onZoneSelectChanged(Zone selectedZone) {
-        this.setSelectedZone(this == selectedZone);
     }
 
     @Override
@@ -330,5 +310,13 @@ public class Zone extends Container implements ZoneEnterOrExitInterface, PlayerL
 
     }
 
+    public boolean isSelectedZone() {
+        return (this == getGpsFictionActivity().getGpsFictionData().getSelectedZone());
+    }
+
+    @Override
+    public int compareTo(Zone zone) {
+        return ((Float)getDistance2Player()).compareTo(zone.getDistance2Player());
+    }
 }
 

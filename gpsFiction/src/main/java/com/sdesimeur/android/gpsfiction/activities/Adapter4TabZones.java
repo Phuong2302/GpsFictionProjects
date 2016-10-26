@@ -14,27 +14,34 @@ import com.sdesimeur.android.gpsfiction.classes.MyLocationListener;
 import com.sdesimeur.android.gpsfiction.classes.PlayerLocationEvent;
 import com.sdesimeur.android.gpsfiction.classes.PlayerLocationListener;
 import com.sdesimeur.android.gpsfiction.classes.Zone;
+import com.sdesimeur.android.gpsfiction.classes.ZoneChangeListener;
 import com.sdesimeur.android.gpsfiction.views.MiniCompassView;
 import com.sdesimeur.android.gpsfiction.views.ZoneDistance4ListView;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 
-@SuppressWarnings({"unused"})
-public class Adapter4TabZones extends BaseAdapter implements PlayerLocationListener {
-    private HashMap<Zone, View> zone2View = new HashMap<>();
-    private LinkedList<Zone> zonesToOrder = new LinkedList<>();
+public class Adapter4TabZones extends BaseAdapter implements PlayerLocationListener, ZoneChangeListener {
+    private HashMap<Zone, View> zone2View = null;
+    private LinkedList<Zone> zonesToOrder = null;
     private GpsFictionActivity gpsFictionActivity = null;
 
     public Adapter4TabZones() {
         super();
+        if (zonesToOrder == null) zonesToOrder = new LinkedList<>();
     }
 
-    public void init(GpsFictionActivity gpsFictionActivity) {
-        this.gpsFictionActivity = gpsFictionActivity;
-        this.getGpsFictionActivity().getMyLocationListener().addPlayerLocationListener(MyLocationListener.REGISTER.ADAPTERVIEW, this);
-        this.reOrderZones();
+    public void register(GpsFictionActivity gfa) {
+        this.gpsFictionActivity = gfa;
+        Iterator<GpsFictionThing> it = this.getGpsFictionActivity().getGpsFictionData().getGpsFictionThing(Zone.class).iterator();
+        while (it.hasNext()) {
+            Zone zn = (Zone) it.next();
+            if (zn.isVisible()) zonesToOrder.add(zn);
+        }
+        getGpsFictionActivity().getMyLocationListener().addPlayerLocationListener(MyLocationListener.REGISTER.ADAPTERVIEW, this);
+        getGpsFictionActivity().getGpsFictionData().addZoneChangeListener(this);
     }
 
     @Override
@@ -49,49 +56,28 @@ public class Adapter4TabZones extends BaseAdapter implements PlayerLocationListe
 
     private void reOrderZones() {
         //TODO add zonesToOrder by tmpZonesToOrder
-        this.zonesToOrder.clear();
-
-        Zone zone;
-        Float newDistance;
-        Iterator<GpsFictionThing> itZone = this.getGpsFictionActivity().getGpsFictionData().getGpsFictionThing(Zone.class).iterator();
-        int i;
-        while (itZone.hasNext()) {
-            zone = (Zone) itZone.next();
-            if (zone.isVisible()) {
-                if (zone.isPlayerInThisZone()) {
-                    this.zonesToOrder.addFirst(zone);
-                } else {
-                    newDistance = zone.getDistance2Player();
-                    i = this.zonesToOrder.size();
-                    do {
-                        i--;
-                    }
-                    while ((i > -1) && (newDistance <= (this.zonesToOrder.get(i).getDistance2Player())));
-                    if (i == -1) {
-                        this.zonesToOrder.addFirst(zone);
-                    } else {
-                        this.zonesToOrder.add(i + 1, zone);
-                    }
-                }
-            }
+        if (zonesToOrder != null) {
+            Collections.sort(zonesToOrder, Zone.DISTANCE2PLAYERINCREASING);
+            notifyDataSetChanged();
         }
     }
 
     @Override
     public Object getItem(int position) {
         // TODO Auto-generated method stub
-        return null;
+        return zonesToOrder.get(position);
     }
 
     @Override
     public long getItemId(int position) {
         // TODO Auto-generated method stub
-        return position;
+        return ((Zone)getItem(position)).getId();
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         // TODO Auto-generated method stub
+        if (zone2View == null ) zone2View = new HashMap<>();
         LinearLayout layoutItem;
         LayoutInflater mLayoutInflater = LayoutInflater.from(this.getGpsFictionActivity());
         ViewHolder4Zones holder;
@@ -128,6 +114,19 @@ public class Adapter4TabZones extends BaseAdapter implements PlayerLocationListe
     @Override
     public void onLocationPlayerChanged(PlayerLocationEvent playerLocationEvent) {
         this.reOrderZones();
-        this.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onZoneChanged(Zone zone) {
+        if ((!zonesToOrder.contains(zone)) && zone.isVisible()) {
+            zonesToOrder.add(zone);
+        } else if (zonesToOrder.contains(zone) && (!zone.isVisible())) {
+            zonesToOrder.remove(zone);
+        }
+        reOrderZones();
+    }
+    public void destroy () {
+        getGpsFictionActivity().getMyLocationListener().removePlayerLocationListener(MyLocationListener.REGISTER.ADAPTERVIEW, this);
+        getGpsFictionActivity().getGpsFictionData().removeZoneChangeListener(this);
     }
 }

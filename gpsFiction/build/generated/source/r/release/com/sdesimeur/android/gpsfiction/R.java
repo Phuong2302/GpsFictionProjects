@@ -2659,11 +2659,11 @@ containing a value of this type.
         public static int transparent=0x7f02006c;
     }
     public static final class id {
-        public static int Compass=0x7f0d00ad;
-        public static int Inventory=0x7f0d00ac;
-        public static int Map=0x7f0d00ae;
-        public static int Tasks=0x7f0d00af;
-        public static int Zones=0x7f0d00ab;
+        public static int Compass=0x7f0d00af;
+        public static int Inventory=0x7f0d00ae;
+        public static int Map=0x7f0d00b0;
+        public static int Tasks=0x7f0d00b1;
+        public static int Zones=0x7f0d00ad;
         public static int action0=0x7f0d008f;
         public static int action_bar=0x7f0d0060;
         public static int action_bar_activity_content=0x7f0d0000;
@@ -2690,7 +2690,7 @@ containing a value of this type.
         public static int all=0x7f0d0034;
         public static int always=0x7f0d0038;
         public static int auto=0x7f0d0023;
-        public static int background4menu=0x7f0d00aa;
+        public static int background4menu=0x7f0d00ab;
         public static int beginning=0x7f0d0036;
         public static int bottom=0x7f0d0024;
         public static int buttonPanel=0x7f0d0049;
@@ -2705,11 +2705,11 @@ containing a value of this type.
         public static int collapseActionView=0x7f0d0039;
         public static int compassDirection=0x7f0d0070;
         public static int container=0x7f0d0084;
-        public static int contentDistanceDirectionForEachZone=0x7f0d00a7;
-        public static int contentForEachZone=0x7f0d00a5;
+        public static int contentDistanceDirectionForEachZone=0x7f0d00a8;
+        public static int contentForEachZone=0x7f0d00a6;
         public static int contentOther=0x7f0d0071;
         public static int contentPanel=0x7f0d004f;
-        public static int contentTextForEachZone=0x7f0d00a6;
+        public static int contentTextForEachZone=0x7f0d00a7;
         public static int coordinator_layout=0x7f0d0083;
         public static int custom=0x7f0d0055;
         public static int customPanel=0x7f0d0054;
@@ -2734,9 +2734,10 @@ containing a value of this type.
         public static int fill_horizontal=0x7f0d0033;
         public static int fill_vertical=0x7f0d0029;
         public static int fixed=0x7f0d003d;
-        public static int forScaleBar=0x7f0d008a;
+        public static int forMapDirectionButtons=0x7f0d008a;
+        public static int forScaleBar=0x7f0d00a3;
         public static int forVehiculesButtons=0x7f0d0089;
-        public static int forZoomButtons=0x7f0d00a3;
+        public static int forZoomButtons=0x7f0d00a4;
         public static int home=0x7f0d0004;
         public static int homeAsUp=0x7f0d0011;
         public static int icon=0x7f0d0047;
@@ -2752,14 +2753,15 @@ containing a value of this type.
         public static int line3=0x7f0d00a0;
         public static int listInventory=0x7f0d0081;
         public static int listMode=0x7f0d000d;
-        public static int listTasks=0x7f0d00a4;
-        public static int listZones=0x7f0d00a9;
+        public static int listTasks=0x7f0d00a5;
+        public static int listZones=0x7f0d00aa;
         public static int list_item=0x7f0d0046;
         public static int mapView=0x7f0d0088;
         public static int media_actions=0x7f0d0092;
+        public static int menuGroup=0x7f0d00ac;
         public static int middle=0x7f0d0037;
         public static int mini=0x7f0d0035;
-        public static int miniCompassDirection=0x7f0d00a8;
+        public static int miniCompassDirection=0x7f0d00a9;
         public static int multiply=0x7f0d001d;
         public static int mydialog_buttons=0x7f0d0080;
         public static int mydialog_text=0x7f0d007f;

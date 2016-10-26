@@ -93,6 +93,7 @@ public class MissionDestructionMainActivity extends GpsFictionActivity {
 //		zone.getShape().setCenterPoint(newZp);
 //		zone.setCircularShape();
         zone.setShape(newZp, radius);
+        zone.validate();
         this.zoneMultiples.add(zone);
     }
 
@@ -133,6 +134,7 @@ public class MissionDestructionMainActivity extends GpsFictionActivity {
         this.zoneGlobale.setId(R.string.zoneGlobale);
         newZp = this.getMyLocationListener().getPlayerGeoPoint();
         this.zoneGlobale.setShape(newZp, radius_zone_globale);
+        zoneGlobale.validate();
 
         //Autres Zones
         //  Zone Arme
@@ -179,6 +181,7 @@ public class MissionDestructionMainActivity extends GpsFictionActivity {
         newZp = this.zoneClef.getCenterPoint().project(angle, distance);
         zpc.setShape(newZp, radius_zone_prendre_clef);
         this.zoneClef.addThingToContainer(zpc);
+        zpc.validate();
     }
 
 }

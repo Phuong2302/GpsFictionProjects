@@ -1,6 +1,7 @@
 package com.sdesimeur.android.gpsfiction.activities;
 
 
+import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Path;
@@ -16,9 +17,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-import android.widget.Toast;
 import android.widget.ZoomControls;
 
 import com.graphhopper.GHRequest;
@@ -74,7 +72,6 @@ import java.util.List;
 import java.util.Locale;
 
 import static android.support.v4.content.ContextCompat.getDrawable;
-import static android.view.ViewGroup.LayoutParams;
 import static org.oscim.android.canvas.AndroidGraphics.drawableToBitmap;
 import static org.oscim.layers.marker.MarkerSymbol.HotspotPlace;
 
@@ -194,7 +191,7 @@ public class MapFragment extends MyTabFragment implements PlayerBearingListener,
         mapView=(MapView) this.getRootView().findViewById(R.id.mapView);
         mMap = mapView.map();
         zoneViewHelperHashMap = new HashMap<>();
-        playerDrawable = getResources().getDrawable(R.drawable.player_marker);
+        playerDrawable = getDrawable(getActivity(),R.drawable.player_marker);
 //        playerRotateDrawable = (RotateDrawable) getResources().getDrawable(R.drawable.playerrotatemarker);
 //        playerBitmap = BitmapFactory.decodeResource(getResources(),R.drawable.player_marker);
         MarkerSymbol ms = new MarkerSymbol(drawableToBitmap(getResources(),R.drawable.transparent), HotspotPlace.CENTER);
@@ -224,7 +221,7 @@ public class MapFragment extends MyTabFragment implements PlayerBearingListener,
         routePathLayer.setStyle(ls);
         ViewGroup vg = (ViewGroup) getRootView();
         addViewGroupForVehiculesButtons(vg);
-        addViewGroupMapSCaleBar(vg);
+        addViewGroupForMapDirection(vg);
         addViewGroupForZoomButtons(vg);
         loadGraphStorage();
         return getRootView();
@@ -275,7 +272,7 @@ public class MapFragment extends MyTabFragment implements PlayerBearingListener,
     @Override
     public void onDetach() {
     //    hopper.clean();
-        hopper.close();
+    //    hopper.close();
         hopper = null;
         mMarkerLayer = null;
         zoneViewHelperHashMap = null;
@@ -363,9 +360,9 @@ public class MapFragment extends MyTabFragment implements PlayerBearingListener,
 
     private void addViewGroupForVehiculesButtons(ViewGroup vg) {
         viewGroupForVehiculesButtons = (ViewGroup) vg.findViewById(R.id.forVehiculesButtons);
-        int[] vehicules = getResources().getIntArray(R.array.vehicules_array);
+        TypedArray vehicules = getResources().obtainTypedArray(R.array.vehicules_array);
         hashMapVehiculesButtonsIdView = new HashMap<>();
-        for (int index = 0; index < vehicules.length; index++) {
+        for (int index = 0; index < vehicules.length(); index++) {
             ImageView img = new ImageView(getActivity());
             int pad = getResources().getDimensionPixelSize(R.dimen.buttonsVehiculesPadding);
             img.setPadding(pad, pad, pad, pad);
@@ -375,7 +372,7 @@ public class MapFragment extends MyTabFragment implements PlayerBearingListener,
                     onVehiculeChange(v);
                 }
             });
-            int res = vehicules[index];
+            Integer res = vehicules.getResourceId(index,0);
             hashMapVehiculesButtonsIdView.put(res,img);
             img.setImageDrawable(getDrawable(getActivity(),res));
             int alpha = MapFragment.UNSELECTEDBUTTON;
@@ -384,20 +381,31 @@ public class MapFragment extends MyTabFragment implements PlayerBearingListener,
         }
     }
 
-    private void addViewGroupMapSCaleBar(ViewGroup vg) {
-        LinearLayout l = (LinearLayout) vg.findViewById(R.id.forScaleBar);
-        RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-        lp.addRule(RelativeLayout.ALIGN_LEFT | RelativeLayout.ALIGN_BOTTOM);
+    private void addViewGroupForMapDirection(ViewGroup vg) {
+        ImageView v = (ImageView) vg.findViewById(R.id.forMapDirectionButtons);
+        //ImageView img = new ImageView(getActivity());
+        //int pad = getResources().getDimensionPixelSize(R.dimen.buttonsVehiculesPadding);
+        //img.setPadding(pad, pad, pad, pad);
+        v.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+            }
+        });
+        //img.setImageDrawable(getDrawable(getActivity(),R.drawable.compass));
+        //l.addView(img);
+        //RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+        //lp.addRule(RelativeLayout.ALIGN_LEFT | RelativeLayout.ALIGN_BOTTOM);
     }
 
-    private String getNextInstruction () {
-        Instruction nextInst = routePath.getInstructions().find(getPlayerLocation().getLatitude(), getPlayerLocation().getLongitude(), 2000);
-        PointList pl = nextInst.getPoints();
-        int idx = pl.getSize()-1;
-        MyGeoPoint nxtMyGeoPoint = new MyGeoPoint(pl.getLatitude(idx),pl.getLongitude(idx));
-        int dstToNxt = Math.round(1000 * getPlayerLocation().distanceTo(nxtMyGeoPoint));
-        nextInstructionString =  mTranslation.tr("web.to_hint", new Object[0]) + " " + dstToNxt + " " + mTranslation.tr("m_abbr",new Object[0]) + ", " + nextInst.getTurnDescription(mTranslation);
-        return nextInstructionString;
+    private void setNextInstruction () {
+        if (routePath != null && !shortestPathRunning) {
+            Instruction nextInst = routePath.getInstructions().find(getPlayerLocation().getLatitude(), getPlayerLocation().getLongitude(), 2000);
+            PointList pl = nextInst.getPoints();
+            int idx = pl.getSize() - 1;
+            MyGeoPoint nxtMyGeoPoint = new MyGeoPoint(pl.getLatitude(idx), pl.getLongitude(idx));
+            int dstToNxt = Math.round(1000 * getPlayerLocation().distanceTo(nxtMyGeoPoint));
+            nextInstructionString = mTranslation.tr("web.to_hint", new Object[0]) + " " + dstToNxt + " " + mTranslation.tr("m_abbr", new Object[0]) + ", " + nextInst.getTurnDescription(mTranslation);
+        }
     }
 
     public PathWrapper getRoutePath() {
@@ -410,7 +418,11 @@ public class MapFragment extends MyTabFragment implements PlayerBearingListener,
         // TODO Auto-generated method stub
     }
 
-    public void calcRoutePath(final double fromLat, final double fromLon, final double toLat, final double toLon ) {
+    public void calcRoutePath() {
+        final double fromLat = getPlayerLocation().getLatitude();
+        final double fromLon = getPlayerLocation().getLongitude();
+        final double toLat = getSelectedZone().getCenterPoint().getLatitude();
+        final double toLon = getSelectedZone().getCenterPoint().getLongitude();
         shortestPathRunning = true;
         new AsyncTask<Void, Void, GHResponse>() {
             float time;
@@ -450,11 +462,7 @@ public class MapFragment extends MyTabFragment implements PlayerBearingListener,
         if (getVehiculeSelectedId() == R.drawable.compass) {
             calcLinePath();
         } else {
-            final double fromLat = getPlayerLocation().getLatitude();
-            final double fromLon = getPlayerLocation().getLongitude();
-            final double toLat = getSelectedZone().getCenterPoint().getLatitude();
-            final double toLon = getSelectedZone().getCenterPoint().getLongitude();
-            if (! (shortestPathRunning)) calcRoutePath(fromLat, fromLon, toLat, toLon);
+            if (! (shortestPathRunning)) calcRoutePath();
         }
     }
 
@@ -496,7 +504,9 @@ public class MapFragment extends MyTabFragment implements PlayerBearingListener,
         if (getVehiculeSelectedId()==R.drawable.compass) {
             calcLinePath();
         } else {
-            Toast.makeText(getGpsFictionActivity(), getNextInstruction(), Toast.LENGTH_LONG).show();
+            setNextInstruction();
+            //Toast.makeText(getGpsFictionActivity(), nextInstructionString, Toast.LENGTH_LONG).show();
+            getGpsFictionActivity().speak(nextInstructionString);
             //   TODO on s'ecarte du chemin...
 
 

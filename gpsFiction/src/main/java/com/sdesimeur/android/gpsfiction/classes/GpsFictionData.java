@@ -6,9 +6,12 @@ import com.sdesimeur.android.gpsfiction.R;
 import com.sdesimeur.android.gpsfiction.activities.GpsFictionActivity;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.function.IntPredicate;
+import java.util.function.Predicate;
 
 public class GpsFictionData {
     public static final String BUNDLE = "GpsFictionData";
@@ -27,6 +30,7 @@ public class GpsFictionData {
     private HashSet<GpsFictionThing> gpsFictionThings = new HashSet<>();
     private HashSet<ZoneChangeListener> zoneChangeListener = new HashSet<> ();
     public boolean toSave=true;
+    private int vehiculeSelectedId = R.drawable.compass;
 
     public int getVehiculeSelectedId() {
         return vehiculeSelectedId;
@@ -36,7 +40,6 @@ public class GpsFictionData {
         this.vehiculeSelectedId = vehiculeSelectedId;
     }
 
-    private int vehiculeSelectedId = R.drawable.compass;
 
     public GpsFictionData() {
         for (GpsFictionData.REGISTER i : GpsFictionData.REGISTER.values()) {
@@ -48,6 +51,7 @@ public class GpsFictionData {
         Bundle dest = new Bundle();
         int index = 0;
         boolean[] valbool = {this.allreadyConfigured};
+        dest.putInt("lastVehiculeSelectedID",vehiculeSelectedId);
         dest.putBooleanArray("BundleBoolArray", valbool);
         ArrayList<String> gftn = new ArrayList<String>();
         Iterator<GpsFictionThing> it = this.gpsFictionThings.iterator();
@@ -91,6 +95,7 @@ public class GpsFictionData {
         Class myclass = null;
         GpsFictionThing gft = null;
         Bundle toPass = null;
+        vehiculeSelectedId = in.getInt("lastVehiculeSelectedID",vehiculeSelectedId);
         val = in.getBooleanArray("BundleBoolArray");
         this.allreadyConfigured = val[0];
         ArrayList<String> gftn = new ArrayList<String>();
@@ -181,7 +186,7 @@ public class GpsFictionData {
     }
 
     @SuppressWarnings("rawtypes")
-    public HashSet<GpsFictionThing> getGpsFictionThing(Class cl) {
+    public HashSet<GpsFictionThing> getGpsFictionThing(final Class cl) {
         HashSet<GpsFictionThing> ret = new HashSet<GpsFictionThing>();
         Iterator<GpsFictionThing> it = this.gpsFictionThings.iterator();
         while (it.hasNext()) {

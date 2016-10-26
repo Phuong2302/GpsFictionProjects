@@ -41,6 +41,7 @@ public abstract class ZoneAdverse extends Zone {
     public void init(GpsFictionActivity gpsFictionActivity) {
         super.init(gpsFictionActivity);
         this.findCenterAndSetShapeIfAllIsSet();
+        this.validate();
     }
 
     public void setIdAdverse(int longId, int numInTable4LongId) {

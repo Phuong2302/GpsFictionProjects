@@ -188,4 +188,7 @@ public class GpsFictionThing {
         static int visible = 0;
         static int active = 1;
     }
+    public void validate() {
+
+    }
 }

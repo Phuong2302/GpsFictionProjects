@@ -5,10 +5,12 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
-import android.content.res.Resources.NotFoundException;
+import android.content.Intent;
+import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.speech.tts.TextToSpeech;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
@@ -36,9 +38,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Locale;
 
 
-public class GpsFictionActivity extends Activity {
+public class GpsFictionActivity extends Activity implements TextToSpeech.OnInitListener {
     private static final String TAGFONT = "FONT";
     protected GpsFictionData gpsFictionData = null;
     protected FragmentManager fragmentManager;
@@ -48,8 +51,35 @@ public class GpsFictionActivity extends Activity {
     private DrawerLayout drawerLayout;
     private HashMap<Integer, MyTabFragmentImpl> menuItem2Fragments;
     private int selectedFragmentId = R.id.Zones;
+    private TextToSpeech mTts;
+    private boolean mTtsOK = false;
+    private void testTTS() {
+        Intent checkIntent = new Intent();
+        checkIntent.setAction(TextToSpeech.Engine.ACTION_CHECK_TTS_DATA);
+        startActivityForResult(checkIntent, 0x01);
+    }
 
-    private void defineFragments(String lastSelectedFragmentName) {
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    		if (requestCode == 0x01) {
+		        if (resultCode == TextToSpeech.Engine.CHECK_VOICE_DATA_PASS) {
+		            // Succès, au moins un moteur de TTS à été trouvé, on l'instancie
+		            mTts = new TextToSpeech(this, this);
+                    if (mTts.isLanguageAvailable(Locale.getDefault()) == TextToSpeech.LANG_COUNTRY_AVAILABLE) {
+                    	mTts.setLanguage(Locale.getDefault());
+                    } else if (mTts.isLanguageAvailable(Locale.ENGLISH) == TextToSpeech.LANG_COUNTRY_AVAILABLE) {
+                        mTts.setLanguage(Locale.ENGLISH);
+                    }
+                    mTts.setSpeechRate(1); // 1 est la valeur par défaut. Une valeur inférieure rendra l'énonciation plus lente, une valeur supérieure la rendra plus rapide.
+                    mTts.setPitch(1); // 1 est la valeur par défaut. Une valeur inférieure rendra l'énonciation plus grave, une valeur supérieure la rendra plus aigue.
+		        } else {
+		            // Echec, aucun moteur n'a été trouvé, on propose à l'utilisateur d'en installer un depuis le Market
+		            Intent installIntent = new Intent();
+		            installIntent.setAction(TextToSpeech.Engine.ACTION_INSTALL_TTS_DATA);
+		            startActivity(installIntent);
+		        }
+    		}
+    	}
+    private void defineFragments() {
         menuItem2Fragments = new HashMap<>();
         String[] fragmentNames = getResources().getStringArray(R.array.fragmentsNames);
         TypedArray menuItems = getResources().obtainTypedArray(R.array.menuItems);
@@ -60,7 +90,6 @@ public class GpsFictionActivity extends Activity {
                 MyTabFragmentImpl myTabFragment = (MyTabFragmentImpl) (myclass.newInstance());
                 Integer id = menuItems.getResourceId(i,0);
                 menuItem2Fragments.put(id, myTabFragment);
-                selectedFragmentId = (myTabFragment.getClass().getName() == lastSelectedFragmentName) ? id : selectedFragmentId;
             } catch (InstantiationException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
@@ -70,7 +99,7 @@ public class GpsFictionActivity extends Activity {
             } catch (ClassNotFoundException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
-            } catch (NotFoundException e) {
+            } catch (Resources.NotFoundException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
             }
@@ -80,7 +109,9 @@ public class GpsFictionActivity extends Activity {
 
     public void setFragmentInContainer() {
         FragmentTransaction fragTransaction = fragmentManager.beginTransaction();
-        fragTransaction.replace(R.id.container, (Fragment)menuItem2Fragments.get(selectedFragmentId));
+        MyTabFragmentImpl mtf = menuItem2Fragments.get(selectedFragmentId);
+        mtf.register(this);
+        fragTransaction.replace(R.id.container, (Fragment)mtf);
         fragTransaction.commit();
         //	navigationView.getMenu().findItem(selectedFragmentId).setChecked(true);
     }
@@ -132,7 +163,7 @@ public class GpsFictionActivity extends Activity {
         InputStream is = null;
         try {
             is = getResources().openRawResource(resource);
-        } catch (NotFoundException e) {
+        } catch (Resources.NotFoundException e) {
             Log.e(TAGFONT, "Could not find font in resources!");
         }
         String outPath = getCacheDir() + "/tmp" + System.currentTimeMillis() + ".raw";
@@ -197,6 +228,7 @@ public class GpsFictionActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         //this.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        testTTS();
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         if (this.myLocationListener == null) this.myLocationListener = new MyLocationListener();
         this.myLocationListener.init(this);
@@ -204,7 +236,6 @@ public class GpsFictionActivity extends Activity {
             this.gpsFictionData = new GpsFictionData();
             this.gpsFictionData.setGpsFictionActivity(this);
         }
-        String lastSelectedFragmentName = null;
         if (savedInstanceState != null) {
             Bundle toPass = savedInstanceState.getBundle("GpsFictionData");
             this.gpsFictionData.setByBundle(toPass);
@@ -212,14 +243,12 @@ public class GpsFictionActivity extends Activity {
             this.myLocationListener.setByBundle(toPass);
             this.myLocationListener.firePlayerLocationListener();
             this.myLocationListener.firePlayerBearingListener();
-            lastSelectedFragmentName = savedInstanceState.getString("lastSelectedFragment");
+            selectedFragmentId = savedInstanceState.getInt("lastSelectedFragmentId",R.id.Zones);
         } else {
             this.gpsFictionData.init();
         }
-        this.defineFragments(lastSelectedFragmentName);
         super.onCreate(savedInstanceState);
         this.setContentView(R.layout.main_view);
-        this.fragmentManager = getFragmentManager();
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         navigationView = (NavigationView) findViewById(R.id.navigation_view);
         navigationView.getMenu().findItem(selectedFragmentId).setChecked(true);
@@ -233,12 +262,9 @@ public class GpsFictionActivity extends Activity {
                 return true;
             }
         });
+        fragmentManager = getFragmentManager();
+        defineFragments();
         setFragmentInContainer();
-    }
-
-    @Override
-    public void onPostCreate(Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
     }
 
     @Override
@@ -252,16 +278,23 @@ public class GpsFictionActivity extends Activity {
     }
 
     @Override
+    public void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
-        for (int key : menuItem2Fragments.keySet()){
-            menuItem2Fragments.get(key).register(this);
-        }
     }
 
     @Override
     public void onPostResume() {
         super.onPostResume();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
     }
 
     @Override
@@ -271,14 +304,9 @@ public class GpsFictionActivity extends Activity {
             savedInstanceState.putBundle("GpsFictionData", toPass);
             toPass = this.myLocationListener.getByBundle();
             savedInstanceState.putBundle("MyLocationListener", toPass);
-            savedInstanceState.putString("lastSelectedFragment", menuItem2Fragments.get(selectedFragmentId).getClass().getName());
+            savedInstanceState.putInt("lastSelectedFragmentId", selectedFragmentId);
         }
         super.onSaveInstanceState(savedInstanceState);
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
     }
 
     @Override
@@ -288,7 +316,19 @@ public class GpsFictionActivity extends Activity {
 
     @Override
     public void onDestroy() {
+        mTts.shutdown();
+        mTtsOK=false;
         super.onDestroy();
     }
 
+    @Override
+    public void onInit(int status) {
+        mTtsOK=(status == TextToSpeech.SUCCESS);
+    }
+    public void speak (String txt) {
+        if (mTtsOK) {
+            //String utteranceId=this.hashCode() + "";
+            mTts.speak(txt, TextToSpeech.QUEUE_FLUSH, null);
+        }
+    }
 }
