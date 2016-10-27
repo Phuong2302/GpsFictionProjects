@@ -45,7 +45,7 @@ public class InventoryFragment extends MyTabFragment {
                              Bundle savedInstanceState) {
         this.setRootView(inflater.inflate(R.layout.inventory_view, container, false));
         listTitles = (ListView) this.getRootView().findViewById(R.id.listInventory);
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this.getGpsFictionActivity(), android.R.layout.simple_list_item_1, createMainList());
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getmGpsFictionActivity(), android.R.layout.simple_list_item_1, createMainList());
         listTitles.setAdapter(adapter);
         return this.getRootView();
     }

@@ -32,14 +32,14 @@ public class MissionDestructionMainActivity extends GpsFictionActivity {
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (!(this.getGpsFictionData().isAllreadyConfigured())) {
-            this.getGpsFictionData().setRules(R.string.rulesDef);
-            this.getGpsFictionData().setTitle(R.string.rulesName);
+        if (!(getmGpsFictionData().isAllreadyConfigured())) {
+            getmGpsFictionData().setRules(R.string.rulesDef);
+            getmGpsFictionData().setTitle(R.string.rulesName);
             MyDialogFragment df = new MyDialogFragment();
             df.init(this, R.string.dialogFirstTaskTitle, R.string.dialogFirstTaskText);
             df.getButtonsListIds().add(R.string.dialogButtonYes);
             df.getButtonsListIds().add(R.string.dialogButtonNo);
-            df.show(this.fragmentManager);
+            df.show(fragmentManager);
         }
     }
 
@@ -50,15 +50,15 @@ public class MissionDestructionMainActivity extends GpsFictionActivity {
     public void getReponseFromMyDialogFragment(int why, int reponse) {
         if (why == R.string.dialogFirstTaskTitle) {
             if (reponse == R.string.dialogButtonYes) {
-                this.angle = ((int) Math.round(360 * Math.random()));
-                this.createAllZoneAmi();
-                this.createAllZoneEnnemi();
-                this.getMyLocationListener().firePlayerLocationListener();
-                this.getGpsFictionData().setAllreadyConfigured(true);
+                angle = ((int) Math.round(360 * Math.random()));
+                createAllZoneAmi();
+                createAllZoneEnnemi();
+                getmMyLocationListener().firePlayerLocationListener();
+                getmGpsFictionData().setAllreadyConfigured(true);
             }
             if (reponse == R.string.dialogButtonNo) {
-                this.gpsFictionData = null;
-                this.finish();
+                setmGpsFictionData(null);
+                finish();
             }
         }
         super.getReponseFromMyDialogFragment(why, reponse);
@@ -71,30 +71,27 @@ public class MissionDestructionMainActivity extends GpsFictionActivity {
         for (int i = 0; i < MissionDestructionMainActivity.NBZONESENNEMIES; i++) {
             zm = new ZoneMine();
             zm.setIdAdverseNum(i);
-            zm.init(this);
-            //zm.setMainActivity(this);
-            this.zoneMultiples.add(zm);
+            zm.initnew(getmGpsFictionData());
+            zoneMultiples.add(zm);
             zce = new ZoneCibleEnnemie();
             zce.setIdAdverseNum(i);
-            zce.init(this);
-            //zce.setMainActivity(this);
-            this.zoneMultiples.add(zce);
+            zce.initnew(getmGpsFictionData());
+            zoneMultiples.add(zce);
             ze = new ZoneEnnemie();
             ze.setIdAdverseNum(i);
-            ze.init(this);
-            //ze.setMainActivity(this);
-            this.zoneMultiples.add(ze);
+            ze.initnew(getmGpsFictionData());
+            zoneMultiples.add(ze);
         }
 
     }
 
     public void createZoneAmi(ZoneAmie zone, float radius) {
-        MyGeoPoint newZp = this.findNewCenterZoneAmie(radius);
+        MyGeoPoint newZp = findNewCenterZoneAmie(radius);
 //		zone.getShape().setCenterPoint(newZp);
 //		zone.setCircularShape();
         zone.setShape(newZp, radius);
         zone.validate();
-        this.zoneMultiples.add(zone);
+        zoneMultiples.add(zone);
     }
 
     private MyGeoPoint findNewCenterZoneAmie(float radiusNewZone) {
@@ -104,16 +101,16 @@ public class MissionDestructionMainActivity extends GpsFictionActivity {
 
         do
             n = (int) Math.floor(4 * Math.random());
-        while (this.zone_occupee[n]);
-        this.zone_occupee[n] = true;
+        while (zone_occupee[n]);
+        zone_occupee[n] = true;
         double distance;
         boolean valide = true;
         boolean newvalide;
         do {
             valide = true;
             distance = (radius_zone_globale - radiusNewZone - dist_min) * Math.random() + dist_min;
-            newZp = this.zoneGlobale.getCenterPoint().project((double) (this.angle + (n * 90)), distance);
-            Iterator<Zone> it = this.zoneMultiples.iterator();
+            newZp = zoneGlobale.getCenterPoint().project((double) (angle + (n * 90)), distance);
+            Iterator<Zone> it = zoneMultiples.iterator();
             while (it.hasNext()) {
                 zn = it.next();
                 newvalide = ((zn.getCenterPoint().distanceTo(newZp) - (zn.getRadius() + radiusNewZone + ZoneAmie.distStdEntreZones)) > 0);
@@ -127,60 +124,60 @@ public class MissionDestructionMainActivity extends GpsFictionActivity {
         MyGeoPoint newZp;
         int nameId;
         float radius;
-        this.zoneGlobale = new ZoneGlobale();
-        this.zoneGlobale.init(this);
-        this.zoneGlobale.setVisible(false);
+        zoneGlobale = new ZoneGlobale();
+        zoneGlobale.init(getmGpsFictionData());
+        zoneGlobale.setVisible(false);
         zoneGlobale.setActive(false);
-        this.zoneGlobale.setId(R.string.zoneGlobale);
-        newZp = this.getMyLocationListener().getPlayerGeoPoint();
-        this.zoneGlobale.setShape(newZp, radius_zone_globale);
+        zoneGlobale.setId(R.string.zoneGlobale);
+        newZp = getmMyLocationListener().getPlayerGeoPoint();
+        zoneGlobale.setShape(newZp, radius_zone_globale);
         zoneGlobale.validate();
 
         //Autres Zones
         //  Zone Arme
         nameId = R.string.zoneArme;
         radius = radius_zone_arme;
-        this.zoneArme = new ZoneArme();
-        this.zoneArme.init(this);
-        this.zoneArme.setId(nameId);
-        this.createZoneAmi(this.zoneArme, radius);
+        zoneArme = new ZoneArme();
+        zoneArme.init(getmGpsFictionData());
+        zoneArme.setId(nameId);
+        createZoneAmi(zoneArme, radius);
 
         //  Zone Explosifs
         nameId = R.string.zoneExplosifs;
         radius = radius_zone_explosifs;
-        this.zoneExplosifs = new ZoneExplosifs();
-        this.zoneExplosifs.init(this);
-        this.zoneExplosifs.setId(nameId);
-        this.createZoneAmi(this.zoneExplosifs, radius);
+        zoneExplosifs = new ZoneExplosifs();
+        zoneExplosifs.init(getmGpsFictionData());
+        zoneExplosifs.setId(nameId);
+        createZoneAmi(zoneExplosifs, radius);
 
         //  Zone Munitions
         nameId = R.string.zoneMunitions;
         radius = radius_zone_munitions;
-        this.zoneMunitions = new ZoneMunitions();
-        this.zoneMunitions.init(this);
-        this.zoneMunitions.setId(nameId);
-        this.createZoneAmi(this.zoneMunitions, radius);
+        zoneMunitions = new ZoneMunitions();
+        zoneMunitions.init(getmGpsFictionData());
+        zoneMunitions.setId(nameId);
+        createZoneAmi(zoneMunitions, radius);
 
         //  Zone Clef
         nameId = R.string.zoneClef;
         radius = radius_zone_clef;
-        this.zoneClef = new ZoneClef();
-        this.zoneClef.init(this);
-        this.zoneClef.setId(nameId);
-        this.createZoneAmi(this.zoneClef, radius);
+        zoneClef = new ZoneClef();
+        zoneClef.init(getmGpsFictionData());
+        zoneClef.setId(nameId);
+        createZoneAmi(zoneClef, radius);
 
         //  Zone Prendre Clef
         ZonePrendreClef zpc;
         nameId = R.string.zonePrendreClef;
         zpc = new ZonePrendreClef();
-        zpc.init(this);
+        zpc.init(getmGpsFictionData());
         zpc.setId(nameId);
         zpc.setVisible(false);
         double distance = (radius_zone_clef - radius_zone_prendre_clef) * Math.random();
         int angle = (int) Math.floor(360 * Math.random());
-        newZp = this.zoneClef.getCenterPoint().project(angle, distance);
+        newZp = zoneClef.getCenterPoint().project(angle, distance);
         zpc.setShape(newZp, radius_zone_prendre_clef);
-        this.zoneClef.addThingToContainer(zpc);
+        zoneClef.addThingToContainer(zpc);
         zpc.validate();
     }
 

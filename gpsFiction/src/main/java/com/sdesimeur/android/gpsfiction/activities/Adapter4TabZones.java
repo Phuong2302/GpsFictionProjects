@@ -26,7 +26,7 @@ import java.util.LinkedList;
 public class Adapter4TabZones extends BaseAdapter implements PlayerLocationListener, ZoneChangeListener {
     private HashMap<Zone, View> zone2View = null;
     private LinkedList<Zone> zonesToOrder = null;
-    private GpsFictionActivity gpsFictionActivity = null;
+    private GpsFictionActivity mGpsFictionActivity = null;
 
     public Adapter4TabZones() {
         super();
@@ -34,24 +34,20 @@ public class Adapter4TabZones extends BaseAdapter implements PlayerLocationListe
     }
 
     public void register(GpsFictionActivity gfa) {
-        this.gpsFictionActivity = gfa;
-        Iterator<GpsFictionThing> it = this.getGpsFictionActivity().getGpsFictionData().getGpsFictionThing(Zone.class).iterator();
+        this.mGpsFictionActivity = gfa;
+        Iterator<GpsFictionThing> it = mGpsFictionActivity.getmGpsFictionData().getGpsFictionThing(Zone.class).iterator();
         while (it.hasNext()) {
             Zone zn = (Zone) it.next();
             if (zn.isVisible()) zonesToOrder.add(zn);
         }
-        getGpsFictionActivity().getMyLocationListener().addPlayerLocationListener(MyLocationListener.REGISTER.ADAPTERVIEW, this);
-        getGpsFictionActivity().getGpsFictionData().addZoneChangeListener(this);
+        mGpsFictionActivity.getmMyLocationListener().addPlayerLocationListener(MyLocationListener.REGISTER.ADAPTERVIEW, this);
+        mGpsFictionActivity.getmGpsFictionData().addZoneChangeListener(this);
     }
 
     @Override
     public int getCount() {
         // TODO Auto-generated method stub
         return zonesToOrder.size();
-    }
-
-    public GpsFictionActivity getGpsFictionActivity() {
-        return this.gpsFictionActivity;
     }
 
     private void reOrderZones() {
@@ -79,7 +75,7 @@ public class Adapter4TabZones extends BaseAdapter implements PlayerLocationListe
         // TODO Auto-generated method stub
         if (zone2View == null ) zone2View = new HashMap<>();
         LinearLayout layoutItem;
-        LayoutInflater mLayoutInflater = LayoutInflater.from(this.getGpsFictionActivity());
+        LayoutInflater mLayoutInflater = LayoutInflater.from(mGpsFictionActivity);
         ViewHolder4Zones holder;
         final Zone attachedZone = this.zonesToOrder.get(position);
         if (zone2View.get(attachedZone) != null) {
@@ -91,13 +87,13 @@ public class Adapter4TabZones extends BaseAdapter implements PlayerLocationListe
             holder.setDistanceToZoneView((ZoneDistance4ListView) layoutItem.findViewById(R.id.textDistance));
             holder.setMiniCompassView((MiniCompassView) layoutItem.findViewById(R.id.miniCompassDirection));
 //			holder.setDirectionOfZone((TextView) layoutItem.findViewById(R.id.textDirection));
-            holder.init(this.getGpsFictionActivity(), attachedZone);
+            holder.init(mGpsFictionActivity, attachedZone);
             layoutItem.setTag(holder);
             layoutItem.setOnLongClickListener(new OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View view) {
                     Zone selectedZone = ((ViewHolder4Zones) (view.getTag())).getAttachedZone();
-                    getGpsFictionActivity().getGpsFictionData().setSelectedZone(selectedZone);
+                    mGpsFictionActivity.getmGpsFictionData().setSelectedZone(selectedZone);
                     //zonesFragment.getListZones().invalidateViews();
                     return true;
                 }
@@ -126,7 +122,7 @@ public class Adapter4TabZones extends BaseAdapter implements PlayerLocationListe
         reOrderZones();
     }
     public void destroy () {
-        getGpsFictionActivity().getMyLocationListener().removePlayerLocationListener(MyLocationListener.REGISTER.ADAPTERVIEW, this);
-        getGpsFictionActivity().getGpsFictionData().removeZoneChangeListener(this);
+        mGpsFictionActivity.getmMyLocationListener().removePlayerLocationListener(MyLocationListener.REGISTER.ADAPTERVIEW, this);
+        mGpsFictionActivity.getmGpsFictionData().removeZoneChangeListener(this);
     }
 }

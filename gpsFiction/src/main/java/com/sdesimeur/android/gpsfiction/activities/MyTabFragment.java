@@ -3,18 +3,21 @@ package com.sdesimeur.android.gpsfiction.activities;
 import android.app.Fragment;
 import android.view.View;
 
+import com.sdesimeur.android.gpsfiction.classes.GpsFictionData;
+import com.sdesimeur.android.gpsfiction.classes.MyLocationListener;
+
 
 public abstract class MyTabFragment extends Fragment implements MyTabFragmentImpl {
     private View rootView = null;
-    private GpsFictionActivity gpsFictionActivity = null;
+    private GpsFictionData mGpsFictionData = null;
 
     public MyTabFragment() {
         super();
     }
 
 
-    public GpsFictionActivity getGpsFictionActivity() {
-        return this.gpsFictionActivity;
+    public GpsFictionData getmGpsFictionData() {
+        return mGpsFictionData;
     }
 
     public View getRootView() {
@@ -30,7 +33,13 @@ public abstract class MyTabFragment extends Fragment implements MyTabFragmentImp
         super.onDestroy();
     }
 
-    public void register(GpsFictionActivity gpsFictionActivity) {
-        this.gpsFictionActivity = gpsFictionActivity;
+    public void register(GpsFictionData gpsFictionData) {
+        mGpsFictionData = gpsFictionData;
+    }
+    public GpsFictionActivity getmGpsFictionActivity() {
+        return (GpsFictionActivity) getActivity();
+    }
+    public MyLocationListener getmMyLocationListener() {
+        return getmGpsFictionData().getmMyLocationListener();
     }
 }

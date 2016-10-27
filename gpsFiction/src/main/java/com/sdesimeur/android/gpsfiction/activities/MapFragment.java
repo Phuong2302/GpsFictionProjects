@@ -113,28 +113,29 @@ public class MapFragment extends MyTabFragment implements PlayerBearingListener,
     private PathWrapper routePath = null;
     private Translation mTranslation = null;
     private HashMap<Integer, ImageView> hashMapVehiculesButtonsIdView = null;
+    private RouteGeoPointListAutoClean mRouteGeoPointListAutoClean = null;
 //    private RotateDrawable playerRotateDrawable = null;
 //    private Bitmap playerBitmap = null;
 
     public int getVehiculeSelectedId() {
-        return getGpsFictionActivity().getGpsFictionData().getVehiculeSelectedId();
+        return getmGpsFictionData().getVehiculeSelectedId();
     }
     public void setVehiculeSelectedId(int id) {
-        getGpsFictionActivity().getGpsFictionData().setVehiculeSelectedId(id);
+        getmGpsFictionData().setVehiculeSelectedId(id);
     }
     public Zone getSelectedZone() {
-        return getGpsFictionActivity().getGpsFictionData().getSelectedZone();
+        return getmGpsFictionData().getSelectedZone();
     }
     public void setSelectedZone(Zone selectedZone) {
-        getGpsFictionActivity().getGpsFictionData().setSelectedZone(selectedZone);
+        getmGpsFictionData().setSelectedZone(selectedZone);
     }
 
     public MyGeoPoint getPlayerLocation() {
-        return getGpsFictionActivity().getMyLocationListener().getPlayerGeoPoint();
+        return getmMyLocationListener().getPlayerGeoPoint();
     }
 
     public float getPlayerBearing() {
-        return getGpsFictionActivity().getMyLocationListener().getBearingOfPlayer();
+        return getmMyLocationListener().getBearingOfPlayer();
     }
 
     public MapFragment() {
@@ -197,7 +198,6 @@ public class MapFragment extends MyTabFragment implements PlayerBearingListener,
         MarkerSymbol ms = new MarkerSymbol(drawableToBitmap(getResources(),R.drawable.transparent), HotspotPlace.CENTER);
         mMarkerLayer = new ItemizedLayer<>(mMap, new ArrayList<MarkerItem>(), ms , this);
         mMap.layers().add(mMarkerLayer);
-        //mPrefs = new MapPreferences(MapFragment.class.getName(), getGpsFictionActivity());
         MapFileTileSource tileSource = new MapFileTileSource();
         tileSource.setPreferredLanguage(Locale.getDefault().getLanguage());
         File file = new File(mapsFolder, currentArea + ".map");
@@ -240,19 +240,20 @@ public class MapFragment extends MyTabFragment implements PlayerBearingListener,
         //mPrefs.load(mapView.map());
         mapView.onResume();
         registerAllZones();
-        getGpsFictionActivity().getMyLocationListener().addPlayerLocationListener(MyLocationListener.REGISTER.FRAGMENT, this);
-        getGpsFictionActivity().getMyLocationListener().addPlayerBearingListener(MyLocationListener.REGISTER.FRAGMENT, this);
-        getGpsFictionActivity().getGpsFictionData().addZoneSelectListener(GpsFictionData.REGISTER.FRAGMENT, this);
-        getGpsFictionActivity().getGpsFictionData().addZoneChangeListener(this);
+        getmMyLocationListener().addPlayerLocationListener(MyLocationListener.REGISTER.FRAGMENT, this);
+        getmMyLocationListener().addPlayerBearingListener(MyLocationListener.REGISTER.FRAGMENT, this);
+        getmGpsFictionData().addZoneSelectListener(GpsFictionData.REGISTER.FRAGMENT, this);
+        getmGpsFictionData().addZoneChangeListener(this);
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        getGpsFictionActivity().getMyLocationListener().removePlayerLocationListener(MyLocationListener.REGISTER.FRAGMENT, this);
-        getGpsFictionActivity().getMyLocationListener().removePlayerBearingListener(MyLocationListener.REGISTER.FRAGMENT, this);
-        getGpsFictionActivity().getGpsFictionData().removeZoneSelectListener(GpsFictionData.REGISTER.FRAGMENT, this);
-        getGpsFictionActivity().getGpsFictionData().removeZoneChangeListener(this);
+        if (mRouteGeoPointListAutoClean != null) mRouteGeoPointListAutoClean.destroy();
+        getmMyLocationListener().removePlayerLocationListener(MyLocationListener.REGISTER.FRAGMENT, this);
+        getmMyLocationListener().removePlayerBearingListener(MyLocationListener.REGISTER.FRAGMENT, this);
+        getmGpsFictionData().removeZoneSelectListener(GpsFictionData.REGISTER.FRAGMENT, this);
+        getmGpsFictionData().removeZoneChangeListener(this);
     }
 
     @Override
@@ -284,7 +285,7 @@ public class MapFragment extends MyTabFragment implements PlayerBearingListener,
 
     private void registerAllZones() {
         Zone zone=null;
-        Iterator<GpsFictionThing> itZone = this.getGpsFictionActivity().getGpsFictionData().getGpsFictionThing(Zone.class).iterator();
+        Iterator<GpsFictionThing> itZone = getmGpsFictionData().getGpsFictionThing(Zone.class).iterator();
         while (itZone.hasNext()) {
             zone = (Zone) itZone.next();
             onZoneChanged(zone);
@@ -414,7 +415,7 @@ public class MapFragment extends MyTabFragment implements PlayerBearingListener,
 
     private void createRouteGeoPointListAutoClean(GHResponse resp) {
         routePath = resp.getBest();
-        RouteGeoPointListAutoClean mRouteGeoPointListAutoClean = new RouteGeoPointListAutoClean(this);
+        mRouteGeoPointListAutoClean = new RouteGeoPointListAutoClean(this);
         // TODO Auto-generated method stub
     }
 
@@ -506,7 +507,7 @@ public class MapFragment extends MyTabFragment implements PlayerBearingListener,
         } else {
             setNextInstruction();
             //Toast.makeText(getGpsFictionActivity(), nextInstructionString, Toast.LENGTH_LONG).show();
-            getGpsFictionActivity().speak(nextInstructionString);
+            getmGpsFictionActivity().speak(nextInstructionString);
             //   TODO on s'ecarte du chemin...
 
 

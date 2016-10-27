@@ -29,7 +29,7 @@ public class RouteGeoPointListAutoClean implements PlayerLocationListener {
             listOfPoints.add(new GeoPoint(pl.toGHPoint(i).getLat(), pl.toGHPoint(i).getLon()));
         }
         fillRoutePathLayer();
-        mapFragment.getGpsFictionActivity().getMyLocationListener().addPlayerLocationListener(MyLocationListener.REGISTER.MARKER,this);
+        mapFragment.getmMyLocationListener().addPlayerLocationListener(MyLocationListener.REGISTER.MARKER,this);
     }
 
     public void fillRoutePathLayer () {
@@ -66,5 +66,8 @@ public class RouteGeoPointListAutoClean implements PlayerLocationListener {
             }
         }
 
+    }
+    public void destroy () {
+        mapFragment.getmMyLocationListener().removePlayerLocationListener(MyLocationListener.REGISTER.MARKER,this);
     }
 }

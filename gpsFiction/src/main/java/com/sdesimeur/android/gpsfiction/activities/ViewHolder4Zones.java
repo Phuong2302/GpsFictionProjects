@@ -17,7 +17,7 @@ public class ViewHolder4Zones implements ZoneSelectListener {
     //	private TextView directionOfZone;
     private MiniCompassView miniCompassView = null;
     private Zone attachedZone = null;
-    private GpsFictionActivity gpsFictionActivity = null;
+    private GpsFictionActivity mGpsFictionActivity = null;
     private Zone selectedZone = null;
 
 
@@ -27,7 +27,7 @@ public class ViewHolder4Zones implements ZoneSelectListener {
 
     private void updateZoneTitleView() {
         // TODO Auto-generated method stub
-        Resources res = this.gpsFictionActivity.getResources();
+        Resources res = mGpsFictionActivity.getResources();
         int titlebackgroundcolor = 0;
         if (this.selectedZone == this.attachedZone) {
             titlebackgroundcolor = res.getColor(R.color.tabnameofzoneselected);
@@ -53,13 +53,13 @@ public class ViewHolder4Zones implements ZoneSelectListener {
 
     public void init(GpsFictionActivity gpsFictionActivity, Zone attachedZone) {
         // TODO Auto-generated method stub
-        this.gpsFictionActivity = gpsFictionActivity;
+        mGpsFictionActivity = gpsFictionActivity;
         this.attachedZone = attachedZone;
         this.zoneTitleView.setText(this.attachedZone.getName());
         this.updateZoneTitleView();
-        this.gpsFictionActivity.getGpsFictionData().addZoneSelectListener(GpsFictionData.REGISTER.HOLDERVIEW, this);
-        this.miniCompassView.init(this.gpsFictionActivity, this.attachedZone);
-        this.distanceToZoneView.init(this.gpsFictionActivity, this.attachedZone);
+        mGpsFictionActivity.getmGpsFictionData().addZoneSelectListener(GpsFictionData.REGISTER.HOLDERVIEW, this);
+        this.miniCompassView.init(mGpsFictionActivity, this.attachedZone);
+        this.distanceToZoneView.init(mGpsFictionActivity, this.attachedZone);
     }
 
     @Override

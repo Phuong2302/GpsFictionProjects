@@ -15,7 +15,7 @@ import com.sdesimeur.android.gpsfiction.classes.ZoneSelectListener;
 
 public class ZoneDistance4CompassView extends TextView implements PlayerLocationListener, ZoneSelectListener {
 
-    private GpsFictionActivity gpsFictionActivity = null;
+    private GpsFictionActivity mGpsFictionActivity = null;
     private Zone selectedZone = null;
 
     public ZoneDistance4CompassView(Context context) {
@@ -32,9 +32,9 @@ public class ZoneDistance4CompassView extends TextView implements PlayerLocation
     }
 
     public void init(GpsFictionActivity gpsFictionActivity) {
-        this.gpsFictionActivity = gpsFictionActivity;
-        this.gpsFictionActivity.getMyLocationListener().addPlayerLocationListener(MyLocationListener.REGISTER.VIEW, this);
-        this.gpsFictionActivity.getGpsFictionData().addZoneSelectListener(GpsFictionData.REGISTER.VIEW, this);
+        mGpsFictionActivity = gpsFictionActivity;
+        mGpsFictionActivity.getmMyLocationListener().addPlayerLocationListener(MyLocationListener.REGISTER.VIEW, this);
+        mGpsFictionActivity.getmGpsFictionData().addZoneSelectListener(GpsFictionData.REGISTER.VIEW, this);
 //		this.gpsFictionActivity.getGpsFictionData().addZoneSelectListener(GpsFictionData.REGISTER.VIEW, this);
     }
 

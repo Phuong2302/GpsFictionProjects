@@ -11,7 +11,7 @@ import com.sdesimeur.android.gpsfiction.classes.Zone;
 import com.sdesimeur.android.gpsfiction.classes.ZoneSelectListener;
 
 public class ZoneNameView extends TextView implements ZoneSelectListener {
-    private GpsFictionActivity gpsFictionActivity = null;
+    private GpsFictionActivity mGpsFictionActivity = null;
     private Zone selectedZone = null;
 
     public ZoneNameView(Context context) {
@@ -28,8 +28,8 @@ public class ZoneNameView extends TextView implements ZoneSelectListener {
     }
 
     public void init(GpsFictionActivity gpsFictionActivity) {
-        this.gpsFictionActivity = gpsFictionActivity;
-        this.gpsFictionActivity.getGpsFictionData().addZoneSelectListener(GpsFictionData.REGISTER.VIEW, this);
+        mGpsFictionActivity = gpsFictionActivity;
+        mGpsFictionActivity.getmGpsFictionData().addZoneSelectListener(GpsFictionData.REGISTER.VIEW, this);
     }
 
     @Override

@@ -2,7 +2,7 @@ package com.sdesimeur.android.gpsfiction.missiondestruction;
 
 import android.os.Bundle;
 
-import com.sdesimeur.android.gpsfiction.activities.GpsFictionActivity;
+import com.sdesimeur.android.gpsfiction.classes.GpsFictionData;
 import com.sdesimeur.android.gpsfiction.classes.Zone;
 import com.sdesimeur.android.gpsfiction.geopoint.MyGeoPoint;
 
@@ -35,11 +35,11 @@ public abstract class ZoneAdverse extends Zone {
     }
 
     public MissionDestructionMainActivity getMainActivity() {
-        return (MissionDestructionMainActivity) this.getGpsFictionActivity();
+        return (MissionDestructionMainActivity) getmGpsFictionActivity();
     }
 
-    public void init(GpsFictionActivity gpsFictionActivity) {
-        super.init(gpsFictionActivity);
+    public void initnew(GpsFictionData gpsFictionData) {
+        super.init(gpsFictionData);
         this.findCenterAndSetShapeIfAllIsSet();
         this.validate();
     }
@@ -50,7 +50,7 @@ public abstract class ZoneAdverse extends Zone {
     }
 
     protected void findCenterAndSetShapeIfAllIsSet() {
-        if ((this.getGpsFictionActivity() != null) && (this.getId() != 0)) findCenterAndSetShape();
+        if ((getmGpsFictionData() != null) && (getId() != 0)) findCenterAndSetShape();
     }
 
     public void findCenterAndSetShape() {

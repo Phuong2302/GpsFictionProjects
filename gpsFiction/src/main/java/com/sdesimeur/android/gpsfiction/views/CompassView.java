@@ -46,7 +46,7 @@ public class CompassView extends View implements PlayerBearingListener, ZoneSele
     @SuppressWarnings("unused")
     private long mNextTime;
     private boolean firstTimePathsDefined = true;
-    private GpsFictionActivity gpsFictionActivity;
+    private GpsFictionActivity mGpsFictionActivity;
     public CompassView(Context context) {
         super(context);
         // TODO Auto-generated constructor stub
@@ -204,33 +204,17 @@ public class CompassView extends View implements PlayerBearingListener, ZoneSele
         canvas.restore();
     }
 
-    //public void register(GpsFictionActivity gpsFictionActivity) {
-    //	this.setGpsFictionActivity(gpsFictionActivity);
-    //	this.getGpsFictionActivity().getGpsFictionData().getMyLocationListener().addPlayerBearingListener(MyLocationListener.REGISTER.VIEW,this);
-    //	this.getGpsFictionActivity().getGpsFictionData().addZoneSelectListener(this);
-    //}
-    //public void onSizeChanged (int w, int h, int oldw, int oldh) {
-    //	super.onSizeChanged(w, h, oldw, oldh);
-    //	this.firstTimePathsDefined=true;
-    //	this.invalidate();
-    //}
     public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-        //int size = this.getSize();
         this.setMeasuredDimension(this.getSize(), this.getSize());
-        //int size =Math.min(this.getHeight(),this.getWidth());
-        //this.setMeasuredDimension(size, size);
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
-        //this.setBackgroundResource(R.color.backgroundcolorminicompass);
-        //canvas.drawColor(Color.WHITE);
         int tx = this.getSize() / 2;
         canvas.translate(tx, tx);
         canvas.rotate(-this.bearingOfPlayer);
         canvas.save();
-        //canvas.drawColor(this.getResources().getColor(R.color.backgroundcolorminicompass));
         if (this.firstTimePathsDefined) {
             this.setPathsAndSavedCanvas(canvas);
         }
@@ -251,20 +235,9 @@ public class CompassView extends View implements PlayerBearingListener, ZoneSele
         super.onDetachedFromWindow();
     }
 
-    //private Zone getZoneSelected() {
-    // TODO Auto-generated method stub
-    //	return this.getGpsFictionActivity().getGpsFictionData().getSelectedZone();
-    //}
-    //public void setGpsFictionActivity (GpsFictionActivity gpsFictionActivity) {
-    //	this.gpsFictionActivity = gpsFictionActivity;
-    //}
-    //public GpsFictionActivity getGpsFictionActivity () {
-    //	return this.gpsFictionActivity;
-    //}
     private int getSize() {
         int size = getResources().getDimensionPixelSize(R.dimen.compassSize);
         return size;
-        //return this.getHeight();
     }
 
     @Override
@@ -282,8 +255,8 @@ public class CompassView extends View implements PlayerBearingListener, ZoneSele
     }
 
     public void init(GpsFictionActivity gpsFictionActivity) {
-        this.gpsFictionActivity = gpsFictionActivity;
-        this.gpsFictionActivity.getMyLocationListener().addPlayerBearingListener(MyLocationListener.REGISTER.VIEW, this);
-        this.gpsFictionActivity.getGpsFictionData().addZoneSelectListener(GpsFictionData.REGISTER.VIEW, this);
+        mGpsFictionActivity = gpsFictionActivity;
+        mGpsFictionActivity.getmMyLocationListener().addPlayerBearingListener(MyLocationListener.REGISTER.VIEW, this);
+        mGpsFictionActivity.getmGpsFictionData().addZoneSelectListener(GpsFictionData.REGISTER.VIEW, this);
     }
 }

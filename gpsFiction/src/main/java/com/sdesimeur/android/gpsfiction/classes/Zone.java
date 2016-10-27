@@ -59,7 +59,7 @@ public class Zone extends Container implements ZoneEnterOrExitInterface, PlayerL
         Bundle dest = new Bundle();
         dest.putBundle("Parent", toPass);
         double[] coord = null;
-        boolean val = (this == getGpsFictionActivity().getGpsFictionData().getSelectedZone());
+        boolean val = (this == getmGpsFictionData().getSelectedZone());
         dest.putBoolean("selectedZone", val);
 //    	boolean val [] = { this.isSelectedZone , this.circularZone };
 //		dest.putBooleanArray("selectedZone_circularZone",val);
@@ -94,7 +94,7 @@ public class Zone extends Container implements ZoneEnterOrExitInterface, PlayerL
             this.shape.add(new MyGeoPoint(coord[0], coord[1]));
         }
         this.validate();
-        if (isSelectedZone) getGpsFictionActivity().getGpsFictionData().setSelectedZone(this);
+        if (isSelectedZone) getmGpsFictionData().setSelectedZone(this);
     }
 
     /*public boolean isThisZoneSelected() {
@@ -132,7 +132,7 @@ public class Zone extends Container implements ZoneEnterOrExitInterface, PlayerL
             wpt = it.next();
             shape.addMyGeoPoint(new MyGeoPoint(wpt));
         }
-        getGpsFictionActivity().getGpsFictionData().fireZoneChangeListener(this);
+        getmGpsFictionData().fireZoneChangeListener(this);
     }
 
     public void setShape(float latitude, float longitude, float radius) {
@@ -157,7 +157,7 @@ public class Zone extends Container implements ZoneEnterOrExitInterface, PlayerL
         for (int i = 0; i < nbDePas; i++) {
             shape.addMyGeoPoint(centerPoint.project((float) (i * 360) / nbDePas, radius));
         }
-        getGpsFictionActivity().getGpsFictionData().fireZoneChangeListener(this);
+        getmGpsFictionData().fireZoneChangeListener(this);
     }
 
     public MyGeoPoint getCenterPoint() {
@@ -190,7 +190,7 @@ public class Zone extends Container implements ZoneEnterOrExitInterface, PlayerL
     */
     public void setRadius(float radius) {
         this.radius = radius;
-        getGpsFictionActivity().getGpsFictionData().fireZoneChangeListener(this);
+        getmGpsFictionData().fireZoneChangeListener(this);
     }
 
     /*
@@ -227,14 +227,14 @@ public class Zone extends Container implements ZoneEnterOrExitInterface, PlayerL
         for (int i = 0; i < points.length; i++) {
             shape.addMyGeoPoint(new MyGeoPoint(points[i][0], points[i][1]));
         }
-        getGpsFictionActivity().getGpsFictionData().fireZoneChangeListener(this);
+        getmGpsFictionData().fireZoneChangeListener(this);
     }
 
     public String getStringDistance2Player() {
         float distance = distance2Player;
         String distanceText;
         if (playerIsInThisZone) {
-            distanceText = getGpsFictionActivity().getResources().getString(R.string.distanceNull);
+            distanceText = getmGpsFictionActivity().getResources().getString(R.string.distanceNull);
         } else if (distance >= 10) {
             distance = (float) ((Math.ceil(distance * 10)) / 10);
             distanceText = Float.toString(distance) + " km";
@@ -257,7 +257,7 @@ public class Zone extends Container implements ZoneEnterOrExitInterface, PlayerL
         // TODO Auto-generated method stub
         String directionText;
         if (playerIsInThisZone) {
-            directionText = this.getGpsFictionActivity().getResources().getString(R.string.noZoneBearing);
+            directionText = getmGpsFictionActivity().getResources().getString(R.string.noZoneBearing);
         } else {
             float direction = this.getAnglePlayer2Zone();
             directionText = Integer.toString((int) Math.round(direction)) + " °";
@@ -286,16 +286,16 @@ public class Zone extends Container implements ZoneEnterOrExitInterface, PlayerL
     public void validate() {
         super.validate();
        // getGpsFictionActivity().getGpsFictionData().addZoneSelectListener(GpsFictionData.REGISTER.ZONE, this);
-        getGpsFictionActivity().getMyLocationListener().addPlayerLocationListener(MyLocationListener.REGISTER.ZONE, this);
-        getGpsFictionActivity().getMyLocationListener().addPlayerBearingListener(MyLocationListener.REGISTER.ZONE, this);
-        getGpsFictionActivity().getGpsFictionData().fireZoneChangeListener(this);
+        getmMyLocationListener().addPlayerLocationListener(MyLocationListener.REGISTER.ZONE, this);
+        getmMyLocationListener().addPlayerBearingListener(MyLocationListener.REGISTER.ZONE, this);
+        getmGpsFictionData().fireZoneChangeListener(this);
     }
 
 
 
     public void setVisible(boolean visible) {
         super.setVisible(visible);
-        getGpsFictionActivity().getGpsFictionData().fireZoneChangeListener(this);
+        getmGpsFictionData().fireZoneChangeListener(this);
     }
 
     @Override
@@ -311,7 +311,7 @@ public class Zone extends Container implements ZoneEnterOrExitInterface, PlayerL
     }
 
     public boolean isSelectedZone() {
-        return (this == getGpsFictionActivity().getGpsFictionData().getSelectedZone());
+        return (this == getmGpsFictionData().getSelectedZone());
     }
 
     @Override

@@ -21,7 +21,7 @@ import java.util.Iterator;
 
 
 public class MyDialogFragment extends DialogFragment {
-    private GpsFictionActivity gpsFictionActivity = null;
+    private GpsFictionActivity mGpsFictionActivity = null;
     private ArrayList<Integer> buttonsListIds = new ArrayList<Integer>();
     private int titleId = 0;
     private int textId = 0;
@@ -43,11 +43,11 @@ public class MyDialogFragment extends DialogFragment {
     }
 
     public void init(GpsFictionActivity gpsFictionActivity, int titleId, int textId) {
-        this.gpsFictionActivity = gpsFictionActivity;
+        mGpsFictionActivity = gpsFictionActivity;
         this.titleId = titleId;
         this.textId = textId;
         this.buttonsListIds.clear();
-        this.gpsFictionActivity.dialogFragments.add(this);
+        mGpsFictionActivity.dialogFragments.add(this);
     }
 
     @Override
@@ -102,14 +102,14 @@ public class MyDialogFragment extends DialogFragment {
     }
 
     private void returnButton(int buttonId) {
-        this.gpsFictionActivity.getReponseFromMyDialogFragment(titleId, (Integer) (buttonId));
+        mGpsFictionActivity.getReponseFromMyDialogFragment(titleId, (Integer) (buttonId));
         this.dismiss();
         //this.dismissAllowingStateLoss();
     }
 
     @Override
     public void onDetach() {
-        this.gpsFictionActivity.dialogFragments.remove(this);
+        mGpsFictionActivity.dialogFragments.remove(this);
         super.onDetach();
     }
 

@@ -45,7 +45,7 @@ public class TasksFragment extends MyTabFragment {
                              Bundle savedInstanceState) {
         this.setRootView(inflater.inflate(R.layout.tasks_view, container, false));
         listTitles = (ListView) this.getRootView().findViewById(R.id.listTasks);
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this.getGpsFictionActivity(), android.R.layout.simple_list_item_1, createMainList());
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getmGpsFictionActivity(), android.R.layout.simple_list_item_1, createMainList());
         listTitles.setAdapter(adapter);
         return this.getRootView();
     }

@@ -25,7 +25,8 @@ public class GpsFictionData {
     private Zone selectedZone = null;
     private int rules;
     private int title;
-    private GpsFictionActivity gpsFictionActivity = null;
+    private GpsFictionActivity mGpsFictionActivity = null;
+    private MyLocationListener mMyLocationListener = null;
     private HashMap<GpsFictionData.REGISTER, HashSet<ZoneSelectListener>> zoneSelectListener = new HashMap<>();
     private HashSet<GpsFictionThing> gpsFictionThings = new HashSet<>();
     private HashSet<ZoneChangeListener> zoneChangeListener = new HashSet<> ();
@@ -117,7 +118,7 @@ public class GpsFictionData {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
             }
-            gft.init(this.gpsFictionActivity);
+            gft.init(this);
             toPass = in.getBundle("PassAsBundle" + index);
             gft.setByBundle(toPass);
             index++;
@@ -174,7 +175,7 @@ public class GpsFictionData {
 
     public void init() {
         this.inventory = new Item();
-        this.inventory.init(this.gpsFictionActivity);
+        this.inventory.init(this);
         this.inventory.setId(R.string.inventory);
     }
 
@@ -265,12 +266,18 @@ public class GpsFictionData {
         }
     }
 
-    public GpsFictionActivity getGpsFictionActivity() {
-        return this.gpsFictionActivity;
+    public GpsFictionActivity getmGpsFictionActivity() {
+        return mGpsFictionActivity;
     }
 
-    public void setGpsFictionActivity(GpsFictionActivity gpsFictionActivity) {
-        this.gpsFictionActivity = gpsFictionActivity;
+
+    public MyLocationListener getmMyLocationListener() {
+        return mMyLocationListener;
+    }
+
+    public void setmGpsFictionActivity(GpsFictionActivity gpsFictionActivity) {
+        mGpsFictionActivity = gpsFictionActivity;
+        mMyLocationListener = mGpsFictionActivity.getmMyLocationListener();
     }
 /*
 	public String getName() {

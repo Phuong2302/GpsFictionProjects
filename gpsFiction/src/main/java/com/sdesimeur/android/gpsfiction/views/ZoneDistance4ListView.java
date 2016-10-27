@@ -12,7 +12,7 @@ import com.sdesimeur.android.gpsfiction.classes.Zone;
 
 public class ZoneDistance4ListView extends TextView implements PlayerLocationListener {
 
-    private GpsFictionActivity gpsFictionActivity = null;
+    private GpsFictionActivity mGpsFictionActivity = null;
     private Zone attachedZone = null;
 
     public ZoneDistance4ListView(Context context) {
@@ -29,9 +29,9 @@ public class ZoneDistance4ListView extends TextView implements PlayerLocationLis
     }
 
     public void init(GpsFictionActivity gpsFictionActivity, Zone zone) {
-        this.gpsFictionActivity = gpsFictionActivity;
+        mGpsFictionActivity = gpsFictionActivity;
         this.attachedZone = zone;
-        this.gpsFictionActivity.getMyLocationListener().addPlayerLocationListener(MyLocationListener.REGISTER.VIEW, this);
+        mGpsFictionActivity.getmMyLocationListener().addPlayerLocationListener(MyLocationListener.REGISTER.VIEW, this);
 //		this.gpsFictionActivity.getGpsFictionData().addZoneSelectListener(GpsFictionData.REGISTER.VIEW, this);
     }
 

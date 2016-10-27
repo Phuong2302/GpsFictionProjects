@@ -14,6 +14,7 @@ import com.sdesimeur.android.gpsfiction.classes.PlayerBearingEvent;
 import com.sdesimeur.android.gpsfiction.classes.PlayerBearingListener;
 import com.sdesimeur.android.gpsfiction.classes.Zone;
 
+
 public class MiniCompassView extends View implements PlayerBearingListener {
     private Paint arrowPaint = new Paint();
     private Path arrowPathCompass = null;
@@ -22,7 +23,7 @@ public class MiniCompassView extends View implements PlayerBearingListener {
     private boolean mAnimate;
     private long mNextTime;
     private Zone attachedZone;
-    private GpsFictionActivity gpsFictionActivity;
+    private GpsFictionActivity mGpsFictionActivity;
 
     public MiniCompassView(Context context) {
         super(context);
@@ -62,9 +63,9 @@ public class MiniCompassView extends View implements PlayerBearingListener {
     }
 
     public void init(GpsFictionActivity gpsFictionActivity, Zone zone) {
-        this.gpsFictionActivity = gpsFictionActivity;
+        mGpsFictionActivity = gpsFictionActivity;
         this.attachedZone = zone;
-        this.gpsFictionActivity.getMyLocationListener().addPlayerBearingListener(MyLocationListener.REGISTER.VIEW, this);
+        mGpsFictionActivity.getmMyLocationListener().addPlayerBearingListener(MyLocationListener.REGISTER.VIEW, this);
         this.invalidate();
     }
 

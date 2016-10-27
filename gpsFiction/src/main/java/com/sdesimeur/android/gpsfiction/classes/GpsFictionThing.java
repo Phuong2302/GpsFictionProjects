@@ -8,7 +8,7 @@ import com.sdesimeur.android.gpsfiction.activities.GpsFictionActivity;
 
 
 public class GpsFictionThing {
-    private GpsFictionActivity gpsFictionActivity = null;
+    private GpsFictionData mGpsFictionData = null;
     private int[] valint = new int[]{
             0,
             0,
@@ -36,9 +36,9 @@ public class GpsFictionThing {
         this.valint = in.getIntArray("ValInt");
     }
 
-    public void init(GpsFictionActivity gpsFictionActivity) {
-        this.gpsFictionActivity = gpsFictionActivity;
-        this.getGpsFictionActivity().getGpsFictionData().addGpsFictionThing(this);
+    public void init(GpsFictionData gpsFictionData) {
+        mGpsFictionData = gpsFictionData;
+        mGpsFictionData.addGpsFictionThing(this);
     }
 
     public void setAttrs(boolean visible, boolean active) {
@@ -157,17 +157,18 @@ public class GpsFictionThing {
     }
 
     public Resources getResources() {
-        return this.getGpsFictionActivity().getResources();
+        return getmGpsFictionActivity().getResources();
     }
 
-    public GpsFictionActivity getGpsFictionActivity() {
-        return this.gpsFictionActivity;
+    public GpsFictionData getmGpsFictionData() {
+        return this.mGpsFictionData;
     }
-
-    public void setGpsFictionActivity(GpsFictionActivity gpsFictionActivity) {
-        this.gpsFictionActivity = gpsFictionActivity;
+    public GpsFictionActivity getmGpsFictionActivity() {
+        return mGpsFictionData.getmGpsFictionActivity();
     }
-
+    public MyLocationListener getmMyLocationListener () {
+        return mGpsFictionData.getmMyLocationListener();
+    }
     public int getIconId() {
         return this.valint[VALINT.iconId];
     }

@@ -43,10 +43,19 @@ import java.util.Locale;
 
 public class GpsFictionActivity extends Activity implements TextToSpeech.OnInitListener {
     private static final String TAGFONT = "FONT";
-    protected GpsFictionData gpsFictionData = null;
+
+    public GpsFictionData getmGpsFictionData() {
+        return mGpsFictionData;
+    }
+
+    public void setmGpsFictionData(GpsFictionData mGpsFictionData) {
+        this.mGpsFictionData = mGpsFictionData;
+    }
+
+    protected GpsFictionData mGpsFictionData = null;
     protected FragmentManager fragmentManager;
     protected HashSet<MyDialogFragment> dialogFragments = new HashSet<>();
-    private MyLocationListener myLocationListener = null;
+    private MyLocationListener mMyLocationListener = null;
     private NavigationView navigationView;
     private DrawerLayout drawerLayout;
     private HashMap<Integer, MyTabFragmentImpl> menuItem2Fragments;
@@ -71,11 +80,11 @@ public class GpsFictionActivity extends Activity implements TextToSpeech.OnInitL
                     }
                     mTts.setSpeechRate(1); // 1 est la valeur par défaut. Une valeur inférieure rendra l'énonciation plus lente, une valeur supérieure la rendra plus rapide.
                     mTts.setPitch(1); // 1 est la valeur par défaut. Une valeur inférieure rendra l'énonciation plus grave, une valeur supérieure la rendra plus aigue.
-		        } else {
+		        //} else {
 		            // Echec, aucun moteur n'a été trouvé, on propose à l'utilisateur d'en installer un depuis le Market
-		            Intent installIntent = new Intent();
-		            installIntent.setAction(TextToSpeech.Engine.ACTION_INSTALL_TTS_DATA);
-		            startActivity(installIntent);
+		        //    Intent installIntent = new Intent();
+		        //    installIntent.setAction(TextToSpeech.Engine.ACTION_INSTALL_TTS_DATA);
+		        //    startActivity(installIntent);
 		        }
     		}
     	}
@@ -110,7 +119,7 @@ public class GpsFictionActivity extends Activity implements TextToSpeech.OnInitL
     public void setFragmentInContainer() {
         FragmentTransaction fragTransaction = fragmentManager.beginTransaction();
         MyTabFragmentImpl mtf = menuItem2Fragments.get(selectedFragmentId);
-        mtf.register(this);
+        mtf.register(mGpsFictionData);
         fragTransaction.replace(R.id.container, (Fragment)mtf);
         fragTransaction.commit();
         //	navigationView.getMenu().findItem(selectedFragmentId).setChecked(true);
@@ -119,19 +128,15 @@ public class GpsFictionActivity extends Activity implements TextToSpeech.OnInitL
     public void getReponseFromMyDialogFragment(int why, int reponse) {
         if (why == R.string.dialogCloseTaskTitle) {
             if (reponse == R.string.dialogButtonNo) {
-                this.gpsFictionData.toSave = false;
+                mGpsFictionData.toSave = false;
                 this.finish();
             }
         }
     }
 
-    public MyLocationListener getMyLocationListener() {
+    public MyLocationListener getmMyLocationListener() {
         // TODO Auto-generated method stub
-        return this.myLocationListener;
-    }
-
-    public GpsFictionData getGpsFictionData() {
-        return gpsFictionData;
+        return mMyLocationListener;
     }
 
     public void setResourcedZones(int gpxRes) {
@@ -149,7 +154,7 @@ public class GpsFictionActivity extends Activity implements TextToSpeech.OnInitL
                 String name = "zone" + tr.getName();
                 int res = getResources().getIdentifier(name, "string", getPackageName());
                 zn = new Zone();
-                zn.init(this);
+                zn.init(mGpsFictionData);
                 zn.setId(res);
                 zn.setShape(wpts);
             }
@@ -230,22 +235,22 @@ public class GpsFictionActivity extends Activity implements TextToSpeech.OnInitL
         //this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         testTTS();
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        if (this.myLocationListener == null) this.myLocationListener = new MyLocationListener();
-        this.myLocationListener.init(this);
-        if (this.gpsFictionData == null) {
-            this.gpsFictionData = new GpsFictionData();
-            this.gpsFictionData.setGpsFictionActivity(this);
+        if (mMyLocationListener == null) mMyLocationListener = new MyLocationListener();
+        mMyLocationListener.init(this);
+        if (mGpsFictionData == null) {
+            mGpsFictionData = new GpsFictionData();
+            mGpsFictionData.setmGpsFictionActivity(this);
         }
         if (savedInstanceState != null) {
             Bundle toPass = savedInstanceState.getBundle("GpsFictionData");
-            this.gpsFictionData.setByBundle(toPass);
+            mGpsFictionData.setByBundle(toPass);
             toPass = savedInstanceState.getBundle("MyLocationListener");
-            this.myLocationListener.setByBundle(toPass);
-            this.myLocationListener.firePlayerLocationListener();
-            this.myLocationListener.firePlayerBearingListener();
+            mMyLocationListener.setByBundle(toPass);
+            mMyLocationListener.firePlayerLocationListener();
+            mMyLocationListener.firePlayerBearingListener();
             selectedFragmentId = savedInstanceState.getInt("lastSelectedFragmentId",R.id.Zones);
         } else {
-            this.gpsFictionData.init();
+            mGpsFictionData.init();
         }
         super.onCreate(savedInstanceState);
         this.setContentView(R.layout.main_view);
@@ -299,10 +304,10 @@ public class GpsFictionActivity extends Activity implements TextToSpeech.OnInitL
 
     @Override
     protected void onSaveInstanceState(Bundle savedInstanceState) {
-        if (gpsFictionData.toSave) {
-            Bundle toPass = this.gpsFictionData.getByBundle();
+        if (mGpsFictionData.toSave) {
+            Bundle toPass = mGpsFictionData.getByBundle();
             savedInstanceState.putBundle("GpsFictionData", toPass);
-            toPass = this.myLocationListener.getByBundle();
+            toPass = mMyLocationListener.getByBundle();
             savedInstanceState.putBundle("MyLocationListener", toPass);
             savedInstanceState.putInt("lastSelectedFragmentId", selectedFragmentId);
         }
@@ -316,7 +321,7 @@ public class GpsFictionActivity extends Activity implements TextToSpeech.OnInitL
 
     @Override
     public void onDestroy() {
-        mTts.shutdown();
+        if (mTts != null) mTts.shutdown();
         mTtsOK=false;
         super.onDestroy();
     }
@@ -328,7 +333,7 @@ public class GpsFictionActivity extends Activity implements TextToSpeech.OnInitL
     public void speak (String txt) {
         if (mTtsOK) {
             //String utteranceId=this.hashCode() + "";
-            mTts.speak(txt, TextToSpeech.QUEUE_FLUSH, null);
+            if (!mTts.isSpeaking()) mTts.speak(txt, TextToSpeech.QUEUE_FLUSH, null);
         }
     }
 }

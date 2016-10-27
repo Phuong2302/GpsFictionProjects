@@ -171,13 +171,13 @@ public abstract class WithDebug {
 
     public final static void afficheObjectPlayerLocationListener(GpsFictionActivity gpsFictionActivity, MyLocationListener.REGISTER register) {
         // TODO Auto-generated method stub
-        if (gpsFictionActivity.getMyLocationListener() == null) {
+        if (gpsFictionActivity.getmMyLocationListener() == null) {
             //Debug.myLog("afficheObjectPlayerLocationListener", "pas de myLocationListener");
         } else {
-            if (gpsFictionActivity.getMyLocationListener().getPlayerLocationListener(register) == null) {
+            if (gpsFictionActivity.getmMyLocationListener().getPlayerLocationListener(register) == null) {
                 //Debug.myLog("afficheObjectPlayerLocationListener", "pas de getPlayerLocationListener");
             } else {
-                HashSet<PlayerLocationListener> playerLocationListener = gpsFictionActivity.getMyLocationListener().getPlayerLocationListener(register);
+                HashSet<PlayerLocationListener> playerLocationListener = gpsFictionActivity.getmMyLocationListener().getPlayerLocationListener(register);
                 Iterator<PlayerLocationListener> it = playerLocationListener.iterator();
                 while (it.hasNext()) {
                     PlayerLocationListener gft = it.next();

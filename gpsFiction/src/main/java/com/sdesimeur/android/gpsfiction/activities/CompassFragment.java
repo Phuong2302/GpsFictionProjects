@@ -10,6 +10,7 @@ import com.sdesimeur.android.gpsfiction.views.CompassView;
 import com.sdesimeur.android.gpsfiction.views.ZoneDistance4CompassView;
 import com.sdesimeur.android.gpsfiction.views.ZoneNameView;
 
+
 @SuppressWarnings("unused")
 public class CompassFragment extends MyTabFragment {
     private ZoneDistance4CompassView textviewDistance = null;
@@ -29,12 +30,12 @@ public class CompassFragment extends MyTabFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         this.setRootView(inflater.inflate(R.layout.compass_view, container, false));
         this.textviewName = (ZoneNameView) (this.getRootView().findViewById(R.id.textNameOfZone));
-        this.textviewName.init(this.getGpsFictionActivity());
+        this.textviewName.init(getmGpsFictionActivity());
         this.textviewDistance = (ZoneDistance4CompassView) (this.getRootView().findViewById(R.id.textDistance));
-        this.textviewDistance.init(this.getGpsFictionActivity());
+        this.textviewDistance.init(getmGpsFictionActivity());
         this.compassView = (CompassView) (this.getRootView().findViewById(R.id.compassDirection));
-        this.compassView.init(this.getGpsFictionActivity());
-        this.compassView.setTypeface(this.getGpsFictionActivity().getFontFromRes(R.raw.font_dancing));
+        this.compassView.init(getmGpsFictionActivity());
+        this.compassView.setTypeface(getmGpsFictionActivity().getFontFromRes(R.raw.font_dancing));
         return this.getRootView();
     }
 
