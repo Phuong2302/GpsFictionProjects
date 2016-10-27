@@ -316,6 +316,10 @@ public class GpsFictionData {
             for (ZoneChangeListener listener : this.zoneChangeListener) {
                 listener.onZoneChanged(zn);
             }
+        if (zn.isSelectedZone()) {
+            selectedZone = null;
+            fireZoneSelectListener();
+        }
     }
 
 }

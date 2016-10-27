@@ -6,6 +6,7 @@ import android.os.Bundle;
 import com.sdesimeur.android.gpsfiction.R;
 import com.sdesimeur.android.gpsfiction.geopoint.MyGeoPoint;
 import com.sdesimeur.android.gpsfiction.gpx.beans.Waypoint;
+import com.sdesimeur.android.gpsfiction.helpers.DistanceToTextHelper;
 import com.sdesimeur.android.gpsfiction.polygon.MyPolygon;
 
 import org.oscim.layers.PathLayer;
@@ -21,7 +22,7 @@ public class Zone extends Container implements ZoneEnterOrExitInterface, PlayerL
     private final static int NB_MIN_DE_COTES = 8;
     private final boolean transportable = false;
     private MyGeoPoint nearestPoint2Player = new MyGeoPoint(0,0);
-    private float distance2Player = 0;
+    private DistanceToTextHelper distance2Player = new DistanceToTextHelper(0);
     private float bearingPlayer = 0;
     private float bearing2Zone = 0;
     private float anglePlayer2Zone = 0;
@@ -109,13 +110,13 @@ public class Zone extends Container implements ZoneEnterOrExitInterface, PlayerL
     }
 
     private void setNearestPoint2Player(PlayerLocationEvent playerLocationEvent) {
-        this.nearestPoint2Player = this.shape.pointDistanceMin(playerLocationEvent.getLocationOfPlayer());
-        this.distance2Player = this.nearestPoint2Player.distanceTo(playerLocationEvent.getLocationOfPlayer());
-        this.bearing2Zone = playerLocationEvent.getLocationOfPlayer().bearingTo(this.nearestPoint2Player);
+        nearestPoint2Player = this.shape.pointDistanceMin(playerLocationEvent.getLocationOfPlayer());
+        distance2Player.setDistanceInKM(this.nearestPoint2Player.distanceTo(playerLocationEvent.getLocationOfPlayer()));
+        bearing2Zone = playerLocationEvent.getLocationOfPlayer().bearingTo(this.nearestPoint2Player);
     }
 
     public float getDistance2Player() {
-        return (this.distance2Player);
+        return (this.distance2Player.getDistanceInKM());
     }
 
     public float getBearing2Zone() {
@@ -231,26 +232,11 @@ public class Zone extends Container implements ZoneEnterOrExitInterface, PlayerL
     }
 
     public String getStringDistance2Player() {
-        float distance = distance2Player;
-        String distanceText;
         if (playerIsInThisZone) {
-            distanceText = getmGpsFictionActivity().getResources().getString(R.string.distanceNull);
-        } else if (distance >= 10) {
-            distance = (float) ((Math.ceil(distance * 10)) / 10);
-            distanceText = Float.toString(distance) + " km";
-        } else if ((distance >= 0.800) && (distance < 10)) {
-            distance = (float) ((Math.ceil(distance * 100)) / 100);
-            distanceText = Float.toString(distance) + " km";
-        } else if ((distance >= 0.060) && (distance < 0.800)) {
-            distance = (float) Math.ceil(distance * 1000);
-            distanceText = Float.toString(distance) + " m";
+            return getmGpsFictionActivity().getResources().getString(R.string.distanceNull);
         } else {
-            distance = (float) (Math.ceil(distance * 10000) / 10);
-            distanceText = Float.toString(distance) + " m";
+            return distance2Player.getDistanceInText();
         }
-
-//		distanceText = Float.toString(distance) + " km"; 
-        return distanceText.replaceFirst("[\\.,]00* ", " ");
     }
 
     public String getStringBearing2Go() {

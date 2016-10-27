@@ -54,6 +54,6 @@
     <string name="titleItems">Les Objets.</string>
     <string name="titleMap">La carte.</string>
     <string name="titleTasks">Ce que vous avez à faire.</string>
-    <string name="titleZones">Zone du jeu.</string>
+    <string name="titleZones">Zones du jeu.</string>
     <string name="title_activity_gps_fiction_main">GPS Fiction</string>
 </resources>

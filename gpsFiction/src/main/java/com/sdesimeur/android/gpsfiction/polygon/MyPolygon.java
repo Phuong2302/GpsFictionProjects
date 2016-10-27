@@ -6,11 +6,12 @@ import com.sdesimeur.android.gpsfiction.math.Vector;
 import org.oscim.core.GeoPoint;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 
-@SuppressWarnings("serial")
-public class MyPolygon extends ArrayList<MyGeoPoint> {
+public class MyPolygon extends LinkedList<MyGeoPoint> {
 
     //private static final int BIG_VALUE = 400000000;
     public MyPolygon() {
@@ -27,7 +28,7 @@ public class MyPolygon extends ArrayList<MyGeoPoint> {
 
     public List<GeoPoint> getAllGeoPoints () {
         Iterator<MyGeoPoint> it = this.iterator();
-        List <GeoPoint> res = new ArrayList<>();
+        List <GeoPoint> res = new LinkedList<>();
         while (it.hasNext())
             res.add(it.next());
         return res;
@@ -321,4 +322,5 @@ public class MyPolygon extends ArrayList<MyGeoPoint> {
         }
         return pTemp;
     }
+
 } // class Polygon

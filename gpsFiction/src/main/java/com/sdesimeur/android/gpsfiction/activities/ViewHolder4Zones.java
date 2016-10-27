@@ -4,7 +4,6 @@ import android.content.res.Resources;
 import android.widget.TextView;
 
 import com.sdesimeur.android.gpsfiction.R;
-import com.sdesimeur.android.gpsfiction.activities.GpsFictionActivity;
 import com.sdesimeur.android.gpsfiction.classes.GpsFictionData;
 import com.sdesimeur.android.gpsfiction.classes.Zone;
 import com.sdesimeur.android.gpsfiction.classes.ZoneSelectListener;
@@ -17,7 +16,7 @@ public class ViewHolder4Zones implements ZoneSelectListener {
     //	private TextView directionOfZone;
     private MiniCompassView miniCompassView = null;
     private Zone attachedZone = null;
-    private GpsFictionActivity mGpsFictionActivity = null;
+    private GpsFictionData mGpsFictionData = null;
     private Zone selectedZone = null;
 
 
@@ -27,7 +26,7 @@ public class ViewHolder4Zones implements ZoneSelectListener {
 
     private void updateZoneTitleView() {
         // TODO Auto-generated method stub
-        Resources res = mGpsFictionActivity.getResources();
+        Resources res = mGpsFictionData.getmGpsFictionActivity().getResources();
         int titlebackgroundcolor = 0;
         if (this.selectedZone == this.attachedZone) {
             titlebackgroundcolor = res.getColor(R.color.tabnameofzoneselected);
@@ -51,15 +50,15 @@ public class ViewHolder4Zones implements ZoneSelectListener {
         this.miniCompassView = miniCompassView;
     }
 
-    public void init(GpsFictionActivity gpsFictionActivity, Zone attachedZone) {
+    public void init(GpsFictionData gpsFictionData, Zone attachedZone) {
         // TODO Auto-generated method stub
-        mGpsFictionActivity = gpsFictionActivity;
+        mGpsFictionData = gpsFictionData;
         this.attachedZone = attachedZone;
         this.zoneTitleView.setText(this.attachedZone.getName());
         this.updateZoneTitleView();
-        mGpsFictionActivity.getmGpsFictionData().addZoneSelectListener(GpsFictionData.REGISTER.HOLDERVIEW, this);
-        this.miniCompassView.init(mGpsFictionActivity, this.attachedZone);
-        this.distanceToZoneView.init(mGpsFictionActivity, this.attachedZone);
+        mGpsFictionData.addZoneSelectListener(GpsFictionData.REGISTER.HOLDERVIEW, this);
+        this.miniCompassView.init(mGpsFictionData, this.attachedZone);
+        this.distanceToZoneView.init(mGpsFictionData, this.attachedZone);
     }
 
     @Override

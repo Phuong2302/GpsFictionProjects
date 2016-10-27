@@ -157,6 +157,7 @@ public class GpsFictionActivity extends Activity implements TextToSpeech.OnInitL
                 zn.init(mGpsFictionData);
                 zn.setId(res);
                 zn.setShape(wpts);
+                zn.validate();
             }
         } catch (Exception e) {
             e.printStackTrace();

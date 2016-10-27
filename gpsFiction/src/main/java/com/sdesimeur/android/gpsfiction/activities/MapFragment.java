@@ -2,11 +2,8 @@ package com.sdesimeur.android.gpsfiction.activities;
 
 
 import android.content.res.TypedArray;
-import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Path;
-import android.graphics.drawable.Drawable;
-import android.graphics.drawable.LayerDrawable;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -47,6 +44,7 @@ import com.sdesimeur.android.gpsfiction.classes.ZoneChangeListener;
 import com.sdesimeur.android.gpsfiction.classes.ZoneSelectListener;
 import com.sdesimeur.android.gpsfiction.classes.ZoneViewHelper;
 import com.sdesimeur.android.gpsfiction.geopoint.MyGeoPoint;
+import com.sdesimeur.android.gpsfiction.utils.MyDrawable;
 
 import org.oscim.android.MapView;
 import org.oscim.backend.canvas.Paint;
@@ -108,7 +106,7 @@ public class MapFragment extends MyTabFragment implements PlayerBearingListener,
     private MarkerSymbol playerMarkerSymbol = null;
     private HashMap<Zone,ZoneViewHelper> zoneViewHelperHashMap = null;
     private ItemizedLayer<MarkerItem> mMarkerLayer=null;
-    private Drawable playerDrawable = null;
+    private MyDrawable playerDrawable = null;
     private PathLayer routePathLayer = null;
     private PathWrapper routePath = null;
     private Translation mTranslation = null;
@@ -192,7 +190,7 @@ public class MapFragment extends MyTabFragment implements PlayerBearingListener,
         mapView=(MapView) this.getRootView().findViewById(R.id.mapView);
         mMap = mapView.map();
         zoneViewHelperHashMap = new HashMap<>();
-        playerDrawable = getDrawable(getActivity(),R.drawable.player_marker);
+        playerDrawable = new MyDrawable(getDrawable(getActivity(),R.drawable.player_marker));
 //        playerRotateDrawable = (RotateDrawable) getResources().getDrawable(R.drawable.playerrotatemarker);
 //        playerBitmap = BitmapFactory.decodeResource(getResources(),R.drawable.player_marker);
         MarkerSymbol ms = new MarkerSymbol(drawableToBitmap(getResources(),R.drawable.transparent), HotspotPlace.CENTER);
@@ -272,14 +270,11 @@ public class MapFragment extends MyTabFragment implements PlayerBearingListener,
 
     @Override
     public void onDetach() {
-    //    hopper.clean();
-    //    hopper.close();
         hopper = null;
         mMarkerLayer = null;
         zoneViewHelperHashMap = null;
         playerMarkerItem = null;
         routePathLayer = null;
-        //System.gc();
         super.onDetach();
     }
 
@@ -384,16 +379,11 @@ public class MapFragment extends MyTabFragment implements PlayerBearingListener,
 
     private void addViewGroupForMapDirection(ViewGroup vg) {
         ImageView v = (ImageView) vg.findViewById(R.id.forMapDirectionButtons);
-        //ImageView img = new ImageView(getActivity());
-        //int pad = getResources().getDimensionPixelSize(R.dimen.buttonsVehiculesPadding);
-        //img.setPadding(pad, pad, pad, pad);
         v.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
             }
         });
-        //img.setImageDrawable(getDrawable(getActivity(),R.drawable.compass));
-        //l.addView(img);
         //RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
         //lp.addRule(RelativeLayout.ALIGN_LEFT | RelativeLayout.ALIGN_BOTTOM);
     }
@@ -416,10 +406,10 @@ public class MapFragment extends MyTabFragment implements PlayerBearingListener,
     private void createRouteGeoPointListAutoClean(GHResponse resp) {
         routePath = resp.getBest();
         mRouteGeoPointListAutoClean = new RouteGeoPointListAutoClean(this);
-        // TODO Auto-generated method stub
     }
 
     public void calcRoutePath() {
+        routePath = null;
         final double fromLat = getPlayerLocation().getLatitude();
         final double fromLon = getPlayerLocation().getLongitude();
         final double toLat = getSelectedZone().getCenterPoint().getLatitude();
@@ -459,11 +449,17 @@ public class MapFragment extends MyTabFragment implements PlayerBearingListener,
         routePathLayer.setPoints(listOfPoints);
     }
     private void calcPath() {
-        if ((getPlayerLocation() != null) && (getSelectedZone() != null))
-        if (getVehiculeSelectedId() == R.drawable.compass) {
-            calcLinePath();
+        if ((getPlayerLocation() != null) && (getSelectedZone() != null)) {
+            if (getVehiculeSelectedId() == R.drawable.compass) {
+                calcLinePath();
+            } else {
+                if (! (shortestPathRunning)) calcRoutePath();
+            }
         } else {
-            if (! (shortestPathRunning)) calcRoutePath();
+            if (mRouteGeoPointListAutoClean!=null) mRouteGeoPointListAutoClean.destroy();
+            mRouteGeoPointListAutoClean=null;
+            routePath=null;
+            if (routePathLayer!=null) routePathLayer.clearPath();
         }
     }
 
@@ -473,27 +469,20 @@ public class MapFragment extends MyTabFragment implements PlayerBearingListener,
 
     @Override
     public void onZoneSelectChanged(Zone sZn) {
-        // TODO Auto-generated method stub
         calcPath();
     }
     @Override
     public void onLocationPlayerChanged(PlayerLocationEvent playerLocationEvent) {
-        // TODO Auto-generated method stub
         if (getPlayerLocation() != null) {
             if (playerMarkerItem != null) {
-//                mMarkerLayer.removeItem(playerMarkerItem);
                 playerMarkerItem.geoPoint=getPlayerLocation();
             } else {
                 playerMarkerItem = new MarkerItem("Player", "", getPlayerLocation());
-                playerMarkerSymbol = new MarkerSymbol(drawableToBitmap(playerDrawable), HotspotPlace.CENTER, false);
+                playerMarkerSymbol = new MarkerSymbol(drawableToBitmap(playerDrawable.getmDrawable()), HotspotPlace.CENTER, false);
                 playerMarkerItem.setMarker(playerMarkerSymbol);
                 mMarkerLayer.addItem(playerMarkerItem);
             }
             mMarkerLayer.populate();
-//            this.playerMarkerItem = new PlayerRotatingMarker(this.playerLocation, getResources(), R.drawable.player_marker);
-                //this.playerMarker = new PlayerRotatingMarker  (playerPosition);
-                //this.playerMarker.setResource(getResources(), R.drawable.player_marker);
-                //this.playerMarker.register(this.getGpsFictionActivity());
             MapPosition pos = mMap.getMapPosition();
             pos.setPosition(getPlayerLocation());
             mMap.setMapPosition(pos);
@@ -508,11 +497,6 @@ public class MapFragment extends MyTabFragment implements PlayerBearingListener,
             setNextInstruction();
             //Toast.makeText(getGpsFictionActivity(), nextInstructionString, Toast.LENGTH_LONG).show();
             getmGpsFictionActivity().speak(nextInstructionString);
-            //   TODO on s'ecarte du chemin...
-
-
-            // On reste sur le chemin
-
         }
     }
 
@@ -553,7 +537,6 @@ public class MapFragment extends MyTabFragment implements PlayerBearingListener,
         zvh.markerItem.setMarker(zone.isVisible()?zoneMarkerSymbol:null);
         mMarkerLayer.populate();
 
-//        int lineWidth = (zone.isVisible()?2:0);
         int lineWidth=2;
         int lineColor = (zone.isVisible()?
                 (zone.isSelectedZone()?Color.RED:Color.YELLOW):
@@ -567,40 +550,17 @@ public class MapFragment extends MyTabFragment implements PlayerBearingListener,
         } else {
             zvh.pathLayer.clearPath();
         }
-//        mMap.updateMap(true);
-    }
-    private Drawable getRotateDrawable(final Drawable d, final float angle) {
-        final Drawable[] arD = { d };
-        return new LayerDrawable(arD) {
-            @Override
-            public void draw(final Canvas canvas) {
-                canvas.save();
-                canvas.rotate(angle, d.getBounds().width() / 2, d.getBounds().height() / 2);
-                super.draw(canvas);
-                canvas.restore();
-            }
-        };
     }
 
+
     public void onBearingPlayerChanged(PlayerBearingEvent playerBearingEvent) {
-//        float playerBearingOld = playerBearing;
         float playerBearing = (180 + playerBearingEvent.getBearing()) % 360 - 180;
         MapPosition pos = mMap.getMapPosition();
         pos.setBearing(-playerBearing);
         mMap.setMapPosition(pos);
 
-     /*   playerRotateDrawable.setFromDegrees(playerBearingOld);
-        playerRotateDrawable.setToDegrees(playerBearing);
-        playerRotateDrawable.setLevel(5);
-        playerMarkerSymbol = new MarkerSymbol(drawableToBitmap(playerRotateDrawable), HotspotPlace.CENTER, false);
-        */
-     /*   Matrix matrix = new Matrix();
-        matrix.postRotate(playerBearing);
-        Bitmap bm = Bitmap.createBitmap(playerBitmap, 0, 0, playerBitmap.getWidth(), playerBitmap.getHeight(), matrix, true);
-        Drawable d = new BitmapDrawable(bm);
-        playerMarkerSymbol = new MarkerSymbol(drawableToBitmap(d), HotspotPlace.CENTER, false);
-        */
-        playerMarkerSymbol = new MarkerSymbol(drawableToBitmap(getRotateDrawable(playerDrawable,playerBearing)), HotspotPlace.CENTER, false);
+        playerDrawable.setAngle(playerBearing);
+        playerMarkerSymbol = new MarkerSymbol(drawableToBitmap(playerDrawable.getRotated()), HotspotPlace.CENTER, false);
 
         playerMarkerItem.setMarker(playerMarkerSymbol);
         mMarkerLayer.populate();

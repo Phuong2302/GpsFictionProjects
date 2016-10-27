@@ -1,6 +1,5 @@
 package com.sdesimeur.android.gpsfiction.enigmealaon;
 
-import com.sdesimeur.android.gpsfiction.enigmealaon.R;
 import android.os.Bundle;
 
 import com.sdesimeur.android.gpsfiction.activities.GpsFictionActivity;
@@ -12,10 +11,10 @@ public class EnigmeALaonMainActivity extends GpsFictionActivity {
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if ( ! ( this.getGpsFictionData().isAllreadyConfigured() ) ) {
+        if ( ! ( getmGpsFictionData().isAllreadyConfigured() ) ) {
             setResourcedZones(R.raw.enigmealaon);
-            this.getMyLocationListener().firePlayerLocationListener();
-            this.getGpsFictionData().setAllreadyConfigured(true);
+            getmMyLocationListener().firePlayerLocationListener();
+            getmGpsFictionData().setAllreadyConfigured(true);
         }
     }
 }

@@ -31,7 +31,7 @@
         <string name="tabMapTitle">Carte</string>
         <string name="tabTasksTitle">Taches</string>-->
 
-    <string name="titleZones">Zone du jeu.</string>
+    <string name="titleZones">Zones du jeu.</string>
     <string name="titleCharacters">Les personnages.</string>
     <string name="titleItems">Les Objets.</string>
     <string name="titleTasks">Ce que vous avez à faire.</string>

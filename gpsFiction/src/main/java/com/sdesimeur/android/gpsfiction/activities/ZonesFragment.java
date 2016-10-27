@@ -11,13 +11,11 @@ import com.sdesimeur.android.gpsfiction.R;
 
 
 public class ZonesFragment extends MyTabFragment
-//        implements PlayerLocationListener
 {
     private ListView listZones = null;
     private Adapter4TabZones adapter = null;
     private DataSetObserver mDataSetObserver = null;
 
-    //private GpsFiction gpsFiction;
     //TODO add tmpZonesToOrder
     public ZonesFragment() {
         super();
@@ -41,8 +39,8 @@ public class ZonesFragment extends MyTabFragment
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
+    public void onStart() {
+        super.onStart();
         if (adapter == null) {
             adapter = new Adapter4TabZones();
         }
@@ -53,7 +51,7 @@ public class ZonesFragment extends MyTabFragment
             }
         };
         adapter.registerDataSetObserver(mDataSetObserver);
-        adapter.register(getmGpsFictionActivity());
+        adapter.register(this);
     }
 
     @Override
@@ -63,9 +61,4 @@ public class ZonesFragment extends MyTabFragment
         adapter.destroy();
         adapter=null;
     }
-/*
-    public void register(GpsFictionActivity gpsFictionActivity) {
-        super.register(gpsFictionActivity);
-    }
-    */
 }
