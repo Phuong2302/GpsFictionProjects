@@ -1,9 +1,10 @@
 package com.sdesimeur.android.gpsfiction.helpers;
 
+import java.text.NumberFormat;
+
 /**
  * Created by sam on 28/10/16.
  */
-
 public class DistanceToTextHelper {
     float distance;
     public DistanceToTextHelper (float d) {
@@ -19,18 +20,19 @@ public class DistanceToTextHelper {
         String distanceText = "";
         if (distance >= 10) {
             distance = (float) ((Math.ceil(distance * 10)) / 10);
-            distanceText = Float.toString(distance) + " km";
+            distanceText = NumberFormat.getInstance().format(distance) + " km";
         } else if ((distance >= 0.800) && (distance < 10)) {
             distance = (float) ((Math.ceil(distance * 100)) / 100);
-            distanceText = Float.toString(distance) + " km";
+            distanceText = NumberFormat.getInstance().format(distance) + " km";
         } else if ((distance >= 0.060) && (distance < 0.800)) {
             distance = (float) Math.ceil(distance * 1000);
-            distanceText = Float.toString(distance) + " m";
+            distanceText = NumberFormat.getInstance().format(distance) + " m";
         } else {
             distance = (float) (Math.ceil(distance * 10000) / 10);
-            distanceText = Float.toString(distance) + " m";
+            distanceText = NumberFormat.getInstance().format(distance) + " m";
         }
-        return distanceText.replaceFirst("[\\.,]00* ", " ");
+        //return distanceText.replaceFirst("[\\.,]00* ", " ");
+        return distanceText;
     }
 
     public float getDistanceInM() {

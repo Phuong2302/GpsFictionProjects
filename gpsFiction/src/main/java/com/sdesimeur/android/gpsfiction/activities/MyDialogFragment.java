@@ -21,14 +21,13 @@ import java.util.Iterator;
 
 
 public class MyDialogFragment extends DialogFragment {
-    private GpsFictionActivity mGpsFictionActivity = null;
     private ArrayList<Integer> buttonsListIds = new ArrayList<Integer>();
     private int titleId = 0;
     private int textId = 0;
     private LinearLayout buttonsLinearLayout = null;
     private TextView textView = null;
     private View dialogView = null;
-
+    private boolean toSave = false;
     public MyDialogFragment() {
         // TODO Auto-generated constructor stub
         super();
@@ -41,18 +40,45 @@ public class MyDialogFragment extends DialogFragment {
     public void setButtonsListIds(ArrayList<Integer> buttonsListIds) {
         this.buttonsListIds = buttonsListIds;
     }
-
-    public void init(GpsFictionActivity gpsFictionActivity, int titleId, int textId) {
-        mGpsFictionActivity = gpsFictionActivity;
+    public GpsFictionActivity getmGpsFictionActivity () {
+        return (GpsFictionActivity) getActivity();
+    }
+    public void init( int titleId, int textId) {
+        toSave = true;
         this.titleId = titleId;
         this.textId = textId;
         this.buttonsListIds.clear();
-        mGpsFictionActivity.dialogFragments.add(this);
     }
-
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        super.onSaveInstanceState(savedInstanceState);
+        if (toSave) {
+            savedInstanceState.putInt("savedState",1);
+            savedInstanceState.putInt("titleId", titleId);
+            savedInstanceState.putInt("textId", textId);
+            savedInstanceState.putInt("nbButtons",buttonsListIds.size());
+            int index=0;
+            final Iterator<Integer> it = this.buttonsListIds.iterator();
+            while (it.hasNext()) {
+                final int buttonTextId = it.next();
+                savedInstanceState.putInt("buttonTextId"+index, buttonTextId);
+                index++;
+            }
+        }
+    }
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        getmGpsFictionActivity().dialogFragments.add(this);
         this.setCancelable(false);
+        if (savedInstanceState != null)
+        if (savedInstanceState.getInt("savedState",0)==1) {
+            titleId = savedInstanceState.getInt("titleId");
+            textId = savedInstanceState.getInt("textId");
+            int indexMax = savedInstanceState.getInt("nbButtons");
+            for (int index=0;index<indexMax;index++) {
+                buttonsListIds.add(savedInstanceState.getInt("buttonTextId"+index));
+            }
+        }
         super.onCreate(savedInstanceState);
     }
 
@@ -102,14 +128,15 @@ public class MyDialogFragment extends DialogFragment {
     }
 
     private void returnButton(int buttonId) {
-        mGpsFictionActivity.getReponseFromMyDialogFragment(titleId, (Integer) (buttonId));
+        toSave = false;
+        getmGpsFictionActivity().getReponseFromMyDialogFragment(titleId, (Integer) (buttonId));
         this.dismiss();
         //this.dismissAllowingStateLoss();
     }
 
     @Override
     public void onDetach() {
-        mGpsFictionActivity.dialogFragments.remove(this);
+        getmGpsFictionActivity().dialogFragments.remove(this);
         super.onDetach();
     }
 

@@ -29,26 +29,35 @@ public class MissionDestructionMainActivity extends GpsFictionActivity {
     public ZoneExplosifs zoneExplosifs = null;
     public HashSet<Zone> zoneMultiples = new HashSet<Zone>();
     private int angle = 0;
+    private boolean firstDialogBoxNotClose = false;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (!(getmGpsFictionData().isAllreadyConfigured())) {
             getmGpsFictionData().setRules(R.string.rulesDef);
             getmGpsFictionData().setTitle(R.string.rulesName);
-            MyDialogFragment df = new MyDialogFragment();
-            df.init(this, R.string.dialogFirstTaskTitle, R.string.dialogFirstTaskText);
-            df.getButtonsListIds().add(R.string.dialogButtonYes);
-            df.getButtonsListIds().add(R.string.dialogButtonNo);
-            df.show(fragmentManager);
+            if ((savedInstanceState==null) || (savedInstanceState.getInt("firstDialogBoxNotClose",0)==0)) {
+                MyDialogFragment df = new MyDialogFragment();
+                df.init(R.string.dialogFirstTaskTitle, R.string.dialogFirstTaskText);
+                df.getButtonsListIds().add(R.string.dialogButtonYes);
+                df.getButtonsListIds().add(R.string.dialogButtonNo);
+                firstDialogBoxNotClose = true;
+                df.show(fragmentManager);
+            }
         }
     }
-
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        super.onSaveInstanceState(savedInstanceState);
+        if (firstDialogBoxNotClose) savedInstanceState.putInt("firstDialogBoxNotClose", 1);
+    }
     public void onResume() {
         super.onResume();
     }
 
     public void getReponseFromMyDialogFragment(int why, int reponse) {
         if (why == R.string.dialogFirstTaskTitle) {
+            firstDialogBoxNotClose = false;
             if (reponse == R.string.dialogButtonYes) {
                 angle = ((int) Math.round(360 * Math.random()));
                 createAllZoneAmi();

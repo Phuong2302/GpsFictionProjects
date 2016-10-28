@@ -15,4 +15,7 @@
     <color name="compasstext">#000000</color>
     <color name="mapzoneborder">#500000FF</color>
     <color name="mapzoneselectedborder">#50FF0000</color>
+    <color name="colorOfRouteLine">#900000FF</color>
+    <color name="colorOfZoneShapeNotSelected">#90FFFF00</color>
+    <color name="colorOfZoneShapeSelected">#90FF0000</color>
 </resources>

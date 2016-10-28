@@ -83,6 +83,8 @@
     <dimen name="dialogButtonPadding">30dip</dimen>
     <dimen name="navigation_drawer_width">240dip</dimen>
     <dimen name="action_button_margin">16dip</dimen>
+    <dimen name="widthOfZoneShape">2dip</dimen>
+    <dimen name="widthOfRouteLine">5dip</dimen>
 
     <dimen name="buttonsVehiculesPadding">10dip</dimen>
     <dimen name="mapzoneborderwidth">1dip</dimen>

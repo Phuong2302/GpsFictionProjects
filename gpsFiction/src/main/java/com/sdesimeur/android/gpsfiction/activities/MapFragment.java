@@ -2,7 +2,6 @@ package com.sdesimeur.android.gpsfiction.activities;
 
 
 import android.content.res.TypedArray;
-import android.graphics.Color;
 import android.graphics.Path;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -14,6 +13,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.Toast;
 import android.widget.ZoomControls;
 
 import com.graphhopper.GHRequest;
@@ -44,9 +44,11 @@ import com.sdesimeur.android.gpsfiction.classes.ZoneChangeListener;
 import com.sdesimeur.android.gpsfiction.classes.ZoneSelectListener;
 import com.sdesimeur.android.gpsfiction.classes.ZoneViewHelper;
 import com.sdesimeur.android.gpsfiction.geopoint.MyGeoPoint;
+import com.sdesimeur.android.gpsfiction.helpers.DistanceToTextHelper;
 import com.sdesimeur.android.gpsfiction.utils.MyDrawable;
 
 import org.oscim.android.MapView;
+import org.oscim.backend.canvas.Color;
 import org.oscim.backend.canvas.Paint;
 import org.oscim.core.GeoPoint;
 import org.oscim.core.MapPosition;
@@ -57,6 +59,9 @@ import org.oscim.layers.marker.MarkerSymbol;
 import org.oscim.layers.tile.buildings.BuildingLayer;
 import org.oscim.layers.tile.vector.VectorTileLayer;
 import org.oscim.layers.tile.vector.labeling.LabelLayer;
+import org.oscim.layers.vector.VectorLayer;
+import org.oscim.layers.vector.geometries.PolygonDrawable;
+import org.oscim.layers.vector.geometries.Style;
 import org.oscim.map.Map;
 import org.oscim.theme.VtmThemes;
 import org.oscim.theme.styles.LineStyle;
@@ -108,6 +113,7 @@ public class MapFragment extends MyTabFragment implements PlayerBearingListener,
     private ItemizedLayer<MarkerItem> mMarkerLayer=null;
     private MyDrawable playerDrawable = null;
     private PathLayer routePathLayer = null;
+    private VectorLayer mVectorLayer = null;
     private PathWrapper routePath = null;
     private Translation mTranslation = null;
     private HashMap<Integer, ImageView> hashMapVehiculesButtonsIdView = null;
@@ -210,11 +216,17 @@ public class MapFragment extends MyTabFragment implements PlayerBearingListener,
             mMap.setMapPosition(pos);
         }
         if (routePathLayer == null) {
-            routePathLayer = new PathLayer(mMap,Color.TRANSPARENT);
+            routePathLayer = new PathLayer(mMap, Color.TRANSPARENT);
             mMap.layers().add(routePathLayer);
         }
-        int lineWidth=2;
-        int lineColor = Color.BLUE;
+        if (mVectorLayer == null) {
+            mVectorLayer = new VectorLayer(mMap);
+            mMap.layers().add(mVectorLayer);
+        }
+        int lineWidth=getResources().getDimensionPixelSize(R.dimen.widthOfRouteLine);
+        //int lineWidth=2;
+        int lineColor = getResources().getColor(R.color.colorOfRouteLine);
+        //int lineColor = Color.BLUE;
         LineStyle ls = new LineStyle(lineColor, lineWidth, Paint.Cap.BUTT);
         routePathLayer.setStyle(ls);
         ViewGroup vg = (ViewGroup) getRootView();
@@ -394,8 +406,8 @@ public class MapFragment extends MyTabFragment implements PlayerBearingListener,
             PointList pl = nextInst.getPoints();
             int idx = pl.getSize() - 1;
             MyGeoPoint nxtMyGeoPoint = new MyGeoPoint(pl.getLatitude(idx), pl.getLongitude(idx));
-            int dstToNxt = Math.round(1000 * getPlayerLocation().distanceTo(nxtMyGeoPoint));
-            nextInstructionString = mTranslation.tr("web.to_hint", new Object[0]) + " " + dstToNxt + " " + mTranslation.tr("m_abbr", new Object[0]) + ", " + nextInst.getTurnDescription(mTranslation);
+            DistanceToTextHelper dst = new DistanceToTextHelper(nxtMyGeoPoint.distanceTo(getPlayerLocation()));
+            nextInstructionString = mTranslation.tr("web.to_hint", new Object[0]) + " " + dst.getDistanceInText() + ", " + nextInst.getTurnDescription(mTranslation);
         }
     }
 
@@ -495,7 +507,7 @@ public class MapFragment extends MyTabFragment implements PlayerBearingListener,
             calcLinePath();
         } else {
             setNextInstruction();
-            //Toast.makeText(getGpsFictionActivity(), nextInstructionString, Toast.LENGTH_LONG).show();
+            Toast.makeText(getmGpsFictionActivity(), nextInstructionString, Toast.LENGTH_LONG).show();
             getmGpsFictionActivity().speak(nextInstructionString);
         }
     }
@@ -520,6 +532,12 @@ public class MapFragment extends MyTabFragment implements PlayerBearingListener,
 
     @Override
     public void onZoneChanged(Zone zone) {
+        PolygonDrawable p = new PolygonDrawable(zone.getShape().getAllGeoPoints());
+        Style.Builder sb = Style.builder().fillColor(getResources().getColor(R.color.colorOfZoneShapeSelected));
+        Style style = sb.build();
+        p.setStyle(style);
+        mVectorLayer.add(p);
+        mVectorLayer.update();
         MarkerSymbol zoneMarkerSymbol = new MarkerSymbol(drawableToBitmap(getResources(),zone.getIconId()), HotspotPlace.CENTER);
         ZoneViewHelper zvh = zoneViewHelperHashMap.get(zone);
         if (zvh == null) {
@@ -537,10 +555,14 @@ public class MapFragment extends MyTabFragment implements PlayerBearingListener,
         zvh.markerItem.setMarker(zone.isVisible()?zoneMarkerSymbol:null);
         mMarkerLayer.populate();
 
-        int lineWidth=2;
-        int lineColor = (zone.isVisible()?
-                (zone.isSelectedZone()?Color.RED:Color.YELLOW):
-                Color.TRANSPARENT);
+        //int lineWidth=2;
+        int lineWidth=getResources().getDimensionPixelSize(R.dimen.widthOfZoneShape);
+        //int lineColor = ((zone.isVisible()?
+        //        (zone.isSelectedZone()?Color.RED:Color.YELLOW):
+        //        Color.TRANSPARENT));
+        int lineColor = ((zone.isVisible()?
+                getResources().getColor(zone.isSelectedZone() ? R.color.colorOfZoneShapeSelected : R.color.colorOfZoneShapeNotSelected):
+                Color.TRANSPARENT));
         LineStyle ls = new LineStyle(lineColor, lineWidth, Paint.Cap.BUTT);
         zvh.pathLayer.setStyle(ls);
         if (zone.isVisible()) {

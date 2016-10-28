@@ -213,7 +213,7 @@ public class GpsFictionActivity extends Activity implements TextToSpeech.OnInitL
     public void onBackPressed() {
         if (this.dialogFragments.isEmpty()) {
             MyDialogFragment df = new MyDialogFragment();
-            df.init(this, R.string.dialogCloseTaskTitle, R.string.dialogCloseTaskText);
+            df.init(R.string.dialogCloseTaskTitle, R.string.dialogCloseTaskText);
             df.getButtonsListIds().add(R.string.dialogButtonYes);
             df.getButtonsListIds().add(R.string.dialogButtonNo);
             df.show(this.fragmentManager);
