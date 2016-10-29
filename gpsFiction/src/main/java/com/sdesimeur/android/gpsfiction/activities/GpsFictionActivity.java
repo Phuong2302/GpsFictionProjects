@@ -11,12 +11,15 @@ import android.content.res.TypedArray;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
+import android.support.multidex.MultiDex;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 
@@ -43,6 +46,10 @@ import java.util.Locale;
 
 public class GpsFictionActivity extends Activity implements TextToSpeech.OnInitListener {
     private static final String TAGFONT = "FONT";
+    private FloatingActionButton fabCreate;
+    private int lastFabAction;
+    private float dYFab;
+    private float dXFab;
 
     public GpsFictionData getmGpsFictionData() {
         return mGpsFictionData;
@@ -206,7 +213,7 @@ public class GpsFictionActivity extends Activity implements TextToSpeech.OnInitL
     }
 
     public void floatingAction(View view) {
-        drawerLayout.openDrawer(Gravity.LEFT);
+   //     drawerLayout.openDrawer(Gravity.LEFT);
     }
 
     @Override
@@ -234,7 +241,7 @@ public class GpsFictionActivity extends Activity implements TextToSpeech.OnInitL
     @Override
     public void onCreate(Bundle savedInstanceState) {
         //this.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        testTTS();
+        MultiDex.install(this);
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         if (mMyLocationListener == null) mMyLocationListener = new MyLocationListener();
         mMyLocationListener.init(this);
@@ -268,9 +275,39 @@ public class GpsFictionActivity extends Activity implements TextToSpeech.OnInitL
                 return true;
             }
         });
+        fabCreate = (FloatingActionButton)findViewById(R.id.actionbutton);
+        fabCreate.setOnTouchListener(new View.OnTouchListener() {
+    	      @Override
+    	      public boolean onTouch(View view, MotionEvent event) {
+    	          switch (event.getActionMasked()) {
+    	              case MotionEvent.ACTION_DOWN:
+    	                  dXFab = view.getX() - event.getRawX();
+    	                  dYFab = view.getY() - event.getRawY();
+    	                  lastFabAction = MotionEvent.ACTION_DOWN;
+    	                  break;
+
+    	              case MotionEvent.ACTION_MOVE:
+    	                  view.setY(event.getRawY() + dYFab);
+    	                  view.setX(event.getRawX() + dXFab);
+    	                  lastFabAction = MotionEvent.ACTION_MOVE;
+    	                  break;
+
+    	              case MotionEvent.ACTION_UP:
+    	                  //if (lastFabAction == MotionEvent.ACTION_DOWN)
+    	                      //Toast.makeText(getActivity(), "Clicked!", Toast.LENGTH_SHORT).show();
+    	                  break;
+    	              case MotionEvent.ACTION_BUTTON_PRESS:
+                          drawerLayout.openDrawer(Gravity.LEFT);
+    	              default:
+    	                  return false;
+    	          }
+    	          return true;
+    	      }
+  	    });
         fragmentManager = getFragmentManager();
         defineFragments();
         setFragmentInContainer();
+        testTTS();
     }
 
     @Override

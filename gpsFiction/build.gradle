@@ -3,9 +3,16 @@ apply plugin: 'com.android.library'
 android {
     compileSdkVersion 25
     buildToolsVersion '25.0.0'
+    dexOptions {
+        maxProcessCount 4 // this is the default value
+        javaMaxHeapSize "2g"
+        preDexLibraries = false
+    }
+
     defaultConfig {
         minSdkVersion 15
         targetSdkVersion 25
+        multiDexEnabled true
     }
     buildTypes {
         release {
@@ -36,4 +43,5 @@ dependencies {
     compile 'com.android.support:design:25.0.0'
     compile 'org.mapsforge:vtm-jts:0.6.0'
     compile 'org.mapsforge:vtm-extras:0.6.0'
+    compile 'com.android.support:multidex:1.0.0'
 }

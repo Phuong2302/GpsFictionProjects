@@ -3,6 +3,11 @@ apply plugin: 'com.android.application'
 android {
     compileSdkVersion 25
     buildToolsVersion '25.0.0'
+    dexOptions {
+        maxProcessCount 4 // this is the default value
+        javaMaxHeapSize "2g"
+        preDexLibraries = false
+    }
     defaultConfig {
         applicationId "com.sdesimeur.android.gpsfiction.missiondestruction"
         minSdkVersion 15
