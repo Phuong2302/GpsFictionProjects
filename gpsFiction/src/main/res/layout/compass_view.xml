@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <com.sdesimeur.android.gpsfiction.views.ZoneNameView
+    <com.sdesimeur.android.gpsfiction.views.ZoneName4CompassView
         android:id="@+id/textNameOfZone"
         style="@style/TabOneLineTitle"
         android:layout_width="match_parent"

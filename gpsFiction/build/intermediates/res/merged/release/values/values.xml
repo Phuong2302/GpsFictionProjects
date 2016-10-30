@@ -58,10 +58,10 @@
     <color name="bright_foreground_material_light">@android:color/black</color>
     <color name="button_material_dark">#ff5a595b</color>
     <color name="button_material_light">#ffd6d7d7</color>
-    <color name="colorOfRouteLine">#900000FF</color>
+    <color name="colorOfRouteLine">#800000FF</color>
     <color name="colorOfZoneShapeInvisible">#00000000</color>
-    <color name="colorOfZoneShapeNotSelected">#90FFFF00</color>
-    <color name="colorOfZoneShapeSelected">#90FF0000</color>
+    <color name="colorOfZoneShapeNotSelected">#FFFFFF00</color>
+    <color name="colorOfZoneShapeSelected">#FFFF0000</color>
     <color name="compassarrow">#ff0000</color>
     <color name="compassbackground">#FFFFFF</color>
     <color name="compasscenter">#000000</color>

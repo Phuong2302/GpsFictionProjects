@@ -10,25 +10,23 @@ import com.sdesimeur.android.gpsfiction.classes.GpsFictionData;
 import com.sdesimeur.android.gpsfiction.classes.Zone;
 import com.sdesimeur.android.gpsfiction.classes.ZoneSelectListener;
 
-public class ZoneNameView extends TextView implements ZoneSelectListener {
-    private GpsFictionActivity mGpsFictionActivity = null;
+public class ZoneName4CompassView extends TextView implements ZoneSelectListener {
 
-    public ZoneNameView(Context context) {
+    public ZoneName4CompassView(Context context) {
         super(context);
         // TODO Auto-generated constructor stub
     }
 
-    public ZoneNameView(Context context, AttributeSet attrs) {
+    public ZoneName4CompassView(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public ZoneNameView(Context context, AttributeSet attrs, int defStyle) {
+    public ZoneName4CompassView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
     }
 
     public void init(GpsFictionActivity gpsFictionActivity) {
-        mGpsFictionActivity = gpsFictionActivity;
-        mGpsFictionActivity.getmGpsFictionData().addZoneSelectListener(GpsFictionData.REGISTER.VIEW, this);
+        gpsFictionActivity.getmGpsFictionData().addZoneSelectListener(GpsFictionData.REGISTER.VIEW, this);
     }
 
     @Override

@@ -192,9 +192,18 @@ public class MapFragment extends MyTabFragment implements PlayerBearingListener,
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         setRootView(inflater.inflate(R.layout.map_view, container, false));
-        mStyle4SelectedZone = Style.builder().fillColor(getResources().getColor(R.color.colorOfZoneShapeSelected)).build();
-        mStyle4UnSelectedZone = Style.builder().fillColor(getResources().getColor(R.color.colorOfZoneShapeNotSelected)).build();
-        mStyle4InvisibleZone = Style.builder().fillColor(getResources().getColor(R.color.colorOfZoneShapeInvisible)).build();
+        mStyle4SelectedZone = Style.builder()
+                .fillColor(getResources().getColor(R.color.colorOfZoneShapeSelected))
+                .build();
+        mStyle4UnSelectedZone = Style.builder()
+                .fillColor(getResources().getColor(R.color.colorOfZoneShapeNotSelected))
+                .build();
+        mStyle4InvisibleZone = Style.builder()
+                .fillColor(getResources().getColor(R.color.colorOfZoneShapeInvisible))
+                .fillAlpha(0f)
+                .strokeWidth(0)
+                .strokeColor(getResources().getColor(R.color.colorOfZoneShapeInvisible))
+                .build();
         TranslationMap trm = new TranslationMap();
         trm.doImport();
         mTranslation = trm.getWithFallBack(Locale.getDefault());
@@ -487,7 +496,11 @@ public class MapFragment extends MyTabFragment implements PlayerBearingListener,
 
     @Override
     public void onZoneSelectChanged(Zone sZn, Zone sZnO ) {
-        calcPath();
+        if (sZnO != null) onZoneChanged(sZnO);
+        if (sZn != null ) {
+            onZoneChanged(sZn);
+            calcPath();
+        }
     }
     @Override
     public void onLocationPlayerChanged(PlayerLocationEvent playerLocationEvent) {
@@ -548,27 +561,43 @@ public class MapFragment extends MyTabFragment implements PlayerBearingListener,
             zvh.markerItem = new MarkerItem(zone, zone.getName(), "", zone.getCenterPoint());
             mMarkerLayer.addItem(zvh.markerItem);
         }
-        if (zvh.pathLayer == null) {
-            zvh.pathLayer = new PathLayer(mMap,Color.TRANSPARENT);
-        }
+    //    if (zvh.pathLayer == null) {
+    //        zvh.pathLayer = new PathLayer(mMap,Color.TRANSPARENT);
+    //    }
         if (zvh.polygon == null) {
             zvh.polygon = new PolygonDrawable(zone.getShape().getAllGeoPoints());
+            zvh.polygon.setStyle(mStyle4InvisibleZone);
             mVectorLayer.add(zvh.polygon);
         }
         zvh.markerItem.setMarker(zone.isVisible()?zoneMarkerSymbol:null);
         mMarkerLayer.populate();
-
+/*
         if (zone.isVisible()) {
             zvh.polygon.setStyle(zone.isSelectedZone() ? mStyle4SelectedZone : mStyle4UnSelectedZone);
-            mMap.layers().add(zvh.pathLayer);
+            if (!zvh.isPolygonVisible) {
+                mVectorLayer.add(zvh.polygon);
+                zvh.isPolygonVisible = true;
+            }
         } else {
-            mMap.layers().remove(zvh.pathLayer);
+            if (zvh.isPolygonVisible) {
+                mVectorLayer.remove(zvh.polygon);
+                zvh.isPolygonVisible = false;
+            }
         }
-        mVectorLayer.remove(zvh.polygon);
-        mVectorLayer.add(zvh.polygon);
-        mVectorLayer.update();
+*/
 
-        /*
+        zvh.polygon.setStyle(zone.isVisible()?
+                (zone.isSelectedZone() ? mStyle4SelectedZone : mStyle4UnSelectedZone):
+                mStyle4InvisibleZone);
+        mVectorLayer.update();
+/*
+        if (zone.isVisible()) {
+            if (mMap.layers().contains(zvh.pathLayer)) mMap.layers().remove(zvh.pathLayer);
+        } else {
+            if (! mMap.layers().contains(zvh.pathLayer)) mMap.layers().add(zvh.pathLayer);
+        }
+        */
+            /*
         int lineWidth=getResources().getDimensionPixelSize(R.dimen.widthOfZoneShape);
         int lineColor = ((zone.isVisible()?
                 getResources().getColor(zone.isSelectedZone() ? R.color.colorOfZoneShapeSelected : R.color.colorOfZoneShapeNotSelected):

@@ -29,9 +29,9 @@
             android:layout_height="wrap_content"
             android:layout_gravity="end|bottom"
             android:layout_margin="@dimen/action_button_margin"
-            android:onClick="floatingAction"
             android:src="@android:drawable/ic_menu_add" />
     </android.support.design.widget.CoordinatorLayout>
+   <!-- android:onClick="floatingAction"-->
 
     <android.support.design.widget.NavigationView
         android:id="@+id/navigation_view"

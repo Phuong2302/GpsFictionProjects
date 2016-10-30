@@ -13,6 +13,7 @@ public class ZoneViewHelper {
     public PathLayer pathLayer;
     public Zone zone;
     public PolygonDrawable polygon;
+    public boolean isPolygonVisible;
 
     public ZoneViewHelper(Zone zn) {
         zone = zn;
