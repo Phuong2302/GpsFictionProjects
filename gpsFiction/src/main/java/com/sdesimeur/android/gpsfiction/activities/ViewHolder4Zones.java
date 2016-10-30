@@ -17,8 +17,6 @@ public class ViewHolder4Zones implements ZoneSelectListener {
     private MiniCompassView miniCompassView = null;
     private Zone attachedZone = null;
     private GpsFictionData mGpsFictionData = null;
-    private Zone selectedZone = null;
-
 
     public Zone getAttachedZone() {
         return attachedZone;
@@ -28,44 +26,43 @@ public class ViewHolder4Zones implements ZoneSelectListener {
         // TODO Auto-generated method stub
         Resources res = mGpsFictionData.getmGpsFictionActivity().getResources();
         int titlebackgroundcolor = 0;
-        if (this.selectedZone == this.attachedZone) {
+        if (mGpsFictionData.getSelectedZone() == attachedZone) {
             titlebackgroundcolor = res.getColor(R.color.tabnameofzoneselected);
         } else {
             titlebackgroundcolor = res.getColor(R.color.tabnameofzone);
         }
-        this.zoneTitleView.setBackgroundColor(titlebackgroundcolor);
-        if (this.zoneTitleView.isShown())
-            this.zoneTitleView.invalidate();
+        zoneTitleView.setBackgroundColor(titlebackgroundcolor);
+        if (zoneTitleView.isShown())
+            zoneTitleView.invalidate();
     }
 
     public void setZoneTitleView(TextView textView) {
-        this.zoneTitleView = textView;
+        zoneTitleView = textView;
     }
 
-    public void setDistanceToZoneView(ZoneDistance4ListView distanceToZoneView) {
-        this.distanceToZoneView = distanceToZoneView;
+    public void setDistanceToZoneView(ZoneDistance4ListView dTZV) {
+        distanceToZoneView = dTZV;
     }
 
-    public void setMiniCompassView(MiniCompassView miniCompassView) {
-        this.miniCompassView = miniCompassView;
+    public void setMiniCompassView(MiniCompassView miniCV) {
+        miniCompassView = miniCV;
     }
 
-    public void init(GpsFictionData gpsFictionData, Zone attachedZone) {
+    public void init(GpsFictionData gpsFictionData, Zone aZone) {
         // TODO Auto-generated method stub
         mGpsFictionData = gpsFictionData;
-        this.attachedZone = attachedZone;
-        this.zoneTitleView.setText(this.attachedZone.getName());
-        this.updateZoneTitleView();
+        attachedZone = aZone;
+        zoneTitleView.setText(attachedZone.getName());
+        updateZoneTitleView();
         mGpsFictionData.addZoneSelectListener(GpsFictionData.REGISTER.HOLDERVIEW, this);
-        this.miniCompassView.init(mGpsFictionData, this.attachedZone);
-        this.distanceToZoneView.init(mGpsFictionData, this.attachedZone);
+        miniCompassView.init(mGpsFictionData, attachedZone);
+        distanceToZoneView.init(mGpsFictionData, attachedZone);
     }
 
     @Override
-    public void onZoneSelectChanged(Zone selectedZone) {
+    public void onZoneSelectChanged(Zone selectedZone, Zone uSZ) {
         // TODO Auto-generated method stub
-        this.selectedZone = selectedZone;
-        this.updateZoneTitleView();
+        updateZoneTitleView();
     }
 
 

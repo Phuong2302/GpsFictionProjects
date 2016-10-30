@@ -293,7 +293,8 @@ public class GpsFictionActivity extends Activity implements TextToSpeech.OnInitL
     	                  break;
 
     	              case MotionEvent.ACTION_UP:
-    	                  //if (lastFabAction == MotionEvent.ACTION_DOWN)
+    	                  if (lastFabAction == MotionEvent.ACTION_DOWN)
+                              drawerLayout.openDrawer(Gravity.LEFT);
     	                      //Toast.makeText(getActivity(), "Clicked!", Toast.LENGTH_SHORT).show();
     	                  break;
     	              case MotionEvent.ACTION_BUTTON_PRESS:

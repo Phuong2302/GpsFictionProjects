@@ -16,7 +16,6 @@ import com.sdesimeur.android.gpsfiction.classes.ZoneSelectListener;
 public class ZoneDistance4CompassView extends TextView implements PlayerLocationListener, ZoneSelectListener {
 
     private GpsFictionActivity mGpsFictionActivity = null;
-    private Zone selectedZone = null;
 
     public ZoneDistance4CompassView(Context context) {
         super(context);
@@ -35,34 +34,22 @@ public class ZoneDistance4CompassView extends TextView implements PlayerLocation
         mGpsFictionActivity = gpsFictionActivity;
         mGpsFictionActivity.getmMyLocationListener().addPlayerLocationListener(MyLocationListener.REGISTER.VIEW, this);
         mGpsFictionActivity.getmGpsFictionData().addZoneSelectListener(GpsFictionData.REGISTER.VIEW, this);
-//		this.gpsFictionActivity.getGpsFictionData().addZoneSelectListener(GpsFictionData.REGISTER.VIEW, this);
+//		gpsFictionActivity.getGpsFictionData().addZoneSelectListener(GpsFictionData.REGISTER.VIEW, this);
     }
 
     @Override
     public void onLocationPlayerChanged(PlayerLocationEvent playerLocationEvent) {
-        String distanceText = (this.selectedZone == null) ?
+        String distanceText = (mGpsFictionActivity.getmGpsFictionData().getSelectedZone() == null) ?
                 getResources().getString(R.string.noZoneDistance) :
-                this.selectedZone.getStringDistance2Player();
-        this.setText(distanceText);
+                mGpsFictionActivity.getmGpsFictionData().getSelectedZone().getStringDistance2Player();
+        setText(distanceText);
+        if (isShown()) invalidate();
     }
 
-    public void setText(String text) {
-        super.setText(text);
-        if (this.isShown())
-            this.invalidate();
-    }
 
     @Override
-    public void onZoneSelectChanged(Zone selectedZone) {
-        this.selectedZone = selectedZone;
-        this.invalidate();
+    public void onZoneSelectChanged(Zone sZ, Zone uSZ) {
+        if (isShown()) invalidate();
     }
-
-	/*
-    @Override
-	public void onZoneSelectChanged(Zone selectedZone) {
-		this.selectedZone = selectedZone;
-		this.invalidate();
-	}*/
 
 }

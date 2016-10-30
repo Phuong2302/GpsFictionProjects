@@ -46,12 +46,10 @@ public class Adapter4TabZones extends BaseAdapter implements PlayerLocationListe
 
     @Override
     public int getCount() {
-        // TODO Auto-generated method stub
         return zonesToOrder.size();
     }
 
     private void reOrderZones() {
-        //TODO add zonesToOrder by tmpZonesToOrder
         if (zonesToOrder != null) {
             Collections.sort(zonesToOrder, Zone.DISTANCE2PLAYERINCREASING);
             notifyDataSetChanged();
@@ -60,19 +58,16 @@ public class Adapter4TabZones extends BaseAdapter implements PlayerLocationListe
 
     @Override
     public Object getItem(int position) {
-        // TODO Auto-generated method stub
         return zonesToOrder.get(position);
     }
 
     @Override
     public long getItemId(int position) {
-        // TODO Auto-generated method stub
         return ((Zone)getItem(position)).getId();
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        // TODO Auto-generated method stub
         if (zone2View == null ) zone2View = new HashMap<>();
         LinearLayout layoutItem;
         LayoutInflater mLayoutInflater = LayoutInflater.from(mMyTabFragmentImpl.getmGpsFictionActivity());
@@ -86,7 +81,6 @@ public class Adapter4TabZones extends BaseAdapter implements PlayerLocationListe
             holder.setZoneTitleView((TextView) layoutItem.findViewById(R.id.textNameOfZone));
             holder.setDistanceToZoneView((ZoneDistance4ListView) layoutItem.findViewById(R.id.textDistance));
             holder.setMiniCompassView((MiniCompassView) layoutItem.findViewById(R.id.miniCompassDirection));
-//			holder.setDirectionOfZone((TextView) layoutItem.findViewById(R.id.textDirection));
             holder.init(mMyTabFragmentImpl.getmGpsFictionData(), attachedZone);
             layoutItem.setTag(holder);
             layoutItem.setOnLongClickListener(new OnLongClickListener() {
@@ -100,10 +94,6 @@ public class Adapter4TabZones extends BaseAdapter implements PlayerLocationListe
             });
             zone2View.put(attachedZone, layoutItem);
         }
-//		this.zonesFragment.getGpsFictionActivity().getMyLocationListener().firePlayerBearingListener();
-//		this.zonesFragment.getGpsFictionActivity().getMyLocationListener().firePlayerLocationListener();
-        // TODO calculer la direction
-//		holder.getDirectionOfZone().setText(this.zoneActivity.getZonesOrdered().get(position).getStringBearingFromPlayer());
         return layoutItem;
     }
 

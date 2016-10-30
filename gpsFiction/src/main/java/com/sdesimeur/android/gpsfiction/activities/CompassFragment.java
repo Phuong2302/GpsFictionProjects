@@ -28,15 +28,15 @@ public class CompassFragment extends MyTabFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        this.setRootView(inflater.inflate(R.layout.compass_view, container, false));
-        this.textviewName = (ZoneNameView) (this.getRootView().findViewById(R.id.textNameOfZone));
-        this.textviewName.init(getmGpsFictionActivity());
-        this.textviewDistance = (ZoneDistance4CompassView) (this.getRootView().findViewById(R.id.textDistance));
-        this.textviewDistance.init(getmGpsFictionActivity());
-        this.compassView = (CompassView) (this.getRootView().findViewById(R.id.compassDirection));
-        this.compassView.init(getmGpsFictionActivity());
-        this.compassView.setTypeface(getmGpsFictionActivity().getFontFromRes(R.raw.font_dancing));
-        return this.getRootView();
+        setRootView(inflater.inflate(R.layout.compass_view, container, false));
+        textviewName = (ZoneNameView) (getRootView().findViewById(R.id.textNameOfZone));
+        textviewName.init(getmGpsFictionActivity());
+        textviewDistance = (ZoneDistance4CompassView) (getRootView().findViewById(R.id.textDistance));
+        textviewDistance.init(getmGpsFictionActivity());
+        compassView = (CompassView) (getRootView().findViewById(R.id.compassDirection));
+        compassView.init(getmGpsFictionActivity());
+        compassView.setTypeface(getmGpsFictionActivity().getFontFromRes(R.raw.font_dancing));
+        return getRootView();
     }
 
 }

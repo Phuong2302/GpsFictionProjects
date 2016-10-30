@@ -118,6 +118,9 @@ public class MapFragment extends MyTabFragment implements PlayerBearingListener,
     private Translation mTranslation = null;
     private HashMap<Integer, ImageView> hashMapVehiculesButtonsIdView = null;
     private RouteGeoPointListAutoClean mRouteGeoPointListAutoClean = null;
+    private Style mStyle4SelectedZone;
+    private Style mStyle4UnSelectedZone;
+    private Style mStyle4InvisibleZone;
 //    private RotateDrawable playerRotateDrawable = null;
 //    private Bitmap playerBitmap = null;
 
@@ -189,6 +192,9 @@ public class MapFragment extends MyTabFragment implements PlayerBearingListener,
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         setRootView(inflater.inflate(R.layout.map_view, container, false));
+        mStyle4SelectedZone = Style.builder().fillColor(getResources().getColor(R.color.colorOfZoneShapeSelected)).build();
+        mStyle4UnSelectedZone = Style.builder().fillColor(getResources().getColor(R.color.colorOfZoneShapeNotSelected)).build();
+        mStyle4InvisibleZone = Style.builder().fillColor(getResources().getColor(R.color.colorOfZoneShapeInvisible)).build();
         TranslationMap trm = new TranslationMap();
         trm.doImport();
         mTranslation = trm.getWithFallBack(Locale.getDefault());
@@ -480,7 +486,7 @@ public class MapFragment extends MyTabFragment implements PlayerBearingListener,
     }
 
     @Override
-    public void onZoneSelectChanged(Zone sZn) {
+    public void onZoneSelectChanged(Zone sZn, Zone sZnO ) {
         calcPath();
     }
     @Override
@@ -532,12 +538,6 @@ public class MapFragment extends MyTabFragment implements PlayerBearingListener,
 
     @Override
     public void onZoneChanged(Zone zone) {
-        PolygonDrawable p = new PolygonDrawable(zone.getShape().getAllGeoPoints());
-        Style.Builder sb = Style.builder().fillColor(getResources().getColor(R.color.colorOfZoneShapeSelected));
-        Style style = sb.build();
-        p.setStyle(style);
-        mVectorLayer.add(p);
-        mVectorLayer.update();
         MarkerSymbol zoneMarkerSymbol = new MarkerSymbol(drawableToBitmap(getResources(),zone.getIconId()), HotspotPlace.CENTER);
         ZoneViewHelper zvh = zoneViewHelperHashMap.get(zone);
         if (zvh == null) {
@@ -550,21 +550,32 @@ public class MapFragment extends MyTabFragment implements PlayerBearingListener,
         }
         if (zvh.pathLayer == null) {
             zvh.pathLayer = new PathLayer(mMap,Color.TRANSPARENT);
-            mMap.layers().add(zvh.pathLayer);
+        }
+        if (zvh.polygon == null) {
+            zvh.polygon = new PolygonDrawable(zone.getShape().getAllGeoPoints());
+            mVectorLayer.add(zvh.polygon);
         }
         zvh.markerItem.setMarker(zone.isVisible()?zoneMarkerSymbol:null);
         mMarkerLayer.populate();
 
-        //int lineWidth=2;
+        if (zone.isVisible()) {
+            zvh.polygon.setStyle(zone.isSelectedZone() ? mStyle4SelectedZone : mStyle4UnSelectedZone);
+            mMap.layers().add(zvh.pathLayer);
+        } else {
+            mMap.layers().remove(zvh.pathLayer);
+        }
+        mVectorLayer.remove(zvh.polygon);
+        mVectorLayer.add(zvh.polygon);
+        mVectorLayer.update();
+
+        /*
         int lineWidth=getResources().getDimensionPixelSize(R.dimen.widthOfZoneShape);
-        //int lineColor = ((zone.isVisible()?
-        //        (zone.isSelectedZone()?Color.RED:Color.YELLOW):
-        //        Color.TRANSPARENT));
         int lineColor = ((zone.isVisible()?
                 getResources().getColor(zone.isSelectedZone() ? R.color.colorOfZoneShapeSelected : R.color.colorOfZoneShapeNotSelected):
                 Color.TRANSPARENT));
         LineStyle ls = new LineStyle(lineColor, lineWidth, Paint.Cap.BUTT);
         zvh.pathLayer.setStyle(ls);
+
         if (zone.isVisible()) {
             List<GeoPoint> temp = zone.getShape().getAllGeoPoints();
             temp.add(temp.get(0));
@@ -572,6 +583,8 @@ public class MapFragment extends MyTabFragment implements PlayerBearingListener,
         } else {
             zvh.pathLayer.clearPath();
         }
+    */
+
     }
 
 

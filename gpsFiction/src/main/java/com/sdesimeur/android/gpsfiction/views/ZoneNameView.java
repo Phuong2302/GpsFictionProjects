@@ -12,7 +12,6 @@ import com.sdesimeur.android.gpsfiction.classes.ZoneSelectListener;
 
 public class ZoneNameView extends TextView implements ZoneSelectListener {
     private GpsFictionActivity mGpsFictionActivity = null;
-    private Zone selectedZone = null;
 
     public ZoneNameView(Context context) {
         super(context);
@@ -33,12 +32,11 @@ public class ZoneNameView extends TextView implements ZoneSelectListener {
     }
 
     @Override
-    public void onZoneSelectChanged(Zone selectedZone) {
+    public void onZoneSelectChanged(Zone selectedZone, Zone uSZ) {
         // TODO Auto-generated method stub
-        this.selectedZone = selectedZone;
-        String nameText = (this.selectedZone == null) ?
+        String nameText = (selectedZone == null) ?
                 getResources().getString(R.string.noZoneTitle) :
-                this.selectedZone.getName();
+                selectedZone.getName();
         this.setText(nameText);
         this.invalidate();
     }

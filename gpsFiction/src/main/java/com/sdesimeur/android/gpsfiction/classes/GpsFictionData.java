@@ -23,6 +23,7 @@ public class GpsFictionData {
     protected boolean allreadyConfigured = false; // Parcel
     protected Item inventory = null; // Parcel
     private Zone selectedZone = null;
+    private Zone unSelectedZone = null;
     private int rules;
     private int title;
     private GpsFictionActivity mGpsFictionActivity = null;
@@ -244,14 +245,15 @@ public class GpsFictionData {
         return this.selectedZone;
     }
 
-    public void setSelectedZone(Zone selectedZone) {
-        this.selectedZone = selectedZone;
+    public void setSelectedZone(Zone sZone) {
+        unSelectedZone = selectedZone;
+        selectedZone = sZone;
         this.fireZoneSelectListener();
     }
 
     public void addZoneSelectListener(GpsFictionData.REGISTER type, ZoneSelectListener listener) {
         this.zoneSelectListener.get(type).add(listener);
-        if (selectedZone != null) listener.onZoneSelectChanged(this.selectedZone);
+        if (selectedZone != null) listener.onZoneSelectChanged(selectedZone,unSelectedZone);
     }
 
     public void removeZoneSelectListener(GpsFictionData.REGISTER type, ZoneSelectListener listener) {
@@ -259,9 +261,10 @@ public class GpsFictionData {
     }
 
     public void fireZoneSelectListener() {
+        if (selectedZone != unSelectedZone)
         for (GpsFictionData.REGISTER i : GpsFictionData.REGISTER.values()) {
             for (ZoneSelectListener listener : this.zoneSelectListener.get(i)) {
-                listener.onZoneSelectChanged(this.selectedZone);
+                listener.onZoneSelectChanged(selectedZone,unSelectedZone);
             }
         }
     }

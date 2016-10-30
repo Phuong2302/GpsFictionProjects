@@ -39,12 +39,6 @@ public class CompassView extends View implements PlayerBearingListener, ZoneSele
     private Zone selectedZone = null;
     private float bearingOfPlayer = 0;
     private Typeface typeface = null;
-    //private Canvas savedCanvas;
-    //private GpsFictionActivity gpsFictionActivity = null;
-    @SuppressWarnings("unused")
-    private boolean mAnimate;
-    @SuppressWarnings("unused")
-    private long mNextTime;
     private boolean firstTimePathsDefined = true;
     private GpsFictionActivity mGpsFictionActivity;
     public CompassView(Context context) {
@@ -61,126 +55,112 @@ public class CompassView extends View implements PlayerBearingListener, ZoneSele
     }
 
     public void setTypeface(Typeface typeface) {
-        this.typeface = typeface;
+        typeface = typeface;
     }
 
     private float getRoseHalfSize() {
-        float h = (float) this.getSize();
+        float h = (float) getSize();
         return (h * SCALEROSE / 2);
     }
 
     private float getTextSize() {
-        float h = (float) this.getSize();
-        return ((h / 2 - this.getRoseHalfSize()) * FACTORTEXT);
+        float h = (float) getSize();
+        return ((h / 2 - getRoseHalfSize()) * FACTORTEXT);
     }
 
     private float getMarginSize() {
-        float h = (float) this.getSize();
-        return ((h / 2 - this.getRoseHalfSize() - this.getTextSize()) / 2);
+        float h = (float) getSize();
+        return ((h / 2 - getRoseHalfSize() - getTextSize()) / 2);
     }
 
     private void setTextStaticLayout() {
-//    	AssetManager myassetmgr = MyLocationListener.getContext().getAssets();
-//    	typeface = Typeface.createFromAsset(myassetmgr, "/fonts/fally.ttf");
-//    	Typeface typeface = Typeface.createFromFile("/mnt/sdcard/fonts/fally.ttf");
-        this.textPaint.setFlags(TextPaint.FAKE_BOLD_TEXT_FLAG);
-        this.textPaint.setAntiAlias(true);
-        this.textPaint.setColor(this.getResources().getColor(R.color.compasstext));
-        this.textPaint.setTextSize(this.getTextSize());
-        this.textPaint.setFakeBoldText(true);
-        this.textPaint.setTypeface(this.typeface);
-        String[] pointsCardinauxTexts = this.getResources().getStringArray(R.array.pointscardinaux);
+        textPaint.setFlags(TextPaint.FAKE_BOLD_TEXT_FLAG);
+        textPaint.setAntiAlias(true);
+        textPaint.setColor(getResources().getColor(R.color.compasstext));
+        textPaint.setTextSize(getTextSize());
+        textPaint.setFakeBoldText(true);
+        textPaint.setTypeface(typeface);
+        String[] pointsCardinauxTexts = getResources().getStringArray(R.array.pointscardinaux);
         for (String txt : pointsCardinauxTexts) {
-            this.cardinalStaticLayout.add(new StaticLayout(txt, this.textPaint, TEXTWIDTH, Layout.Alignment.ALIGN_CENTER, 0, 0, false));
+            cardinalStaticLayout.add(new StaticLayout(txt, textPaint, TEXTWIDTH, Layout.Alignment.ALIGN_CENTER, 0, 0, false));
         }
     }
 
     private void setPathsAndSavedCanvas(Canvas canvas) {
-        /*
-		this.savedCanvas = new Canvas();
-    	this.savedCanvas.translate(height/2, width/2);
-    	this.savedCanvas.drawColor(this.getResources().getColor(R.color.backgroundcolorminicompass));
-	    */
-        this.firstTimePathsDefined = false;
-		/*
-		int tx = canvas.getWidth() / 2;
-    	int ty = canvas.getHeight() / 2;
-    	canvas.translate(tx, ty);
-    	canvas.drawColor(this.getResources().getColor(R.color.backgroundcolorminicompass));
-    	*/
-        this.setArrowPaths();
-        this.setRoseOneBranchPath();
-        this.setCirclePath();
-        this.setTextStaticLayout();
+        firstTimePathsDefined = false;
+        setArrowPaths();
+        setRoseOneBranchPath();
+        setCirclePath();
+        setTextStaticLayout();
     }
 
     private void setCirclePath() {
-        float h = this.getRoseHalfSize();
-        this.circlePath.addCircle(0, 0, h, Path.Direction.CW);
+        float h = getRoseHalfSize();
+        circlePath.addCircle(0, 0, h, Path.Direction.CW);
 
-        this.circlePaint.setColor(this.getResources().getColor(R.color.compasscircle));
-        this.circlePaint.setStyle(Paint.Style.FILL);
-        this.circlePaint.setAntiAlias(true);
+        circlePaint.setColor(getResources().getColor(R.color.compasscircle));
+        circlePaint.setStyle(Paint.Style.FILL);
+        circlePaint.setAntiAlias(true);
     }
 
     private void setRoseOneBranchPath() {
-        float h = this.getRoseHalfSize();
-        this.roseOneBranchPath.moveTo(0, -h);
-        this.roseOneBranchPath.lineTo(-h / 5, 0);
-        this.roseOneBranchPath.lineTo(0, h);
-        this.roseOneBranchPath.lineTo(h / 5, 0);
-        this.roseOneBranchPath.close();
+        float h = getRoseHalfSize();
+        roseOneBranchPath.moveTo(0, -h);
+        roseOneBranchPath.lineTo(-h / 5, 0);
+        roseOneBranchPath.lineTo(0, h);
+        roseOneBranchPath.lineTo(h / 5, 0);
+        roseOneBranchPath.close();
 
-        this.roseOneBranchPaint.setAntiAlias(true);
-        this.roseOneBranchPaint.setColor(this.getResources().getColor(R.color.compassrose));
-        this.roseOneBranchPaint.setStyle(Paint.Style.FILL);
+        roseOneBranchPaint.setAntiAlias(true);
+        roseOneBranchPaint.setColor(getResources().getColor(R.color.compassrose));
+        roseOneBranchPaint.setStyle(Paint.Style.FILL);
     }
 
     private void setArrowPaths() {
-        float c = ((float) this.getSize()) / 2;
+        float c = ((float) getSize()) / 2;
         float h = c * SCALEARROW;
         float m = 2 * (c - h) / 3;
-        this.arrowPath.moveTo(0, -h - m);
-        this.arrowPath.lineTo(-h * 2 / 5, h - m);
-        this.arrowPath.lineTo(0, h * 3 / 5 - m);
-        this.arrowPath.lineTo(h * 2 / 5, h - m);
-        this.arrowPath.close();
+        arrowPath.moveTo(0, -h - m);
+        arrowPath.lineTo(-h * 2 / 5, h - m);
+        arrowPath.lineTo(0, h * 3 / 5 - m);
+        arrowPath.lineTo(h * 2 / 5, h - m);
+        arrowPath.close();
 
         h = h / 20;
-        this.centerPath.addCircle(0, 0, h, Path.Direction.CW);
+        centerPath.addCircle(0, 0, h, Path.Direction.CW);
     }
 
     private void drawStaticPaths(Canvas canvas) {
         canvas.save();
-        canvas.drawPath(this.circlePath, this.circlePaint);
-        canvas.drawPath(this.roseOneBranchPath, this.roseOneBranchPaint);
+        canvas.drawPath(circlePath, circlePaint);
+        canvas.drawPath(roseOneBranchPath, roseOneBranchPaint);
         canvas.rotate((float) 90.0);
-        canvas.drawPath(this.roseOneBranchPath, this.roseOneBranchPaint);
+        canvas.drawPath(roseOneBranchPath, roseOneBranchPaint);
         canvas.restore();
         canvas.scale((float) 0.8, (float) 0.8);
         canvas.rotate((float) 45.0);
-        canvas.drawPath(this.roseOneBranchPath, this.roseOneBranchPaint);
+        canvas.drawPath(roseOneBranchPath, roseOneBranchPaint);
         canvas.rotate((float) -90.0);
-        canvas.drawPath(this.roseOneBranchPath, this.roseOneBranchPaint);
+        canvas.drawPath(roseOneBranchPath, roseOneBranchPaint);
         canvas.restore();
     }
 
     private void drawArrowPaths(Canvas canvas) {
-        if ((this.selectedZone == null) || (this.selectedZone.isPlayerInThisZone())) {
-            this.arrowPaint.setAntiAlias(true);
-            this.arrowPaint.setColor(this.getResources().getColor(R.color.compasscenter));
-            this.arrowPaint.setStyle(Paint.Style.FILL);
-            canvas.drawPath(this.centerPath, this.arrowPaint);
+        if ((selectedZone == null) || (selectedZone.isPlayerInThisZone())) {
+            arrowPaint.setAntiAlias(true);
+            arrowPaint.setColor(getResources().getColor(R.color.compasscenter));
+            arrowPaint.setStyle(Paint.Style.FILL);
+            canvas.drawPath(centerPath, arrowPaint);
         } else {
             canvas.save();
-            canvas.rotate(this.selectedZone.getBearing2Zone());
-            this.arrowPaint.setAntiAlias(true);
-            this.arrowPaint.setColor(this.getResources().getColor(R.color.compassarrow));
-            this.arrowPaint.setStyle(Paint.Style.FILL);
-            canvas.drawPath(this.arrowPath, this.arrowPaint);
-            this.arrowPaint.setColor(this.getResources().getColor(R.color.compasscenter));
-//            this.arrowPaint.setStyle(Paint.Style.FILL);
-            canvas.drawPath(this.centerPath, this.arrowPaint);
+            canvas.rotate(selectedZone.getBearing2Zone());
+            arrowPaint.setAntiAlias(true);
+            arrowPaint.setColor(getResources().getColor(R.color.compassarrow));
+            arrowPaint.setStyle(Paint.Style.FILL);
+            canvas.drawPath(arrowPath, arrowPaint);
+            arrowPaint.setColor(getResources().getColor(R.color.compasscenter));
+//            arrowPaint.setStyle(Paint.Style.FILL);
+            canvas.drawPath(centerPath, arrowPaint);
             canvas.restore();
         }
     }
@@ -188,12 +168,12 @@ public class CompassView extends View implements PlayerBearingListener, ZoneSele
     private void drawTexts(Canvas canvas) {
         canvas.save();
         // calculate x and y position where your text will be placed
-        float textY = this.getRoseHalfSize() + this.getMarginSize() + this.getTextSize();
+        float textY = getRoseHalfSize() + getMarginSize() + getTextSize();
         float textX = 0;
-        int n = this.cardinalStaticLayout.size();
+        int n = cardinalStaticLayout.size();
         StaticLayout sl = null;
         for (int i = 0; i < n; i++) {
-            sl = this.cardinalStaticLayout.get(i);
+            sl = cardinalStaticLayout.get(i);
             textX = (float) (-sl.getWidth()) / 2;
             canvas.save();
             canvas.rotate((float) (360 * i / n));
@@ -206,32 +186,30 @@ public class CompassView extends View implements PlayerBearingListener, ZoneSele
 
     public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-        this.setMeasuredDimension(this.getSize(), this.getSize());
+        setMeasuredDimension(getSize(), getSize());
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
-        int tx = this.getSize() / 2;
+        int tx = getSize() / 2;
         canvas.translate(tx, tx);
-        canvas.rotate(-this.bearingOfPlayer);
+        canvas.rotate(-bearingOfPlayer);
         canvas.save();
-        if (this.firstTimePathsDefined) {
-            this.setPathsAndSavedCanvas(canvas);
+        if (firstTimePathsDefined) {
+            setPathsAndSavedCanvas(canvas);
         }
-        this.drawStaticPaths(canvas);
-        this.drawTexts(canvas);
-        this.drawArrowPaths(canvas);
+        drawStaticPaths(canvas);
+        drawTexts(canvas);
+        drawArrowPaths(canvas);
     }
 
     @Override
     protected void onAttachedToWindow() {
-        mAnimate = true;
         super.onAttachedToWindow();
     }
 
     @Override
     protected void onDetachedFromWindow() {
-        mAnimate = false;
         super.onDetachedFromWindow();
     }
 
@@ -241,17 +219,17 @@ public class CompassView extends View implements PlayerBearingListener, ZoneSele
     }
 
     @Override
-    public void onZoneSelectChanged(Zone selectedZone) {
+    public void onZoneSelectChanged(Zone sZ, Zone uSZ) {
         // TODO Auto-generated method stub
-        this.selectedZone = selectedZone;
-        this.invalidate();
+        selectedZone = sZ;
+        invalidate();
     }
 
     @Override
     public void onBearingPlayerChanged(PlayerBearingEvent playerBearingEvent) {
         // TODO Auto-generated method stub
-        this.bearingOfPlayer = playerBearingEvent.getBearing();
-        this.invalidate();
+        bearingOfPlayer = playerBearingEvent.getBearing();
+        invalidate();
     }
 
     public void init(GpsFictionActivity gpsFictionActivity) {

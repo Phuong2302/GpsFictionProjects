@@ -18,4 +18,5 @@
     <color name="colorOfRouteLine">#900000FF</color>
     <color name="colorOfZoneShapeNotSelected">#90FFFF00</color>
     <color name="colorOfZoneShapeSelected">#90FF0000</color>
+    <color name="colorOfZoneShapeInvisible">#00000000</color>
 </resources>
