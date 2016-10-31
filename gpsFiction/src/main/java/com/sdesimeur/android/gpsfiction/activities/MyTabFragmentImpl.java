@@ -11,7 +11,6 @@ import com.sdesimeur.android.gpsfiction.classes.MyLocationListener;
 public interface MyTabFragmentImpl {
     public View getRootView();
     public void setRootView(View rootView);
-    public void register(GpsFictionData gpsFictionData);
     public GpsFictionData getmGpsFictionData();
     public GpsFictionActivity getmGpsFictionActivity();
     public MyLocationListener getmMyLocationListener();

@@ -9,7 +9,6 @@ import com.sdesimeur.android.gpsfiction.classes.MyLocationListener;
 
 public abstract class MyTabFragment extends Fragment implements MyTabFragmentImpl {
     private View rootView = null;
-    private GpsFictionData mGpsFictionData = null;
 
     public MyTabFragment() {
         super();
@@ -17,7 +16,7 @@ public abstract class MyTabFragment extends Fragment implements MyTabFragmentImp
 
 
     public GpsFictionData getmGpsFictionData() {
-        return mGpsFictionData;
+        return getmGpsFictionActivity().getmGpsFictionData();
     }
 
     public View getRootView() {
@@ -33,9 +32,6 @@ public abstract class MyTabFragment extends Fragment implements MyTabFragmentImp
         super.onDestroy();
     }
 
-    public void register(GpsFictionData gpsFictionData) {
-        mGpsFictionData = gpsFictionData;
-    }
     public GpsFictionActivity getmGpsFictionActivity() {
         return (GpsFictionActivity) getActivity();
     }

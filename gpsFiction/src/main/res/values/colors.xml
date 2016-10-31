@@ -16,7 +16,7 @@
     <color name="mapzoneborder">#500000FF</color>
     <color name="mapzoneselectedborder">#50FF0000</color>
     <color name="colorOfRouteLine">#800000FF</color>
-    <color name="colorOfZoneShapeNotSelected">#A0FFFF00</color>
+    <color name="colorOfZoneShapeNotSelected">#A0FFB000</color>
     <color name="colorOfZoneShapeSelected">#A0FF0000</color>
     <color name="colorOfZoneShapeInvisible">#00000000</color>
 </resources>

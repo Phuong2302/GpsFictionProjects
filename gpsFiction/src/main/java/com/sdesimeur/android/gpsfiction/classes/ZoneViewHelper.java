@@ -2,6 +2,7 @@ package com.sdesimeur.android.gpsfiction.classes;
 
 import org.oscim.layers.PathLayer;
 import org.oscim.layers.marker.MarkerItem;
+import org.oscim.layers.vector.VectorLayer;
 import org.oscim.layers.vector.geometries.PolygonDrawable;
 
 /**
@@ -9,12 +10,12 @@ import org.oscim.layers.vector.geometries.PolygonDrawable;
  */
 
 public class ZoneViewHelper {
-    public MarkerItem markerItem;
-    public PathLayer pathLayer;
-    public Zone zone;
-    public PolygonDrawable polygon;
+    public MarkerItem markerItem = null;
+    public PathLayer pathLayer = null;
+    public Zone zone = null;
+    public PolygonDrawable polygon = null;
     public boolean isPolygonVisible;
-
+    public VectorLayer vectorLayer = null;
     public ZoneViewHelper(Zone zn) {
         zone = zn;
     }

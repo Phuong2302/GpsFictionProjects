@@ -126,7 +126,6 @@ public class GpsFictionActivity extends Activity implements TextToSpeech.OnInitL
     public void setFragmentInContainer() {
         FragmentTransaction fragTransaction = fragmentManager.beginTransaction();
         MyTabFragmentImpl mtf = menuItem2Fragments.get(selectedFragmentId);
-        mtf.register(mGpsFictionData);
         fragTransaction.replace(R.id.container, (Fragment)mtf);
         fragTransaction.commit();
         //	navigationView.getMenu().findItem(selectedFragmentId).setChecked(true);
