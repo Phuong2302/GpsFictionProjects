@@ -16,7 +16,7 @@ public class ViewHolder4Zones implements ZoneSelectListener {
     //	private TextView directionOfZone;
     private MiniCompassView miniCompassView = null;
     private Zone attachedZone = null;
-    private GpsFictionData mGpsFictionData = null;
+    private GpsFictionActivity mGpsFictionActivity = null;
 
     public Zone getAttachedZone() {
         return attachedZone;
@@ -24,9 +24,9 @@ public class ViewHolder4Zones implements ZoneSelectListener {
 
     private void updateZoneTitleView() {
         // TODO Auto-generated method stub
-        Resources res = mGpsFictionData.getmGpsFictionActivity().getResources();
+        Resources res = mGpsFictionActivity.getResources();
         int titlebackgroundcolor = 0;
-        if (mGpsFictionData.getSelectedZone() == attachedZone) {
+        if (mGpsFictionActivity.getmGpsFictionData().getSelectedZone() == attachedZone) {
             titlebackgroundcolor = res.getColor(R.color.tabnameofzoneselected);
         } else {
             titlebackgroundcolor = res.getColor(R.color.tabnameofzone);
@@ -48,15 +48,15 @@ public class ViewHolder4Zones implements ZoneSelectListener {
         miniCompassView = miniCV;
     }
 
-    public void init(GpsFictionData gpsFictionData, Zone aZone) {
+    public void init(GpsFictionActivity gpsFictionActivity, Zone aZone) {
         // TODO Auto-generated method stub
-        mGpsFictionData = gpsFictionData;
+        mGpsFictionActivity = gpsFictionActivity;
         attachedZone = aZone;
         zoneTitleView.setText(attachedZone.getName());
         updateZoneTitleView();
-        mGpsFictionData.addZoneSelectListener(GpsFictionData.REGISTER.HOLDERVIEW, this);
-        miniCompassView.init(mGpsFictionData, attachedZone);
-        distanceToZoneView.init(mGpsFictionData, attachedZone);
+        mGpsFictionActivity.getmGpsFictionData().addZoneSelectListener(GpsFictionData.REGISTER.HOLDERVIEW, this);
+        miniCompassView.init(mGpsFictionActivity, attachedZone);
+        distanceToZoneView.init(mGpsFictionActivity, attachedZone);
     }
 
     @Override

@@ -81,7 +81,7 @@ public class Adapter4TabZones extends BaseAdapter implements PlayerLocationListe
             holder.setZoneTitleView((TextView) layoutItem.findViewById(R.id.textNameOfZone));
             holder.setDistanceToZoneView((ZoneDistance4ListView) layoutItem.findViewById(R.id.textDistance));
             holder.setMiniCompassView((MiniCompassView) layoutItem.findViewById(R.id.miniCompassDirection));
-            holder.init(mMyTabFragmentImpl.getmGpsFictionData(), attachedZone);
+            holder.init(mMyTabFragmentImpl.getmGpsFictionActivity(), attachedZone);
             layoutItem.setTag(holder);
             layoutItem.setOnLongClickListener(new OnLongClickListener() {
                 @Override

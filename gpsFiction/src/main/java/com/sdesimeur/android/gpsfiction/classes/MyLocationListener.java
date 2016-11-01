@@ -113,7 +113,7 @@ public class MyLocationListener implements LocationListener, SensorEventListener
     }*/
     public void addPlayerLocationListener(REGISTER type, PlayerLocationListener listener) {
         this.playerLocationListener.get(type).add(listener);
-        listener.onLocationPlayerChanged(this.playerLocationEvent);
+        if (playerLocationEvent != null) listener.onLocationPlayerChanged(this.playerLocationEvent);
     }
 
     public void removePlayerLocationListener(REGISTER type, PlayerLocationListener listener) {
@@ -122,7 +122,7 @@ public class MyLocationListener implements LocationListener, SensorEventListener
 
     public void addPlayerBearingListener(REGISTER type, PlayerBearingListener listener) {
         this.playerBearingListener.get(type).add(listener);
-        listener.onBearingPlayerChanged(this.playerBearingEvent);
+        if (playerBearingEvent != null) listener.onBearingPlayerChanged(this.playerBearingEvent);
     }
 
     public void removePlayerBearingListener(REGISTER type, PlayerBearingListener listener) {
@@ -130,6 +130,7 @@ public class MyLocationListener implements LocationListener, SensorEventListener
     }
 
     public void firePlayerLocationListener() {
+        if (playerLocationEvent != null)
         for (REGISTER i : REGISTER.values()) {
             for (PlayerLocationListener listener : this.playerLocationListener.get(i)) {
                 listener.onLocationPlayerChanged(this.playerLocationEvent);
@@ -138,6 +139,7 @@ public class MyLocationListener implements LocationListener, SensorEventListener
     }
 
     public void firePlayerBearingListener() {
+        if (playerBearingEvent != null)
         for (REGISTER i : REGISTER.values()) {
             for (PlayerBearingListener listener : this.playerBearingListener.get(i)) {
                 listener.onBearingPlayerChanged(this.playerBearingEvent);

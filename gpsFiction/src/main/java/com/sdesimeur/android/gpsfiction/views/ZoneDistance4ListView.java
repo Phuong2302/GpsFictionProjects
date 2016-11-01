@@ -4,7 +4,7 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.widget.TextView;
 
-import com.sdesimeur.android.gpsfiction.classes.GpsFictionData;
+import com.sdesimeur.android.gpsfiction.activities.GpsFictionActivity;
 import com.sdesimeur.android.gpsfiction.classes.MyLocationListener;
 import com.sdesimeur.android.gpsfiction.classes.PlayerLocationEvent;
 import com.sdesimeur.android.gpsfiction.classes.PlayerLocationListener;
@@ -12,7 +12,7 @@ import com.sdesimeur.android.gpsfiction.classes.Zone;
 
 public class ZoneDistance4ListView extends TextView implements PlayerLocationListener {
 
-    private GpsFictionData mGpsFictionData = null;
+    private GpsFictionActivity mGpsFictionActivity = null;
     private Zone attachedZone = null;
 
     public ZoneDistance4ListView(Context context) {
@@ -28,10 +28,10 @@ public class ZoneDistance4ListView extends TextView implements PlayerLocationLis
         super(context, attrs, defStyle);
     }
 
-    public void init(GpsFictionData gpsFictionData, Zone zone) {
-        mGpsFictionData = gpsFictionData;
+    public void init(GpsFictionActivity gpsFictionActivity, Zone zone) {
+        mGpsFictionActivity = gpsFictionActivity;
         this.attachedZone = zone;
-        mGpsFictionData.getmMyLocationListener().addPlayerLocationListener(MyLocationListener.REGISTER.VIEW, this);
+        mGpsFictionActivity.getmMyLocationListener().addPlayerLocationListener(MyLocationListener.REGISTER.VIEW, this);
 //		this.gpsFictionData.getGpsFictionData().addZoneSelectListener(GpsFictionData.REGISTER.VIEW, this);
     }
 

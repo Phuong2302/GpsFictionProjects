@@ -36,6 +36,6 @@ public abstract class MyTabFragment extends Fragment implements MyTabFragmentImp
         return (GpsFictionActivity) getActivity();
     }
     public MyLocationListener getmMyLocationListener() {
-        return getmGpsFictionData().getmMyLocationListener();
+        return getmGpsFictionActivity().getmMyLocationListener();
     }
 }

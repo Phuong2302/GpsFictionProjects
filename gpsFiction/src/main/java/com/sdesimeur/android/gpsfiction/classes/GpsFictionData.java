@@ -27,7 +27,7 @@ public class GpsFictionData {
     private int rules;
     private int title;
     private GpsFictionActivity mGpsFictionActivity = null;
-    private MyLocationListener mMyLocationListener = null;
+//    private MyLocationListener mMyLocationListener = null;
     private HashMap<GpsFictionData.REGISTER, HashSet<ZoneSelectListener>> zoneSelectListener = new HashMap<>();
     private HashSet<GpsFictionThing> gpsFictionThings = new HashSet<>();
     private HashSet<ZoneChangeListener> zoneChangeListener = new HashSet<> ();
@@ -274,13 +274,13 @@ public class GpsFictionData {
     }
 
 
-    public MyLocationListener getmMyLocationListener() {
-        return mMyLocationListener;
-    }
+//    public MyLocationListener getmMyLocationListener() {
+//        return mMyLocationListener;
+//    }
 
     public void setmGpsFictionActivity(GpsFictionActivity gpsFictionActivity) {
         mGpsFictionActivity = gpsFictionActivity;
-        mMyLocationListener = mGpsFictionActivity.getmMyLocationListener();
+//        mMyLocationListener = mGpsFictionActivity.getmMyLocationListener();
     }
 /*
 	public String getName() {

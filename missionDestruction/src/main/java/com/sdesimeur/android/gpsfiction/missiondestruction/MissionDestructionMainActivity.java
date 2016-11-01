@@ -4,13 +4,16 @@ import android.os.Bundle;
 
 import com.sdesimeur.android.gpsfiction.activities.GpsFictionActivity;
 import com.sdesimeur.android.gpsfiction.activities.MyDialogFragment;
+import com.sdesimeur.android.gpsfiction.classes.MyLocationListener;
+import com.sdesimeur.android.gpsfiction.classes.PlayerLocationEvent;
+import com.sdesimeur.android.gpsfiction.classes.PlayerLocationListener;
 import com.sdesimeur.android.gpsfiction.classes.Zone;
 import com.sdesimeur.android.gpsfiction.geopoint.MyGeoPoint;
 
 import java.util.HashSet;
 import java.util.Iterator;
 
-public class MissionDestructionMainActivity extends GpsFictionActivity {
+public class MissionDestructionMainActivity extends GpsFictionActivity implements PlayerLocationListener {
     public final static float COEF = 10f / 1000f;
     public final static float dist_min = MissionDestructionMainActivity.COEF * 15f;
     public final static float radius_zone_globale = MissionDestructionMainActivity.COEF * 50f;
@@ -29,27 +32,23 @@ public class MissionDestructionMainActivity extends GpsFictionActivity {
     public ZoneExplosifs zoneExplosifs = null;
     public HashSet<Zone> zoneMultiples = new HashSet<Zone>();
     private int angle = 0;
-    private boolean firstDialogBoxNotClose = false;
+    private boolean firstDialogBoxAllreadyOpened = false;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (savedInstanceState != null) {
+            firstDialogBoxAllreadyOpened = savedInstanceState.getInt("firstDialogBoxAllreadyOpened",-1)==1;
+        }
         if (!(getmGpsFictionData().isAllreadyConfigured())) {
             getmGpsFictionData().setRules(R.string.rulesDef);
             getmGpsFictionData().setTitle(R.string.rulesName);
-            if ((savedInstanceState==null) || (savedInstanceState.getInt("firstDialogBoxNotClose",0)==0)) {
-                MyDialogFragment df = new MyDialogFragment();
-                df.init(R.string.dialogFirstTaskTitle, R.string.dialogFirstTaskText);
-                df.getButtonsListIds().add(R.string.dialogButtonYes);
-                df.getButtonsListIds().add(R.string.dialogButtonNo);
-                firstDialogBoxNotClose = true;
-                df.show(fragmentManager);
-            }
+            getmMyLocationListener().addPlayerLocationListener(MyLocationListener.REGISTER.FRAGMENT,this);
         }
     }
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
         super.onSaveInstanceState(savedInstanceState);
-        if (firstDialogBoxNotClose) savedInstanceState.putInt("firstDialogBoxNotClose", 1);
+        if (firstDialogBoxAllreadyOpened) savedInstanceState.putInt("firstDialogBoxAllreadyOpened", 1);
     }
     public void onResume() {
         super.onResume();
@@ -57,7 +56,7 @@ public class MissionDestructionMainActivity extends GpsFictionActivity {
 
     public void getReponseFromMyDialogFragment(int why, int reponse) {
         if (why == R.string.dialogFirstTaskTitle) {
-            firstDialogBoxNotClose = false;
+            firstDialogBoxAllreadyOpened = false;
             if (reponse == R.string.dialogButtonYes) {
                 angle = ((int) Math.round(360 * Math.random()));
                 createAllZoneAmi();
@@ -190,4 +189,18 @@ public class MissionDestructionMainActivity extends GpsFictionActivity {
         zpc.validate();
     }
 
+    @Override
+    public void onLocationPlayerChanged(PlayerLocationEvent playerLocationEvent) {
+        if (!(getmGpsFictionData().isAllreadyConfigured()) && !firstDialogBoxAllreadyOpened) {
+            MyDialogFragment df = new MyDialogFragment();
+            df.init(R.string.dialogFirstTaskTitle, R.string.dialogFirstTaskText);
+            df.getButtonsListIds().add(R.string.dialogButtonYes);
+            df.getButtonsListIds().add(R.string.dialogButtonNo);
+            //firstDialogBoxNotClose = true;
+            firstDialogBoxAllreadyOpened = true;
+            df.show(fragmentManager);
+        } else {
+            getmMyLocationListener().removePlayerLocationListener(MyLocationListener.REGISTER.FRAGMENT,this);
+        }
+    }
 }

@@ -255,7 +255,7 @@ public class MapFragment extends MyTabFragment implements PlayerBearingListener,
     @Override
     public void onPause() {
         super.onPause();
-        if (mRouteGeoPointListHelper != null) mRouteGeoPointListHelper.destroy();
+        if (mRouteGeoPointListHelper != null) mRouteGeoPointListHelper.stopListenning();
         getmMyLocationListener().removePlayerLocationListener(MyLocationListener.REGISTER.FRAGMENT, this);
         getmMyLocationListener().removePlayerBearingListener(MyLocationListener.REGISTER.FRAGMENT, this);
         getmGpsFictionData().removeZoneSelectListener(GpsFictionData.REGISTER.FRAGMENT, this);
@@ -403,7 +403,8 @@ public class MapFragment extends MyTabFragment implements PlayerBearingListener,
 
     private void createRouteGeoPointListHelper(GHResponse resp) {
         routePath = resp.getBest();
-        mRouteGeoPointListHelper = new RouteGeoPointListHelper(this);
+        if (mRouteGeoPointListHelper == null) mRouteGeoPointListHelper = new RouteGeoPointListHelper(this);
+        mRouteGeoPointListHelper.startListenning();
     }
 
     public boolean isShortestPathRunning() {
@@ -453,14 +454,15 @@ public class MapFragment extends MyTabFragment implements PlayerBearingListener,
     private void calcPath() {
         if ((getPlayerLocation() != null) && (getSelectedZone() != null)) {
             if (getVehiculeSelectedId() == R.drawable.compass) {
+                if (mRouteGeoPointListHelper!=null) mRouteGeoPointListHelper.stopListenning();
                 calcLinePath();
             } else {
                 if (! (shortestPathRunning)) calcRoutePath();
             }
         } else {
-            if (mRouteGeoPointListHelper!=null) mRouteGeoPointListHelper.destroy();
-            mRouteGeoPointListHelper=null;
-            routePath=null;
+            if (mRouteGeoPointListHelper!=null) mRouteGeoPointListHelper.stopListenning();
+            //mRouteGeoPointListHelper=null;
+            //routePath=null;
             if (routePathLayer!=null) routePathLayer.clearPath();
         }
     }

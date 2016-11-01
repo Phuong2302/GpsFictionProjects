@@ -27,21 +27,29 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:orientation="horizontal">
+        <ZoomControls
+            android:id="@+id/zoomControls"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            />
 
             <ImageView
                 android:id="@+id/forMapDirectionButtons"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/compass"
-                android:layout_alignParentLeft="true"
-                android:layout_centerVertical="true"
+                android:src="@drawable/bearing"
+                android:layout_alignParentBottom="true"
                 />
-    <ZoomControls
-        android:id="@+id/zoomControls"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        />
+        <ImageView
+            android:id="@+id/forMapPositionButtons"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/nobearing"
+            android:layout_alignParentBottom="true"
+            />
 
     </LinearLayout>
     <!--	</LinearLayout>-->
