@@ -5,7 +5,6 @@ import android.os.Bundle;
 import com.sdesimeur.android.gpsfiction.activities.GpsFictionActivity;
 import com.sdesimeur.android.gpsfiction.activities.MyDialogFragment;
 import com.sdesimeur.android.gpsfiction.classes.MyLocationListener;
-import com.sdesimeur.android.gpsfiction.classes.PlayerLocationEvent;
 import com.sdesimeur.android.gpsfiction.classes.PlayerLocationListener;
 import com.sdesimeur.android.gpsfiction.classes.Zone;
 import com.sdesimeur.android.gpsfiction.geopoint.MyGeoPoint;
@@ -190,7 +189,7 @@ public class MissionDestructionMainActivity extends GpsFictionActivity implement
     }
 
     @Override
-    public void onLocationPlayerChanged(PlayerLocationEvent playerLocationEvent) {
+    public void onLocationPlayerChanged(MyGeoPoint playerLocation) {
         if (!(getmGpsFictionData().isAllreadyConfigured()) && !firstDialogBoxAllreadyOpened) {
             MyDialogFragment df = new MyDialogFragment();
             df.init(R.string.dialogFirstTaskTitle, R.string.dialogFirstTaskText);

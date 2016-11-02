@@ -4,7 +4,7 @@
     android:id="@+id/layoutMapView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    >
+    android:orientation="vertical">
 
     <org.oscim.android.MapView
         android:id="@+id/mapView"
@@ -17,40 +17,39 @@
         android:id="@+id/forVehiculesButtons"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:orientation="horizontal"
-        >
+        android:layout_alignParentLeft="true"
+        android:orientation="vertical">
     </LinearLayout>
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
-        android:orientation="horizontal">
+        android:layout_alignParentBottom="true"
+        android:orientation="vertical">
 
-        <ZoomControls
-            android:id="@+id/zoomControls"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="@dimen/buttonsVehiculesPadding"
-            android:layout_gravity="bottom"
-            />
             <ImageView
                 android:id="@+id/forMapDirectionButtons"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="@dimen/buttonsVehiculesPadding"
-                android:layout_gravity="bottom"
+                android:layout_gravity="right"
                 />
         <ImageView
             android:id="@+id/forMapPositionButtons"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:padding="@dimen/buttonsVehiculesPadding"
             android:src="@drawable/nobearing"
+            android:padding="@dimen/buttonsVehiculesPadding"
+            android:layout_gravity="right"
+            />
+        <ZoomControls
+            android:id="@+id/zoomControls"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/buttonsVehiculesPadding"
+            android:layout_gravity="right"
             />
 
     </LinearLayout>

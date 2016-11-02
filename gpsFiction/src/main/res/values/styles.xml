@@ -65,6 +65,7 @@
     <style name="NavigationView">
         <item name="android:textSize">@dimen/normalTextSize</item>
         <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@drawable/color4textmenu</item>
         <item name="android:itemBackground">@drawable/background4menu</item>
     </style>
 
@@ -86,6 +87,6 @@
     <dimen name="widthOfZoneShape">2dip</dimen>
     <dimen name="widthOfRouteLine">5dip</dimen>
 
-    <dimen name="buttonsVehiculesPadding">10dip</dimen>
+    <dimen name="buttonsVehiculesPadding">5dip</dimen>
     <dimen name="mapzoneborderwidth">1dip</dimen>
 </resources>

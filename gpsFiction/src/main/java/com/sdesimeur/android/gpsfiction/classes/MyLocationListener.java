@@ -43,8 +43,6 @@ public class MyLocationListener implements LocationListener, SensorEventListener
     private float locationBearing;
     private SensorManager sensorManager = null;
     private Sensor sensorsOrientation = null;
-    private PlayerLocationEvent playerLocationEvent = null;
-    private PlayerBearingEvent playerBearingEvent = null;
     private GpsFictionActivity gpsFictionActivity = null;
 
     public MyLocationListener() {
@@ -58,8 +56,6 @@ public class MyLocationListener implements LocationListener, SensorEventListener
         this.lastTimePlayerGeoPoint = new Time();
         this.playerGeoPoint = new MyGeoPoint();
         this.timePlayerGeoPoint = new Time();
-        this.playerLocationEvent = new PlayerLocationEvent();
-        this.playerBearingEvent = new PlayerBearingEvent();
         this.firstLocation = true;
         this.compassActive = false;
         this.bearingOfPlayer = 0;
@@ -113,7 +109,7 @@ public class MyLocationListener implements LocationListener, SensorEventListener
     }*/
     public void addPlayerLocationListener(REGISTER type, PlayerLocationListener listener) {
         this.playerLocationListener.get(type).add(listener);
-        if (playerLocationEvent != null) listener.onLocationPlayerChanged(this.playerLocationEvent);
+        if (playerGeoPoint != null) listener.onLocationPlayerChanged(playerGeoPoint);
     }
 
     public void removePlayerLocationListener(REGISTER type, PlayerLocationListener listener) {
@@ -122,7 +118,7 @@ public class MyLocationListener implements LocationListener, SensorEventListener
 
     public void addPlayerBearingListener(REGISTER type, PlayerBearingListener listener) {
         this.playerBearingListener.get(type).add(listener);
-        if (playerBearingEvent != null) listener.onBearingPlayerChanged(this.playerBearingEvent);
+            listener.onBearingPlayerChanged(bearingOfPlayer);
     }
 
     public void removePlayerBearingListener(REGISTER type, PlayerBearingListener listener) {
@@ -130,19 +126,18 @@ public class MyLocationListener implements LocationListener, SensorEventListener
     }
 
     public void firePlayerLocationListener() {
-        if (playerLocationEvent != null)
+        if (playerGeoPoint != null)
         for (REGISTER i : REGISTER.values()) {
             for (PlayerLocationListener listener : this.playerLocationListener.get(i)) {
-                listener.onLocationPlayerChanged(this.playerLocationEvent);
+                listener.onLocationPlayerChanged(playerGeoPoint);
             }
         }
     }
 
     public void firePlayerBearingListener() {
-        if (playerBearingEvent != null)
         for (REGISTER i : REGISTER.values()) {
             for (PlayerBearingListener listener : this.playerBearingListener.get(i)) {
-                listener.onBearingPlayerChanged(this.playerBearingEvent);
+                listener.onBearingPlayerChanged(bearingOfPlayer);
             }
         }
     }
@@ -184,7 +179,6 @@ public class MyLocationListener implements LocationListener, SensorEventListener
         this.timePlayerGeoPoint.setToNow();
         //this.playerGeoPoint.setGeoPoint(location);
         this.playerGeoPoint = new MyGeoPoint(location);
-        this.playerLocationEvent.setLocationOfPlayer(this.playerGeoPoint);
         this.locationBearing = this.lastPlayerGeoPoint.bearingTo(this.playerGeoPoint);
         this.setCompassActive();
     }
@@ -196,7 +190,6 @@ public class MyLocationListener implements LocationListener, SensorEventListener
         } else {
             this.bearingOfPlayer = this.locationBearing;
         }
-        this.playerBearingEvent.setBearingOfPlayer(this.bearingOfPlayer);
         this.firePlayerBearingListener();
     }
 

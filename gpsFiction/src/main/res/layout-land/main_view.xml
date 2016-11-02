@@ -27,7 +27,7 @@
             android:id="@+id/actionbutton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="end|center"
+            android:layout_gravity="end|top"
             android:layout_margin="@dimen/action_button_margin"
             android:src="@android:drawable/ic_menu_more" />
     </android.support.design.widget.CoordinatorLayout>
@@ -40,6 +40,5 @@
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
         app:menu="@menu/main_menu"
-        app:theme="@style/NavigationView"
-        app:itemTextAppearance="@style/NavigationView"/>
+        app:theme="@style/NavigationView" />
 </android.support.v4.widget.DrawerLayout>

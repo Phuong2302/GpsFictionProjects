@@ -11,10 +11,10 @@ import android.widget.TextView;
 import com.sdesimeur.android.gpsfiction.R;
 import com.sdesimeur.android.gpsfiction.classes.GpsFictionThing;
 import com.sdesimeur.android.gpsfiction.classes.MyLocationListener;
-import com.sdesimeur.android.gpsfiction.classes.PlayerLocationEvent;
 import com.sdesimeur.android.gpsfiction.classes.PlayerLocationListener;
 import com.sdesimeur.android.gpsfiction.classes.Zone;
 import com.sdesimeur.android.gpsfiction.classes.ZoneChangeListener;
+import com.sdesimeur.android.gpsfiction.geopoint.MyGeoPoint;
 import com.sdesimeur.android.gpsfiction.views.MiniCompassView;
 import com.sdesimeur.android.gpsfiction.views.ZoneDistance4ListView;
 
@@ -98,7 +98,7 @@ public class Adapter4TabZones extends BaseAdapter implements PlayerLocationListe
     }
 
     @Override
-    public void onLocationPlayerChanged(PlayerLocationEvent playerLocationEvent) {
+    public void onLocationPlayerChanged(MyGeoPoint playerLocation) {
         this.reOrderZones();
     }
 

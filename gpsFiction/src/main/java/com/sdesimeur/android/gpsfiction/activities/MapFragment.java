@@ -8,6 +8,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
+import android.view.DragEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -29,9 +30,7 @@ import com.sdesimeur.android.gpsfiction.R;
 import com.sdesimeur.android.gpsfiction.classes.GpsFictionData;
 import com.sdesimeur.android.gpsfiction.classes.GpsFictionThing;
 import com.sdesimeur.android.gpsfiction.classes.MyLocationListener;
-import com.sdesimeur.android.gpsfiction.classes.PlayerBearingEvent;
 import com.sdesimeur.android.gpsfiction.classes.PlayerBearingListener;
-import com.sdesimeur.android.gpsfiction.classes.PlayerLocationEvent;
 import com.sdesimeur.android.gpsfiction.classes.PlayerLocationListener;
 import com.sdesimeur.android.gpsfiction.classes.RouteGeoPointListHelper;
 import com.sdesimeur.android.gpsfiction.classes.Zone;
@@ -81,7 +80,14 @@ public class MapFragment extends MyTabFragment implements PlayerBearingListener,
     private static final int INITZOOMLEVEL = 14;
     private static final int SELECTEDBUTTON = 255;
     private static final int UNSELECTEDBUTTON = 100;
+    private ImageView viewForMapDirection;
+    private ImageView viewForMapPosition;
 
+    private static class MapDirection {
+        public static final int PLAYER=0;
+        public static final int FIX = 1;
+        public static final int NORTH = 2;
+    }
     //private Drawable vehiculeSelectedDrawable = null;
     private File mapsFolder;
 
@@ -108,7 +114,7 @@ public class MapFragment extends MyTabFragment implements PlayerBearingListener,
     private PathLayer routePathLayer = null;
 //    private VectorLayer mVectorLayer = null;
     private PathWrapper routePath = null;
-    private HashMap<Integer, ImageView> hashMapVehiculesButtonsIdView = null;
+//    private HashMap<Integer, ImageView> hashMapVehiculesButtonsIdView = null;
     private RouteGeoPointListHelper mRouteGeoPointListHelper = null;
     private Style mStyle4SelectedZone;
     private Style mStyle4UnSelectedZone;
@@ -227,7 +233,8 @@ public class MapFragment extends MyTabFragment implements PlayerBearingListener,
         routePathLayer.setStyle(ls);
         ViewGroup vg = (ViewGroup) getRootView();
         addViewGroupForVehiculesButtons(vg);
-        addViewGroupForMapDirection(vg);
+        addViewForMapDirection(vg);
+        addViewForMapPosition(vg);
         addViewGroupForZoomButtons(vg);
         loadGraphStorage();
         return getRootView();
@@ -240,8 +247,8 @@ public class MapFragment extends MyTabFragment implements PlayerBearingListener,
     @Override
     public void onResume() {
         super.onResume();
-        int alpha = MapFragment.SELECTEDBUTTON;
-        hashMapVehiculesButtonsIdView.get(getVehiculeSelectedId()).getDrawable().setAlpha(alpha);
+//        int alpha = MapFragment.SELECTEDBUTTON;
+//        hashMapVehiculesButtonsIdView.get(getVehiculeSelectedId()).getDrawable().setAlpha(alpha);
         shortestPathRunning = false;
         //mPrefs.load(mapView.map());
         mapView.onResume();
@@ -348,24 +355,31 @@ public class MapFragment extends MyTabFragment implements PlayerBearingListener,
 
     private void onVehiculeChange(View v) {
             ImageView v1 = (ImageView) v;
-            if (hashMapVehiculesButtonsIdView.get(getVehiculeSelectedId()) != v1) {
-                for (int idx : hashMapVehiculesButtonsIdView.keySet()){
-                    ImageView v2 = hashMapVehiculesButtonsIdView.get(idx);
-                    if (v2 == v1) {
-                        setVehiculeSelectedId(idx);
+            int res = (int) v1.getTag();
+//            if (hashMapVehiculesButtonsIdView.get(getVehiculeSelectedId()) != v1) {
+            if (getVehiculeSelectedId() != res) {
+                setVehiculeSelectedId(res);
+                v1.getDrawable().setAlpha(MapFragment.SELECTEDBUTTON);
+                v1.invalidate();
+                for (int idx=0; idx < viewGroupForVehiculesButtons.getChildCount(); idx++) {
+//                for (int idx : hashMapVehiculesButtonsIdView.keySet()){
+                    ImageView v2 = (ImageView) viewGroupForVehiculesButtons.getChildAt(idx);
+//                    if (((int)v2.getTag()) == ((int)v1.getTag())) {
+//                        setVehiculeSelectedId(idx);
+//                    }
+                    if (((int) v2.getTag()) == res) {
+                        v2.getDrawable().setAlpha(MapFragment.UNSELECTEDBUTTON);
+                        v2.invalidate();
                     }
-                    int alpha = ((v2 == v1) ? MapFragment.SELECTEDBUTTON : MapFragment.UNSELECTEDBUTTON);
-                    v2.getDrawable().setAlpha(alpha);
-                    v2.invalidate();
                 }
+                calcPath();
             }
-            calcPath();
     }
 
     private void addViewGroupForVehiculesButtons(ViewGroup vg) {
         viewGroupForVehiculesButtons = (ViewGroup) vg.findViewById(R.id.forVehiculesButtons);
         TypedArray vehicules = getResources().obtainTypedArray(R.array.vehicules_array);
-        hashMapVehiculesButtonsIdView = new HashMap<>();
+        //hashMapVehiculesButtonsIdView = new HashMap<>();
         for (int index = 0; index < vehicules.length(); index++) {
             ImageView img = new ImageView(getActivity());
             int pad = getResources().getDimensionPixelSize(R.dimen.buttonsVehiculesPadding);
@@ -377,25 +391,84 @@ public class MapFragment extends MyTabFragment implements PlayerBearingListener,
                 }
             });
             Integer res = vehicules.getResourceId(index,0);
-            hashMapVehiculesButtonsIdView.put(res,img);
+            //hashMapVehiculesButtonsIdView.put(res,img);
             img.setImageDrawable(getDrawable(getActivity(),res));
-            int alpha = MapFragment.UNSELECTEDBUTTON;
+            img.setTag(res);
+            int alpha = (res==getVehiculeSelectedId())? MapFragment.SELECTEDBUTTON : MapFragment.UNSELECTEDBUTTON;
             img.getDrawable().setAlpha(alpha);
             viewGroupForVehiculesButtons.addView(img);
         }
     }
 
-    private void addViewGroupForMapDirection(ViewGroup vg) {
-        ImageView v = (ImageView) vg.findViewById(R.id.forMapDirectionButtons);
-        v.setOnClickListener(new OnClickListener() {
+    private void addViewForMapPosition(ViewGroup vg) {
+        viewForMapPosition = (ImageView) vg.findViewById(R.id.forMapPositionButtons);
+        viewForMapPosition.setImageDrawable(getDrawable(getActivity(),R.drawable.mapwithfollow));
+        viewForMapPosition.setTag(R.drawable.mapwithfollow);
+        mapView.setOnDragListener(new View.OnDragListener() {
             @Override
-            public void onClick(View v) {
+            public boolean onDrag(View view, DragEvent dragEvent) {
+                viewForMapPosition.setTag(R.drawable.mapwithoutfollow);
+                fixViewForMapPosition();
+                return true;
             }
         });
-        //RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-        //lp.addRule(RelativeLayout.ALIGN_LEFT | RelativeLayout.ALIGN_BOTTOM);
+        viewForMapPosition.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int id = (int) viewForMapPosition.getTag();
+                if (id == R.drawable.mapwithfollow) {
+                    viewForMapPosition.setTag(R.drawable.mapwithoutfollow);
+                } else if (id == R.drawable.mapwithoutfollow) {
+                    viewForMapPosition.setTag(R.drawable.mapwithfollow);
+                }
+                fixViewForMapPosition();
+            }
+        });
     }
-
+    private void fixViewForMapPosition () {
+        int id = (int) viewForMapPosition.getTag();
+            viewForMapDirection.setImageDrawable(getDrawable(getActivity(),id));
+    }
+    private void addViewForMapDirection(ViewGroup vg) {
+        viewForMapDirection = (ImageView) vg.findViewById(R.id.forMapDirectionButtons);
+        viewForMapDirection.setImageDrawable(getDrawable(getActivity(),R.drawable.bearing));
+        viewForMapDirection.setTag(MapDirection.PLAYER);
+        mapView.setOnDragListener(new View.OnDragListener() {
+            @Override
+            public boolean onDrag(View view, DragEvent dragEvent) {
+                viewForMapDirection.setTag(MapDirection.FIX);
+                fixViewForMapDirection();
+                return true;
+            }
+        });
+        viewForMapDirection.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int id = (int) viewForMapDirection.getTag();
+                if (id == MapDirection.PLAYER) {
+                    viewForMapDirection.setTag(MapDirection.FIX);
+                } else if (id == MapDirection.FIX) {
+                    viewForMapDirection.setTag(MapDirection.NORTH);
+                } else if (id == MapDirection.NORTH) {
+                    viewForMapDirection.setTag(MapDirection.PLAYER);
+                }
+                onBearingPlayerChanged(getmMyLocationListener().getBearingOfPlayer());
+                fixViewForMapDirection();
+            }
+        });
+    }
+    private void fixViewForMapDirection () {
+        int id = (int) viewForMapDirection.getTag();
+        if (id == MapDirection.PLAYER) {
+            viewForMapDirection.setImageDrawable(getDrawable(getActivity(),R.drawable.bearing));
+        } else if (id == MapDirection.FIX) {
+            MyDrawable md = new MyDrawable(getDrawable(getActivity(),R.drawable.nobearing));
+            md.setAngle(mMap.getMapPosition().getBearing());
+            viewForMapDirection.setImageDrawable(md.getRotated());
+        } else if (id == MapDirection.NORTH) {
+            viewForMapDirection.setImageDrawable(getDrawable(getActivity(),R.drawable.nobearing));
+        }
+    }
 
     public PathWrapper getRoutePath() {
         return routePath;
@@ -480,20 +553,22 @@ public class MapFragment extends MyTabFragment implements PlayerBearingListener,
         }
     }
     @Override
-    public void onLocationPlayerChanged(PlayerLocationEvent playerLocationEvent) {
-        if (getPlayerLocation() != null) {
+    public void onLocationPlayerChanged(MyGeoPoint playerLocation) {
+        if (playerLocation != null) {
             if (playerMarkerItem != null) {
-                playerMarkerItem.geoPoint=getPlayerLocation();
+                playerMarkerItem.geoPoint=playerLocation;
             } else {
-                playerMarkerItem = new MarkerItem("Player", "", getPlayerLocation());
+                playerMarkerItem = new MarkerItem("Player", "", playerLocation);
                 playerMarkerSymbol = new MarkerSymbol(drawableToBitmap(playerDrawable.getmDrawable()), HotspotPlace.CENTER, false);
                 playerMarkerItem.setMarker(playerMarkerSymbol);
                 mMarkerLayer.addItem(playerMarkerItem);
             }
             mMarkerLayer.populate();
-            MapPosition pos = mMap.getMapPosition();
-            pos.setPosition(getPlayerLocation());
-            mMap.setMapPosition(pos);
+            if (((int)viewForMapPosition.getTag()) != R.drawable.mapwithoutfollow) {
+                MapPosition pos = mMap.getMapPosition();
+                pos.setPosition(playerLocation);
+                mMap.setMapPosition(pos);
+            }
             if (getSelectedZone() != null) updateCalcPath();
         }
     }
@@ -595,15 +670,21 @@ public class MapFragment extends MyTabFragment implements PlayerBearingListener,
 
     }
 
-    public void onBearingPlayerChanged(PlayerBearingEvent playerBearingEvent) {
-        float playerBearing = (180 + playerBearingEvent.getBearing()) % 360 - 180;
+    public void onBearingPlayerChanged(float angle) {
+        int id = (int)viewForMapDirection.getTag();
         MapPosition pos = mMap.getMapPosition();
-        pos.setBearing(-playerBearing);
+        float playerBearing = (180 + angle) % 360 - 180;
+        if (id == MapDirection.NORTH)  {
+            pos.setBearing(0);
+        } else if (id == MapDirection.FIX) {
+            fixViewForMapDirection();
+        } else if (id == MapDirection.PLAYER) {
+            pos.setBearing(-playerBearing);
+        }
         mMap.setMapPosition(pos);
 
         playerDrawable.setAngle(playerBearing);
         playerMarkerSymbol = new MarkerSymbol(drawableToBitmap(playerDrawable.getRotated()), HotspotPlace.CENTER, false);
-
         playerMarkerItem.setMarker(playerMarkerSymbol);
         mMarkerLayer.populate();
     }

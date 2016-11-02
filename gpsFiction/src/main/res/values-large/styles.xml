@@ -4,6 +4,7 @@
     <dimen name="miniCompassSize">80dip</dimen>
     <dimen name="titleTextSize">24sp</dimen>
     <dimen name="normalTextSize">24sp</dimen>
+    <dimen name="bigTextSize">36sp</dimen>
     <dimen name="tabMinHeight">55dp</dimen>
     <dimen name="titleMinHeight">38dp</dimen>
     <dimen name="normalTextPadding">60dip</dimen>

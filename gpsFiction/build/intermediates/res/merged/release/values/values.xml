@@ -127,6 +127,8 @@
     <color name="switch_thumb_normal_material_light">#fff1f1f1</color>
     <color name="tabnameofzone">#AAA</color>
     <color name="tabnameofzoneselected">#A66</color>
+    <color name="textmenuChecked">#FF00FF00</color>
+    <color name="textmenuUnChecked">#FF000000</color>
     <color name="white">#ffffff</color>
     <declare-styleable name="ActionBar"><attr name="navigationMode">
             
@@ -506,7 +508,7 @@
     <dimen name="abc_text_size_title_material_toolbar">20dp</dimen>
     <dimen name="action_button_margin">16dip</dimen>
     <dimen name="bigTextSize">24sp</dimen>
-    <dimen name="buttonsVehiculesPadding">10dip</dimen>
+    <dimen name="buttonsVehiculesPadding">5dip</dimen>
     <dimen name="compassLineWidth">5dip</dimen>
     <dimen name="compassSize">300dip</dimen>
     <dimen name="design_appbar_elevation">4dp</dimen>
@@ -1712,6 +1714,7 @@
     <style name="NavigationView">
         <item name="android:textSize">@dimen/normalTextSize</item>
         <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@drawable/color4textmenu</item>
         <item name="android:itemBackground">@drawable/background4menu</item>
     </style>
     <style name="Platform.AppCompat" parent="android:Theme">

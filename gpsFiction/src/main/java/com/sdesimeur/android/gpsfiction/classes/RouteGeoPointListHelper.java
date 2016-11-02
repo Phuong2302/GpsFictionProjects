@@ -46,9 +46,8 @@ public class RouteGeoPointListHelper implements PlayerLocationListener {
     }
 
     @Override
-    public void onLocationPlayerChanged(PlayerLocationEvent playerLocationEvent) {
-        MyGeoPoint p = playerLocationEvent.getLocationOfPlayer();
-        if (listOfPoints.pointDistanceMin(p).distanceTo(p) > deltaDistMax) {
+    public void onLocationPlayerChanged(MyGeoPoint playerLocation) {
+        if (listOfPoints.pointDistanceMin(playerLocation).distanceTo(playerLocation) > deltaDistMax) {
             stopListenning();
             mapFragment.calcRoutePath();
         } else {
@@ -57,14 +56,14 @@ public class RouteGeoPointListHelper implements PlayerLocationListener {
                 MyGeoPoint g1 = new MyGeoPoint(listOfPoints.get(1));
                 boolean toFillRoutePathLayer = false;
                 float dPts0Pts1 = g0.distanceTo(g1);
-                float dPts0Pl = g0.distanceTo(p);
+                float dPts0Pl = g0.distanceTo(playerLocation);
                 while (dPts0Pts1 < dPts0Pl) {
                     toFillRoutePathLayer = true;
                     listOfPoints.poll();
                     g0 = g1;
                     g1 = new MyGeoPoint(listOfPoints.get(1));
                     dPts0Pts1 = g0.distanceTo(g1);
-                    dPts0Pl = g0.distanceTo(p);
+                    dPts0Pl = g0.distanceTo(playerLocation);
                     if (listOfPoints.size() == 2) break;
                 }
                 if (toFillRoutePathLayer) {
@@ -72,10 +71,10 @@ public class RouteGeoPointListHelper implements PlayerLocationListener {
                 }
             }
             if (mapFragment.getRoutePath() != null && !mapFragment.isShortestPathRunning()) {
-                Instruction nextInst = mapFragment.getRoutePath().getInstructions().find(playerLocationEvent.getLocationOfPlayer().getLatitude(), playerLocationEvent.getLocationOfPlayer().getLongitude(), 2000);
+                Instruction nextInst = mapFragment.getRoutePath().getInstructions().find(playerLocation.getLatitude(), playerLocation.getLongitude(), 2000);
                 int lastIndex = nextInst.getPoints().size()-1;
                 MyGeoPoint gp = new MyGeoPoint(nextInst.getPoints().getLat(lastIndex),nextInst.getPoints().getLon(lastIndex));
-                calcDistancePlayerToPoints(playerLocationEvent.getLocationOfPlayer(),gp);
+                calcDistancePlayerToPoints(playerLocation,gp);
                 DistanceToTextHelper dst = new DistanceToTextHelper(distanceToNxtPoint);
                 nextInstructionString = mTranslation.tr("web.to_hint", new Object[0]) + " " + dst.getDistanceInText() + ", " + nextInst.getTurnDescription(mTranslation);
                 Toast.makeText(mapFragment.getmGpsFictionActivity(), nextInstructionString, Toast.LENGTH_LONG).show();

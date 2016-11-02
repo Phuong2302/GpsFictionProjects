@@ -10,7 +10,6 @@ import android.view.View;
 import com.sdesimeur.android.gpsfiction.R;
 import com.sdesimeur.android.gpsfiction.activities.GpsFictionActivity;
 import com.sdesimeur.android.gpsfiction.classes.MyLocationListener;
-import com.sdesimeur.android.gpsfiction.classes.PlayerBearingEvent;
 import com.sdesimeur.android.gpsfiction.classes.PlayerBearingListener;
 import com.sdesimeur.android.gpsfiction.classes.Zone;
 
@@ -119,7 +118,7 @@ public class MiniCompassView extends View implements PlayerBearingListener {
     }
 
     @Override
-    public void onBearingPlayerChanged(PlayerBearingEvent playerBearingEvent) {
+    public void onBearingPlayerChanged(float angle) {
         this.invalidate();
     }
 

@@ -15,7 +15,6 @@ import com.sdesimeur.android.gpsfiction.R;
 import com.sdesimeur.android.gpsfiction.activities.GpsFictionActivity;
 import com.sdesimeur.android.gpsfiction.classes.GpsFictionData;
 import com.sdesimeur.android.gpsfiction.classes.MyLocationListener;
-import com.sdesimeur.android.gpsfiction.classes.PlayerBearingEvent;
 import com.sdesimeur.android.gpsfiction.classes.PlayerBearingListener;
 import com.sdesimeur.android.gpsfiction.classes.Zone;
 import com.sdesimeur.android.gpsfiction.classes.ZoneSelectListener;
@@ -226,9 +225,9 @@ public class CompassView extends View implements PlayerBearingListener, ZoneSele
     }
 
     @Override
-    public void onBearingPlayerChanged(PlayerBearingEvent playerBearingEvent) {
+    public void onBearingPlayerChanged(float angle) {
         // TODO Auto-generated method stub
-        bearingOfPlayer = playerBearingEvent.getBearing();
+        bearingOfPlayer = angle;
         invalidate();
     }
 

@@ -102,17 +102,17 @@ public class Zone extends Container implements ZoneEnterOrExitInterface, PlayerL
         return thisZoneSelected;
 	}*/
 
-    public void onLocationPlayerChanged(PlayerLocationEvent playerLocationEvent) {
-        this.playerIsInThisZone = this.isInThisZone(playerLocationEvent.getLocationOfPlayer());
+    public void onLocationPlayerChanged(MyGeoPoint playerLocation) {
+        this.playerIsInThisZone = this.isInThisZone(playerLocation);
         if (!(this.playerIsInThisZone)) {
-            this.setNearestPoint2Player(playerLocationEvent);
+            this.setNearestPoint2Player(playerLocation);
         }
     }
 
-    private void setNearestPoint2Player(PlayerLocationEvent playerLocationEvent) {
-        nearestPoint2Player = this.shape.pointDistanceMin(playerLocationEvent.getLocationOfPlayer());
-        distance2Player.setDistanceInKM(this.nearestPoint2Player.distanceTo(playerLocationEvent.getLocationOfPlayer()));
-        bearing2Zone = playerLocationEvent.getLocationOfPlayer().bearingTo(this.nearestPoint2Player);
+    private void setNearestPoint2Player(MyGeoPoint playerLocation) {
+        nearestPoint2Player = this.shape.pointDistanceMin(playerLocation);
+        distance2Player.setDistanceInKM(this.nearestPoint2Player.distanceTo(playerLocation));
+        bearing2Zone = playerLocation.bearingTo(this.nearestPoint2Player);
     }
 
     public float getDistance2Player() {
@@ -252,11 +252,9 @@ public class Zone extends Container implements ZoneEnterOrExitInterface, PlayerL
     }
 
     @Override
-    public void onBearingPlayerChanged(PlayerBearingEvent playerBearingEvent) {
-        // TODO Auto-generated method stub
-        float a = playerBearingEvent.getBearing();
-        bearingPlayer = a;
-        anglePlayer2Zone = this.getBearing2Zone() - a;
+    public void onBearingPlayerChanged(float angle) {
+        bearingPlayer = angle;
+        anglePlayer2Zone = this.getBearing2Zone() - angle;
     }
 
     public float getAnglePlayer2Zone() {

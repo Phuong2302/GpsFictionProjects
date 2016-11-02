@@ -8,10 +8,10 @@ import com.sdesimeur.android.gpsfiction.R;
 import com.sdesimeur.android.gpsfiction.activities.GpsFictionActivity;
 import com.sdesimeur.android.gpsfiction.classes.GpsFictionData;
 import com.sdesimeur.android.gpsfiction.classes.MyLocationListener;
-import com.sdesimeur.android.gpsfiction.classes.PlayerLocationEvent;
 import com.sdesimeur.android.gpsfiction.classes.PlayerLocationListener;
 import com.sdesimeur.android.gpsfiction.classes.Zone;
 import com.sdesimeur.android.gpsfiction.classes.ZoneSelectListener;
+import com.sdesimeur.android.gpsfiction.geopoint.MyGeoPoint;
 
 public class ZoneDistance4CompassView extends TextView implements PlayerLocationListener, ZoneSelectListener {
 
@@ -38,7 +38,7 @@ public class ZoneDistance4CompassView extends TextView implements PlayerLocation
     }
 
     @Override
-    public void onLocationPlayerChanged(PlayerLocationEvent playerLocationEvent) {
+    public void onLocationPlayerChanged(MyGeoPoint playerLocation) {
         String distanceText = (mGpsFictionActivity.getmGpsFictionData().getSelectedZone() == null) ?
                 getResources().getString(R.string.noZoneDistance) :
                 mGpsFictionActivity.getmGpsFictionData().getSelectedZone().getStringDistance2Player();

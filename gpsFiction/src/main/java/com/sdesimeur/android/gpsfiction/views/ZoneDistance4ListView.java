@@ -6,9 +6,9 @@ import android.widget.TextView;
 
 import com.sdesimeur.android.gpsfiction.activities.GpsFictionActivity;
 import com.sdesimeur.android.gpsfiction.classes.MyLocationListener;
-import com.sdesimeur.android.gpsfiction.classes.PlayerLocationEvent;
 import com.sdesimeur.android.gpsfiction.classes.PlayerLocationListener;
 import com.sdesimeur.android.gpsfiction.classes.Zone;
+import com.sdesimeur.android.gpsfiction.geopoint.MyGeoPoint;
 
 public class ZoneDistance4ListView extends TextView implements PlayerLocationListener {
 
@@ -30,14 +30,14 @@ public class ZoneDistance4ListView extends TextView implements PlayerLocationLis
 
     public void init(GpsFictionActivity gpsFictionActivity, Zone zone) {
         mGpsFictionActivity = gpsFictionActivity;
-        this.attachedZone = zone;
+        attachedZone = zone;
         mGpsFictionActivity.getmMyLocationListener().addPlayerLocationListener(MyLocationListener.REGISTER.VIEW, this);
 //		this.gpsFictionData.getGpsFictionData().addZoneSelectListener(GpsFictionData.REGISTER.VIEW, this);
     }
 
     @Override
-    public void onLocationPlayerChanged(PlayerLocationEvent playerLocationEvent) {
-        String distanceText = this.attachedZone.getStringDistance2Player();
+    public void onLocationPlayerChanged(MyGeoPoint playerLocation) {
+        String distanceText = attachedZone.getStringDistance2Player();
         this.setText(distanceText);
         if (this.isShown())
             this.invalidate();

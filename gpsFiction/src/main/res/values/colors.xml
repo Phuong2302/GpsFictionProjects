@@ -19,4 +19,7 @@
     <color name="colorOfZoneShapeNotSelected">#A0FFB000</color>
     <color name="colorOfZoneShapeSelected">#A0FF0000</color>
     <color name="colorOfZoneShapeInvisible">#00000000</color>
+    <color name="textmenuUnChecked">#FF000000</color>
+    <color name="textmenuChecked">#FF00FF00</color>
+
 </resources>
