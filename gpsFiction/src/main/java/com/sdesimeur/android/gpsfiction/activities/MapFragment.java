@@ -8,7 +8,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
-import android.view.DragEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -45,6 +44,8 @@ import org.oscim.backend.canvas.Color;
 import org.oscim.backend.canvas.Paint;
 import org.oscim.core.GeoPoint;
 import org.oscim.core.MapPosition;
+import org.oscim.event.MotionEvent;
+import org.oscim.layers.MapEventLayer;
 import org.oscim.layers.PathLayer;
 import org.oscim.layers.marker.ItemizedLayer;
 import org.oscim.layers.marker.MarkerItem;
@@ -72,16 +73,38 @@ import static org.oscim.android.canvas.AndroidGraphics.drawableToBitmap;
 import static org.oscim.layers.marker.MarkerSymbol.HotspotPlace;
 
 
-public class MapFragment extends MyTabFragment implements PlayerBearingListener, ZoneChangeListener, PlayerLocationListener, ZoneSelectListener, ItemizedLayer.OnItemGestureListener<MarkerItem> {
+public class MapFragment
+        extends MyTabFragment
+        implements PlayerBearingListener, ZoneChangeListener, PlayerLocationListener,
+                    ZoneSelectListener, ItemizedLayer.OnItemGestureListener<MarkerItem> {
     MapView mapView;
     Map mMap;
     //MapPreferences mPrefs;
     //private MapPosition mapPosition = null;
-    private static final int INITZOOMLEVEL = 14;
     private static final int SELECTEDBUTTON = 255;
     private static final int UNSELECTEDBUTTON = 100;
     private ImageView viewForMapDirection;
     private ImageView viewForMapPosition;
+    int clickCount;
+    private int PositionTouchX;
+    private int PositionTouchY;
+    long startTouchTime = 0 ;
+
+/*
+    public void onMapEvent(Event e, MapPosition mapPosition) {
+        if ((e == Map.MOVE_EVENT) || (e==Map.POSITION_EVENT)) {
+            case MotionEvent.ACTION_MOVE:
+                if ((pointerCount == 1)||(pointerCount == 2)) {
+            viewForMapPosition.setTag(R.drawable.mapwithoutfollow);
+            fixViewForMapPosition();
+            onLocationPlayerChanged(getPlayerLocation());
+            viewForMapDirection.setTag(MapDirection.FIX);
+            fixViewForMapDirection();
+            onBearingPlayerChanged(getmMyLocationListener().getBearingOfPlayer());
+        }
+
+    }
+*/
 
     private static class MapDirection {
         public static final int PLAYER=0;
@@ -99,7 +122,6 @@ public class MapFragment extends MyTabFragment implements PlayerBearingListener,
     private volatile boolean prepareInProgress = false;
     private MarkerItem playerMarkerItem;
     private ViewGroup viewGroupForVehiculesButtons = null;
-
     private HashMap<Integer,FlagEncoder> vehiculeGHEncoding = new HashMap <Integer, FlagEncoder> () {{
         put(R.drawable.compass, null);
         put(R.drawable.pieton, new FootFlagEncoder());
@@ -122,6 +144,18 @@ public class MapFragment extends MyTabFragment implements PlayerBearingListener,
 //    private RotateDrawable playerRotateDrawable = null;
 //    private Bitmap playerBitmap = null;
 
+    public int getZoomLevel() {
+        return getmGpsFictionData().getZoomLevel();
+    }
+    public void setZoomLevel(int id) {
+        getmGpsFictionData().setZoomLevel(id);
+    }
+    public int getZoomLevelIncr() {
+        return getmGpsFictionData().getZoomLevelIncr();
+    }
+    public int getZoomLevelDecr() {
+        return getmGpsFictionData().getZoomLevelDecr();
+    }
     public int getVehiculeSelectedId() {
         return getmGpsFictionData().getVehiculeSelectedId();
     }
@@ -141,7 +175,6 @@ public class MapFragment extends MyTabFragment implements PlayerBearingListener,
 
     public MapFragment() {
         super();
-        //	this.setNameId(R.string.tabMapTitle);
     }
 
     public MapView getMapView() {
@@ -151,16 +184,9 @@ public class MapFragment extends MyTabFragment implements PlayerBearingListener,
     private void finishPrepare() {
         prepareInProgress = false;
     }
-    boolean isReady()
-    {
-        // only return true if already loaded
-        if (hopper != null)
-            return true;
-
-        if (prepareInProgress)
-        {
-            return false;
-        }
+    boolean isReady() {
+        if (hopper != null) return true;
+        if (prepareInProgress) return false;
         return false;
     }
 
@@ -203,6 +229,22 @@ public class MapFragment extends MyTabFragment implements PlayerBearingListener,
         //setVehiculeSelectedId(R.drawable.compass);
         mapView=(MapView) this.getRootView().findViewById(R.id.mapView);
         mMap = mapView.map();
+        mMap.layers().add(new MapEventLayer(mMap){
+            public boolean onTouchEvent(MotionEvent e) {
+                int pointerCount = e.getPointerCount();
+                if ((e.getAction() & MotionEvent.ACTION_MASK)==MotionEvent.ACTION_MOVE ) {
+                        if ((pointerCount == 1)||(pointerCount == 2)) {
+                            viewForMapPosition.setTag(R.drawable.mapwithoutfollow);
+                            fixViewForMapPosition();
+                            onLocationPlayerChanged(getPlayerLocation());
+                            viewForMapDirection.setTag(MapDirection.FIX);
+                            fixViewForMapDirection();
+                            onBearingPlayerChanged(getmMyLocationListener().getBearingOfPlayer());
+                        }
+                }
+                return super.onTouchEvent(e);
+            }
+        });
         zoneViewHelperHashMap = new HashMap<>();
         playerDrawable = new MyDrawable(getDrawable(getActivity(),R.drawable.player_marker));
 //        playerRotateDrawable = (RotateDrawable) getResources().getDrawable(R.drawable.playerrotatemarker);
@@ -220,7 +262,7 @@ public class MapFragment extends MyTabFragment implements PlayerBearingListener,
             mMap.layers().add(new LabelLayer(mMap, l));
             //   mPrefs.clear();
             MapPosition pos = mMap.getMapPosition();
-            pos.setZoomLevel(INITZOOMLEVEL);
+            pos.setZoomLevel(getZoomLevel());
             mMap.setMapPosition(pos);
         }
         if (routePathLayer == null) {
@@ -278,6 +320,10 @@ public class MapFragment extends MyTabFragment implements PlayerBearingListener,
         super.onDestroyView();
     }
 
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        super.onSaveInstanceState(savedInstanceState);
+    }
     @Override
     public void onDestroy() {
         super.onDestroy();
@@ -339,7 +385,7 @@ public class MapFragment extends MyTabFragment implements PlayerBearingListener,
             @Override
             public void onClick(View v) {
                 MapPosition pos = mMap.getMapPosition();
-                pos.setZoomLevel(pos.getZoomLevel()+1);
+                pos.setZoomLevel(getZoomLevelIncr());
                 mMap.setMapPosition(pos);
             }
         });
@@ -347,7 +393,7 @@ public class MapFragment extends MyTabFragment implements PlayerBearingListener,
             @Override
             public void onClick(View v) {
                 MapPosition pos = mMap.getMapPosition();
-                pos.setZoomLevel(pos.getZoomLevel()-1);
+                pos.setZoomLevel(getZoomLevelDecr());
                 mMap.setMapPosition(pos);
             }
         });
@@ -367,7 +413,7 @@ public class MapFragment extends MyTabFragment implements PlayerBearingListener,
 //                    if (((int)v2.getTag()) == ((int)v1.getTag())) {
 //                        setVehiculeSelectedId(idx);
 //                    }
-                    if (((int) v2.getTag()) == res) {
+                    if (((int) v2.getTag()) != res) {
                         v2.getDrawable().setAlpha(MapFragment.UNSELECTEDBUTTON);
                         v2.invalidate();
                     }
@@ -404,43 +450,30 @@ public class MapFragment extends MyTabFragment implements PlayerBearingListener,
         viewForMapPosition = (ImageView) vg.findViewById(R.id.forMapPositionButtons);
         viewForMapPosition.setImageDrawable(getDrawable(getActivity(),R.drawable.mapwithfollow));
         viewForMapPosition.setTag(R.drawable.mapwithfollow);
-        mapView.setOnDragListener(new View.OnDragListener() {
-            @Override
-            public boolean onDrag(View view, DragEvent dragEvent) {
-                viewForMapPosition.setTag(R.drawable.mapwithoutfollow);
-                fixViewForMapPosition();
-                return true;
-            }
-        });
         viewForMapPosition.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 int id = (int) viewForMapPosition.getTag();
                 if (id == R.drawable.mapwithfollow) {
                     viewForMapPosition.setTag(R.drawable.mapwithoutfollow);
+                    viewForMapDirection.setTag(MapDirection.FIX);
                 } else if (id == R.drawable.mapwithoutfollow) {
                     viewForMapPosition.setTag(R.drawable.mapwithfollow);
                 }
                 fixViewForMapPosition();
+                fixViewForMapDirection();
+                onLocationPlayerChanged(getPlayerLocation());
             }
         });
     }
     private void fixViewForMapPosition () {
         int id = (int) viewForMapPosition.getTag();
-            viewForMapDirection.setImageDrawable(getDrawable(getActivity(),id));
+        viewForMapPosition.setImageDrawable(getDrawable(getActivity(),id));
     }
     private void addViewForMapDirection(ViewGroup vg) {
         viewForMapDirection = (ImageView) vg.findViewById(R.id.forMapDirectionButtons);
         viewForMapDirection.setImageDrawable(getDrawable(getActivity(),R.drawable.bearing));
         viewForMapDirection.setTag(MapDirection.PLAYER);
-        mapView.setOnDragListener(new View.OnDragListener() {
-            @Override
-            public boolean onDrag(View view, DragEvent dragEvent) {
-                viewForMapDirection.setTag(MapDirection.FIX);
-                fixViewForMapDirection();
-                return true;
-            }
-        });
         viewForMapDirection.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -451,9 +484,11 @@ public class MapFragment extends MyTabFragment implements PlayerBearingListener,
                     viewForMapDirection.setTag(MapDirection.NORTH);
                 } else if (id == MapDirection.NORTH) {
                     viewForMapDirection.setTag(MapDirection.PLAYER);
+                    viewForMapPosition.setTag(R.drawable.mapwithfollow);
                 }
-                onBearingPlayerChanged(getmMyLocationListener().getBearingOfPlayer());
                 fixViewForMapDirection();
+                fixViewForMapPosition();
+                onBearingPlayerChanged(getmMyLocationListener().getBearingOfPlayer());
             }
         });
     }
@@ -610,9 +645,6 @@ public class MapFragment extends MyTabFragment implements PlayerBearingListener,
             zvh.markerItem = new MarkerItem(zone, zone.getName(), "", zone.getCenterPoint());
             mMarkerLayer.addItem(zvh.markerItem);
         }
-    //    if (zvh.pathLayer == null) {
-    //        zvh.pathLayer = new PathLayer(mMap,Color.TRANSPARENT);
-    //    }
         if (zvh.vectorLayer == null) {
             zvh.vectorLayer = new VectorLayer(mMap);
             mMap.layers().add(zvh.vectorLayer);
@@ -624,34 +656,22 @@ public class MapFragment extends MyTabFragment implements PlayerBearingListener,
         }
         zvh.markerItem.setMarker(zone.isVisible()?zoneMarkerSymbol:null);
         mMarkerLayer.populate();
-/*
-        if (zone.isVisible()) {
-            zvh.polygon.setStyle(zone.isSelectedZone() ? mStyle4SelectedZone : mStyle4UnSelectedZone);
-            if (!zvh.isPolygonVisible) {
-                mVectorLayer.add(zvh.polygon);
-                zvh.isPolygonVisible = true;
-            }
-        } else {
-            if (zvh.isPolygonVisible) {
-                mVectorLayer.remove(zvh.polygon);
-                zvh.isPolygonVisible = false;
-            }
-        }
-*/
+
+
         Style st = (zone.isVisible()?
                 (zone.isSelectedZone() ? mStyle4SelectedZone : mStyle4UnSelectedZone):
                 mStyle4InvisibleZone);
         zvh.polygon.setStyle(st);
-//        setPolygonStyle(zvh.polygon);
         zvh.vectorLayer.update();
-/*
+    /*
+        if (zvh.pathLayer == null) {
+            zvh.pathLayer = new PathLayer(mMap,Color.TRANSPARENT);
+        }
         if (zone.isVisible()) {
             if (mMap.layers().contains(zvh.pathLayer)) mMap.layers().remove(zvh.pathLayer);
         } else {
             if (! mMap.layers().contains(zvh.pathLayer)) mMap.layers().add(zvh.pathLayer);
         }
-        */
-            /*
         int lineWidth=getResources().getDimensionPixelSize(R.dimen.widthOfZoneShape);
         int lineColor = ((zone.isVisible()?
                 getResources().getColor(zone.isSelectedZone() ? R.color.colorOfZoneShapeSelected : R.color.colorOfZoneShapeNotSelected):
@@ -667,7 +687,6 @@ public class MapFragment extends MyTabFragment implements PlayerBearingListener,
             zvh.pathLayer.clearPath();
         }
     */
-
     }
 
     public void onBearingPlayerChanged(float angle) {

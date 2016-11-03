@@ -14,6 +14,7 @@ import java.util.function.IntPredicate;
 import java.util.function.Predicate;
 
 public class GpsFictionData {
+    private static final int INITZOOMLEVEL = 14;
     public static final String BUNDLE = "GpsFictionData";
     public static final String BUNDLEBOOLEANARRAY = "BooleanArray";
     private static final String GFTNARRAY = "GFTNArray";
@@ -27,6 +28,24 @@ public class GpsFictionData {
     private int rules;
     private int title;
     private GpsFictionActivity mGpsFictionActivity = null;
+
+    public int getZoomLevel() {
+        return zoomLevel;
+    }
+
+    public void setZoomLevel(int zoomLevel) {
+        this.zoomLevel = zoomLevel;
+    }
+    public int getZoomLevelIncr() {
+        zoomLevel++;
+        return zoomLevel;
+    }
+    public int getZoomLevelDecr() {
+        zoomLevel--;
+        return zoomLevel;
+    }
+
+    private int zoomLevel = INITZOOMLEVEL;
 //    private MyLocationListener mMyLocationListener = null;
     private HashMap<GpsFictionData.REGISTER, HashSet<ZoneSelectListener>> zoneSelectListener = new HashMap<>();
     private HashSet<GpsFictionThing> gpsFictionThings = new HashSet<>();
@@ -53,6 +72,7 @@ public class GpsFictionData {
         Bundle dest = new Bundle();
         int index = 0;
         boolean[] valbool = {this.allreadyConfigured};
+        dest.putInt("zoomLevel",zoomLevel);
         dest.putInt("lastVehiculeSelectedID",vehiculeSelectedId);
         dest.putBooleanArray("BundleBoolArray", valbool);
         ArrayList<String> gftn = new ArrayList<String>();
@@ -97,6 +117,7 @@ public class GpsFictionData {
         Class myclass = null;
         GpsFictionThing gft = null;
         Bundle toPass = null;
+        zoomLevel = in.getInt("zoomLevel",zoomLevel);
         vehiculeSelectedId = in.getInt("lastVehiculeSelectedID",vehiculeSelectedId);
         val = in.getBooleanArray("BundleBoolArray");
         this.allreadyConfigured = val[0];
