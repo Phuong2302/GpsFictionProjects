@@ -33,7 +33,6 @@ public class MyLocationListener implements LocationListener, SensorEventListener
     private Time lastTimePlayerGeoPoint = null;
     private MyGeoPoint playerGeoPoint = null;
     private Time timePlayerGeoPoint = null;
-    private boolean firstLocation;
     private LocationManager locationManager = null;
     //	private static final MyLocationListener staticLocationListener=new MyLocationListener();
 //	private static final SensorEventListener staticCompassListener = staticLocationListener;
@@ -46,21 +45,18 @@ public class MyLocationListener implements LocationListener, SensorEventListener
     private GpsFictionActivity gpsFictionActivity = null;
 
     public MyLocationListener() {
-        this.playerBearingListener = new HashMap<>();
-        this.playerLocationListener = new HashMap<>();
+        playerBearingListener = new HashMap<>();
+        playerLocationListener = new HashMap<>();
         for (REGISTER i : REGISTER.values()) {
-            this.playerBearingListener.put(i, new HashSet<PlayerBearingListener>());
-            this.playerLocationListener.put(i, new HashSet<PlayerLocationListener>());
+            playerBearingListener.put(i, new HashSet<PlayerBearingListener>());
+            playerLocationListener.put(i, new HashSet<PlayerLocationListener>());
         }
-        this.lastPlayerGeoPoint = new MyGeoPoint();
-        this.lastTimePlayerGeoPoint = new Time();
-        this.playerGeoPoint = new MyGeoPoint();
-        this.timePlayerGeoPoint = new Time();
-        this.firstLocation = true;
-        this.compassActive = false;
-        this.bearingOfPlayer = 0;
-        this.compassBearing = 0;
-        this.locationBearing = 0;
+        timePlayerGeoPoint = new Time();
+        lastTimePlayerGeoPoint = new Time();
+        compassActive = false;
+        bearingOfPlayer = 0;
+        compassBearing = 0;
+        locationBearing = 0;
     }
 
     public HashSet<PlayerBearingListener> getPlayerBearingListener(REGISTER i) {
@@ -73,33 +69,37 @@ public class MyLocationListener implements LocationListener, SensorEventListener
 
     public Bundle getByBundle() {
         Bundle dest = new Bundle();
-        dest.putFloat("bop", this.bearingOfPlayer);
-        dest.putFloat("cb", this.compassBearing);
-        dest.putFloat("lb", this.locationBearing);
-        double[] coord = {this.playerGeoPoint.getLatitude(), this.playerGeoPoint.getLongitude()};
+        dest.putFloat("bop", bearingOfPlayer);
+        dest.putFloat("cb", compassBearing);
+        dest.putFloat("lb", locationBearing);
+        /*
+        double[] coord = {playerGeoPoint.getLatitude(), playerGeoPoint.getLongitude()};
         dest.putDoubleArray("pgp", coord);
-        coord = new double[]{this.lastPlayerGeoPoint.getLatitude(), this.lastPlayerGeoPoint.getLongitude()};
+        coord = new double[]{lastPlayerGeoPoint.getLatitude(), lastPlayerGeoPoint.getLongitude()};
         dest.putDoubleArray("lpgp", coord);
-        dest.putLong("tpgp", this.timePlayerGeoPoint.toMillis(true));
-        dest.putLong("ltpgp", this.lastTimePlayerGeoPoint.toMillis(true));
+        dest.putLong("tpgp", timePlayerGeoPoint.toMillis(true));
+        dest.putLong("ltpgp", lastTimePlayerGeoPoint.toMillis(true));
+        */
         return dest;
     }
 
     public void setByBundle(Bundle in) {
-        this.bearingOfPlayer = in.getFloat("bop");
-        this.compassBearing = in.getFloat("cb");
-        this.locationBearing = in.getFloat("lb");
+        bearingOfPlayer = in.getFloat("bop");
+        compassBearing = in.getFloat("cb");
+        locationBearing = in.getFloat("lb");
+        /*
         double[] coord = in.getDoubleArray("pgp");
-        this.playerGeoPoint = new MyGeoPoint(coord[0], coord[1]);
+        playerGeoPoint = new MyGeoPoint(coord[0], coord[1]);
         coord = in.getDoubleArray("lpgp");
-        this.lastPlayerGeoPoint = new MyGeoPoint(coord[0], coord[1]);
-        this.timePlayerGeoPoint.set(in.getLong("tpgp"));
-        this.lastTimePlayerGeoPoint.set(in.getLong("ltpgp"));
+        lastPlayerGeoPoint = new MyGeoPoint(coord[0], coord[1]);
+        timePlayerGeoPoint.set(in.getLong("tpgp"));
+        lastTimePlayerGeoPoint.set(in.getLong("ltpgp"));
+        */
     }
 
-    public void init(GpsFictionActivity gpsFictionActivity) {
-        this.gpsFictionActivity = gpsFictionActivity;
-        this.startLocationListener();
+    public void init(GpsFictionActivity gfa) {
+        gpsFictionActivity = gfa;
+        startLocationListener();
 
     }
 
@@ -108,27 +108,27 @@ public class MyLocationListener implements LocationListener, SensorEventListener
         LOCATION
     }*/
     public void addPlayerLocationListener(REGISTER type, PlayerLocationListener listener) {
-        this.playerLocationListener.get(type).add(listener);
+        playerLocationListener.get(type).add(listener);
         if (playerGeoPoint != null) listener.onLocationPlayerChanged(playerGeoPoint);
     }
 
     public void removePlayerLocationListener(REGISTER type, PlayerLocationListener listener) {
-        this.playerLocationListener.get(type).remove(listener);
+        playerLocationListener.get(type).remove(listener);
     }
 
     public void addPlayerBearingListener(REGISTER type, PlayerBearingListener listener) {
-        this.playerBearingListener.get(type).add(listener);
+        playerBearingListener.get(type).add(listener);
             listener.onBearingPlayerChanged(bearingOfPlayer);
     }
 
     public void removePlayerBearingListener(REGISTER type, PlayerBearingListener listener) {
-        this.playerBearingListener.get(type).remove(listener);
+        playerBearingListener.get(type).remove(listener);
     }
 
     public void firePlayerLocationListener() {
         if (playerGeoPoint != null)
         for (REGISTER i : REGISTER.values()) {
-            for (PlayerLocationListener listener : this.playerLocationListener.get(i)) {
+            for (PlayerLocationListener listener : playerLocationListener.get(i)) {
                 listener.onLocationPlayerChanged(playerGeoPoint);
             }
         }
@@ -136,19 +136,19 @@ public class MyLocationListener implements LocationListener, SensorEventListener
 
     public void firePlayerBearingListener() {
         for (REGISTER i : REGISTER.values()) {
-            for (PlayerBearingListener listener : this.playerBearingListener.get(i)) {
+            for (PlayerBearingListener listener : playerBearingListener.get(i)) {
                 listener.onBearingPlayerChanged(bearingOfPlayer);
             }
         }
     }
 
     public LocationManager getLocationManager() {
-        return this.locationManager;
+        return locationManager;
     }
 
     public void onLocationChanged(Location location) {
-        this.setNewPlayerGeopoint(location);
-        this.firePlayerLocationListener();
+        setNewPlayerGeopoint(location);
+        firePlayerLocationListener();
     }
 
     @Override
@@ -167,36 +167,33 @@ public class MyLocationListener implements LocationListener, SensorEventListener
     }
 
     private void setNewPlayerGeopoint(Location location) {
-        if (this.firstLocation) {
-            this.firstLocation = false;
-            this.timePlayerGeoPoint.setToNow();
-            //this.playerGeoPoint.setGeoPoint(location);
-            this.playerGeoPoint = new MyGeoPoint(location);
+        if (playerGeoPoint != null) {
+            lastTimePlayerGeoPoint.set(timePlayerGeoPoint);
+            lastPlayerGeoPoint = new MyGeoPoint(playerGeoPoint);
         }
-        this.lastTimePlayerGeoPoint.set(this.timePlayerGeoPoint);
-        //this.lastPlayerGeoPoint.setGeoPoint(this.playerGeoPoint);
-        this.lastPlayerGeoPoint = new MyGeoPoint(this.playerGeoPoint);
-        this.timePlayerGeoPoint.setToNow();
-        //this.playerGeoPoint.setGeoPoint(location);
-        this.playerGeoPoint = new MyGeoPoint(location);
-        this.locationBearing = this.lastPlayerGeoPoint.bearingTo(this.playerGeoPoint);
-        this.setCompassActive();
+        timePlayerGeoPoint.setToNow();
+        //playerGeoPoint.setGeoPoint(location);
+        playerGeoPoint = new MyGeoPoint(location);
+        if (lastPlayerGeoPoint != null) {
+            locationBearing = lastPlayerGeoPoint.bearingTo(playerGeoPoint);
+        }
+        setCompassActive();
     }
 
     private void calculateNewPlayerBearing() {
         // TODO Auto-generated method stub
-        if (this.compassActive) {
-            this.bearingOfPlayer = this.compassBearing;
+        if (compassActive) {
+            bearingOfPlayer = compassBearing;
         } else {
-            this.bearingOfPlayer = this.locationBearing;
+            bearingOfPlayer = locationBearing;
         }
-        this.firePlayerBearingListener();
+        firePlayerBearingListener();
     }
 
     public void startLocationListener() {
         //TODO verifier que le GPS est active, sinon lancer une boite de dialog pour le faire activer
-        this.locationManager = (LocationManager) this.getGpsFictionActivity().getSystemService(Context.LOCATION_SERVICE);
-        if (ActivityCompat.checkSelfPermission(this.getGpsFictionActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this.getGpsFictionActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        locationManager = (LocationManager) getGpsFictionActivity().getSystemService(Context.LOCATION_SERVICE);
+        if (ActivityCompat.checkSelfPermission(getGpsFictionActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getGpsFictionActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
             //    ActivityCompat#requestPermissions
             // here to request the missing permissions, and then overriding
@@ -206,24 +203,24 @@ public class MyLocationListener implements LocationListener, SensorEventListener
             // for ActivityCompat#requestPermissions for more details.
             return;
         }
-        this.locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 200, 0.5f, this);
-        Location location = this.locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-        if (location == null) {
-            this.playerGeoPoint = new MyGeoPoint(LATITUDE, LONGITUDE);
-        } else {
-            this.playerGeoPoint = new MyGeoPoint(location);
-        }
-        this.lastPlayerGeoPoint = this.playerGeoPoint;
-        this.sensorManager = (SensorManager) this.getGpsFictionActivity().getSystemService(Context.SENSOR_SERVICE);
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 200, 0.5f, this);
+        //Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+        //if (location == null) {
+        //    playerGeoPoint = new MyGeoPoint(LATITUDE, LONGITUDE);
+        //} else {
+        //    playerGeoPoint = new MyGeoPoint(location);
+        //}
+        lastPlayerGeoPoint = playerGeoPoint;
+        sensorManager = (SensorManager) getGpsFictionActivity().getSystemService(Context.SENSOR_SERVICE);
 
     }
 
     public GpsFictionActivity getGpsFictionActivity() {
-        return this.gpsFictionActivity;
+        return gpsFictionActivity;
     }
 
     public void removeGpsFictionUpdates() {
-        if (ActivityCompat.checkSelfPermission(this.getGpsFictionActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this.getGpsFictionActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        if (ActivityCompat.checkSelfPermission(getGpsFictionActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getGpsFictionActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
             //    ActivityCompat#requestPermissions
             // here to request the missing permissions, and then overriding
@@ -233,34 +230,37 @@ public class MyLocationListener implements LocationListener, SensorEventListener
             // for ActivityCompat#requestPermissions for more details.
             return;
         }
-        this.locationManager.removeUpdates(this);
+        locationManager.removeUpdates(this);
     }
 
     public MyGeoPoint getPlayerGeoPoint() {
-        return this.playerGeoPoint;
+        return playerGeoPoint;
     }
 
     public boolean isCompassActive() {
-        return this.compassActive;
+        return compassActive;
     }
 
     public void setCompassActive() {
-        if (this.sensorManager != null) {
-            float deltaTimeInMilliSeconds = (float) (this.timePlayerGeoPoint.toMillis(true) - this.lastTimePlayerGeoPoint.toMillis(true));
-            float speed = 3600 * this.lastPlayerGeoPoint.distanceTo(this.playerGeoPoint) / deltaTimeInMilliSeconds;
-            this.compassActive = (speed < SPEEDLIMIT);
+        if (sensorManager != null) {
+            float speed = 0f;
+            if ((lastPlayerGeoPoint != null) && (playerGeoPoint != null)) {
+                float deltaTimeInMilliSeconds = (float) (timePlayerGeoPoint.toMillis(true) - lastTimePlayerGeoPoint.toMillis(true));
+                speed = 3600 * lastPlayerGeoPoint.distanceTo(playerGeoPoint) / deltaTimeInMilliSeconds;
+            }
+            compassActive = (speed < SPEEDLIMIT);
         } else {
-            this.compassActive = false;
+            compassActive = false;
         }
-        if (this.compassActive) {
-            this.sensorsOrientation = this.sensorManager.getDefaultSensor(Sensor.TYPE_ORIENTATION);
-            this.sensorManager.registerListener(this, this.sensorsOrientation, SensorManager.SENSOR_DELAY_GAME);
+        if (compassActive) {
+            sensorsOrientation = sensorManager.getDefaultSensor(Sensor.TYPE_ORIENTATION);
+            sensorManager.registerListener(this, sensorsOrientation, SensorManager.SENSOR_DELAY_GAME);
         } else {
-            if (this.sensorManager != null) {
-                this.sensorManager.unregisterListener(this, this.sensorsOrientation);
+            if (sensorManager != null) {
+                sensorManager.unregisterListener(this, sensorsOrientation);
             }
         }
-        this.calculateNewPlayerBearing();
+        calculateNewPlayerBearing();
     }
 
     @Override
@@ -272,36 +272,36 @@ public class MyLocationListener implements LocationListener, SensorEventListener
     public void onSensorChanged(SensorEvent event) {
         // TODO Auto-generated method stub
         float newCompassBearing = event.values[0];
-        float diffBearing = Math.abs(newCompassBearing - this.compassBearing);
+        float diffBearing = Math.abs(newCompassBearing - compassBearing);
         if (!((diffBearing < MINBEARINGCHANGED) || (diffBearing > (360 - MINBEARINGCHANGED)))) {
-            this.compassBearing = newCompassBearing;
-            this.calculateNewPlayerBearing();
+            compassBearing = newCompassBearing;
+            calculateNewPlayerBearing();
         }
     }
 
     public float getBearingOfPlayer() {
-        return this.bearingOfPlayer;
+        return bearingOfPlayer;
     }
 
     public void clearFragmentListener() {
-        this.getPlayerBearingListener(REGISTER.FRAGMENT).clear();
-        this.getPlayerLocationListener(REGISTER.FRAGMENT).clear();
+        getPlayerBearingListener(REGISTER.FRAGMENT).clear();
+        getPlayerLocationListener(REGISTER.FRAGMENT).clear();
     }
 
     public void clearZoneListener() {
-        this.getPlayerBearingListener(REGISTER.ZONE).clear();
-        this.getPlayerLocationListener(REGISTER.ZONE).clear();
+        getPlayerBearingListener(REGISTER.ZONE).clear();
+        getPlayerLocationListener(REGISTER.ZONE).clear();
     }
 
     public void clearViewListener() {
-        this.getPlayerBearingListener(REGISTER.VIEW).clear();
-        this.getPlayerLocationListener(REGISTER.VIEW).clear();
+        getPlayerBearingListener(REGISTER.VIEW).clear();
+        getPlayerLocationListener(REGISTER.VIEW).clear();
     }
 
     public void clearAllListener() {
-        this.clearFragmentListener();
-        this.clearViewListener();
-        //this.clearZoneListener();
+        clearFragmentListener();
+        clearViewListener();
+        //clearZoneListener();
     }
 
     static public enum REGISTER {

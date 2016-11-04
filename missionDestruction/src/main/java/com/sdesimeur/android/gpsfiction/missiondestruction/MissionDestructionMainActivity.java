@@ -53,9 +53,24 @@ public class MissionDestructionMainActivity extends GpsFictionActivity implement
         super.onResume();
     }
 
+    @Override
+    public void onLocationPlayerChanged(MyGeoPoint playerLocation) {
+        if (!(getmGpsFictionData().isAllreadyConfigured()) && !firstDialogBoxAllreadyOpened) {
+            MyDialogFragment df = new MyDialogFragment();
+            df.init(R.string.dialogFirstTaskTitle, R.string.dialogFirstTaskText);
+            df.getButtonsListIds().add(R.string.dialogButtonYes);
+            df.getButtonsListIds().add(R.string.dialogButtonNo);
+            //firstDialogBoxNotClose = true;
+            firstDialogBoxAllreadyOpened = true;
+            df.show(fragmentManager);
+        } else {
+            getmMyLocationListener().removePlayerLocationListener(MyLocationListener.REGISTER.FRAGMENT,this);
+        }
+    }
+
     public void getReponseFromMyDialogFragment(int why, int reponse) {
         if (why == R.string.dialogFirstTaskTitle) {
-            firstDialogBoxAllreadyOpened = false;
+//            firstDialogBoxAllreadyOpened = false;
             if (reponse == R.string.dialogButtonYes) {
                 angle = ((int) Math.round(360 * Math.random()));
                 createAllZoneAmi();
@@ -186,20 +201,5 @@ public class MissionDestructionMainActivity extends GpsFictionActivity implement
         zpc.setShape(newZp, radius_zone_prendre_clef);
         zoneClef.addThingToContainer(zpc);
         zpc.validate();
-    }
-
-    @Override
-    public void onLocationPlayerChanged(MyGeoPoint playerLocation) {
-        if (!(getmGpsFictionData().isAllreadyConfigured()) && !firstDialogBoxAllreadyOpened) {
-            MyDialogFragment df = new MyDialogFragment();
-            df.init(R.string.dialogFirstTaskTitle, R.string.dialogFirstTaskText);
-            df.getButtonsListIds().add(R.string.dialogButtonYes);
-            df.getButtonsListIds().add(R.string.dialogButtonNo);
-            //firstDialogBoxNotClose = true;
-            firstDialogBoxAllreadyOpened = true;
-            df.show(fragmentManager);
-        } else {
-            getmMyLocationListener().removePlayerLocationListener(MyLocationListener.REGISTER.FRAGMENT,this);
-        }
     }
 }

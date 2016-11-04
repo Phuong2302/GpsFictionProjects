@@ -38,6 +38,7 @@ import com.sdesimeur.android.gpsfiction.classes.ZoneSelectListener;
 import com.sdesimeur.android.gpsfiction.classes.ZoneViewHelper;
 import com.sdesimeur.android.gpsfiction.geopoint.MyGeoPoint;
 import com.sdesimeur.android.gpsfiction.utils.MyDrawable;
+import com.sdesimeur.android.gpsfiction.utils.TextDrawable;
 
 import org.oscim.android.MapView;
 import org.oscim.backend.canvas.Color;
@@ -593,7 +594,13 @@ public class MapFragment
             if (playerMarkerItem != null) {
                 playerMarkerItem.geoPoint=playerLocation;
             } else {
-                playerMarkerItem = new MarkerItem("Player", "", playerLocation);
+                MarkerItem ti = new MarkerItem("Test", "Test", playerLocation);
+                TextDrawable d = new TextDrawable(getResources(),"test");
+                MarkerSymbol ms = new MarkerSymbol(drawableToBitmap(d),HotspotPlace.LOWER_LEFT_CORNER,false);
+                ti.setMarker(ms);
+                mMarkerLayer.addItem(ti);
+
+                playerMarkerItem = new MarkerItem("Player", "Player", playerLocation);
                 playerMarkerSymbol = new MarkerSymbol(drawableToBitmap(playerDrawable.getmDrawable()), HotspotPlace.CENTER, false);
                 playerMarkerItem.setMarker(playerMarkerSymbol);
                 mMarkerLayer.addItem(playerMarkerItem);
