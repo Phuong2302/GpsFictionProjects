@@ -3,6 +3,7 @@ package com.sdesimeur.android.gpsfiction.activities;
 
 import android.content.res.TypedArray;
 import android.graphics.Path;
+import android.graphics.PorterDuff;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -37,7 +38,8 @@ import com.sdesimeur.android.gpsfiction.classes.ZoneChangeListener;
 import com.sdesimeur.android.gpsfiction.classes.ZoneSelectListener;
 import com.sdesimeur.android.gpsfiction.classes.ZoneViewHelper;
 import com.sdesimeur.android.gpsfiction.geopoint.MyGeoPoint;
-import com.sdesimeur.android.gpsfiction.utils.MyDrawable;
+import com.sdesimeur.android.gpsfiction.helpers.DistanceToTextHelper;
+import com.sdesimeur.android.gpsfiction.utils.RotateDrawable;
 import com.sdesimeur.android.gpsfiction.utils.TextDrawable;
 
 import org.oscim.android.MapView;
@@ -69,6 +71,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 
+import static android.support.v4.content.ContextCompat.getColor;
 import static android.support.v4.content.ContextCompat.getDrawable;
 import static org.oscim.android.canvas.AndroidGraphics.drawableToBitmap;
 import static org.oscim.layers.marker.MarkerSymbol.HotspotPlace;
@@ -122,6 +125,7 @@ public class MapFragment
     private volatile boolean shortestPathRunning = false;
     private volatile boolean prepareInProgress = false;
     private MarkerItem playerMarkerItem;
+    private MarkerItem distanceMarkerItem;
     private ViewGroup viewGroupForVehiculesButtons = null;
     private HashMap<Integer,FlagEncoder> vehiculeGHEncoding = new HashMap <Integer, FlagEncoder> () {{
         put(R.drawable.compass, null);
@@ -133,7 +137,7 @@ public class MapFragment
     private MarkerSymbol playerMarkerSymbol = null;
     private HashMap<Zone,ZoneViewHelper> zoneViewHelperHashMap = null;
     private ItemizedLayer<MarkerItem> mMarkerLayer=null;
-    private MyDrawable playerDrawable = null;
+    private RotateDrawable playerDrawable = null;
     private PathLayer routePathLayer = null;
 //    private VectorLayer mVectorLayer = null;
     private PathWrapper routePath = null;
@@ -214,18 +218,18 @@ public class MapFragment
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         setRootView(inflater.inflate(R.layout.map_view, container, false));
         mStyle4SelectedZone = Style.builder()
-                .strokeColor(getResources().getColor(R.color.colorOfZoneShapeSelected))
-                .fillColor(getResources().getColor(R.color.colorOfZoneShapeSelected))
+                .strokeColor(getColor(getActivity(),R.color.colorOfZoneShapeSelected))
+                .fillColor(getColor(getActivity(),R.color.colorOfZoneShapeSelected))
                 .build();
         mStyle4UnSelectedZone = Style.builder()
-                .strokeColor(getResources().getColor(R.color.colorOfZoneShapeNotSelected))
-                .fillColor(getResources().getColor(R.color.colorOfZoneShapeNotSelected))
+                .strokeColor(getColor(getActivity(),R.color.colorOfZoneShapeNotSelected))
+                .fillColor(getColor(getActivity(),R.color.colorOfZoneShapeNotSelected))
                 .build();
         mStyle4InvisibleZone = Style.builder()
-                .fillColor(getResources().getColor(R.color.colorOfZoneShapeInvisible))
+                .fillColor(getColor(getActivity(),R.color.colorOfZoneShapeInvisible))
                 .fillAlpha(0f)
                 .strokeWidth(0)
-                .strokeColor(getResources().getColor(R.color.colorOfZoneShapeInvisible))
+                .strokeColor(getColor(getActivity(),R.color.colorOfZoneShapeInvisible))
                 .build();
         //setVehiculeSelectedId(R.drawable.compass);
         mapView=(MapView) this.getRootView().findViewById(R.id.mapView);
@@ -247,11 +251,15 @@ public class MapFragment
             }
         });
         zoneViewHelperHashMap = new HashMap<>();
-        playerDrawable = new MyDrawable(getDrawable(getActivity(),R.drawable.player_marker));
-//        playerRotateDrawable = (RotateDrawable) getResources().getDrawable(R.drawable.playerrotatemarker);
-//        playerBitmap = BitmapFactory.decodeResource(getResources(),R.drawable.player_marker);
+        playerDrawable = new RotateDrawable(getDrawable(getActivity(),R.drawable.player_marker));
         MarkerSymbol ms = new MarkerSymbol(drawableToBitmap(getResources(),R.drawable.transparent), HotspotPlace.CENTER);
         mMarkerLayer = new ItemizedLayer<>(mMap, new ArrayList<MarkerItem>(), ms , this);
+        if (playerMarkerItem == null) {
+            playerMarkerItem = new MarkerItem("Player", "Player", new MyGeoPoint(90,0));
+            playerMarkerSymbol = new MarkerSymbol(drawableToBitmap(playerDrawable), HotspotPlace.CENTER, false);
+            playerMarkerItem.setMarker(playerMarkerSymbol);
+            mMarkerLayer.addItem(playerMarkerItem);
+        }
         mMap.layers().add(mMarkerLayer);
         MapFileTileSource tileSource = new MapFileTileSource();
         tileSource.setPreferredLanguage(Locale.getDefault().getLanguage());
@@ -271,7 +279,7 @@ public class MapFragment
             mMap.layers().add(routePathLayer);
         }
         int lineWidth=getResources().getDimensionPixelSize(R.dimen.widthOfRouteLine);
-        int lineColor = getResources().getColor(R.color.colorOfRouteLine);
+        int lineColor = getColor(getActivity(),R.color.colorOfRouteLine);
         LineStyle ls = new LineStyle(lineColor, lineWidth, Paint.Cap.ROUND);
         routePathLayer.setStyle(ls);
         ViewGroup vg = (ViewGroup) getRootView();
@@ -490,6 +498,7 @@ public class MapFragment
                 fixViewForMapDirection();
                 fixViewForMapPosition();
                 onBearingPlayerChanged(getmMyLocationListener().getBearingOfPlayer());
+                if (id == MapDirection.NORTH) onLocationPlayerChanged(getPlayerLocation());
             }
         });
     }
@@ -498,9 +507,10 @@ public class MapFragment
         if (id == MapDirection.PLAYER) {
             viewForMapDirection.setImageDrawable(getDrawable(getActivity(),R.drawable.bearing));
         } else if (id == MapDirection.FIX) {
-            MyDrawable md = new MyDrawable(getDrawable(getActivity(),R.drawable.nobearing));
+            RotateDrawable md = new RotateDrawable(getDrawable(getActivity(),R.drawable.nobearing));
             md.setAngle(mMap.getMapPosition().getBearing());
-            viewForMapDirection.setImageDrawable(md.getRotated());
+            viewForMapDirection.setImageDrawable(md);
+            //viewForMapDirection.setImageDrawable(md.getRotated());
         } else if (id == MapDirection.NORTH) {
             viewForMapDirection.setImageDrawable(getDrawable(getActivity(),R.drawable.nobearing));
         }
@@ -586,30 +596,21 @@ public class MapFragment
         if (sZn != null ) {
             onZoneChanged(sZn);
             calcPath();
+            setDistanceMarkerItem();
+            mMarkerLayer.populate();
         }
     }
     @Override
     public void onLocationPlayerChanged(MyGeoPoint playerLocation) {
         if (playerLocation != null) {
-            if (playerMarkerItem != null) {
-                playerMarkerItem.geoPoint=playerLocation;
-            } else {
-                MarkerItem ti = new MarkerItem("Test", "Test", playerLocation);
-                TextDrawable d = new TextDrawable(getResources(),"test");
-                MarkerSymbol ms = new MarkerSymbol(drawableToBitmap(d),HotspotPlace.LOWER_LEFT_CORNER,false);
-                ti.setMarker(ms);
-                mMarkerLayer.addItem(ti);
-
-                playerMarkerItem = new MarkerItem("Player", "Player", playerLocation);
-                playerMarkerSymbol = new MarkerSymbol(drawableToBitmap(playerDrawable.getmDrawable()), HotspotPlace.CENTER, false);
-                playerMarkerItem.setMarker(playerMarkerSymbol);
-                mMarkerLayer.addItem(playerMarkerItem);
-            }
+            playerMarkerItem.geoPoint=playerLocation;
+            setDistanceMarkerItem();
             mMarkerLayer.populate();
             if (((int)viewForMapPosition.getTag()) != R.drawable.mapwithoutfollow) {
                 MapPosition pos = mMap.getMapPosition();
                 pos.setPosition(playerLocation);
                 mMap.setMapPosition(pos);
+                mMap.updateMap(true);
             }
             if (getSelectedZone() != null) updateCalcPath();
         }
@@ -662,6 +663,7 @@ public class MapFragment
             zvh.vectorLayer.add(zvh.polygon);
         }
         zvh.markerItem.setMarker(zone.isVisible()?zoneMarkerSymbol:null);
+        setDistanceMarkerItem();
         mMarkerLayer.populate();
 
 
@@ -710,8 +712,40 @@ public class MapFragment
         mMap.setMapPosition(pos);
 
         playerDrawable.setAngle(playerBearing);
-        playerMarkerSymbol = new MarkerSymbol(drawableToBitmap(playerDrawable.getRotated()), HotspotPlace.CENTER, false);
+        playerMarkerSymbol = new MarkerSymbol(drawableToBitmap(playerDrawable), HotspotPlace.CENTER, false);
+        //playerMarkerSymbol = new MarkerSymbol(drawableToBitmap(playerDrawable.getRotated()), HotspotPlace.CENTER, false);
         playerMarkerItem.setMarker(playerMarkerSymbol);
+        setDistanceMarkerItem();
         mMarkerLayer.populate();
     }
+
+    private void setDistanceMarkerItem () {
+        MyGeoPoint playerLocation = getPlayerLocation()!=null?getPlayerLocation():new MyGeoPoint(90,0);
+        if (distanceMarkerItem == null) {
+            distanceMarkerItem = new MarkerItem("DistanceText", "DistanceText", playerLocation);
+            mMarkerLayer.addItem(distanceMarkerItem);
+        } else {
+            distanceMarkerItem.geoPoint=playerLocation;
+        }
+        MarkerSymbol ms = null;
+        if (routePathLayer!=null)
+            if (routePathLayer.getPoints().size()>1) {
+                DistanceToTextHelper d = null;
+                MyGeoPoint gd = new MyGeoPoint(routePathLayer.getPoints().get(1).getLatitude(), routePathLayer.getPoints().get(1).getLongitude());
+                if (routePath != null) {
+                    d = new DistanceToTextHelper((float) (routePath.getDistance() / 1000));
+                } else {
+                    d = new DistanceToTextHelper(playerLocation.distanceTo(gd));
+                }
+                TextDrawable distanceTextDrawable = new TextDrawable(getResources(), d.getDistanceInText());
+                distanceTextDrawable.setColor(getColor(getActivity(),R.color.colorOfDistanceToZoneOnMap));
+               // distanceTextDrawable.setColorFilter(getResources().getColor(R.color.black), PorterDuff.Mode.LIGHTEN);
+                RotateDrawable distanceTextRotateDrawable = new RotateDrawable(distanceTextDrawable);
+                distanceTextRotateDrawable.setAngle(playerLocation.bearingTo(gd)-90);
+                distanceTextRotateDrawable.setOffset(0f,0f);
+                ms = new MarkerSymbol(drawableToBitmap(distanceTextRotateDrawable), HotspotPlace.LOWER_LEFT_CORNER, false);
+            }
+        distanceMarkerItem.setMarker(ms);
+    }
+
 }

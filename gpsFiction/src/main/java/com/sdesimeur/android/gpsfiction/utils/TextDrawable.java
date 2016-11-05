@@ -5,30 +5,36 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.ColorFilter;
 import android.graphics.Paint;
-import android.graphics.Paint.Align;
 import android.graphics.PixelFormat;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.util.TypedValue;
 
+/**
+ * Created by sam on 05/11/16.
+ */
 
 public class TextDrawable extends Drawable {
-    private static final int DEFAULT_COLOR = Color.WHITE;
+    private static final int DEFAULT_COLOR = Color.BLACK;
     private static final int DEFAULT_TEXTSIZE = 15;
     private Paint mPaint;
     private CharSequence mText;
     private int mIntrinsicWidth;
     private int mIntrinsicHeight;
+
     public TextDrawable(Resources res, CharSequence text) {
         mText = text;
         mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mPaint.setColor(DEFAULT_COLOR);
-        mPaint.setTextAlign(Align.CENTER);
+        mPaint.setTextAlign(Paint.Align.CENTER);
         float textSize = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP,
                 DEFAULT_TEXTSIZE, res.getDisplayMetrics());
         mPaint.setTextSize(textSize);
         mIntrinsicWidth = (int) (mPaint.measureText(mText, 0, mText.length()) + .5);
         mIntrinsicHeight = mPaint.getFontMetricsInt(null);
+    }
+    public void setColor (int i) {
+        mPaint.setColor(i);
     }
     @Override
     public void draw(Canvas canvas) {
@@ -38,11 +44,7 @@ public class TextDrawable extends Drawable {
     }
     @Override
     public int getOpacity() {
-        int opc= PixelFormat.UNKNOWN;
-        if (mPaint.getAlpha()<=0.3f) opc=PixelFormat.TRANSPARENT;
-        if ((mPaint.getAlpha()>0.3f) && (mPaint.getAlpha()<0.8f)) opc=PixelFormat.TRANSLUCENT;
-        if (mPaint.getAlpha()>=0.8f) opc=PixelFormat.OPAQUE;
-        return opc;
+        return PixelFormat.TRANSLUCENT;
     }
     @Override
     public int getIntrinsicWidth() {
