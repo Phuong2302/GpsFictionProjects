@@ -8,7 +8,8 @@ import android.graphics.Paint;
 import android.graphics.PixelFormat;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
-import android.util.TypedValue;
+import com.sdesimeur.android.gpsfiction.R;
+
 
 /**
  * Created by sam on 05/11/16.
@@ -18,20 +19,32 @@ public class TextDrawable extends Drawable {
     private static final int DEFAULT_COLOR = Color.BLACK;
     private static final int DEFAULT_TEXTSIZE = 15;
     private Paint mPaint;
-    private CharSequence mText;
+    private String mText;
     private int mIntrinsicWidth;
     private int mIntrinsicHeight;
-
-    public TextDrawable(Resources res, CharSequence text) {
+    private Resources resources;
+    private float textSize;
+    public TextDrawable(Resources res, String text) {
         mText = text;
+        resources = res;
+        textSize = resources.getDimension(R.dimen.normalTextSize);
         mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mPaint.setColor(DEFAULT_COLOR);
-        mPaint.setTextAlign(Paint.Align.CENTER);
-        float textSize = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP,
-                DEFAULT_TEXTSIZE, res.getDisplayMetrics());
+        mPaint.setTextAlign(Paint.Align.LEFT);
+    }
+    private void setPaintAndMesure () {
         mPaint.setTextSize(textSize);
-        mIntrinsicWidth = (int) (mPaint.measureText(mText, 0, mText.length()) + .5);
+        Rect bounds = new Rect();
+        mPaint.getTextBounds(mText,0,mText.length(),bounds);
+        bounds.offsetTo(0,0);
+        //mIntrinsicWidth = bounds.width();
+        //mIntrinsicHeight = bounds.height();
+        mIntrinsicWidth = (int) (mPaint.measureText(mText) + 0.5);
         mIntrinsicHeight = mPaint.getFontMetricsInt(null);
+    }
+    public void setTextSize (float i) {
+        textSize = i;
+        setPaintAndMesure();
     }
     public void setColor (int i) {
         mPaint.setColor(i);
@@ -39,8 +52,9 @@ public class TextDrawable extends Drawable {
     @Override
     public void draw(Canvas canvas) {
         Rect bounds = getBounds();
-        canvas.drawText(mText, 0, mText.length(),
-                bounds.centerX(), bounds.centerY(), mPaint);
+        canvas.drawARGB(255, 0, 255, 0);
+        canvas.drawText(mText, 0, mText.length(), 0, 0, mPaint);
+        //canvas.drawText(mText, 0, mText.length(), 0, 0, mPaint);
     }
     @Override
     public int getOpacity() {

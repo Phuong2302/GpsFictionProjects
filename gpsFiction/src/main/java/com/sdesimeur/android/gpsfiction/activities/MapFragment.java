@@ -3,7 +3,6 @@ package com.sdesimeur.android.gpsfiction.activities;
 
 import android.content.res.TypedArray;
 import android.graphics.Path;
-import android.graphics.PorterDuff;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -594,10 +593,10 @@ public class MapFragment
     public void onZoneSelectChanged(Zone sZn, Zone sZnO ) {
         if (sZnO != null) onZoneChanged(sZnO);
         if (sZn != null ) {
-            onZoneChanged(sZn);
+            //onZoneChanged(sZn);
             calcPath();
-            setDistanceMarkerItem();
-            mMarkerLayer.populate();
+            //setDistanceMarkerItem();
+            //mMarkerLayer.populate();
         }
     }
     @Override
@@ -739,11 +738,12 @@ public class MapFragment
                 }
                 TextDrawable distanceTextDrawable = new TextDrawable(getResources(), d.getDistanceInText());
                 distanceTextDrawable.setColor(getColor(getActivity(),R.color.colorOfDistanceToZoneOnMap));
+                distanceTextDrawable.setTextSize(getResources().getDimension(R.dimen.bigTextSize));
                // distanceTextDrawable.setColorFilter(getResources().getColor(R.color.black), PorterDuff.Mode.LIGHTEN);
                 RotateDrawable distanceTextRotateDrawable = new RotateDrawable(distanceTextDrawable);
                 distanceTextRotateDrawable.setAngle(playerLocation.bearingTo(gd)-90);
                 distanceTextRotateDrawable.setOffset(0f,0f);
-                ms = new MarkerSymbol(drawableToBitmap(distanceTextRotateDrawable), HotspotPlace.LOWER_LEFT_CORNER, false);
+                ms = new MarkerSymbol(drawableToBitmap(distanceTextDrawable), HotspotPlace.LOWER_LEFT_CORNER, false);
             }
         distanceMarkerItem.setMarker(ms);
     }

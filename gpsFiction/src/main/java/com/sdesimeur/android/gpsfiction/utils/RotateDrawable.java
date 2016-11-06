@@ -17,6 +17,8 @@ public class RotateDrawable extends LayerDrawable {
     private Paint mPaint;
     private float angle=0;
     private Drawable mDrawable;
+    private int mIntrinsicWidth;
+    private int mIntrinsicHeight;
 
     public Drawable getmDrawable() {
         return mDrawable;
@@ -62,13 +64,13 @@ public class RotateDrawable extends LayerDrawable {
     @Override
     public void draw(Canvas canvas) {
         int saveCount =  canvas.save();
-        canvas.rotate(angle, mDrawable.getBounds().width() / 2 , mDrawable.getBounds().height() / 2 );
-        super.draw(canvas);
         float dxSize =  mDrawable.getBounds().width()*xOffset;
         float dySize =  mDrawable.getBounds().height()*yOffset;
         float dx = (float) (dxSize * Math.cos(angle) - dySize * Math.sin(angle));
         float dy = (float) (dxSize * Math.sin(angle) + dySize * Math.cos(angle));
         canvas.translate(dx, dy);
+        canvas.rotate(angle, mDrawable.getBounds().width() / 2 , mDrawable.getBounds().height() / 2 );
+        super.draw(canvas);
         canvas.restoreToCount(saveCount);
     }
 
