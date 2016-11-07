@@ -40,7 +40,6 @@
             android:id="@+id/forMapPositionButtons"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/nobearing"
             android:padding="@dimen/buttonsVehiculesPadding"
             android:layout_gravity="right"
             />

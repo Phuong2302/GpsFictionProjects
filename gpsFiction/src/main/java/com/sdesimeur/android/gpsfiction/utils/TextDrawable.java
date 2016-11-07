@@ -24,6 +24,8 @@ public class TextDrawable extends Drawable {
     private int mIntrinsicHeight;
     private Resources resources;
     private float textSize;
+    private int mIntrinsicWidthAndHeight;
+
     public TextDrawable(Resources res, String text) {
         mText = text;
         resources = res;
@@ -34,13 +36,11 @@ public class TextDrawable extends Drawable {
     }
     private void setPaintAndMesure () {
         mPaint.setTextSize(textSize);
-        Rect bounds = new Rect();
-        mPaint.getTextBounds(mText,0,mText.length(),bounds);
-        bounds.offsetTo(0,0);
         //mIntrinsicWidth = bounds.width();
         //mIntrinsicHeight = bounds.height();
         mIntrinsicWidth = (int) (mPaint.measureText(mText) + 0.5);
         mIntrinsicHeight = mPaint.getFontMetricsInt(null);
+        mIntrinsicWidthAndHeight = (int) (Math.sqrt(mIntrinsicHeight*mIntrinsicHeight + mIntrinsicWidth * mIntrinsicWidth) + 0.5);
     }
     public void setTextSize (float i) {
         textSize = i;
@@ -51,9 +51,12 @@ public class TextDrawable extends Drawable {
     }
     @Override
     public void draw(Canvas canvas) {
-        Rect bounds = getBounds();
+        Rect bds = new Rect();
+        mPaint.getTextBounds(mText,0,mText.length(),bds);
+        //Rect bds = getBounds();
+        //bounds.offsetTo(0,0);
         canvas.drawARGB(255, 0, 255, 0);
-        canvas.drawText(mText, 0, mText.length(), 0, 0, mPaint);
+        canvas.drawText(mText, 0, mText.length(), -bds.left, -bds.top, mPaint);
         //canvas.drawText(mText, 0, mText.length(), 0, 0, mPaint);
     }
     @Override
@@ -62,11 +65,13 @@ public class TextDrawable extends Drawable {
     }
     @Override
     public int getIntrinsicWidth() {
-        return mIntrinsicWidth;
+        return 2*mIntrinsicWidthAndHeight;
+        //return mIntrinsicWidth;
     }
     @Override
     public int getIntrinsicHeight() {
-        return mIntrinsicHeight;
+        return 2*mIntrinsicWidthAndHeight;
+        //return mIntrinsicHeight;
     }
     @Override
     public void setAlpha(int alpha) {

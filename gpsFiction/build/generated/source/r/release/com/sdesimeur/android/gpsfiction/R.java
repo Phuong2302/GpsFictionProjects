@@ -2664,14 +2664,13 @@ containing a value of this type.
         public static int notification_bg_normal=0x7f020069;
         public static int notification_bg_normal_pressed=0x7f02006a;
         public static int notification_icon_background=0x7f02006b;
-        public static int notification_template_icon_bg=0x7f020072;
-        public static int notification_template_icon_low_bg=0x7f020073;
+        public static int notification_template_icon_bg=0x7f020071;
+        public static int notification_template_icon_low_bg=0x7f020072;
         public static int notification_tile_bg=0x7f02006c;
         public static int notify_panel_notification_icon_bg=0x7f02006d;
         public static int pieton=0x7f02006e;
         public static int player_marker=0x7f02006f;
-        public static int playerrotatemarker=0x7f020070;
-        public static int transparent=0x7f020071;
+        public static int transparent=0x7f020070;
     }
     public static final class id {
         public static int Compass=0x7f0d00b0;

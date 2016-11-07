@@ -50,7 +50,6 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
             android:padding="@dimen/buttonsVehiculesPadding"
-            android:src="@drawable/nobearing"
             />
 
     </LinearLayout>

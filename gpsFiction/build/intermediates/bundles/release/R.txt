@@ -713,14 +713,13 @@ int drawable notification_bg_low_pressed 0x7f020068
 int drawable notification_bg_normal 0x7f020069
 int drawable notification_bg_normal_pressed 0x7f02006a
 int drawable notification_icon_background 0x7f02006b
-int drawable notification_template_icon_bg 0x7f020072
-int drawable notification_template_icon_low_bg 0x7f020073
+int drawable notification_template_icon_bg 0x7f020071
+int drawable notification_template_icon_low_bg 0x7f020072
 int drawable notification_tile_bg 0x7f02006c
 int drawable notify_panel_notification_icon_bg 0x7f02006d
 int drawable pieton 0x7f02006e
 int drawable player_marker 0x7f02006f
-int drawable playerrotatemarker 0x7f020070
-int drawable transparent 0x7f020071
+int drawable transparent 0x7f020070
 int id Compass 0x7f0d00b0
 int id Inventory 0x7f0d00af
 int id Map 0x7f0d00b1

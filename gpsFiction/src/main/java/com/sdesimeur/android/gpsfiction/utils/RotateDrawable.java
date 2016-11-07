@@ -2,7 +2,6 @@ package com.sdesimeur.android.gpsfiction.utils;
 
 import android.graphics.Canvas;
 import android.graphics.ColorFilter;
-import android.graphics.Paint;
 import android.graphics.PixelFormat;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
@@ -12,64 +11,74 @@ import android.graphics.drawable.LayerDrawable;
  */
 
 public class RotateDrawable extends LayerDrawable {
-    private float xOffset=0;
-    private float yOffset=0;
-    private Paint mPaint;
-    private float angle=0;
+    private float angle = 0;
     private Drawable mDrawable;
     private int mIntrinsicWidth;
     private int mIntrinsicHeight;
+    private float xRotateOffset = 0.5f;
+    private float yRotateOffset = 0.5f;
+  //  private Matrix mMatrix = new Matrix();
+    private float xTranslate = 0;
+    private float yTranslate = 0;
+    private float xRotateCenter;
+    private float yRotateCenter;
 
-    public Drawable getmDrawable() {
-        return mDrawable;
-    }
-/*
-    public void setmDrawable(Drawable d) {
-        this.mDrawable = d;
-    }
-*/
     public void setAngle(float a) {
-        this.angle = a;
+        angle = a;
+        applyMatrix();
     }
 
+    private void applyMatrix() {
+    /*
+        Drawable dtemp = getConstantState().newDrawable();
+        mIntrinsicHeight = dtemp.getIntrinsicHeight();
+        mIntrinsicWidth = dtemp.getIntrinsicWidth();
+    */
+        mIntrinsicHeight = mDrawable.getIntrinsicHeight();
+        mIntrinsicWidth = mDrawable.getIntrinsicWidth();
+        xRotateCenter = xRotateOffset*mIntrinsicWidth;
+        yRotateCenter = yRotateOffset*mIntrinsicHeight;
+    /*
+        mMatrix.setRotate(angle,xRotateCenter,yRotateCenter);
+        RectF rf = new RectF(dtemp.getBounds());
+        final boolean b = mMatrix.mapRect(rf);
+        Rect rn = new Rect();
+        rf.round(rn);
+        mIntrinsicWidth = rn.width();
+        mIntrinsicHeight = rn.height();
+    */
+    }
 
-    public RotateDrawable (Drawable d) {
-        super(new Drawable[]{d});
-        mDrawable = d;
+    public RotateDrawable (Drawable[] d) {
+        super(d);
+        mDrawable = d[0];
+        mDrawable.getBounds().offsetTo(0,0);
+        applyMatrix();
     }
-/*
-    public Drawable getRotated (float a) {
-        angle=a;
-        return getRotated();
+    public void setRotateOffset (float x, float y) {
+        xRotateOffset = x;
+        yRotateOffset = y;
+        applyMatrix();
     }
-*/
-    public void setOffset (float x, float y) {
-        xOffset = x;
-        yOffset = y;
+    public void setTranslate (float x, float y) {
+        xTranslate = x;
+        yTranslate = y;
     }
-/*
-    public Drawable getRotated() {
-        final Drawable[] arD = { mDrawable };
-        return new LayerDrawable(arD) {
-            @Override
-            public void draw(final Canvas canvas) {
-                canvas.save();
-                canvas.rotate(angle, mDrawable.getBounds().width() / 2, mDrawable.getBounds().height() / 2);
-                super.draw(canvas);
-                canvas.restore();
-            }
-        };
-    }
-*/
     @Override
     public void draw(Canvas canvas) {
         int saveCount =  canvas.save();
-        float dxSize =  mDrawable.getBounds().width()*xOffset;
-        float dySize =  mDrawable.getBounds().height()*yOffset;
-        float dx = (float) (dxSize * Math.cos(angle) - dySize * Math.sin(angle));
-        float dy = (float) (dxSize * Math.sin(angle) + dySize * Math.cos(angle));
-        canvas.translate(dx, dy);
-        canvas.rotate(angle, mDrawable.getBounds().width() / 2 , mDrawable.getBounds().height() / 2 );
+        canvas.drawARGB(125, 255, 0, 0);
+        float tx = (float) (xTranslate * Math.cos(angle) - yTranslate * Math.sin(angle));
+        float ty = (float) (xTranslate * Math.sin(angle) + yTranslate * Math.cos(angle));
+        canvas.translate(tx, ty);
+        canvas.rotate(angle, xRotateCenter , yRotateCenter);
+        canvas.drawARGB(125, 0, 255, 0);
+        canvas.getClipBounds().offsetTo(0,0);
+        //Paint mPaint = new Paint();
+        //mPaint.setColor(Color.BLUE);
+        //mPaint.setStrokeCap(Paint.Cap.BUTT);
+        //mPaint.setStyle(Style.FILL);
+        //canvas.drawCircle(xRotateCenter,yRotateCenter, (float) Math.sqrt(xRotateCenter*xRotateCenter+yRotateCenter*yRotateCenter),mPaint);
         super.draw(canvas);
         canvas.restoreToCount(saveCount);
     }
@@ -90,10 +99,10 @@ public class RotateDrawable extends LayerDrawable {
     }
     @Override
     public int getIntrinsicWidth() {
-        return mDrawable.getIntrinsicWidth();
+        return mIntrinsicWidth;
     }
     @Override
     public int getIntrinsicHeight() {
-        return mDrawable.getIntrinsicHeight();
+        return mIntrinsicHeight;
     }
 }

@@ -2,6 +2,11 @@ package com.sdesimeur.android.gpsfiction.activities;
 
 
 import android.content.res.TypedArray;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Matrix;
+import android.graphics.Paint;
 import android.graphics.Path;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -38,12 +43,10 @@ import com.sdesimeur.android.gpsfiction.classes.ZoneSelectListener;
 import com.sdesimeur.android.gpsfiction.classes.ZoneViewHelper;
 import com.sdesimeur.android.gpsfiction.geopoint.MyGeoPoint;
 import com.sdesimeur.android.gpsfiction.helpers.DistanceToTextHelper;
-import com.sdesimeur.android.gpsfiction.utils.RotateDrawable;
-import com.sdesimeur.android.gpsfiction.utils.TextDrawable;
 
 import org.oscim.android.MapView;
+import org.oscim.android.canvas.AndroidBitmap;
 import org.oscim.backend.canvas.Color;
-import org.oscim.backend.canvas.Paint;
 import org.oscim.core.GeoPoint;
 import org.oscim.core.MapPosition;
 import org.oscim.event.MotionEvent;
@@ -92,6 +95,7 @@ public class MapFragment
     private int PositionTouchX;
     private int PositionTouchY;
     long startTouchTime = 0 ;
+    private Bitmap playerBitmap;
 
 /*
     public void onMapEvent(Event e, MapPosition mapPosition) {
@@ -133,20 +137,14 @@ public class MapFragment
         put(R.drawable.auto, new CarFlagEncoder());
     }};
 
-    private MarkerSymbol playerMarkerSymbol = null;
     private HashMap<Zone,ZoneViewHelper> zoneViewHelperHashMap = null;
     private ItemizedLayer<MarkerItem> mMarkerLayer=null;
-    private RotateDrawable playerDrawable = null;
     private PathLayer routePathLayer = null;
-//    private VectorLayer mVectorLayer = null;
     private PathWrapper routePath = null;
-//    private HashMap<Integer, ImageView> hashMapVehiculesButtonsIdView = null;
     private RouteGeoPointListHelper mRouteGeoPointListHelper = null;
     private Style mStyle4SelectedZone;
     private Style mStyle4UnSelectedZone;
     private Style mStyle4InvisibleZone;
-//    private RotateDrawable playerRotateDrawable = null;
-//    private Bitmap playerBitmap = null;
 
     public int getZoomLevel() {
         return getmGpsFictionData().getZoomLevel();
@@ -250,13 +248,12 @@ public class MapFragment
             }
         });
         zoneViewHelperHashMap = new HashMap<>();
-        playerDrawable = new RotateDrawable(getDrawable(getActivity(),R.drawable.player_marker));
+        playerBitmap = BitmapFactory.decodeResource(getResources(),R.drawable.player_marker);
         MarkerSymbol ms = new MarkerSymbol(drawableToBitmap(getResources(),R.drawable.transparent), HotspotPlace.CENTER);
         mMarkerLayer = new ItemizedLayer<>(mMap, new ArrayList<MarkerItem>(), ms , this);
         if (playerMarkerItem == null) {
             playerMarkerItem = new MarkerItem("Player", "Player", new MyGeoPoint(90,0));
-            playerMarkerSymbol = new MarkerSymbol(drawableToBitmap(playerDrawable), HotspotPlace.CENTER, false);
-            playerMarkerItem.setMarker(playerMarkerSymbol);
+            playerMarkerItem.setMarker(getMarkerSymbolWithBitmap(getRotatedBitmap(playerBitmap,0f,false),HotspotPlace.CENTER,false));
             mMarkerLayer.addItem(playerMarkerItem);
         }
         mMap.layers().add(mMarkerLayer);
@@ -279,7 +276,7 @@ public class MapFragment
         }
         int lineWidth=getResources().getDimensionPixelSize(R.dimen.widthOfRouteLine);
         int lineColor = getColor(getActivity(),R.color.colorOfRouteLine);
-        LineStyle ls = new LineStyle(lineColor, lineWidth, Paint.Cap.ROUND);
+        LineStyle ls = new LineStyle(lineColor, lineWidth, org.oscim.backend.canvas.Paint.Cap.ROUND);
         routePathLayer.setStyle(ls);
         ViewGroup vg = (ViewGroup) getRootView();
         addViewGroupForVehiculesButtons(vg);
@@ -506,10 +503,7 @@ public class MapFragment
         if (id == MapDirection.PLAYER) {
             viewForMapDirection.setImageDrawable(getDrawable(getActivity(),R.drawable.bearing));
         } else if (id == MapDirection.FIX) {
-            RotateDrawable md = new RotateDrawable(getDrawable(getActivity(),R.drawable.nobearing));
-            md.setAngle(mMap.getMapPosition().getBearing());
-            viewForMapDirection.setImageDrawable(md);
-            //viewForMapDirection.setImageDrawable(md.getRotated());
+            viewForMapDirection.setImageBitmap(getRotatedBitmap(BitmapFactory.decodeResource(getResources(),R.drawable.nobearing),mMap.getMapPosition().getBearing(),true));
         } else if (id == MapDirection.NORTH) {
             viewForMapDirection.setImageDrawable(getDrawable(getActivity(),R.drawable.nobearing));
         }
@@ -593,8 +587,8 @@ public class MapFragment
     public void onZoneSelectChanged(Zone sZn, Zone sZnO ) {
         if (sZnO != null) onZoneChanged(sZnO);
         if (sZn != null ) {
-            //onZoneChanged(sZn);
             calcPath();
+            onZoneChanged(sZn);
             //setDistanceMarkerItem();
             //mMarkerLayer.populate();
         }
@@ -710,10 +704,7 @@ public class MapFragment
         }
         mMap.setMapPosition(pos);
 
-        playerDrawable.setAngle(playerBearing);
-        playerMarkerSymbol = new MarkerSymbol(drawableToBitmap(playerDrawable), HotspotPlace.CENTER, false);
-        //playerMarkerSymbol = new MarkerSymbol(drawableToBitmap(playerDrawable.getRotated()), HotspotPlace.CENTER, false);
-        playerMarkerItem.setMarker(playerMarkerSymbol);
+        playerMarkerItem.setMarker(getMarkerSymbolWithBitmap(getRotatedBitmap(playerBitmap,playerBearing,false),HotspotPlace.CENTER,false));
         setDistanceMarkerItem();
         mMarkerLayer.populate();
     }
@@ -736,16 +727,45 @@ public class MapFragment
                 } else {
                     d = new DistanceToTextHelper(playerLocation.distanceTo(gd));
                 }
-                TextDrawable distanceTextDrawable = new TextDrawable(getResources(), d.getDistanceInText());
-                distanceTextDrawable.setColor(getColor(getActivity(),R.color.colorOfDistanceToZoneOnMap));
-                distanceTextDrawable.setTextSize(getResources().getDimension(R.dimen.bigTextSize));
-               // distanceTextDrawable.setColorFilter(getResources().getColor(R.color.black), PorterDuff.Mode.LIGHTEN);
-                RotateDrawable distanceTextRotateDrawable = new RotateDrawable(distanceTextDrawable);
-                distanceTextRotateDrawable.setAngle(playerLocation.bearingTo(gd)-90);
-                distanceTextRotateDrawable.setOffset(0f,0f);
-                ms = new MarkerSymbol(drawableToBitmap(distanceTextDrawable), HotspotPlace.LOWER_LEFT_CORNER, false);
+                ms = getMarkerSymbolWithBitmap(
+                        getRotatedBitmap(
+                            textAsBitmap(
+                                d.getDistanceInText(),
+                                getResources().getDimension(R.dimen.bigTextSize),
+                                getColor(getActivity(),R.color.colorOfDistanceToZoneOnMap)),
+                            playerLocation.bearingTo(gd)-90,
+                            false),
+                        HotspotPlace.LOWER_LEFT_CORNER, false );
             }
         distanceMarkerItem.setMarker(ms);
     }
-
+    private Bitmap getRotatedBitmap (Bitmap bitmap , float angle, boolean keepSize){
+        Matrix m = new Matrix();
+        m.setRotate(angle, bitmap.getWidth()/2, bitmap.getHeight()/2);
+        Bitmap b = Bitmap.createBitmap(bitmap,0,0,bitmap.getWidth(),bitmap.getHeight(),m,true);
+        if (keepSize) {
+            int dx = (b.getWidth() - bitmap.getWidth()) / 2;
+            int dy = (b.getHeight() - bitmap.getHeight()) / 2;
+            return Bitmap.createBitmap(b,dx,dy,bitmap.getWidth(),bitmap.getHeight());
+        } else {
+            return b;
+        }
+    }
+    private MarkerSymbol getMarkerSymbolWithBitmap (Bitmap bitmap, HotspotPlace hp, boolean bill) {
+        AndroidBitmap ab = new AndroidBitmap(bitmap);
+        return new MarkerSymbol(ab, hp, bill);
+    }
+    private Bitmap textAsBitmap(String text, float textSize, int textColor) {
+        Paint paint = new Paint(Paint.DITHER_FLAG|Paint.ANTI_ALIAS_FLAG| Paint.FILTER_BITMAP_FLAG);
+        paint.setTextSize(textSize);
+        paint.setColor(textColor);
+        paint.setTextAlign(Paint.Align.LEFT);
+        float baseline = -paint.ascent(); // ascent() is negative
+        int width = (int) (paint.measureText(text) + 0.5f); // round
+        int height = (int) (baseline + paint.descent() + 0.5f);
+        Bitmap image = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(image);
+        canvas.drawText(text, 0, baseline, paint);
+        return image;
+}
 }
