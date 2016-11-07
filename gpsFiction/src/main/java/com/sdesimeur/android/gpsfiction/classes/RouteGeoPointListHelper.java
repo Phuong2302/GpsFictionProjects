@@ -23,6 +23,11 @@ public class RouteGeoPointListHelper implements PlayerLocationListener {
     private MapFragment mapFragment = null;
     private MyPolygon listOfPoints = null;
     private float deltaDistMax = 0.050f;
+
+    public float getDistanceToEnd() {
+        return distanceToEnd;
+    }
+
     private float distanceToEnd;
     private float distanceToNxtPoint;
     private String nextInstructionString = "";

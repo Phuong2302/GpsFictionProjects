@@ -284,19 +284,17 @@ public class GpsFictionActivity extends Activity implements TextToSpeech.OnInitL
     	                  dYFab = view.getY() - event.getRawY();
     	                  lastFabAction = MotionEvent.ACTION_DOWN;
     	                  break;
-
-    	              case MotionEvent.ACTION_MOVE:
-    	                  view.setY(event.getRawY() + dYFab);
-    	                  view.setX(event.getRawX() + dXFab);
-    	                  lastFabAction = MotionEvent.ACTION_MOVE;
-    	                  break;
-
     	              case MotionEvent.ACTION_UP:
-                          if ( ((lastFabAction == MotionEvent.ACTION_MOVE) && (Math.abs(dXFab-view.getX())<10) && (Math.abs(dYFab - view.getY())<10)) ||
+                          if ( ((lastFabAction == MotionEvent.ACTION_MOVE) && (Math.abs(dXFab-view.getX())<30) && (Math.abs(dYFab - view.getY())<30)) ||
                             (lastFabAction == MotionEvent.ACTION_DOWN) )
                               drawerLayout.openDrawer(Gravity.LEFT);
     	                      //Toast.makeText(getActivity(), "Clicked!", Toast.LENGTH_SHORT).show();
     	                  break;
+                      case MotionEvent.ACTION_MOVE:
+                          view.setY(event.getRawY() + dYFab);
+                          view.setX(event.getRawX() + dXFab);
+                          lastFabAction = MotionEvent.ACTION_MOVE;
+                          break;
     	              case MotionEvent.ACTION_BUTTON_PRESS:
                           drawerLayout.openDrawer(Gravity.LEFT);
     	              default:

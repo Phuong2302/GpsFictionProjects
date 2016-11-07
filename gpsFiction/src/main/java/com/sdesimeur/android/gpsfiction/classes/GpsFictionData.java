@@ -341,7 +341,7 @@ public class GpsFictionData {
                 listener.onZoneChanged(zn);
             }
         if (zn.isSelectedZone()) {
-            selectedZone = null;
+            setSelectedZone(null);
             fireZoneSelectListener();
         }
     }

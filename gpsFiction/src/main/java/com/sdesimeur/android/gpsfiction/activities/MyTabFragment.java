@@ -16,7 +16,10 @@ public abstract class MyTabFragment extends Fragment implements MyTabFragmentImp
 
 
     public GpsFictionData getmGpsFictionData() {
-        return getmGpsFictionActivity().getmGpsFictionData();
+        if (getmGpsFictionActivity()==null)
+            return null;
+        else
+            return getmGpsFictionActivity().getmGpsFictionData();
     }
 
     public View getRootView() {
@@ -36,6 +39,9 @@ public abstract class MyTabFragment extends Fragment implements MyTabFragmentImp
         return (GpsFictionActivity) getActivity();
     }
     public MyLocationListener getmMyLocationListener() {
-        return getmGpsFictionActivity().getmMyLocationListener();
+        if (getmGpsFictionActivity()==null)
+            return null;
+        else
+            return getmGpsFictionActivity().getmMyLocationListener();
     }
 }

@@ -55,7 +55,15 @@
         <item name="android:paddingLeft">@dimen/dialogButtonPadding</item>
         <item name="android:paddingRight">@dimen/dialogButtonPadding</item>
     </style>
-
+    <style name="MapDistanceTitle">
+        <item name="android:textStyle">bold|italic</item>
+        <item name="android:textSize">@dimen/titleTextSize</item>
+        <item name="android:layout_gravity">center</item>
+    </style>
+    <style name="MapDistance">
+        <item name="android:textSize">@dimen/normalTextSize</item>
+        <item name="android:layout_gravity">center</item>
+    </style>
     <style name="TabCompassOther">
         <item name="android:paddingLeft">@dimen/normalTextPadding</item>
         <item name="android:textSize">@dimen/normalTextSize</item>
@@ -87,6 +95,7 @@
     <dimen name="widthOfZoneShape">2dip</dimen>
     <dimen name="widthOfRouteLine">5dip</dimen>
 
-    <dimen name="buttonsVehiculesPadding">5dip</dimen>
+    <dimen name="buttonsVehiculesPadding">4dip</dimen>
+    <dimen name="buttonsVehiculesSize">48dp</dimen>
     <dimen name="mapzoneborderwidth">1dip</dimen>
 </resources>

@@ -14,10 +14,12 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.ZoomControls;
 
 import com.graphhopper.GHRequest;
@@ -49,8 +51,6 @@ import org.oscim.android.canvas.AndroidBitmap;
 import org.oscim.backend.canvas.Color;
 import org.oscim.core.GeoPoint;
 import org.oscim.core.MapPosition;
-import org.oscim.event.MotionEvent;
-import org.oscim.layers.MapEventLayer;
 import org.oscim.layers.PathLayer;
 import org.oscim.layers.marker.ItemizedLayer;
 import org.oscim.layers.marker.MarkerItem;
@@ -83,6 +83,7 @@ public class MapFragment
         extends MyTabFragment
         implements PlayerBearingListener, ZoneChangeListener, PlayerLocationListener,
                     ZoneSelectListener, ItemizedLayer.OnItemGestureListener<MarkerItem> {
+    private static final float MINMOVE = 20;
     MapView mapView;
     Map mMap;
     //MapPreferences mPrefs;
@@ -91,44 +92,30 @@ public class MapFragment
     private static final int UNSELECTEDBUTTON = 100;
     private ImageView viewForMapDirection;
     private ImageView viewForMapPosition;
+    private TextView viewForDistanceToDest;
     int clickCount;
     private int PositionTouchX;
     private int PositionTouchY;
     long startTouchTime = 0 ;
     private Bitmap playerBitmap;
-
-/*
-    public void onMapEvent(Event e, MapPosition mapPosition) {
-        if ((e == Map.MOVE_EVENT) || (e==Map.POSITION_EVENT)) {
-            case MotionEvent.ACTION_MOVE:
-                if ((pointerCount == 1)||(pointerCount == 2)) {
-            viewForMapPosition.setTag(R.drawable.mapwithoutfollow);
-            fixViewForMapPosition();
-            onLocationPlayerChanged(getPlayerLocation());
-            viewForMapDirection.setTag(MapDirection.FIX);
-            fixViewForMapDirection();
-            onBearingPlayerChanged(getmMyLocationListener().getBearingOfPlayer());
-        }
-
-    }
-*/
+    private float dX2;
+    private float dY2;
+    private int lastAction;
+    private float dX1;
+    private float dY1;
 
     private static class MapDirection {
         public static final int PLAYER=0;
         public static final int FIX = 1;
         public static final int NORTH = 2;
     }
-    //private Drawable vehiculeSelectedDrawable = null;
     private File mapsFolder;
-
     private File ghFolder;
     private GraphHopper hopper;
-    //private GraphHopperAPI hopper;
     private String currentArea = "jeu";
     private volatile boolean shortestPathRunning = false;
     private volatile boolean prepareInProgress = false;
     private MarkerItem playerMarkerItem;
-    private MarkerItem distanceMarkerItem;
     private ViewGroup viewGroupForVehiculesButtons = null;
     private HashMap<Integer,FlagEncoder> vehiculeGHEncoding = new HashMap <Integer, FlagEncoder> () {{
         put(R.drawable.compass, null);
@@ -136,7 +123,6 @@ public class MapFragment
         put(R.drawable.cycle, new BikeFlagEncoder());
         put(R.drawable.auto, new CarFlagEncoder());
     }};
-
     private HashMap<Zone,ZoneViewHelper> zoneViewHelperHashMap = null;
     private ItemizedLayer<MarkerItem> mMarkerLayer=null;
     private PathLayer routePathLayer = null;
@@ -228,9 +214,40 @@ public class MapFragment
                 .strokeWidth(0)
                 .strokeColor(getColor(getActivity(),R.color.colorOfZoneShapeInvisible))
                 .build();
-        //setVehiculeSelectedId(R.drawable.compass);
         mapView=(MapView) this.getRootView().findViewById(R.id.mapView);
         mMap = mapView.map();
+        mapView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, android.view.MotionEvent event) {
+                int pointerCount = event.getPointerCount();
+                switch (event.getActionMasked()) {
+    	              case MotionEvent.ACTION_DOWN:
+    	                  dX1 = event.getRawX();
+    	                  dY1 = event.getRawY();
+    	                  break;
+                    case MotionEvent.ACTION_POINTER_DOWN:
+                        dX2 = event.getX();
+                        dY2 = event.getY();
+                        lastAction = MotionEvent.ACTION_POINTER_DOWN;
+                        break;
+    	            case MotionEvent.ACTION_POINTER_UP:
+                        if ((Math.abs(dX2-event.getX())<MINMOVE) && (Math.abs(dY2 - event.getY())<MINMOVE)) break;
+                    case MotionEvent.ACTION_UP:
+                          if ((Math.abs(dX1-event.getRawX())<MINMOVE) && (Math.abs(dY1 - event.getRawY())<MINMOVE)) break;
+                                  viewForMapPosition.setTag(R.drawable.mapwithoutfollow);
+                                  fixViewForMapPosition();
+                                  onLocationPlayerChanged(getPlayerLocation());
+                                  viewForMapDirection.setTag(MapDirection.FIX);
+                                  fixViewForMapDirection();
+                                  onBearingPlayerChanged(getmMyLocationListener().getBearingOfPlayer());
+    	                  break;
+    	              default:
+    	                  return false;
+    	          }
+                return false;
+            }
+        });
+        /*
         mMap.layers().add(new MapEventLayer(mMap){
             public boolean onTouchEvent(MotionEvent e) {
                 int pointerCount = e.getPointerCount();
@@ -247,6 +264,7 @@ public class MapFragment
                 return super.onTouchEvent(e);
             }
         });
+        */
         zoneViewHelperHashMap = new HashMap<>();
         playerBitmap = BitmapFactory.decodeResource(getResources(),R.drawable.player_marker);
         MarkerSymbol ms = new MarkerSymbol(drawableToBitmap(getResources(),R.drawable.transparent), HotspotPlace.CENTER);
@@ -280,6 +298,7 @@ public class MapFragment
         routePathLayer.setStyle(ls);
         ViewGroup vg = (ViewGroup) getRootView();
         addViewGroupForVehiculesButtons(vg);
+        viewForDistanceToDest = (TextView) vg.findViewById(R.id.forDistanceToDest);
         addViewForMapDirection(vg);
         addViewForMapPosition(vg);
         addViewGroupForZoomButtons(vg);
@@ -430,7 +449,6 @@ public class MapFragment
     private void addViewGroupForVehiculesButtons(ViewGroup vg) {
         viewGroupForVehiculesButtons = (ViewGroup) vg.findViewById(R.id.forVehiculesButtons);
         TypedArray vehicules = getResources().obtainTypedArray(R.array.vehicules_array);
-        //hashMapVehiculesButtonsIdView = new HashMap<>();
         for (int index = 0; index < vehicules.length(); index++) {
             ImageView img = new ImageView(getActivity());
             int pad = getResources().getDimensionPixelSize(R.dimen.buttonsVehiculesPadding);
@@ -442,8 +460,10 @@ public class MapFragment
                 }
             });
             Integer res = vehicules.getResourceId(index,0);
-            //hashMapVehiculesButtonsIdView.put(res,img);
             img.setImageDrawable(getDrawable(getActivity(),res));
+            int sZ = getResources().getDimensionPixelSize(R.dimen.buttonsVehiculesSize);
+            ViewGroup.LayoutParams parms = new ViewGroup.LayoutParams(sZ, sZ);
+            img.setLayoutParams(parms);
             img.setTag(res);
             int alpha = (res==getVehiculeSelectedId())? MapFragment.SELECTEDBUTTON : MapFragment.UNSELECTEDBUTTON;
             img.getDrawable().setAlpha(alpha);
@@ -494,7 +514,8 @@ public class MapFragment
                 fixViewForMapDirection();
                 fixViewForMapPosition();
                 onBearingPlayerChanged(getmMyLocationListener().getBearingOfPlayer());
-                if (id == MapDirection.NORTH) onLocationPlayerChanged(getPlayerLocation());
+                //if (id == MapDirection.NORTH)
+                    onLocationPlayerChanged(getPlayerLocation());
             }
         });
     }
@@ -585,19 +606,16 @@ public class MapFragment
 
     @Override
     public void onZoneSelectChanged(Zone sZn, Zone sZnO ) {
-        if (sZnO != null) onZoneChanged(sZnO);
-        if (sZn != null ) {
-            calcPath();
-            onZoneChanged(sZn);
-            //setDistanceMarkerItem();
-            //mMarkerLayer.populate();
+        if (sZnO != null) {
+            onZoneChanged(sZnO);
         }
+        calcPath();
+        setViewDistanceToDest();
     }
     @Override
     public void onLocationPlayerChanged(MyGeoPoint playerLocation) {
         if (playerLocation != null) {
             playerMarkerItem.geoPoint=playerLocation;
-            setDistanceMarkerItem();
             mMarkerLayer.populate();
             if (((int)viewForMapPosition.getTag()) != R.drawable.mapwithoutfollow) {
                 MapPosition pos = mMap.getMapPosition();
@@ -605,14 +623,8 @@ public class MapFragment
                 mMap.setMapPosition(pos);
                 mMap.updateMap(true);
             }
-            if (getSelectedZone() != null) updateCalcPath();
-        }
-    }
-
-    private void updateCalcPath() {
-        if (getVehiculeSelectedId()==R.drawable.compass) {
-            calcLinePath();
-        } else {
+            if ((getSelectedZone() != null) && (getVehiculeSelectedId()==R.drawable.compass)) calcLinePath();
+            setViewDistanceToDest();
         }
     }
 
@@ -656,7 +668,6 @@ public class MapFragment
             zvh.vectorLayer.add(zvh.polygon);
         }
         zvh.markerItem.setMarker(zone.isVisible()?zoneMarkerSymbol:null);
-        setDistanceMarkerItem();
         mMarkerLayer.populate();
 
 
@@ -665,30 +676,6 @@ public class MapFragment
                 mStyle4InvisibleZone);
         zvh.polygon.setStyle(st);
         zvh.vectorLayer.update();
-    /*
-        if (zvh.pathLayer == null) {
-            zvh.pathLayer = new PathLayer(mMap,Color.TRANSPARENT);
-        }
-        if (zone.isVisible()) {
-            if (mMap.layers().contains(zvh.pathLayer)) mMap.layers().remove(zvh.pathLayer);
-        } else {
-            if (! mMap.layers().contains(zvh.pathLayer)) mMap.layers().add(zvh.pathLayer);
-        }
-        int lineWidth=getResources().getDimensionPixelSize(R.dimen.widthOfZoneShape);
-        int lineColor = ((zone.isVisible()?
-                getResources().getColor(zone.isSelectedZone() ? R.color.colorOfZoneShapeSelected : R.color.colorOfZoneShapeNotSelected):
-                Color.TRANSPARENT));
-        LineStyle ls = new LineStyle(lineColor, lineWidth, Paint.Cap.BUTT);
-        zvh.pathLayer.setStyle(ls);
-
-        if (zone.isVisible()) {
-            List<GeoPoint> temp = zone.getShape().getAllGeoPoints();
-            temp.add(temp.get(0));
-            zvh.pathLayer.setPoints(temp);
-        } else {
-            zvh.pathLayer.clearPath();
-        }
-    */
     }
 
     public void onBearingPlayerChanged(float angle) {
@@ -705,39 +692,24 @@ public class MapFragment
         mMap.setMapPosition(pos);
 
         playerMarkerItem.setMarker(getMarkerSymbolWithBitmap(getRotatedBitmap(playerBitmap,playerBearing,false),HotspotPlace.CENTER,false));
-        setDistanceMarkerItem();
         mMarkerLayer.populate();
     }
 
-    private void setDistanceMarkerItem () {
+    private void setViewDistanceToDest () {
         MyGeoPoint playerLocation = getPlayerLocation()!=null?getPlayerLocation():new MyGeoPoint(90,0);
-        if (distanceMarkerItem == null) {
-            distanceMarkerItem = new MarkerItem("DistanceText", "DistanceText", playerLocation);
-            mMarkerLayer.addItem(distanceMarkerItem);
-        } else {
-            distanceMarkerItem.geoPoint=playerLocation;
-        }
-        MarkerSymbol ms = null;
-        if (routePathLayer!=null)
-            if (routePathLayer.getPoints().size()>1) {
+        if ((routePathLayer!=null) && (routePathLayer.getPoints().size() > 1)) {
                 DistanceToTextHelper d = null;
                 MyGeoPoint gd = new MyGeoPoint(routePathLayer.getPoints().get(1).getLatitude(), routePathLayer.getPoints().get(1).getLongitude());
                 if (routePath != null) {
-                    d = new DistanceToTextHelper((float) (routePath.getDistance() / 1000));
+                    d = new DistanceToTextHelper(mRouteGeoPointListHelper.getDistanceToEnd());
                 } else {
                     d = new DistanceToTextHelper(playerLocation.distanceTo(gd));
                 }
-                ms = getMarkerSymbolWithBitmap(
-                        getRotatedBitmap(
-                            textAsBitmap(
-                                d.getDistanceInText(),
-                                getResources().getDimension(R.dimen.bigTextSize),
-                                getColor(getActivity(),R.color.colorOfDistanceToZoneOnMap)),
-                            playerLocation.bearingTo(gd)-90,
-                            false),
-                        HotspotPlace.LOWER_LEFT_CORNER, false );
-            }
-        distanceMarkerItem.setMarker(ms);
+                ((ViewGroup)viewForDistanceToDest.getParent()).setVisibility(View.VISIBLE);
+                viewForDistanceToDest.setText(d.getDistanceInText());
+        } else {
+            ((ViewGroup)viewForDistanceToDest.getParent()).setVisibility(View.INVISIBLE);
+        }
     }
     private Bitmap getRotatedBitmap (Bitmap bitmap , float angle, boolean keepSize){
         Matrix m = new Matrix();

@@ -36,6 +36,7 @@
     <string name="dialogCloseTaskText">Sauvegarder la partie ?</string>
     <string name="dialogCloseTaskTitle">Pour finir...</string>
     <string name="distanceNull">Vous êtes dans la zone.</string>
+    <string name="distanceToDest">Distance à destination</string>
     <string name="distance_initiale">100 m</string>
     <string name="err_invalid_lat_lon">Désolé, latitude ou longitude invalide.</string>
     <string name="err_parse_dist">Désolé, c:geo n\'arrive pas à lire la distance.</string>

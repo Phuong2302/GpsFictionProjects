@@ -52,5 +52,6 @@
     <string name="dialogButtonCancel">Cancel</string>
     <string name="dialogButtonValidate">Validate</string>
 
+    <string name="distanceToDest">Distance to destination</string>
 
 </resources>
