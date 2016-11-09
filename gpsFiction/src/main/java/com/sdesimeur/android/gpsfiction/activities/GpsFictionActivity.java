@@ -50,6 +50,9 @@ public class GpsFictionActivity extends Activity implements TextToSpeech.OnInitL
     private int lastFabAction;
     private float dYFab;
     private float dXFab;
+    private float dX;
+    private float dY;
+    private static final float MINMOVE = 20;
 
     public GpsFictionData getmGpsFictionData() {
         return mGpsFictionData;
@@ -199,6 +202,14 @@ public class GpsFictionActivity extends Activity implements TextToSpeech.OnInitL
 
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         //Checking for the "menu" key
+        //if (keyCode == KeyEvent.KEYCODE_BACK) {
+        //}
+        if (keyCode == KeyEvent.KEYCODE_HOME) {
+            return true;
+        }
+        if (keyCode == KeyEvent.KEYCODE_POWER) {
+            return true;
+        }
         if (keyCode == KeyEvent.KEYCODE_MENU) {
             if (drawerLayout.isDrawerOpen(Gravity.LEFT)) {
                 drawerLayout.closeDrawer(Gravity.LEFT);
@@ -206,9 +217,8 @@ public class GpsFictionActivity extends Activity implements TextToSpeech.OnInitL
                 drawerLayout.openDrawer(Gravity.LEFT);
             }
             return true;
-        } else {
-            return super.onKeyDown(keyCode, event);
         }
+        return super.onKeyDown(keyCode, event);
     }
 
     public void floatingAction(View view) {
@@ -241,7 +251,11 @@ public class GpsFictionActivity extends Activity implements TextToSpeech.OnInitL
     public void onCreate(Bundle savedInstanceState) {
         //this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         MultiDex.install(this);
-        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED);
+        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION|View.SYSTEM_UI_FLAG_LOW_PROFILE);
+//        getWindow().addFlags(WindowManager.LayoutParams.TYPE_SYSTEM_OVERLAY);
         if (mMyLocationListener == null) mMyLocationListener = new MyLocationListener();
         mMyLocationListener.init(this);
         if (mGpsFictionData == null) {
@@ -260,7 +274,7 @@ public class GpsFictionActivity extends Activity implements TextToSpeech.OnInitL
             mGpsFictionData.init();
         }
         super.onCreate(savedInstanceState);
-        this.setContentView(R.layout.main_view);
+        setContentView(R.layout.main_view);
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         navigationView = (NavigationView) findViewById(R.id.navigation_view);
         navigationView.getMenu().findItem(selectedFragmentId).setChecked(true);
@@ -281,11 +295,13 @@ public class GpsFictionActivity extends Activity implements TextToSpeech.OnInitL
     	          switch (event.getActionMasked()) {
     	              case MotionEvent.ACTION_DOWN:
     	                  dXFab = view.getX() - event.getRawX();
+                          dX = event.getRawX();
     	                  dYFab = view.getY() - event.getRawY();
+                          dY = event.getRawY();
     	                  lastFabAction = MotionEvent.ACTION_DOWN;
     	                  break;
     	              case MotionEvent.ACTION_UP:
-                          if ( ((lastFabAction == MotionEvent.ACTION_MOVE) && (Math.abs(dXFab-view.getX())<30) && (Math.abs(dYFab - view.getY())<30)) ||
+                          if ( ((lastFabAction == MotionEvent.ACTION_MOVE) && (Math.abs(dX-event.getRawX())<MINMOVE) && (Math.abs(dY - event.getRawY())<MINMOVE)) ||
                             (lastFabAction == MotionEvent.ACTION_DOWN) )
                               drawerLayout.openDrawer(Gravity.LEFT);
     	                      //Toast.makeText(getActivity(), "Clicked!", Toast.LENGTH_SHORT).show();
