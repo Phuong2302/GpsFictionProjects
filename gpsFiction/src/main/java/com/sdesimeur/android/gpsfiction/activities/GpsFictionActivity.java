@@ -41,10 +41,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.Locale;
 
 
-public class GpsFictionActivity extends Activity implements TextToSpeech.OnInitListener {
+public class GpsFictionActivity extends Activity {
     private static final String TAGFONT = "FONT";
     private FloatingActionButton fabCreate;
     private int lastFabAction;
@@ -70,34 +69,6 @@ public class GpsFictionActivity extends Activity implements TextToSpeech.OnInitL
     private DrawerLayout drawerLayout;
     private HashMap<Integer, MyTabFragmentImpl> menuItem2Fragments;
     private int selectedFragmentId = R.id.Zones;
-    private TextToSpeech mTts;
-    private boolean mTtsOK = false;
-    private void testTTS() {
-        Intent checkIntent = new Intent();
-        checkIntent.setAction(TextToSpeech.Engine.ACTION_CHECK_TTS_DATA);
-        startActivityForResult(checkIntent, 0x01);
-    }
-
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-    		if (requestCode == 0x01) {
-		        if (resultCode == TextToSpeech.Engine.CHECK_VOICE_DATA_PASS) {
-		            // Succès, au moins un moteur de TTS à été trouvé, on l'instancie
-		            mTts = new TextToSpeech(this, this);
-                    if (mTts.isLanguageAvailable(Locale.getDefault()) == TextToSpeech.LANG_COUNTRY_AVAILABLE) {
-                    	mTts.setLanguage(Locale.getDefault());
-                    } else if (mTts.isLanguageAvailable(Locale.ENGLISH) == TextToSpeech.LANG_COUNTRY_AVAILABLE) {
-                        mTts.setLanguage(Locale.ENGLISH);
-                    }
-                    mTts.setSpeechRate(1); // 1 est la valeur par défaut. Une valeur inférieure rendra l'énonciation plus lente, une valeur supérieure la rendra plus rapide.
-                    mTts.setPitch(1); // 1 est la valeur par défaut. Une valeur inférieure rendra l'énonciation plus grave, une valeur supérieure la rendra plus aigue.
-		        //} else {
-		            // Echec, aucun moteur n'a été trouvé, on propose à l'utilisateur d'en installer un depuis le Market
-		        //    Intent installIntent = new Intent();
-		        //    installIntent.setAction(TextToSpeech.Engine.ACTION_INSTALL_TTS_DATA);
-		        //    startActivity(installIntent);
-		        }
-    		}
-    	}
     private void defineFragments() {
         menuItem2Fragments = new HashMap<>();
         String[] fragmentNames = getResources().getStringArray(R.array.fragmentsNames);
@@ -220,7 +191,16 @@ public class GpsFictionActivity extends Activity implements TextToSpeech.OnInitL
         }
         return super.onKeyDown(keyCode, event);
     }
-
+    @Override
+    public boolean dispatchKeyEvent(KeyEvent event) {
+        if (event.getKeyCode() == KeyEvent.KEYCODE_HOME) {
+            return true;
+        }
+        if (event.getKeyCode() == KeyEvent.KEYCODE_POWER) {
+            return true;
+        }
+        return super.dispatchKeyEvent(event);
+    }
     public void floatingAction(View view) {
    //     drawerLayout.openDrawer(Gravity.LEFT);
     }
@@ -372,21 +352,17 @@ public class GpsFictionActivity extends Activity implements TextToSpeech.OnInitL
         super.onStop();
     }
 
-    @Override
-    public void onDestroy() {
-        if (mTts != null) mTts.shutdown();
-        mTtsOK=false;
-        super.onDestroy();
+    private void testTTS() {
+        Intent checkIntent = new Intent();
+        checkIntent.setAction(TextToSpeech.Engine.ACTION_CHECK_TTS_DATA);
+        startActivityForResult(checkIntent, 0x01);
     }
-
-    @Override
-    public void onInit(int status) {
-        mTtsOK=(status == TextToSpeech.SUCCESS);
-    }
-    public void speak (String txt) {
-        if (mTtsOK) {
-            //String utteranceId=this.hashCode() + "";
-            if (!mTts.isSpeaking()) mTts.speak(txt, TextToSpeech.QUEUE_FLUSH, null);
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == 0x01) {
+            if (resultCode == TextToSpeech.Engine.CHECK_VOICE_DATA_PASS) {
+                ///// TODO send result to CalcRouteAndSpeakService which "startTts"
+            }
         }
     }
+
 }

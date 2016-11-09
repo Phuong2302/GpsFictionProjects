@@ -59,6 +59,7 @@ public class GpsFictionData {
 
     public void setVehiculeSelectedId(int vehiculeSelectedId) {
         this.vehiculeSelectedId = vehiculeSelectedId;
+        /////TODO send this to CalcRouteAndSpeakService
     }
 
 
@@ -341,6 +342,7 @@ public class GpsFictionData {
                 listener.onZoneChanged(zn);
             }
         if (zn.isSelectedZone()) {
+            /////TODO send this to CalcRouteAndSpeakService
             setSelectedZone(null);
             fireZoneSelectListener();
         }

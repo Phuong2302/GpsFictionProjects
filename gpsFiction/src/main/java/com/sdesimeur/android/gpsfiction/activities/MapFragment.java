@@ -7,12 +7,9 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.Paint;
-import android.graphics.Path;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -22,23 +19,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.ZoomControls;
 
-import com.graphhopper.GHRequest;
-import com.graphhopper.GHResponse;
-import com.graphhopper.GraphHopper;
-import com.graphhopper.PathWrapper;
-import com.graphhopper.routing.util.BikeFlagEncoder;
-import com.graphhopper.routing.util.CarFlagEncoder;
-import com.graphhopper.routing.util.FlagEncoder;
-import com.graphhopper.routing.util.FootFlagEncoder;
-import com.graphhopper.util.Parameters;
-import com.graphhopper.util.StopWatch;
 import com.sdesimeur.android.gpsfiction.R;
 import com.sdesimeur.android.gpsfiction.classes.GpsFictionData;
 import com.sdesimeur.android.gpsfiction.classes.GpsFictionThing;
 import com.sdesimeur.android.gpsfiction.classes.MyLocationListener;
 import com.sdesimeur.android.gpsfiction.classes.PlayerBearingListener;
 import com.sdesimeur.android.gpsfiction.classes.PlayerLocationListener;
-import com.sdesimeur.android.gpsfiction.classes.RouteGeoPointListHelper;
 import com.sdesimeur.android.gpsfiction.classes.Zone;
 import com.sdesimeur.android.gpsfiction.classes.ZoneChangeListener;
 import com.sdesimeur.android.gpsfiction.classes.ZoneSelectListener;
@@ -93,16 +79,17 @@ public class MapFragment
     private ImageView viewForMapDirection;
     private ImageView viewForMapPosition;
     private TextView viewForDistanceToDest;
-    int clickCount;
-    private int PositionTouchX;
-    private int PositionTouchY;
-    long startTouchTime = 0 ;
+    //int clickCount;
+    //private int PositionTouchX;
+    //private int PositionTouchY;
+    //long startTouchTime = 0 ;
     private Bitmap playerBitmap;
     private float dX2;
     private float dY2;
-    private int lastAction;
+    //private int lastAction;
     private float dX1;
     private float dY1;
+    private float distanceToEnd = 0;
 
     private static class MapDirection {
         public static final int PLAYER=0;
@@ -110,24 +97,12 @@ public class MapFragment
         public static final int NORTH = 2;
     }
     private File mapsFolder;
-    private File ghFolder;
-    private GraphHopper hopper;
-    private String currentArea = "jeu";
-    private volatile boolean shortestPathRunning = false;
-    private volatile boolean prepareInProgress = false;
+    static final private String CURRENTAREA = "jeu";
     private MarkerItem playerMarkerItem;
     private ViewGroup viewGroupForVehiculesButtons = null;
-    private HashMap<Integer,FlagEncoder> vehiculeGHEncoding = new HashMap <Integer, FlagEncoder> () {{
-        put(R.drawable.compass, null);
-        put(R.drawable.pieton, new FootFlagEncoder());
-        put(R.drawable.cycle, new BikeFlagEncoder());
-        put(R.drawable.auto, new CarFlagEncoder());
-    }};
     private HashMap<Zone,ZoneViewHelper> zoneViewHelperHashMap = null;
     private ItemizedLayer<MarkerItem> mMarkerLayer=null;
     private PathLayer routePathLayer = null;
-    private PathWrapper routePath = null;
-    private RouteGeoPointListHelper mRouteGeoPointListHelper = null;
     private Style mStyle4SelectedZone;
     private Style mStyle4UnSelectedZone;
     private Style mStyle4InvisibleZone;
@@ -169,21 +144,12 @@ public class MapFragment
         return this.mapView;
     }
 
-    private void finishPrepare() {
-        prepareInProgress = false;
-    }
-    boolean isReady() {
-        if (hopper != null) return true;
-        if (prepareInProgress) return false;
-        return false;
-    }
 
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //this.vehiculeSelectedDrawable = this.getResources().getDrawable(R.drawable.compass);
-        prepareInProgress = true;
             boolean greaterOrEqKitkat = Build.VERSION.SDK_INT >= 19;
             File dir = null;
             if (greaterOrEqKitkat) {
@@ -194,7 +160,6 @@ public class MapFragment
             }
             dir = new File (dir, "/sdesimeur/");
             this.mapsFolder = new File (dir , "/mapsforge/");
-            this.ghFolder = new File (dir , "/graphhopper/");
     }
 
     @Override
@@ -228,7 +193,7 @@ public class MapFragment
                     case MotionEvent.ACTION_POINTER_DOWN:
                         dX2 = event.getX();
                         dY2 = event.getY();
-                        lastAction = MotionEvent.ACTION_POINTER_DOWN;
+ //                       lastAction = MotionEvent.ACTION_POINTER_DOWN;
                         break;
     	            case MotionEvent.ACTION_POINTER_UP:
                         if ((Math.abs(dX2-event.getX())<MINMOVE) && (Math.abs(dY2 - event.getY())<MINMOVE)) break;
@@ -277,7 +242,7 @@ public class MapFragment
         mMap.layers().add(mMarkerLayer);
         MapFileTileSource tileSource = new MapFileTileSource();
         tileSource.setPreferredLanguage(Locale.getDefault().getLanguage());
-        File file = new File(mapsFolder, currentArea + ".map");
+        File file = new File(mapsFolder, CURRENTAREA + ".map");
         if (tileSource.setMapFile(file.toString())) {
             VectorTileLayer l = mMap.setBaseMap(tileSource);
             mMap.setTheme(VtmThemes.DEFAULT);
@@ -302,7 +267,6 @@ public class MapFragment
         addViewForMapDirection(vg);
         addViewForMapPosition(vg);
         addViewGroupForZoomButtons(vg);
-        loadGraphStorage();
         return getRootView();
     }
     @Override
@@ -315,7 +279,6 @@ public class MapFragment
         super.onResume();
 //        int alpha = MapFragment.SELECTEDBUTTON;
 //        hashMapVehiculesButtonsIdView.get(getVehiculeSelectedId()).getDrawable().setAlpha(alpha);
-        shortestPathRunning = false;
         //mPrefs.load(mapView.map());
         mapView.onResume();
         registerAllZones();
@@ -328,7 +291,6 @@ public class MapFragment
     @Override
     public void onPause() {
         super.onPause();
-        if (mRouteGeoPointListHelper != null) mRouteGeoPointListHelper.stopListenning();
         getmMyLocationListener().removePlayerLocationListener(MyLocationListener.REGISTER.FRAGMENT, this);
         getmMyLocationListener().removePlayerBearingListener(MyLocationListener.REGISTER.FRAGMENT, this);
         getmGpsFictionData().removeZoneSelectListener(GpsFictionData.REGISTER.FRAGMENT, this);
@@ -355,7 +317,6 @@ public class MapFragment
 
     @Override
     public void onDetach() {
-        hopper = null;
         mMarkerLayer = null;
         zoneViewHelperHashMap = null;
         playerMarkerItem = null;
@@ -372,36 +333,6 @@ public class MapFragment
         }
     }
 
-    void loadGraphStorage() {
-        new AsyncTask<Void, Void, Path>() {
-            String error = "Pas d'erreur";
-            protected Path saveDoInBackground(Void... v) {
-                GraphHopper tmpHopp = new GraphHopper().forMobile();
-                hopper = tmpHopp;
-//                hopper.getCHFactoryDecorator().addWeighting("fastest");
-//                hopper.getCHFactoryDecorator().addWeighting("shortest");
-                hopper.setCHEnabled(false);
-                hopper.setAllowWrites(false);
-                hopper.setEnableInstructions(true);
-                hopper.setEnableCalcPoints(true);
-                hopper.load(new File(ghFolder, currentArea).getAbsolutePath());
-                return null;
-            }
-            @Override
-            protected Path doInBackground(Void... params) {
-                try {
-                    return saveDoInBackground(params);
-                } catch (Throwable t) {
-                    error = t.getMessage();
-                    Log.e("AsynTask GraphHopper", error);
-                    return null;
-                }
-            }
-            protected void onPostExecute(Path o) {
-                finishPrepare();
-            }
-        }.execute();
-    }
 
     private void addViewGroupForZoomButtons(ViewGroup vg) {
         ZoomControls zoom = (ZoomControls) vg.findViewById(R.id.zoomControls);
@@ -530,54 +461,8 @@ public class MapFragment
         }
     }
 
-    public PathWrapper getRoutePath() {
-        return routePath;
-    }
 
-    private void createRouteGeoPointListHelper(GHResponse resp) {
-        routePath = resp.getBest();
-        if (mRouteGeoPointListHelper == null) mRouteGeoPointListHelper = new RouteGeoPointListHelper(this);
-        mRouteGeoPointListHelper.startListenning();
-    }
 
-    public boolean isShortestPathRunning() {
-        return shortestPathRunning;
-    }
-
-    public void calcRoutePath() {
-        routePath = null;
-        final double fromLat = getPlayerLocation().getLatitude();
-        final double fromLon = getPlayerLocation().getLongitude();
-        final double toLat = getSelectedZone().getCenterPoint().getLatitude();
-        final double toLon = getSelectedZone().getCenterPoint().getLongitude();
-        shortestPathRunning = true;
-        new AsyncTask<Void, Void, GHResponse>() {
-            float time;
-
-            protected GHResponse doInBackground( Void... v ) {
-                while ( ! (isReady()))  {}
-                StopWatch sw = new StopWatch().start();
-                GHRequest req = new GHRequest(fromLat, fromLon, toLat, toLon);
-                req.setAlgorithm(Parameters.Algorithms.DIJKSTRA_BI);
-                req.getHints().put("instructions", true);
-                req.getHints().put("calc_points", true);
-                req.setLocale(Locale.getDefault());
-                req.setVehicle(vehiculeGHEncoding.get(getVehiculeSelectedId()).toString());
-                //req.setWeighting("fastest");
-                //hopper.getGraphHopperStorage();
-                GHResponse resp = hopper.route(req);
-                time = sw.stop().getSeconds();
-                return resp;
-            }
-
-            protected void onPostExecute( GHResponse resp ) {
-                if (!resp.hasErrors()) {
-                    createRouteGeoPointListHelper(resp);
-                }
-                shortestPathRunning = false;
-            }
-        }.execute();
-    }
     private void calcLinePath (){
         List<GeoPoint> listOfPoints = new ArrayList<>();
         listOfPoints.add(getPlayerLocation());
@@ -587,15 +472,9 @@ public class MapFragment
     private void calcPath() {
         if ((getPlayerLocation() != null) && (getSelectedZone() != null)) {
             if (getVehiculeSelectedId() == R.drawable.compass) {
-                if (mRouteGeoPointListHelper!=null) mRouteGeoPointListHelper.stopListenning();
                 calcLinePath();
-            } else {
-                if (! (shortestPathRunning)) calcRoutePath();
             }
         } else {
-            if (mRouteGeoPointListHelper!=null) mRouteGeoPointListHelper.stopListenning();
-            //mRouteGeoPointListHelper=null;
-            //routePath=null;
             if (routePathLayer!=null) routePathLayer.clearPath();
         }
     }
@@ -700,8 +579,8 @@ public class MapFragment
         if ((routePathLayer!=null) && (routePathLayer.getPoints().size() > 1)) {
                 DistanceToTextHelper d = null;
                 MyGeoPoint gd = new MyGeoPoint(routePathLayer.getPoints().get(1).getLatitude(), routePathLayer.getPoints().get(1).getLongitude());
-                if (routePath != null) {
-                    d = new DistanceToTextHelper(mRouteGeoPointListHelper.getDistanceToEnd());
+                if ( getVehiculeSelectedId() != R.drawable.compass) {
+                    d = new DistanceToTextHelper(distanceToEnd);
                 } else {
                     d = new DistanceToTextHelper(playerLocation.distanceTo(gd));
                 }
