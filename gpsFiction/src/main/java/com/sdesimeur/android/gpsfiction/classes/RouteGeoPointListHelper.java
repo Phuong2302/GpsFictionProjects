@@ -8,7 +8,8 @@ import com.graphhopper.util.Instruction;
 import com.graphhopper.util.PointList;
 import com.graphhopper.util.Translation;
 import com.graphhopper.util.TranslationMap;
-import com.sdesimeur.android.gpsfiction.activities.MapFragment;
+import com.sdesimeur.android.gpsfiction.activities.CalcRouteAndSpeakService;
+import com.sdesimeur.android.gpsfiction.activities.CalcRouteAndSpeakService;
 import com.sdesimeur.android.gpsfiction.geopoint.MyGeoPoint;
 import com.sdesimeur.android.gpsfiction.helpers.DistanceToTextHelper;
 import com.sdesimeur.android.gpsfiction.polygon.MyPolygon;
@@ -20,9 +21,11 @@ import java.util.Locale;
  * Created by sam on 25/10/16.
  */
 public class RouteGeoPointListHelper implements PlayerLocationListener {
-    private MapFragment mapFragment = null;
+    private CalcRouteAndSpeakService mCalcRouteAndSpeakService = null;
+    private CalcRouteAndSpeakService mCalcRouteAndSpeakService = null;
     private MyPolygon listOfPoints = null;
     private float deltaDistMax = 0.050f;
+
 
     public float getDistanceToEnd() {
         return distanceToEnd;
@@ -38,23 +41,23 @@ public class RouteGeoPointListHelper implements PlayerLocationListener {
     }
 
 
-    public RouteGeoPointListHelper(MapFragment mf) {
-        mapFragment = mf;
+    public RouteGeoPointListHelper(CalcRouteAndSpeakService calcRouteAndSpeakService) {
+        mCalcRouteAndSpeakService = calcRouteAndSpeakService;
         TranslationMap trm = new TranslationMap();
         trm.doImport();
         mTranslation = trm.getWithFallBack(Locale.getDefault());
-//        deltaDistMax = (float) (0.015+(mapFragment.getVehiculeSelectedId()!= R.drawable.pieton?0.015:0));
+//        deltaDistMax = (float) (0.015+(mCalcRouteAndSpeakService.getVehiculeSelectedId()!= R.drawable.pieton?0.015:0));
     }
 
     public void fillRoutePathLayer () {
-        if (mapFragment.getRoutePathLayer()!=null) mapFragment.getRoutePathLayer().setPoints(listOfPoints.getAllGeoPoints());
+        if (mCalcRouteAndSpeakService.getRoutePathLayer()!=null) mCalcRouteAndSpeakService.getRoutePathLayer().setPoints(listOfPoints.getAllGeoPoints());
     }
 
     @Override
     public void onLocationPlayerChanged(MyGeoPoint playerLocation) {
         if (listOfPoints.pointDistanceMin(playerLocation).distanceTo(playerLocation) > deltaDistMax) {
             stopListenning();
-            mapFragment.calcRoutePath();
+            mCalcRouteAndSpeakService.calcRoutePath();
         } else {
             if (listOfPoints.size() > 2) {
                 MyGeoPoint g0 = new MyGeoPoint(listOfPoints.get(0));
@@ -75,15 +78,15 @@ public class RouteGeoPointListHelper implements PlayerLocationListener {
                     fillRoutePathLayer();
                 }
             }
-            if (mapFragment.getRoutePath() != null && !mapFragment.isShortestPathRunning()) {
-                Instruction nextInst = mapFragment.getRoutePath().getInstructions().find(playerLocation.getLatitude(), playerLocation.getLongitude(), 2000);
+            if (mCalcRouteAndSpeakService.getRoutePath() != null && !mCalcRouteAndSpeakService.isShortestPathRunning()) {
+                Instruction nextInst = mCalcRouteAndSpeakService.getRoutePath().getInstructions().find(playerLocation.getLatitude(), playerLocation.getLongitude(), 2000);
                 int lastIndex = nextInst.getPoints().size()-1;
                 MyGeoPoint gp = new MyGeoPoint(nextInst.getPoints().getLat(lastIndex),nextInst.getPoints().getLon(lastIndex));
                 calcDistancePlayerToPoints(playerLocation,gp);
                 DistanceToTextHelper dst = new DistanceToTextHelper(distanceToNxtPoint);
                 nextInstructionString = mTranslation.tr("web.to_hint", new Object[0]) + " " + dst.getDistanceInText() + ", " + nextInst.getTurnDescription(mTranslation);
-                Toast.makeText(mapFragment.getmGpsFictionActivity(), nextInstructionString, Toast.LENGTH_LONG).show();
-                mapFragment.getmGpsFictionActivity().speak(nextInstructionString);
+                Toast.makeText(mCalcRouteAndSpeakService, nextInstructionString, Toast.LENGTH_LONG).show();
+                mCalcRouteAndSpeakService.speak(nextInstructionString);
             }
         }
     }
@@ -106,16 +109,16 @@ public class RouteGeoPointListHelper implements PlayerLocationListener {
     }
 
     public void stopListenning () {
-        mapFragment.getmMyLocationListener().removePlayerLocationListener(MyLocationListener.REGISTER.MARKER,this);
+        mCalcRouteAndSpeakService.getmMyLocationListener().removePlayerLocationListener(MyLocationListener.REGISTER.MARKER,this);
     }
 
     public void startListenning() {
         listOfPoints = new MyPolygon();
-        PointList pl = mapFragment.getRoutePath().getPoints();
+        PointList pl = mCalcRouteAndSpeakService.getRoutePath().getPoints();
         for (int i = 0; i < pl.size(); i++) {
             listOfPoints.add(new MyGeoPoint(pl.toGHPoint(i).getLat(), pl.toGHPoint(i).getLon()));
         }
         fillRoutePathLayer();
-        mapFragment.getmMyLocationListener().addPlayerLocationListener(MyLocationListener.REGISTER.MARKER,this);
+        mCalcRouteAndSpeakService.getmMyLocationListener().addPlayerLocationListener(MyLocationListener.REGISTER.MARKER,this);
     }
 }

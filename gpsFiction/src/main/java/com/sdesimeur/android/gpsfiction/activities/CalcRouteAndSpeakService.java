@@ -47,6 +47,7 @@ public class CalcRouteAndSpeakService extends Service implements TextToSpeech.On
         put(R.drawable.cycle, new BikeFlagEncoder());
         put(R.drawable.auto, new CarFlagEncoder());
     }};
+    private int vehiculeSelectedId = R.drawable.compass;
 
 
     private void finishPrepare() {
@@ -113,7 +114,7 @@ public class CalcRouteAndSpeakService extends Service implements TextToSpeech.On
                 req.getHints().put("instructions", true);
                 req.getHints().put("calc_points", true);
                 req.setLocale(Locale.getDefault());
-                req.setVehicle(vehiculeGHEncoding.get(getVehiculeSelectedId()).toString());
+                req.setVehicle(vehiculeGHEncoding.get(vehiculeSelectedId).toString());
                 //req.setWeighting("fastest");
                 //hopper.getGraphHopperStorage();
                 GHResponse resp = hopper.route(req);
@@ -192,4 +193,8 @@ public class CalcRouteAndSpeakService extends Service implements TextToSpeech.On
                 //    installIntent.setAction(TextToSpeech.Engine.ACTION_INSTALL_TTS_DATA);
                 //    startActivity(installIntent);
             }
+
+    public PathWrapper getRoutePath() {
+        return routePath;
     }
+}
