@@ -463,21 +463,6 @@ public class MapFragment
 
 
 
-    private void calcLinePath (){
-        List<GeoPoint> listOfPoints = new ArrayList<>();
-        listOfPoints.add(getPlayerLocation());
-        listOfPoints.add(getSelectedZone().getCenterPoint());
-        routePathLayer.setPoints(listOfPoints);
-    }
-    private void calcPath() {
-        if ((getPlayerLocation() != null) && (getSelectedZone() != null)) {
-            if (getVehiculeSelectedId() == R.drawable.compass) {
-                calcLinePath();
-            }
-        } else {
-            if (routePathLayer!=null) routePathLayer.clearPath();
-        }
-    }
 
     public PathLayer getRoutePathLayer() {
         return routePathLayer;

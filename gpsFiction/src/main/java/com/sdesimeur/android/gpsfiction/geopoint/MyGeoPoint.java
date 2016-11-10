@@ -1,6 +1,7 @@
 package com.sdesimeur.android.gpsfiction.geopoint;
 
 import android.location.Location;
+import android.os.Bundle;
 
 import com.sdesimeur.android.gpsfiction.gpx.beans.Waypoint;
 
@@ -95,7 +96,18 @@ public class MyGeoPoint extends GeoPoint {
     public MyGeoPoint(GeoPoint gp) {
         this(gp.getLatitude(),gp.getLongitude());
     }
-    
+    public Bundle getByBundle() {
+        Bundle dest = new Bundle();
+        double[] coord = null;
+        coord = new double[]{getLatitude(), getLongitude()};
+        dest.putDoubleArray("GeoPoint", coord);
+        return dest;
+    }
+    public static MyGeoPoint setByBundle(Bundle in) {
+            double[] coord = null;
+            coord = in.getDoubleArray("GeoPoint");
+            return new MyGeoPoint(coord[0],coord[1]);
+    }
  /*   
     public void setMyGeoPoint(Location loc) {
         this.setMyGeoPoint(loc.getLatitude(), loc.getLongitude());

@@ -1,17 +1,16 @@
 package com.sdesimeur.android.gpsfiction.classes;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.sdesimeur.android.gpsfiction.R;
+import com.sdesimeur.android.gpsfiction.activities.CalcRouteAndSpeakService;
 import com.sdesimeur.android.gpsfiction.activities.GpsFictionActivity;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.function.IntPredicate;
-import java.util.function.Predicate;
 
 public class GpsFictionData {
     private static final int INITZOOMLEVEL = 14;
@@ -59,7 +58,10 @@ public class GpsFictionData {
 
     public void setVehiculeSelectedId(int vehiculeSelectedId) {
         this.vehiculeSelectedId = vehiculeSelectedId;
-        /////TODO send this to CalcRouteAndSpeakService
+        Intent myIntent = new Intent (getmGpsFictionActivity(), CalcRouteAndSpeakService.class);
+        myIntent.setAction(CalcRouteAndSpeakService.ACTION.CHANGEVEHICULESELECTEDID);
+        myIntent.putExtra("vehiculeSelectedId",vehiculeSelectedId);
+        getmGpsFictionActivity().startService(myIntent);
     }
 
 
@@ -283,10 +285,16 @@ public class GpsFictionData {
     }
 
     public void fireZoneSelectListener() {
-        if (selectedZone != unSelectedZone)
-        for (GpsFictionData.REGISTER i : GpsFictionData.REGISTER.values()) {
-            for (ZoneSelectListener listener : this.zoneSelectListener.get(i)) {
-                listener.onZoneSelectChanged(selectedZone,unSelectedZone);
+        if (selectedZone != unSelectedZone) {
+            Intent myIntent = new Intent (getmGpsFictionActivity(), CalcRouteAndSpeakService.class);
+            myIntent.setAction(CalcRouteAndSpeakService.ACTION.CHANGEGEOPOINT4ZONESELECTED);
+            Bundle bd = selectedZone.getCenterPoint().getByBundle();
+            myIntent.putExtras(bd);
+            getmGpsFictionActivity().startService(myIntent);
+            for (GpsFictionData.REGISTER i : GpsFictionData.REGISTER.values()) {
+                for (ZoneSelectListener listener : this.zoneSelectListener.get(i)) {
+                    listener.onZoneSelectChanged(selectedZone, unSelectedZone);
+                }
             }
         }
     }

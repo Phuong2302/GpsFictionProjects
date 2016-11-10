@@ -34,7 +34,8 @@
                 <category android:name="android.intent.category.MONKEY" />
             </intent-filter>
         </activity>
-        <service android:name=".activities.CalcRouteAndSpeakService" />
+        <service android:name=".activities.CalcRouteAndSpeakService"
+            android:exported="false"/>
 
         <!-- android:label="@string/title_activity_gps_fiction_main" -->
         <!--

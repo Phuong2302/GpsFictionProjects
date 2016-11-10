@@ -2,6 +2,7 @@ package com.sdesimeur.android.gpsfiction.classes;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -14,6 +15,7 @@ import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.text.format.Time;
 
+import com.sdesimeur.android.gpsfiction.activities.CalcRouteAndSpeakService;
 import com.sdesimeur.android.gpsfiction.activities.GpsFictionActivity;
 import com.sdesimeur.android.gpsfiction.geopoint.MyGeoPoint;
 
@@ -33,14 +35,12 @@ public class MyLocationListener implements LocationListener, SensorEventListener
     private Time lastTimePlayerGeoPoint = null;
     private MyGeoPoint playerGeoPoint = null;
     private Time timePlayerGeoPoint = null;
-    private LocationManager locationManager = null;
     //	private static final MyLocationListener staticLocationListener=new MyLocationListener();
 //	private static final SensorEventListener staticCompassListener = staticLocationListener;
     private boolean compassActive;
     private float bearingOfPlayer;
     private float compassBearing;
     private float locationBearing;
-    private SensorManager sensorManager = null;
     private Sensor sensorsOrientation = null;
     private GpsFictionActivity gpsFictionActivity = null;
 
@@ -126,10 +126,16 @@ public class MyLocationListener implements LocationListener, SensorEventListener
     }
 
     public void firePlayerLocationListener() {
-        if (playerGeoPoint != null)
-        for (REGISTER i : REGISTER.values()) {
-            for (PlayerLocationListener listener : playerLocationListener.get(i)) {
-                listener.onLocationPlayerChanged(playerGeoPoint);
+        if (playerGeoPoint != null) {
+            Bundle bd = playerGeoPoint.getByBundle();
+            Intent myIntent = new Intent (getGpsFictionActivity(), CalcRouteAndSpeakService.class);
+            myIntent.setAction(CalcRouteAndSpeakService.ACTION.CHANGEGEOPOINT4PLAYER);
+            myIntent.putExtras(bd);
+            getGpsFictionActivity().startService(myIntent);
+            for (REGISTER i : REGISTER.values()) {
+                for (PlayerLocationListener listener : playerLocationListener.get(i)) {
+                    listener.onLocationPlayerChanged(playerGeoPoint);
+                }
             }
         }
     }
@@ -140,10 +146,6 @@ public class MyLocationListener implements LocationListener, SensorEventListener
                 listener.onBearingPlayerChanged(bearingOfPlayer);
             }
         }
-    }
-
-    public LocationManager getLocationManager() {
-        return locationManager;
     }
 
     public void onLocationChanged(Location location) {
@@ -191,8 +193,7 @@ public class MyLocationListener implements LocationListener, SensorEventListener
     }
 
     public void startLocationListener() {
-        //TODO verifier que le GPS est active, sinon lancer une boite de dialog pour le faire activer
-        locationManager = (LocationManager) getGpsFictionActivity().getSystemService(Context.LOCATION_SERVICE);
+        LocationManager locationManager = (LocationManager) getGpsFictionActivity().getSystemService(Context.LOCATION_SERVICE);
         if (ActivityCompat.checkSelfPermission(getGpsFictionActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getGpsFictionActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
             //    ActivityCompat#requestPermissions
@@ -204,22 +205,11 @@ public class MyLocationListener implements LocationListener, SensorEventListener
             return;
         }
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 200, 0.5f, this);
-        //Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-        //if (location == null) {
-        //    playerGeoPoint = new MyGeoPoint(LATITUDE, LONGITUDE);
-        //} else {
-        //    playerGeoPoint = new MyGeoPoint(location);
-        //}
-        lastPlayerGeoPoint = playerGeoPoint;
-        sensorManager = (SensorManager) getGpsFictionActivity().getSystemService(Context.SENSOR_SERVICE);
-
-    }
-
-    public GpsFictionActivity getGpsFictionActivity() {
-        return gpsFictionActivity;
+        //lastPlayerGeoPoint = playerGeoPoint;
     }
 
     public void removeGpsFictionUpdates() {
+        LocationManager locationManager = (LocationManager) getGpsFictionActivity().getSystemService(Context.LOCATION_SERVICE);
         if (ActivityCompat.checkSelfPermission(getGpsFictionActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getGpsFictionActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
             //    ActivityCompat#requestPermissions
@@ -233,6 +223,10 @@ public class MyLocationListener implements LocationListener, SensorEventListener
         locationManager.removeUpdates(this);
     }
 
+    public GpsFictionActivity getGpsFictionActivity() {
+        return gpsFictionActivity;
+    }
+
     public MyGeoPoint getPlayerGeoPoint() {
         return playerGeoPoint;
     }
@@ -242,6 +236,7 @@ public class MyLocationListener implements LocationListener, SensorEventListener
     }
 
     public void setCompassActive() {
+        SensorManager sensorManager = (SensorManager) getGpsFictionActivity().getSystemService(Context.SENSOR_SERVICE);
         if (sensorManager != null) {
             float speed = 0f;
             if ((lastPlayerGeoPoint != null) && (playerGeoPoint != null)) {

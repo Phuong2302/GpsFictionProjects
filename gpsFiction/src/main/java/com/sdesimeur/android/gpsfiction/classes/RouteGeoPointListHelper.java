@@ -22,7 +22,6 @@ import java.util.Locale;
  */
 public class RouteGeoPointListHelper implements PlayerLocationListener {
     private CalcRouteAndSpeakService mCalcRouteAndSpeakService = null;
-    private CalcRouteAndSpeakService mCalcRouteAndSpeakService = null;
     private MyPolygon listOfPoints = null;
     private float deltaDistMax = 0.050f;
 

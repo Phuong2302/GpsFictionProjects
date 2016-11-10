@@ -59,24 +59,9 @@ public class Zone extends Container implements ZoneEnterOrExitInterface, PlayerL
         Bundle toPass = super.getByBundle();
         Bundle dest = new Bundle();
         dest.putBundle("Parent", toPass);
-        double[] coord = null;
         boolean val = (this == getmGpsFictionData().getSelectedZone());
         dest.putBoolean("selectedZone", val);
-//    	boolean val [] = { this.isSelectedZone , this.circularZone };
-//		dest.putBooleanArray("selectedZone_circularZone",val);
-//		dest.putFloat("radius",this.radius);
-//		coord = {this.centerPoint.getLatitude() , this.centerPoint.getLongitude()};
-//		dest.putDoubleArray("centerPoint",coord);
-        Iterator<MyGeoPoint> it = this.shape.iterator();
-        MyGeoPoint gp = null;
-        dest.putInt("shapeNbPoints", this.shape.size());
-        int index = 0;
-        while (it.hasNext()) {
-            gp = it.next();
-            coord = new double[]{gp.getLatitude(), gp.getLongitude()};
-            dest.putDoubleArray("shapePoint" + index, coord);
-            index++;
-        }
+        dest.putBundle("shape",this.shape.getByBundle());
         return dest;
     }
 
@@ -84,16 +69,9 @@ public class Zone extends Container implements ZoneEnterOrExitInterface, PlayerL
         Bundle toPass = in.getBundle("Parent");
         super.setByBundle(toPass);
         boolean isSelectedZone = in.getBoolean("selectedZone");
-        double[] coord = null;
-//		this.circularZone = val[1];
-//		this.radius = in.getFloat("radius");
-//		coord = in.getDoubleArray("centerPoint");
-//		this.centerPoint = new MyGeoPoint(coord[0],coord[1]);
-        int nbGeoGointInShape = in.getInt("shapeNbPoints");
-        for (int index = 0; index < nbGeoGointInShape; index++) {
-            coord = in.getDoubleArray("shapePoint" + index);
-            this.shape.add(new MyGeoPoint(coord[0], coord[1]));
-        }
+        shape = new MyPolygon();
+        toPass = in.getBundle("shape");
+        shape.setByBundle(toPass);
         this.validate();
         if (isSelectedZone) getmGpsFictionData().setSelectedZone(this);
     }

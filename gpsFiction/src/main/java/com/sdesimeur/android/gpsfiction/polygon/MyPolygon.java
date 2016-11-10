@@ -1,12 +1,12 @@
 package com.sdesimeur.android.gpsfiction.polygon;
 
+import android.os.Bundle;
+
 import com.sdesimeur.android.gpsfiction.geopoint.MyGeoPoint;
 import com.sdesimeur.android.gpsfiction.math.Vector;
 
 import org.oscim.core.GeoPoint;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -17,7 +17,32 @@ public class MyPolygon extends LinkedList<MyGeoPoint> {
     public MyPolygon() {
         super();
     }
+    public Bundle getByBundle() {
+        Bundle dest = new Bundle();
+        Iterator<MyGeoPoint> it = this.iterator();
+        MyGeoPoint gp = null;
+        dest.putInt("shapeNbPoints", this.size());
+        int index = 0;
+        while (it.hasNext()) {
+            gp = it.next();
+            dest.putBundle("shapePoint" + index, gp.getByBundle());
+            index++;
+        }
+        return dest;
+    }
 
+    public void setByBundle(Bundle in) {
+        MyGeoPoint gp = null;
+        int nbGeoGointInShape = in.getInt("shapeNbPoints");
+        for (int index = 0; index < nbGeoGointInShape; index++) {
+            gp = MyGeoPoint.setByBundle(in.getBundle("shapePoint" + index));
+            this.add(gp);
+        }
+    }
+
+    /*public boolean isThisZoneSelected() {
+        return thisZoneSelected;
+	}*/
     public void addMyGeoPoint(MyGeoPoint gp) {
         this.add(gp);
     }
