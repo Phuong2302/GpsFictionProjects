@@ -1,6 +1,7 @@
 package com.sdesimeur.android.gpsfiction.activities;
 
 
+import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -25,6 +26,7 @@ import com.sdesimeur.android.gpsfiction.classes.GpsFictionThing;
 import com.sdesimeur.android.gpsfiction.classes.MyLocationListener;
 import com.sdesimeur.android.gpsfiction.classes.PlayerBearingListener;
 import com.sdesimeur.android.gpsfiction.classes.PlayerLocationListener;
+import com.sdesimeur.android.gpsfiction.classes.VehiculeSelectedIdListener;
 import com.sdesimeur.android.gpsfiction.classes.Zone;
 import com.sdesimeur.android.gpsfiction.classes.ZoneChangeListener;
 import com.sdesimeur.android.gpsfiction.classes.ZoneSelectListener;
@@ -149,7 +151,6 @@ public class MapFragment
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //this.vehiculeSelectedDrawable = this.getResources().getDrawable(R.drawable.compass);
             boolean greaterOrEqKitkat = Build.VERSION.SDK_INT >= 19;
             File dir = null;
             if (greaterOrEqKitkat) {
@@ -353,41 +354,49 @@ public class MapFragment
             }
         });
     }
-
+/*
     private void onVehiculeChange(View v) {
             ImageView v1 = (ImageView) v;
             int res = (int) v1.getTag();
-//            if (hashMapVehiculesButtonsIdView.get(getVehiculeSelectedId()) != v1) {
             if (getVehiculeSelectedId() != res) {
                 setVehiculeSelectedId(res);
                 v1.getDrawable().setAlpha(MapFragment.SELECTEDBUTTON);
                 v1.invalidate();
                 for (int idx=0; idx < viewGroupForVehiculesButtons.getChildCount(); idx++) {
-//                for (int idx : hashMapVehiculesButtonsIdView.keySet()){
                     ImageView v2 = (ImageView) viewGroupForVehiculesButtons.getChildAt(idx);
-//                    if (((int)v2.getTag()) == ((int)v1.getTag())) {
-//                        setVehiculeSelectedId(idx);
-//                    }
                     if (((int) v2.getTag()) != res) {
                         v2.getDrawable().setAlpha(MapFragment.UNSELECTEDBUTTON);
                         v2.invalidate();
                     }
                 }
-                calcPath();
             }
     }
-
+*/
     private void addViewGroupForVehiculesButtons(ViewGroup vg) {
         viewGroupForVehiculesButtons = (ViewGroup) vg.findViewById(R.id.forVehiculesButtons);
         TypedArray vehicules = getResources().obtainTypedArray(R.array.vehicules_array);
         for (int index = 0; index < vehicules.length(); index++) {
-            ImageView img = new ImageView(getActivity());
+            class MyImageView extends ImageView implements VehiculeSelectedIdListener {
+                public MyImageView(Context context) {
+                    super(context);
+                }
+                @Override
+                public void onVehiculeSelectedId(int id) {
+                    int res = (int) getTag();
+                    getDrawable().setAlpha((res==id)?MapFragment.SELECTEDBUTTON:MapFragment.UNSELECTEDBUTTON);
+                }
+            }
+            ImageView img = new MyImageView (getActivity());
             int pad = getResources().getDimensionPixelSize(R.dimen.buttonsVehiculesPadding);
             img.setPadding(pad, pad, pad, pad);
             img.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    onVehiculeChange(v);
+                    int res = (int) v.getTag();
+                    if (getVehiculeSelectedId() != res) {
+                        setVehiculeSelectedId(res);
+                    }
+                    //onVehiculeChange(v);
                 }
             });
             Integer res = vehicules.getResourceId(index,0);
@@ -473,7 +482,6 @@ public class MapFragment
         if (sZnO != null) {
             onZoneChanged(sZnO);
         }
-        calcPath();
         setViewDistanceToDest();
     }
     @Override
@@ -487,7 +495,6 @@ public class MapFragment
                 mMap.setMapPosition(pos);
                 mMap.updateMap(true);
             }
-            if ((getSelectedZone() != null) && (getVehiculeSelectedId()==R.drawable.compass)) calcLinePath();
             setViewDistanceToDest();
         }
     }
@@ -562,13 +569,7 @@ public class MapFragment
     private void setViewDistanceToDest () {
         MyGeoPoint playerLocation = getPlayerLocation()!=null?getPlayerLocation():new MyGeoPoint(90,0);
         if ((routePathLayer!=null) && (routePathLayer.getPoints().size() > 1)) {
-                DistanceToTextHelper d = null;
-                MyGeoPoint gd = new MyGeoPoint(routePathLayer.getPoints().get(1).getLatitude(), routePathLayer.getPoints().get(1).getLongitude());
-                if ( getVehiculeSelectedId() != R.drawable.compass) {
-                    d = new DistanceToTextHelper(distanceToEnd);
-                } else {
-                    d = new DistanceToTextHelper(playerLocation.distanceTo(gd));
-                }
+                DistanceToTextHelper d = new DistanceToTextHelper(getDistanceToEnd());
                 ((ViewGroup)viewForDistanceToDest.getParent()).setVisibility(View.VISIBLE);
                 viewForDistanceToDest.setText(d.getDistanceInText());
         } else {

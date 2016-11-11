@@ -2,7 +2,6 @@ package com.sdesimeur.android.gpsfiction.classes;
 
 import android.Manifest;
 import android.content.Context;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -15,7 +14,6 @@ import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.text.format.Time;
 
-import com.sdesimeur.android.gpsfiction.activities.CalcRouteAndSpeakService;
 import com.sdesimeur.android.gpsfiction.activities.GpsFictionActivity;
 import com.sdesimeur.android.gpsfiction.geopoint.MyGeoPoint;
 
@@ -127,11 +125,6 @@ public class MyLocationListener implements LocationListener, SensorEventListener
 
     public void firePlayerLocationListener() {
         if (playerGeoPoint != null) {
-            Bundle bd = playerGeoPoint.getByBundle();
-            Intent myIntent = new Intent (getGpsFictionActivity(), CalcRouteAndSpeakService.class);
-            myIntent.setAction(CalcRouteAndSpeakService.ACTION.CHANGEGEOPOINT4PLAYER);
-            myIntent.putExtras(bd);
-            getGpsFictionActivity().startService(myIntent);
             for (REGISTER i : REGISTER.values()) {
                 for (PlayerLocationListener listener : playerLocationListener.get(i)) {
                     listener.onLocationPlayerChanged(playerGeoPoint);
@@ -300,6 +293,7 @@ public class MyLocationListener implements LocationListener, SensorEventListener
     }
 
     static public enum REGISTER {
+        SERVICE,
         MARKER,
         ZONE,
         HOLDERVIEW,

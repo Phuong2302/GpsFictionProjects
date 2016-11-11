@@ -1,21 +1,16 @@
 package com.sdesimeur.android.gpsfiction.activities;
 
-import android.Manifest;
 import android.app.Notification;
 import android.app.PendingIntent;
 import android.app.Service;
-import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.location.LocationManager;
 import android.os.AsyncTask;
+import android.os.Binder;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.IBinder;
 import android.speech.tts.TextToSpeech;
-import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 
 import com.graphhopper.GHRequest;
@@ -30,7 +25,11 @@ import com.graphhopper.routing.util.FootFlagEncoder;
 import com.graphhopper.util.Parameters;
 import com.graphhopper.util.StopWatch;
 import com.sdesimeur.android.gpsfiction.R;
+import com.sdesimeur.android.gpsfiction.classes.PlayerLocationListener;
 import com.sdesimeur.android.gpsfiction.classes.RouteGeoPointListHelper;
+import com.sdesimeur.android.gpsfiction.classes.VehiculeSelectedIdListener;
+import com.sdesimeur.android.gpsfiction.classes.Zone;
+import com.sdesimeur.android.gpsfiction.classes.ZoneSelectListener;
 import com.sdesimeur.android.gpsfiction.geopoint.MyGeoPoint;
 import com.sdesimeur.android.gpsfiction.polygon.MyPolygon;
 
@@ -38,8 +37,29 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Locale;
 
-public class CalcRouteAndSpeakService extends Service implements TextToSpeech.OnInitListener {
+public class CalcRouteAndSpeakService extends Service implements TextToSpeech.OnInitListener, PlayerLocationListener, ZoneSelectListener, VehiculeSelectedIdListener {
     private static int NOTIFICATIONID = 1024;
+
+    @Override
+    public void onLocationPlayerChanged(MyGeoPoint pl) {
+        playerLocation = pl;
+        calcPathIfNecessar();
+    }
+
+    @Override
+    public void onZoneSelectChanged(Zone selectedZone, Zone unSelectedZone) {
+        destLocation = selectedZone.getCenterPoint();
+        if (selectedZone != unSelectedZone) calcPathIfNecessar();
+    }
+
+    @Override
+    public void onVehiculeSelectedId(int id) {
+        if (vehiculeSelectedId != id) {
+            vehiculeSelectedId = id;
+            calcPathIfNecessar();
+        }
+    }
+
     public interface ACTION {
 
         public static String STARTFOREGROUND = "com.sdesimeur.android.gpsfiction.action.startforeground";
@@ -72,7 +92,21 @@ public class CalcRouteAndSpeakService extends Service implements TextToSpeech.On
     private void finishPrepare() {
         prepareInProgress = false;
     }
+    private IBinder myBinder = new MyBinder();
+    public class MyBinder extends Binder {
+        public CalcRouteAndSpeakService getService() {
+            return CalcRouteAndSpeakService.this;
+        }
+    }
+    @Override
+    public IBinder onBind(Intent intent) {
+        return myBinder;
+    }
 
+    @Override
+    public boolean onUnbind(Intent intent) {
+        return false;
+    }
 
     boolean isReady() {
         if (hopper != null) return true;
@@ -130,6 +164,7 @@ public class CalcRouteAndSpeakService extends Service implements TextToSpeech.On
                 this.stopForeground(true);
                 this.stopSelf();
                 break;
+            /*
             case ACTION.CHANGEVEHICULESELECTEDID:
                 /////// TODO prendre en compte les valeurs nulles
                 int temp = intent.getIntExtra("vehiculeSelectedId",R.drawable.compass);
@@ -148,18 +183,13 @@ public class CalcRouteAndSpeakService extends Service implements TextToSpeech.On
                 playerLocation = MyGeoPoint.setByBundle(bd);
                 calcPathIfNecessar();
                 break;
+            */
             default:
-
+                break;
         }
 
         return Service.START_REDELIVER_INTENT;
         //return super.onStartCommand(intent, flags, startId);
-    }
-
-    @Nullable
-    @Override
-    public IBinder onBind(Intent intent) {
-        return null;
     }
 
     private void createRouteGeoPointListHelper(GHResponse resp) {
@@ -295,34 +325,4 @@ public class CalcRouteAndSpeakService extends Service implements TextToSpeech.On
         return routePath;
     }
 
-    public void startLocationListener() {
-        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-            return;
-        }
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 200, 0.5f, this);
-        //lastPlayerGeoPoint = playerGeoPoint;
-    }
-
-    public void removeGpsFictionUpdates() {
-        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-            return;
-        }
-        locationManager.removeUpdates(this);
-    }
 }

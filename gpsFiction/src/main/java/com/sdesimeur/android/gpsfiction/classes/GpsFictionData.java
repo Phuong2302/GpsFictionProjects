@@ -1,7 +1,11 @@
 package com.sdesimeur.android.gpsfiction.classes;
 
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.os.Bundle;
+import android.os.IBinder;
 
 import com.sdesimeur.android.gpsfiction.R;
 import com.sdesimeur.android.gpsfiction.activities.CalcRouteAndSpeakService;
@@ -27,6 +31,7 @@ public class GpsFictionData {
     private int rules;
     private int title;
     private GpsFictionActivity mGpsFictionActivity = null;
+    private HashSet<VehiculeSelectedIdListener> vehiculeSelectedIdListener = new HashSet<>();
 
     public int getZoomLevel() {
         return zoomLevel;
@@ -52,16 +57,37 @@ public class GpsFictionData {
     public boolean toSave=true;
     private int vehiculeSelectedId = R.drawable.compass;
 
+    private boolean isBound;
+    private CalcRouteAndSpeakService mCalcRouteAndSpeakService;
+    private ServiceConnection serviceConnection = new ServiceConnection() {
+    @Override
+    public void onServiceConnected(ComponentName name, IBinder service) {
+        CalcRouteAndSpeakService.MyBinder binder = (CalcRouteAndSpeakService.MyBinder) service;
+        mCalcRouteAndSpeakService = binder.getService();
+        addZoneSelectListener(REGISTER.SERVICE,mCalcRouteAndSpeakService);
+        addVehiculeSelectedIdListener(mCalcRouteAndSpeakService);
+        getmGpsFictionActivity().getmMyLocationListener().addPlayerLocationListener(MyLocationListener.REGISTER.SERVICE,mCalcRouteAndSpeakService);
+        isBound = true;
+    }
+
+    @Override
+    public void onServiceDisconnected(ComponentName name) {
+        removeZoneSelectListener(REGISTER.SERVICE,mCalcRouteAndSpeakService);
+        removeVehiculeSelectedIdListener(mCalcRouteAndSpeakService);
+        getmGpsFictionActivity().getmMyLocationListener().removePlayerLocationListener(MyLocationListener.REGISTER.SERVICE,mCalcRouteAndSpeakService);
+        mCalcRouteAndSpeakService = null;
+        isBound = false;
+    }
+};
     public int getVehiculeSelectedId() {
         return vehiculeSelectedId;
     }
 
-    public void setVehiculeSelectedId(int vehiculeSelectedId) {
-        this.vehiculeSelectedId = vehiculeSelectedId;
-        Intent myIntent = new Intent (getmGpsFictionActivity(), CalcRouteAndSpeakService.class);
-        myIntent.setAction(CalcRouteAndSpeakService.ACTION.CHANGEVEHICULESELECTEDID);
-        myIntent.putExtra("vehiculeSelectedId",vehiculeSelectedId);
-        getmGpsFictionActivity().startService(myIntent);
+    public void setVehiculeSelectedId(int id) {
+        if (id != vehiculeSelectedId) {
+            vehiculeSelectedId = id;
+            fireVehiculeSelectedIdListener();
+        }
     }
 
 
@@ -286,11 +312,6 @@ public class GpsFictionData {
 
     public void fireZoneSelectListener() {
         if (selectedZone != unSelectedZone) {
-            Intent myIntent = new Intent (getmGpsFictionActivity(), CalcRouteAndSpeakService.class);
-            myIntent.setAction(CalcRouteAndSpeakService.ACTION.CHANGEGEOPOINT4ZONESELECTED);
-            Bundle bd = selectedZone.getCenterPoint().getByBundle();
-            myIntent.putExtras(bd);
-            getmGpsFictionActivity().startService(myIntent);
             for (GpsFictionData.REGISTER i : GpsFictionData.REGISTER.values()) {
                 for (ZoneSelectListener listener : this.zoneSelectListener.get(i)) {
                     listener.onZoneSelectChanged(selectedZone, unSelectedZone);
@@ -310,6 +331,8 @@ public class GpsFictionData {
 
     public void setmGpsFictionActivity(GpsFictionActivity gpsFictionActivity) {
         mGpsFictionActivity = gpsFictionActivity;
+        Intent myIntent = new Intent (mGpsFictionActivity, CalcRouteAndSpeakService.class);
+        mGpsFictionActivity.bindService(myIntent,serviceConnection, Context.BIND_AUTO_CREATE);
 //        mMyLocationListener = mGpsFictionActivity.getmMyLocationListener();
     }
 /*
@@ -330,6 +353,7 @@ public class GpsFictionData {
 */
 
     public static enum REGISTER {
+        SERVICE,
         ZONE,
         HOLDERVIEW,
         ADAPTERVIEW,
@@ -355,5 +379,18 @@ public class GpsFictionData {
             fireZoneSelectListener();
         }
     }
+    public void addVehiculeSelectedIdListener(VehiculeSelectedIdListener listener) {
+        this.vehiculeSelectedIdListener.add(listener);
+        listener.onVehiculeSelectedId(vehiculeSelectedId);
+    }
 
+    public void removeVehiculeSelectedIdListener(VehiculeSelectedIdListener listener) {
+        this.vehiculeSelectedIdListener.remove(listener);
+    }
+    public void fireVehiculeSelectedIdListener() {
+            for (VehiculeSelectedIdListener listener : this.vehiculeSelectedIdListener) {
+                listener.onVehiculeSelectedId(vehiculeSelectedId);
+            }
+        }
+    }
 }
