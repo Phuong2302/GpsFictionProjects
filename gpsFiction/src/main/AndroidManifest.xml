@@ -27,50 +27,16 @@
             android:launchMode="singleInstance">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
                 <!-- <category android:name="android.intent.category.HOME" /> -->
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.MONKEY" />
             </intent-filter>
         </activity>
-        <service android:name=".activities.CalcRouteAndSpeakService"
-            android:exported="false"/>
-
-        <!-- android:label="@string/title_activity_gps_fiction_main" -->
-        <!--
-                         android:configChanges="mcc|mnc|keyboard|touchscreen|keyboard|keyboardHidden|navigation|screenLayout|fontScale|uiMode|orientation|screenSize|smallestScreenSize|layoutDirection"
-                        android:configChanges=keyboard|keyboard|keyboardHidden|fontScale|orientation|layoutDirection
-        -->
-        <!--
-                    <activity android:name="com.sdesimeur.android.gpsfiction.activities.ZonesActivity" android:label="@string/titleZones">
-                    <intent-filter>
-                        <action android:name="android.intent.action.MAIN" />
-                    </intent-filter>
-                </activity>
-                <activity android:name="com.sdesimeur.android.gpsfiction.activities.InventoryActivity" android:label="@string/titleInventory">
-                    <intent-filter>
-                        <action android:name="android.intent.action.MAIN" />
-                    </intent-filter>
-                </activity>
-                <activity android:name="com.sdesimeur.android.gpsfiction.activities.TasksActivity" android:label="@string/titleTasks">
-                    <intent-filter>
-                        <action android:name="android.intent.action.MAIN" />
-                    </intent-filter>
-                </activity>
-                <activity android:name="com.sdesimeur.android.gpsfiction.activities.MapActivity" android:label="@string/titleMap">
-                    <intent-filter>
-                        <action android:name="android.intent.action.MAIN" />
-                    </intent-filter>
-                </activity>
-                <activity android:name="com.sdesimeur.android.gpsfiction.activities.CompassActivity" android:label="@string/titleCompass">
-                    <intent-filter>
-                        <action android:name="android.intent.action.MAIN" />
-                    </intent-filter>
-                </activity>
-        -->
         <service
             android:name=".activities.CalcRouteAndSpeakService"
+            android:launchMode="singleTop"
+            android:persistent="true"
             android:enabled="true"
             android:exported="true"></service>
     </application>

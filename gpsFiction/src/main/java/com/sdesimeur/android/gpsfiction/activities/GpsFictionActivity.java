@@ -5,11 +5,15 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.speech.tts.TextToSpeech;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -226,6 +230,29 @@ public class GpsFictionActivity extends Activity {
         }
         return super.onOptionsItemSelected(item);
     }
+    private boolean isBound;
+
+    public CalcRouteAndSpeakService getmCalcRouteAndSpeakService() {
+        return mCalcRouteAndSpeakService;
+    }
+
+    private CalcRouteAndSpeakService mCalcRouteAndSpeakService;
+    private ServiceConnection serviceConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            CalcRouteAndSpeakService.MyBinder binder = (CalcRouteAndSpeakService.MyBinder) service;
+            mCalcRouteAndSpeakService = binder.getService();
+            mCalcRouteAndSpeakService.setGpsFictionData(getmGpsFictionData());
+            mCalcRouteAndSpeakService.setMyLocationListener(getmMyLocationListener());
+            testTTS();
+            isBound = true;
+        }
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            mCalcRouteAndSpeakService = null;
+            isBound = false;
+        }
+    };
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -253,6 +280,10 @@ public class GpsFictionActivity extends Activity {
         } else {
             mGpsFictionData.init();
         }
+            Intent myIntent = new Intent(this, CalcRouteAndSpeakService.class);
+            myIntent.setAction(CalcRouteAndSpeakService.ACTION.STARTFOREGROUND);
+            bindService(myIntent, serviceConnection, Context.BIND_AUTO_CREATE);
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_view);
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -302,7 +333,6 @@ public class GpsFictionActivity extends Activity {
         fragmentManager = getFragmentManager();
         defineFragments();
         setFragmentInContainer();
-        testTTS();
     }
 
     @Override
@@ -349,9 +379,16 @@ public class GpsFictionActivity extends Activity {
 
     @Override
     public void onStop() {
+        unbindService(serviceConnection);
         super.onStop();
     }
 
+    @Override
+    public void onDestroy() {
+        Intent myIntent = new Intent(this, CalcRouteAndSpeakService.class);
+        myIntent.setAction(CalcRouteAndSpeakService.ACTION.STOPFOREGROUND);
+        startService(myIntent);
+    }
     private void testTTS() {
         Intent checkIntent = new Intent();
         checkIntent.setAction(TextToSpeech.Engine.ACTION_CHECK_TTS_DATA);
@@ -361,6 +398,7 @@ public class GpsFictionActivity extends Activity {
         if (requestCode == 0x01) {
             if (resultCode == TextToSpeech.Engine.CHECK_VOICE_DATA_PASS) {
                 ///// TODO send result to CalcRouteAndSpeakService which "startTts"
+                getmCalcRouteAndSpeakService().startTts();
             }
         }
     }

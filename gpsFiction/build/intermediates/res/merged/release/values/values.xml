@@ -59,7 +59,7 @@
     <color name="bright_foreground_material_light">@android:color/black</color>
     <color name="button_material_dark">#ff5a595b</color>
     <color name="button_material_light">#ffd6d7d7</color>
-    <color name="colorOfDistanceToZoneOnMap">#FFFF00FF</color>
+    <color name="colorOfDistanceToZoneOnMap">#A00000FF</color>
     <color name="colorOfRouteLine">#800000FF</color>
     <color name="colorOfZoneShapeInvisible">#00000000</color>
     <color name="colorOfZoneShapeNotSelected">#A0FFB000</color>
@@ -509,7 +509,7 @@
     <dimen name="abc_text_size_title_material">20sp</dimen>
     <dimen name="abc_text_size_title_material_toolbar">20dp</dimen>
     <dimen name="action_button_margin">16dip</dimen>
-    <dimen name="bigTextSize">24sp</dimen>
+    <dimen name="bigTextSize">30sp</dimen>
     <dimen name="buttonsVehiculesPadding">4dip</dimen>
     <dimen name="buttonsVehiculesSize">48dp</dimen>
     <dimen name="compassLineWidth">5dip</dimen>
@@ -568,7 +568,7 @@
     <dimen name="miniCompassSize">80dip</dimen>
     <dimen name="navigation_drawer_width">240dip</dimen>
     <dimen name="normalTextPadding">60dip</dimen>
-    <dimen name="normalTextSize">18sp</dimen>
+    <dimen name="normalTextSize">24sp</dimen>
     <dimen name="notification_action_icon_size">32dp</dimen>
     <dimen name="notification_action_text_size">13sp</dimen>
     <dimen name="notification_big_circle_margin">12dp</dimen>
@@ -587,7 +587,7 @@
     <dimen name="tabMinHeight">40dp</dimen>
     <dimen name="titleMinHeight">28dp</dimen>
     <dimen name="titleTextPadding">30dip</dimen>
-    <dimen name="titleTextSize">18sp</dimen>
+    <dimen name="titleTextSize">24sp</dimen>
     <dimen name="widthOfRouteLine">5dip</dimen>
     <dimen name="widthOfZoneShape">2dip</dimen>
     <drawable name="notification_template_icon_bg">#3333B5E5</drawable>
@@ -1709,10 +1709,13 @@
         <item name="android:textSize">@dimen/bigTextSize</item>
     </style>
     <style name="MapDistance">
+        <item name="android:textColor">@color/colorOfDistanceToZoneOnMap</item>
+        <item name="android:textStyle">bold|italic</item>
         <item name="android:textSize">@dimen/normalTextSize</item>
         <item name="android:layout_gravity">center</item>
     </style>
     <style name="MapDistanceTitle">
+        <item name="android:textColor">@color/colorOfDistanceToZoneOnMap</item>
         <item name="android:textStyle">bold|italic</item>
         <item name="android:textSize">@dimen/titleTextSize</item>
         <item name="android:layout_gravity">center</item>

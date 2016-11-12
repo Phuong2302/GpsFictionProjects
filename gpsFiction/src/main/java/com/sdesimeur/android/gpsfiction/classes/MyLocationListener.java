@@ -21,8 +21,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 
 public class MyLocationListener implements LocationListener, SensorEventListener {
-    private static final double LATITUDE = 49.59266;
-    private static final double LONGITUDE = 3.65649;
     private final static float MINBEARINGCHANGED = 5;
     private final static float SPEEDLIMIT = 0.003f;
     private HashMap<MyLocationListener.REGISTER, HashSet<PlayerBearingListener>> playerBearingListener = null;

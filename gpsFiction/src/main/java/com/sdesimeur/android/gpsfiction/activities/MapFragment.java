@@ -37,7 +37,6 @@ import com.sdesimeur.android.gpsfiction.helpers.DistanceToTextHelper;
 import org.oscim.android.MapView;
 import org.oscim.android.canvas.AndroidBitmap;
 import org.oscim.backend.canvas.Color;
-import org.oscim.core.GeoPoint;
 import org.oscim.core.MapPosition;
 import org.oscim.layers.PathLayer;
 import org.oscim.layers.marker.ItemizedLayer;
@@ -58,7 +57,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Locale;
 
 import static android.support.v4.content.ContextCompat.getColor;
@@ -92,6 +90,7 @@ public class MapFragment
     private float dX1;
     private float dY1;
     private float distanceToEnd = 0;
+
 
     private static class MapDirection {
         public static final int PLAYER=0;
@@ -213,24 +212,6 @@ public class MapFragment
                 return false;
             }
         });
-        /*
-        mMap.layers().add(new MapEventLayer(mMap){
-            public boolean onTouchEvent(MotionEvent e) {
-                int pointerCount = e.getPointerCount();
-                if ((e.getAction() & MotionEvent.ACTION_MASK)==MotionEvent.ACTION_MOVE ) {
-                        if ((pointerCount == 1)||(pointerCount == 2)) {
-                            viewForMapPosition.setTag(R.drawable.mapwithoutfollow);
-                            fixViewForMapPosition();
-                            onLocationPlayerChanged(getPlayerLocation());
-                            viewForMapDirection.setTag(MapDirection.FIX);
-                            fixViewForMapDirection();
-                            onBearingPlayerChanged(getmMyLocationListener().getBearingOfPlayer());
-                        }
-                }
-                return super.onTouchEvent(e);
-            }
-        });
-        */
         zoneViewHelperHashMap = new HashMap<>();
         playerBitmap = BitmapFactory.decodeResource(getResources(),R.drawable.player_marker);
         MarkerSymbol ms = new MarkerSymbol(drawableToBitmap(getResources(),R.drawable.transparent), HotspotPlace.CENTER);
@@ -262,6 +243,7 @@ public class MapFragment
         int lineColor = getColor(getActivity(),R.color.colorOfRouteLine);
         LineStyle ls = new LineStyle(lineColor, lineWidth, org.oscim.backend.canvas.Paint.Cap.ROUND);
         routePathLayer.setStyle(ls);
+        getmGpsFictionData().setRoutePathLayer(routePathLayer);
         ViewGroup vg = (ViewGroup) getRootView();
         addViewGroupForVehiculesButtons(vg);
         viewForDistanceToDest = (TextView) vg.findViewById(R.id.forDistanceToDest);
@@ -287,6 +269,7 @@ public class MapFragment
         getmMyLocationListener().addPlayerBearingListener(MyLocationListener.REGISTER.FRAGMENT, this);
         getmGpsFictionData().addZoneSelectListener(GpsFictionData.REGISTER.FRAGMENT, this);
         getmGpsFictionData().addZoneChangeListener(this);
+        getmGpsFictionActivity().getmCalcRouteAndSpeakService().setMapFragment(this);
     }
 
     @Override
@@ -305,6 +288,7 @@ public class MapFragment
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        getmGpsFictionActivity().getmCalcRouteAndSpeakService().setMapFragment(null);
     }
 
     @Override
@@ -384,6 +368,7 @@ public class MapFragment
                 public void onVehiculeSelectedId(int id) {
                     int res = (int) getTag();
                     getDrawable().setAlpha((res==id)?MapFragment.SELECTEDBUTTON:MapFragment.UNSELECTEDBUTTON);
+                    invalidate();
                 }
             }
             ImageView img = new MyImageView (getActivity());
@@ -408,6 +393,7 @@ public class MapFragment
             int alpha = (res==getVehiculeSelectedId())? MapFragment.SELECTEDBUTTON : MapFragment.UNSELECTEDBUTTON;
             img.getDrawable().setAlpha(alpha);
             viewGroupForVehiculesButtons.addView(img);
+            getmGpsFictionData().addVehiculeSelectedIdListener((VehiculeSelectedIdListener) img);
         }
     }
 
@@ -470,14 +456,6 @@ public class MapFragment
         }
     }
 
-
-
-
-    public PathLayer getRoutePathLayer() {
-        return routePathLayer;
-    }
-
-    @Override
     public void onZoneSelectChanged(Zone sZn, Zone sZnO ) {
         if (sZnO != null) {
             onZoneChanged(sZnO);
@@ -566,10 +544,9 @@ public class MapFragment
         mMarkerLayer.populate();
     }
 
-    private void setViewDistanceToDest () {
-        MyGeoPoint playerLocation = getPlayerLocation()!=null?getPlayerLocation():new MyGeoPoint(90,0);
+    public void setViewDistanceToDest () {
         if ((routePathLayer!=null) && (routePathLayer.getPoints().size() > 1)) {
-                DistanceToTextHelper d = new DistanceToTextHelper(getDistanceToEnd());
+                DistanceToTextHelper d = new DistanceToTextHelper(getmGpsFictionData().getDistanceToEnd());
                 ((ViewGroup)viewForDistanceToDest.getParent()).setVisibility(View.VISIBLE);
                 viewForDistanceToDest.setText(d.getDistanceInText());
         } else {

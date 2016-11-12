@@ -22,6 +22,6 @@
     <color name="colorOfZoneShapeInvisible">#00000000</color>
     <color name="textmenuUnChecked">#FF000000</color>
     <color name="textmenuChecked">#FF00FF00</color>
-    <color name="colorOfDistanceToZoneOnMap">#FFFF00FF</color>
+    <color name="colorOfDistanceToZoneOnMap">#A00000FF</color>
 
 </resources>

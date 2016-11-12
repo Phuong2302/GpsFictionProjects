@@ -11,6 +11,8 @@ import com.sdesimeur.android.gpsfiction.R;
 import com.sdesimeur.android.gpsfiction.activities.CalcRouteAndSpeakService;
 import com.sdesimeur.android.gpsfiction.activities.GpsFictionActivity;
 
+import org.oscim.layers.PathLayer;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -32,6 +34,12 @@ public class GpsFictionData {
     private int title;
     private GpsFictionActivity mGpsFictionActivity = null;
     private HashSet<VehiculeSelectedIdListener> vehiculeSelectedIdListener = new HashSet<>();
+
+    public PathLayer getRoutePathLayer() {
+        return routePathLayer;
+    }
+
+    private PathLayer routePathLayer = null;
 
     public int getZoomLevel() {
         return zoomLevel;
@@ -57,28 +65,6 @@ public class GpsFictionData {
     public boolean toSave=true;
     private int vehiculeSelectedId = R.drawable.compass;
 
-    private boolean isBound;
-    private CalcRouteAndSpeakService mCalcRouteAndSpeakService;
-    private ServiceConnection serviceConnection = new ServiceConnection() {
-    @Override
-    public void onServiceConnected(ComponentName name, IBinder service) {
-        CalcRouteAndSpeakService.MyBinder binder = (CalcRouteAndSpeakService.MyBinder) service;
-        mCalcRouteAndSpeakService = binder.getService();
-        addZoneSelectListener(REGISTER.SERVICE,mCalcRouteAndSpeakService);
-        addVehiculeSelectedIdListener(mCalcRouteAndSpeakService);
-        getmGpsFictionActivity().getmMyLocationListener().addPlayerLocationListener(MyLocationListener.REGISTER.SERVICE,mCalcRouteAndSpeakService);
-        isBound = true;
-    }
-
-    @Override
-    public void onServiceDisconnected(ComponentName name) {
-        removeZoneSelectListener(REGISTER.SERVICE,mCalcRouteAndSpeakService);
-        removeVehiculeSelectedIdListener(mCalcRouteAndSpeakService);
-        getmGpsFictionActivity().getmMyLocationListener().removePlayerLocationListener(MyLocationListener.REGISTER.SERVICE,mCalcRouteAndSpeakService);
-        mCalcRouteAndSpeakService = null;
-        isBound = false;
-    }
-};
     public int getVehiculeSelectedId() {
         return vehiculeSelectedId;
     }
@@ -331,28 +317,19 @@ public class GpsFictionData {
 
     public void setmGpsFictionActivity(GpsFictionActivity gpsFictionActivity) {
         mGpsFictionActivity = gpsFictionActivity;
-        Intent myIntent = new Intent (mGpsFictionActivity, CalcRouteAndSpeakService.class);
-        mGpsFictionActivity.bindService(myIntent,serviceConnection, Context.BIND_AUTO_CREATE);
 //        mMyLocationListener = mGpsFictionActivity.getmMyLocationListener();
     }
-/*
-	public String getName() {
-		String name;
-		if (this.getId() == 0 ) {
-			name = this.getGpsFiction().getContext().getResources().getString(this.getId());
-		} else {
-			if (this.replacementIsATableInLongId) {
-				name = this.getGpsFiction().getContext().getResources().getStringArray(this.replacementInNameInLongId)[this.numInTable4LongId];
-			} else {
-				name = this.getGpsFiction().getContext().getResources().getString(this.replacementInNameInLongId);
-			}
-			name=this.getGpsFiction().getContext().getResources().getString(this.longId).replaceFirst("%%%%", name);
-		}
-		return name;
-	}
-*/
 
-    public static enum REGISTER {
+    public void setRoutePathLayer(PathLayer layer) {
+        routePathLayer = layer;
+        getmGpsFictionActivity().getmCalcRouteAndSpeakService().clearAndCalc();
+    }
+
+    public float getDistanceToEnd() {
+        return mGpsFictionActivity.getmCalcRouteAndSpeakService().getDistanceToEnd();
+    }
+
+    public enum REGISTER {
         SERVICE,
         ZONE,
         HOLDERVIEW,
@@ -391,6 +368,5 @@ public class GpsFictionData {
             for (VehiculeSelectedIdListener listener : this.vehiculeSelectedIdListener) {
                 listener.onVehiculeSelectedId(vehiculeSelectedId);
             }
-        }
     }
 }
