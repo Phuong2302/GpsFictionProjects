@@ -1,4 +1,5 @@
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
+
     <style name="MyAppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="colorPrimary">#ff5fb71a</item>
         <item name="colorPrimaryDark">#512DA8</item>
@@ -55,18 +56,21 @@
         <item name="android:paddingLeft">@dimen/dialogButtonPadding</item>
         <item name="android:paddingRight">@dimen/dialogButtonPadding</item>
     </style>
+
     <style name="MapDistanceTitle">
         <item name="android:textColor">@color/colorOfDistanceToZoneOnMap</item>
         <item name="android:textStyle">bold|italic</item>
         <item name="android:textSize">@dimen/titleTextSize</item>
         <item name="android:layout_gravity">center</item>
     </style>
+
     <style name="MapDistance">
         <item name="android:textColor">@color/colorOfDistanceToZoneOnMap</item>
         <item name="android:textStyle">bold|italic</item>
         <item name="android:textSize">@dimen/normalTextSize</item>
         <item name="android:layout_gravity">center</item>
     </style>
+
     <style name="TabCompassOther">
         <item name="android:paddingLeft">@dimen/normalTextPadding</item>
         <item name="android:textSize">@dimen/normalTextSize</item>
@@ -97,8 +101,11 @@
     <dimen name="action_button_margin">16dip</dimen>
     <dimen name="widthOfZoneShape">2dip</dimen>
     <dimen name="widthOfRouteLine">5dip</dimen>
+    <dimen name="buttonsPadding">8dip</dimen>
+    <dimen name="adminTextSize">18sp</dimen>
 
     <dimen name="buttonsVehiculesPadding">4dip</dimen>
     <dimen name="buttonsVehiculesSize">48dp</dimen>
     <dimen name="mapzoneborderwidth">1dip</dimen>
+
 </resources>

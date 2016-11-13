@@ -23,5 +23,12 @@
     <color name="textmenuUnChecked">#FF000000</color>
     <color name="textmenuChecked">#FF00FF00</color>
     <color name="colorOfDistanceToZoneOnMap">#A00000FF</color>
+    <color name="pressedStateButtonColor">#FF505050</color>
+    <color name="pressedStateButtonColorText">#FFFFFFFF</color>
+    <color name="normalStateButtonColor">#FFA0A0A0</color>
+    <color name="normalStateButtonColorText">#FFFFFFFF</color>
+
+
+    <color name="black_overlay">#66000000</color>
 
 </resources>

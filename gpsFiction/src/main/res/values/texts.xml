@@ -9,7 +9,7 @@
 
     <string name="nullstring"></string>
     <string name="distance_initiale">100 m</string>
-    <string name="app_name">GpsFiction</string>
+    <string name="app_name">GpsFiction Applications</string>
 
     <string name="distanceNull">You are in this area.</string>
     <string name="noZoneTitle">You don\'t select an area.</string>

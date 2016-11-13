@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string-array name="countryCodeArray">
+        <item>en_US</item>
+        <item>fr_FR</item>
+    </string-array>
     <string-array name="fragmentsNames">
         <item>Zones</item>
         <item>Inventory</item>
@@ -51,6 +55,7 @@
     <color name="background_material_dark">@color/material_grey_850</color>
     <color name="background_material_light">@color/material_grey_50</color>
     <color name="black">#FF000000</color>
+    <color name="black_overlay">#66000000</color>
     <color name="bright_foreground_disabled_material_dark">#80ffffff</color>
     <color name="bright_foreground_disabled_material_light">#80000000</color>
     <color name="bright_foreground_inverse_material_dark">@color/bright_foreground_material_light</color>
@@ -106,9 +111,13 @@
     <color name="minicompassarrow">#FFff0000</color>
     <color name="minicompassbackground">#FFFFFFFF</color>
     <color name="minicompasscenter">#FF000000</color>
+    <color name="normalStateButtonColor">#FFA0A0A0</color>
+    <color name="normalStateButtonColorText">#FFFFFFFF</color>
     <color name="notification_action_color_filter">#ffffffff</color>
     <color name="notification_icon_bg_color">#ff9e9e9e</color>
     <color name="notification_material_background_media_default_color">#ff424242</color>
+    <color name="pressedStateButtonColor">#FF707070</color>
+    <color name="pressedStateButtonColorText">#FFFFFFFF</color>
     <color name="primary_dark_material_dark">@android:color/black</color>
     <color name="primary_dark_material_light">@color/material_grey_600</color>
     <color name="primary_material_dark">@color/material_grey_900</color>
@@ -509,7 +518,9 @@
     <dimen name="abc_text_size_title_material">20sp</dimen>
     <dimen name="abc_text_size_title_material_toolbar">20dp</dimen>
     <dimen name="action_button_margin">16dip</dimen>
+    <dimen name="adminTextSize">18sp</dimen>
     <dimen name="bigTextSize">30sp</dimen>
+    <dimen name="buttonsPadding">8dip</dimen>
     <dimen name="buttonsVehiculesPadding">4dip</dimen>
     <dimen name="buttonsVehiculesSize">48dp</dimen>
     <dimen name="compassLineWidth">5dip</dimen>
@@ -643,7 +654,7 @@
     <string name="abc_shareactionprovider_share_with">Share with</string>
     <string name="abc_shareactionprovider_share_with_application">Share with %s</string>
     <string name="abc_toolbar_collapse_description">Collapse</string>
-    <string name="app_name">GpsFiction</string>
+    <string name="app_name">GpsFiction Applications</string>
     <string name="appbar_scrolling_view_behavior" translatable="false">android.support.design.widget.AppBarLayout$ScrollingViewBehavior</string>
     <string name="bottom_sheet_behavior" translatable="false">android.support.design.widget.BottomSheetBehavior</string>
     <string name="character_counter_pattern" translatable="false">%1$d / %2$d</string>
@@ -1697,7 +1708,7 @@
         <item name="tabSelectedTextColor">?android:textColorPrimary</item>
     </style>
     <style name="DialogButton">
-        <!-- 	    <item name="android:textStyle">bold|italic</item> -->
+        
         <item name="android:textSize">@dimen/dialogButtonTextSize</item>
         <item name="android:paddingLeft">@dimen/dialogButtonPadding</item>
         <item name="android:paddingRight">@dimen/dialogButtonPadding</item>
@@ -1895,9 +1906,9 @@
         <item name="android:gravity">center</item>
     </style>
     <style name="TabOneLineMiniCompass">
-        <!-- 	    <item name="android:minWidth">@dimen/miniCompassSize</item> -->
+        
         <item name="android:layout_width">@dimen/miniCompassSize</item>
-        <!--    	<item name="android:minHeight">@dimen/miniCompassSize</item> -->
+        
         <item name="android:layout_height">@dimen/miniCompassSize</item>
         <item name="android:gravity">left</item>
         <item name="android:background">@color/minicompassbackground</item>
@@ -1915,7 +1926,7 @@
     </style>
     <style name="TabTheme">
         <item name="android:minHeight">@dimen/tabMinHeight</item>
-        <!-- 	    <item name="android:background">@color/background4menu</item> -->
+        
         <item name="android:textSize">@dimen/titleTextSize</item>
         <item name="android:textStyle">bold</item>
     </style>

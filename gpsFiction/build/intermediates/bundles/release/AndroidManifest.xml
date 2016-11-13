@@ -22,21 +22,36 @@
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/MyAppTheme" >
-
-        <!-- android:label="@string/app_name" -->
-        <!-- android:theme="@style/Theme.AppCompat.Light" -->
         <activity
-            android:name="com.sdesimeur.android.gpsfiction.activities.GpsFictionActivity"
+            android:name="com.sdesimeur.android.gpsfiction.activities.AdminActivity"
             android:alwaysRetainTaskState="true"
+            android:label="@string/app_name"
             android:launchMode="singleInstance" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
-                <!-- <category android:name="android.intent.category.HOME" /> -->
+                <!--
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.HOME" />
+                <category android:name="android.intent.category.MONKEY" />
+                -->
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.sdesimeur.android.gpsfiction.activities.GpsFictionActivity"
+            android:alwaysRetainTaskState="true"
+            android:launchMode="singleInstance" >
+
+            <!--
+            <intent-filter>
+                <action android:name="android.intent.action.MAI" />
+                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.HOME" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.MONKEY" />
             </intent-filter>
+            -->
         </activity>
 
         <service
