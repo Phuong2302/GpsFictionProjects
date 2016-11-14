@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="title_activity_gps_fiction_main">GPS Fiction</string>
+    <string name="err_parse_lat">Sorry, c:geo can\'t parse latitude.</string>
+    <string name="err_parse_lon">Sorry, c:geo can\'t parse longitude.</string>
+    <string name="err_parse_dist">Sorry, c:geo can\'t parse distance.</string>
+    <string name="err_parse_lat_lon">Sorry, c:geo can\'t parse latitude or longitude.</string>
+    <string name="err_invalid_lat_lon">Sorry, invalid latitude or longitude.</string>
+
+    <string name="nullstring"></string>
+    <string name="distance_initiale">100 m</string>
+    <string name="app_name">GpsFiction Applications</string>
+
+    <string name="distanceNull">You are in this area.</string>
+    <string name="noZoneTitle">You don\'t select an area.</string>
+    <string name="noZoneBearing">--- °</string>
+    <string name="noZoneDistance">---</string>
+    <string name="dialogCloseTaskTitle">To finish...</string>
+    <string name="dialogCloseTaskText">Save this game ?</string>
+    <string-array name="pointscardinaux">
+        <item>N</item>
+        <item>NE</item>
+        <item>E</item>
+        <item>SE</item>
+        <item>S</item>
+        <item>SW</item>
+        <item>W</item>
+        <item>NW</item>
+    </string-array>
+
+    <!--	<string name="tabZonesTitle">Areas</string>
+        <string name="tabInventoryTitle">Inventory</string>
+        <string name="tabCompassTitle">Compass</string>
+        <string name="tabMapTitle">Map</string>
+        <string name="tabTasksTitle">Tasks</string>-->
+
+    <string name="titleZones">The places.</string>
+    <string name="titleCharacters">The characters.</string>
+    <string name="titleItems">The items.</string>
+    <string name="titleInventory">Your inventory.</string>
+    <string name="titleTasks">What you have to do.</string>
+    <string name="titleCompass">The Compass.</string>
+    <string name="titleMap">The Map.</string>
+
+    <string name="inventory">My Inventory</string>
+    <!--
+        <string name="userid">sdesimeur</string>
+     -->
+    <string name="rulesName">Rules.</string>
+    <string name="dialogButtonYes">Yes</string>
+    <string name="dialogButtonNo">No</string>
+    <string name="dialogButtonCancel">Cancel</string>
+    <string name="dialogButtonValidate">Validate</string>
+
+    <string name="distanceToDest">Distance to destination</string>
+
+</resources>

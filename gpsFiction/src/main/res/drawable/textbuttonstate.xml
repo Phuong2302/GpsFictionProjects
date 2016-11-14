@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:state_pressed="true" android:drawable="@color/pressedStateButtonColorText" />
-   <item android:state_focused="true" android:drawable="@color/pressedStateButtonColorText" />
-   <item android:drawable="@color/normalStateButtonColorText" />
+    <item android:state_pressed="true" android:color="@color/pressedStateButtonColorText" />
+   <item android:state_focused="true" android:color="@color/pressedStateButtonColorText" />
+   <item android:color="@color/normalStateButtonColorText" />
 </selector>
