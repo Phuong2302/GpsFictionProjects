@@ -61,20 +61,22 @@ public class AdminActivity extends Activity {
         ArrayAdapter adapter = new ArrayAdapter(this, R.layout.spinnerlanguageselect, langs);
         languageLocaleSpinner.setAdapter(adapter);
         languageLocaleSpinner.setSelection(i);
+        TextView tv = (TextView) findViewById(R.id.mytext);
+        tv.setText(getResources().getString(R.string.titleCompass));
+        tv.invalidate();
     }
 
     public void changeAdminPassword(View v) {
 
     }
-    public void startGames ( View v) {
+    public void startGames (View v) {
         Locale l = string2locale.get(languageLocaleSpinner.getSelectedItem());
         Locale.setDefault(l);
         Configuration cfg = getResources().getConfiguration();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-            cfg.setLocale(l);
-        }
-        TextView tv = (TextView) findViewById(R.id.mytext);
-        tv.setText(getResources().getString(R.string.titleCompass));
-        tv.invalidate();
+                cfg.setLocale(l);
+            }
+        getResources().updateConfiguration(cfg,null);
+        recreate();
     }
 }

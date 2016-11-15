@@ -38,7 +38,9 @@ android:orientation="vertical"
 
 
 <ToggleButton
+    android:textOff="Reset Games (new Player)"
     android:text="Reset Games (new Player)"
+    android:textOn="Reset Games (new Player)"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_gravity="center_horizontal"
@@ -67,7 +69,6 @@ android:orientation="vertical"
         android:id="@+id/mytext"
         android:padding="@dimen/buttonsPadding"
         android:textSize="@dimen/adminTextSize"
-        android:text="temp"
         android:background="@color/white"
         />
 </LinearLayout>
