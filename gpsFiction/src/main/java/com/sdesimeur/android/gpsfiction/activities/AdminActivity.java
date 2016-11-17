@@ -1,16 +1,23 @@
 package com.sdesimeur.android.gpsfiction.activities;
 
 import android.app.Activity;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.sdesimeur.android.gpsfiction.R;
+
+import org.apache.commons.codec.binary.Hex;
+import org.apache.commons.codec.digest.DigestUtils;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -67,6 +74,18 @@ public class AdminActivity extends Activity {
     }
 
     public void changeAdminPassword(View v) {
+        EditText ed1 = (EditText) findViewById(R.id.pass1);
+        EditText ed2 = (EditText) findViewById(R.id.pass2);
+        if (ed2.getText().toString().equals(ed1.getText().toString())) {
+            SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
+            String shaHex= new String(Hex.encodeHex(DigestUtils.sha(ed1.getText().toString())));
+            settings.edit().putString("PassWord",shaHex);
+            ed1.setText("");
+            ed2.setText("");
+            Toast.makeText(this,"mot de passe sauvegarde",Toast.LENGTH_LONG);
+        } else {
+            Toast.makeText(this,"mots de passe differents",Toast.LENGTH_LONG);
+        }
 
     }
     public void startGames (View v) {

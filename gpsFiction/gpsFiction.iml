@@ -124,6 +124,7 @@
     <orderEntry type="library" exported="" name="vtm-jts-0.6.0" level="project" />
     <orderEntry type="library" exported="" name="support-fragment-25.0.0" level="project" />
     <orderEntry type="library" exported="" name="support-core-ui-25.0.0" level="project" />
+    <orderEntry type="library" exported="" name="commons-codec-20041127.091804" level="project" />
     <orderEntry type="library" exported="" name="vtm-android-0.6.0-rc1-natives-armeabi-v7a" level="project" />
     <orderEntry type="library" exported="" name="support-core-utils-25.0.0" level="project" />
     <orderEntry type="library" exported="" name="vtm-android-0.6.0-rc1" level="project" />

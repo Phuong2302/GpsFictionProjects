@@ -43,4 +43,5 @@ dependencies {
     compile 'com.android.support:design:25.0.0'
     compile 'org.mapsforge:vtm-jts:0.6.0'
     compile 'com.android.support:multidex:1.0.1'
+    compile 'commons-codec:commons-codec:20041127.091804'
 }
