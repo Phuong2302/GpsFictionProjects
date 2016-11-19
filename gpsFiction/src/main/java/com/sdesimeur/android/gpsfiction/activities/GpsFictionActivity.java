@@ -29,7 +29,7 @@ import android.view.WindowManager;
 
 import com.sdesimeur.android.gpsfiction.R;
 import com.sdesimeur.android.gpsfiction.classes.GpsFictionData;
-import com.sdesimeur.android.gpsfiction.classes.MyLocationListener;
+import com.sdesimeur.android.gpsfiction.classes.MyLocationListenerService;
 import com.sdesimeur.android.gpsfiction.classes.Zone;
 import com.sdesimeur.android.gpsfiction.gpx.GPXParser;
 import com.sdesimeur.android.gpsfiction.gpx.beans.GPX;
@@ -68,7 +68,7 @@ public class GpsFictionActivity extends Activity {
     protected GpsFictionData mGpsFictionData = null;
     protected FragmentManager fragmentManager;
     protected HashSet<MyDialogFragment> dialogFragments = new HashSet<>();
-    private MyLocationListener mMyLocationListener = null;
+    private MyLocationListenerService mMyLocationListenerService = null;
     private NavigationView navigationView;
     private DrawerLayout drawerLayout;
     private HashMap<Integer, MyTabFragmentImpl> menuItem2Fragments;
@@ -118,9 +118,9 @@ public class GpsFictionActivity extends Activity {
         }
     }
 
-    public MyLocationListener getmMyLocationListener() {
+    public MyLocationListenerService getmMyLocationListenerService() {
         // TODO Auto-generated method stub
-        return mMyLocationListener;
+        return mMyLocationListenerService;
     }
 
     public void setResourcedZones(int gpxRes) {
@@ -230,27 +230,42 @@ public class GpsFictionActivity extends Activity {
         }
         return super.onOptionsItemSelected(item);
     }
-    private boolean isBound;
 
     public CalcRouteAndSpeakService getmCalcRouteAndSpeakService() {
         return mCalcRouteAndSpeakService;
     }
 
     private CalcRouteAndSpeakService mCalcRouteAndSpeakService;
-    private ServiceConnection serviceConnection = new ServiceConnection() {
+    private boolean isBoundToCalcRouteAndSpeakService;
+    private ServiceConnection serviceConnectionToCalcRouteAndSpeakService = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
             CalcRouteAndSpeakService.MyBinder binder = (CalcRouteAndSpeakService.MyBinder) service;
             mCalcRouteAndSpeakService = binder.getService();
             mCalcRouteAndSpeakService.setGpsFictionData(getmGpsFictionData());
-            mCalcRouteAndSpeakService.setMyLocationListener(getmMyLocationListener());
             testTTS();
-            isBound = true;
+            isBoundToCalcRouteAndSpeakService = true;
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            mCalcRouteAndSpeakService = null;
+            isBoundToCalcRouteAndSpeakService = false;
+        }
+    };
+
+    private boolean isBoundToMyLocationListenerService;
+    private ServiceConnection serviceConnectionToMyLocationListenerService = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            MyLocationListenerService.MyBinder binder = (MyLocationListenerService.MyBinder) service;
+            mMyLocationListenerService = binder.getService();
+            isBoundToMyLocationListenerService = true;
         }
         @Override
         public void onServiceDisconnected(ComponentName name) {
             mCalcRouteAndSpeakService = null;
-            isBound = false;
+            isBoundToMyLocationListenerService = false;
         }
     };
 
@@ -263,8 +278,8 @@ public class GpsFictionActivity extends Activity {
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED);
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION|View.SYSTEM_UI_FLAG_LOW_PROFILE);
 //        getWindow().addFlags(WindowManager.LayoutParams.TYPE_SYSTEM_OVERLAY);
-        if (mMyLocationListener == null) mMyLocationListener = new MyLocationListener();
-        mMyLocationListener.init(this);
+//        if (mMyLocationListener == null) mMyLocationListener = new MyLocationListener();
+//        mMyLocationListener.init(this);
         if (mGpsFictionData == null) {
             mGpsFictionData = new GpsFictionData();
             mGpsFictionData.setmGpsFictionActivity(this);
@@ -273,16 +288,16 @@ public class GpsFictionActivity extends Activity {
             Bundle toPass = savedInstanceState.getBundle("GpsFictionData");
             mGpsFictionData.setByBundle(toPass);
             toPass = savedInstanceState.getBundle("MyLocationListener");
-            mMyLocationListener.setByBundle(toPass);
-            mMyLocationListener.firePlayerLocationListener();
-            mMyLocationListener.firePlayerBearingListener();
+            mMyLocationListenerService.setByBundle(toPass);
+            mMyLocationListenerService.firePlayerLocationListener();
+            mMyLocationListenerService.firePlayerBearingListener();
             selectedFragmentId = savedInstanceState.getInt("lastSelectedFragmentId",R.id.Zones);
         } else {
             mGpsFictionData.init();
         }
             Intent myIntent = new Intent(this, CalcRouteAndSpeakService.class);
             myIntent.setAction(CalcRouteAndSpeakService.ACTION.STARTFOREGROUND);
-            bindService(myIntent, serviceConnection, Context.BIND_AUTO_CREATE);
+            bindService(myIntent, serviceConnectionToCalcRouteAndSpeakService, Context.BIND_AUTO_CREATE);
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_view);
@@ -370,8 +385,6 @@ public class GpsFictionActivity extends Activity {
         if (mGpsFictionData.toSave) {
             Bundle toPass = mGpsFictionData.getByBundle();
             savedInstanceState.putBundle("GpsFictionData", toPass);
-            toPass = mMyLocationListener.getByBundle();
-            savedInstanceState.putBundle("MyLocationListener", toPass);
             savedInstanceState.putInt("lastSelectedFragmentId", selectedFragmentId);
         }
         super.onSaveInstanceState(savedInstanceState);
@@ -379,12 +392,13 @@ public class GpsFictionActivity extends Activity {
 
     @Override
     public void onStop() {
-        unbindService(serviceConnection);
         super.onStop();
     }
 
     @Override
     public void onDestroy() {
+        unbindService(serviceConnectionToCalcRouteAndSpeakService);
+        unbindService(serviceConnectionToMyLocationListenerService);
         Intent myIntent = new Intent(this, CalcRouteAndSpeakService.class);
         myIntent.setAction(CalcRouteAndSpeakService.ACTION.STOPFOREGROUND);
         startService(myIntent);

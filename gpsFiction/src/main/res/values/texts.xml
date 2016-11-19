@@ -53,5 +53,10 @@
     <string name="dialogButtonValidate">Validate</string>
 
     <string name="distanceToDest">Distance to destination</string>
+    <string name="start_games">Start Games</string>
+    <string name="reset_games_new_player">Reset Games (new Player)</string>
+    <string name="change_admin_password">Change Admin Password</string>
+    <string name="passwd_saved">Password saved</string>
+    <string name="passwd_different">Passwords don\'t match</string>
 
 </resources>

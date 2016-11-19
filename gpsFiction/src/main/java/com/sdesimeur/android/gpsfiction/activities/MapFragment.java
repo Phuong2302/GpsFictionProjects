@@ -23,7 +23,7 @@ import android.widget.ZoomControls;
 import com.sdesimeur.android.gpsfiction.R;
 import com.sdesimeur.android.gpsfiction.classes.GpsFictionData;
 import com.sdesimeur.android.gpsfiction.classes.GpsFictionThing;
-import com.sdesimeur.android.gpsfiction.classes.MyLocationListener;
+import com.sdesimeur.android.gpsfiction.classes.MyLocationListenerService;
 import com.sdesimeur.android.gpsfiction.classes.PlayerBearingListener;
 import com.sdesimeur.android.gpsfiction.classes.PlayerLocationListener;
 import com.sdesimeur.android.gpsfiction.classes.VehiculeSelectedIdListener;
@@ -134,7 +134,7 @@ public class MapFragment
     }
 
     public MyGeoPoint getPlayerLocation() {
-        return getmMyLocationListener().getPlayerGeoPoint();
+        return getmMyLocationListenerService().getPlayerGeoPoint();
     }
 
     public MapFragment() {
@@ -204,7 +204,7 @@ public class MapFragment
                                   onLocationPlayerChanged(getPlayerLocation());
                                   viewForMapDirection.setTag(MapDirection.FIX);
                                   fixViewForMapDirection();
-                                  onBearingPlayerChanged(getmMyLocationListener().getBearingOfPlayer());
+                                  onBearingPlayerChanged(getmMyLocationListenerService().getBearingOfPlayer());
     	                  break;
     	              default:
     	                  return false;
@@ -265,8 +265,8 @@ public class MapFragment
         //mPrefs.load(mapView.map());
         mapView.onResume();
         registerAllZones();
-        getmMyLocationListener().addPlayerLocationListener(MyLocationListener.REGISTER.FRAGMENT, this);
-        getmMyLocationListener().addPlayerBearingListener(MyLocationListener.REGISTER.FRAGMENT, this);
+        getmMyLocationListenerService().addPlayerLocationListener(MyLocationListenerService.REGISTER.FRAGMENT, this);
+        getmMyLocationListenerService().addPlayerBearingListener(MyLocationListenerService.REGISTER.FRAGMENT, this);
         getmGpsFictionData().addZoneSelectListener(GpsFictionData.REGISTER.FRAGMENT, this);
         getmGpsFictionData().addZoneChangeListener(this);
         getmGpsFictionActivity().getmCalcRouteAndSpeakService().setMapFragment(this);
@@ -275,8 +275,8 @@ public class MapFragment
     @Override
     public void onPause() {
         super.onPause();
-        getmMyLocationListener().removePlayerLocationListener(MyLocationListener.REGISTER.FRAGMENT, this);
-        getmMyLocationListener().removePlayerBearingListener(MyLocationListener.REGISTER.FRAGMENT, this);
+        getmMyLocationListenerService().removePlayerLocationListener(MyLocationListenerService.REGISTER.FRAGMENT, this);
+        getmMyLocationListenerService().removePlayerBearingListener(MyLocationListenerService.REGISTER.FRAGMENT, this);
         getmGpsFictionData().removeZoneSelectListener(GpsFictionData.REGISTER.FRAGMENT, this);
         getmGpsFictionData().removeZoneChangeListener(this);
     }
@@ -357,44 +357,50 @@ public class MapFragment
     }
 */
     private void addViewGroupForVehiculesButtons(ViewGroup vg) {
-        viewGroupForVehiculesButtons = (ViewGroup) vg.findViewById(R.id.forVehiculesButtons);
         TypedArray vehicules = getResources().obtainTypedArray(R.array.vehicules_array);
-        for (int index = 0; index < vehicules.length(); index++) {
-            class MyImageView extends ImageView implements VehiculeSelectedIdListener {
-                public MyImageView(Context context) {
-                    super(context);
-                }
-                @Override
-                public void onVehiculeSelectedId(int id) {
-                    int res = (int) getTag();
-                    getDrawable().setAlpha((res==id)?MapFragment.SELECTEDBUTTON:MapFragment.UNSELECTEDBUTTON);
-                    invalidate();
-                }
-            }
-            ImageView img = new MyImageView (getActivity());
-            int pad = getResources().getDimensionPixelSize(R.dimen.buttonsVehiculesPadding);
-            img.setPadding(pad, pad, pad, pad);
-            img.setOnClickListener(new OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    int res = (int) v.getTag();
-                    if (getVehiculeSelectedId() != res) {
-                        setVehiculeSelectedId(res);
+        if (vehicules.length() > 1) {
+            viewGroupForVehiculesButtons = (ViewGroup) vg.findViewById(R.id.forVehiculesButtons);
+            for (int index = 0; index < vehicules.length(); index++) {
+                class MyImageView extends ImageView implements VehiculeSelectedIdListener {
+                    public MyImageView(Context context) {
+                        super(context);
                     }
-                    //onVehiculeChange(v);
+
+                    @Override
+                    public void onVehiculeSelectedId(int id) {
+                        int res = (int) getTag();
+                        getDrawable().setAlpha((res == id) ? MapFragment.SELECTEDBUTTON : MapFragment.UNSELECTEDBUTTON);
+                        invalidate();
+                    }
                 }
-            });
-            Integer res = vehicules.getResourceId(index,0);
-            img.setImageDrawable(getDrawable(getActivity(),res));
-            int sZ = getResources().getDimensionPixelSize(R.dimen.buttonsVehiculesSize);
-            ViewGroup.LayoutParams parms = new ViewGroup.LayoutParams(sZ, sZ);
-            img.setLayoutParams(parms);
-            img.setTag(res);
-            int alpha = (res==getVehiculeSelectedId())? MapFragment.SELECTEDBUTTON : MapFragment.UNSELECTEDBUTTON;
-            img.getDrawable().setAlpha(alpha);
-            viewGroupForVehiculesButtons.addView(img);
-            getmGpsFictionData().addVehiculeSelectedIdListener((VehiculeSelectedIdListener) img);
+                ImageView img = new MyImageView(getActivity());
+                int pad = getResources().getDimensionPixelSize(R.dimen.buttonsVehiculesPadding);
+                img.setPadding(pad, pad, pad, pad);
+                img.setOnClickListener(new OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        int res = (int) v.getTag();
+                        if (getVehiculeSelectedId() != res) {
+                            setVehiculeSelectedId(res);
+                        }
+                        //onVehiculeChange(v);
+                    }
+                });
+                Integer res = vehicules.getResourceId(index, 0);
+                img.setImageDrawable(getDrawable(getActivity(), res));
+                int sZ = getResources().getDimensionPixelSize(R.dimen.buttonsVehiculesSize);
+                ViewGroup.LayoutParams parms = new ViewGroup.LayoutParams(sZ, sZ);
+                img.setLayoutParams(parms);
+                img.setTag(res);
+                int alpha = (res == getVehiculeSelectedId()) ? MapFragment.SELECTEDBUTTON : MapFragment.UNSELECTEDBUTTON;
+                img.getDrawable().setAlpha(alpha);
+                viewGroupForVehiculesButtons.addView(img);
+                getmGpsFictionData().addVehiculeSelectedIdListener((VehiculeSelectedIdListener) img);
+            }
+        } else {
+            setVehiculeSelectedId(vehicules.getResourceId(0,R.drawable.compass));
         }
+
     }
 
     private void addViewForMapPosition(ViewGroup vg) {
@@ -439,7 +445,7 @@ public class MapFragment
                 }
                 fixViewForMapDirection();
                 fixViewForMapPosition();
-                onBearingPlayerChanged(getmMyLocationListener().getBearingOfPlayer());
+                onBearingPlayerChanged(getmMyLocationListenerService().getBearingOfPlayer());
                 //if (id == MapDirection.NORTH)
                     onLocationPlayerChanged(getPlayerLocation());
             }

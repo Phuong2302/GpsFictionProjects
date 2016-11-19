@@ -248,8 +248,8 @@ public class Zone extends Container implements ZoneEnterOrExitInterface, PlayerL
     public void validate() {
         super.validate();
        // getGpsFictionActivity().getGpsFictionData().addZoneSelectListener(GpsFictionData.REGISTER.ZONE, this);
-        getmMyLocationListener().addPlayerLocationListener(MyLocationListener.REGISTER.ZONE, this);
-        getmMyLocationListener().addPlayerBearingListener(MyLocationListener.REGISTER.ZONE, this);
+        getmMyLocationListenerService().addPlayerLocationListener(MyLocationListenerService.REGISTER.ZONE, this);
+        getmMyLocationListenerService().addPlayerBearingListener(MyLocationListenerService.REGISTER.ZONE, this);
         getmGpsFictionData().fireZoneChangeListener(this);
     }
 

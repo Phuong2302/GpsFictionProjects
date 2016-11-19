@@ -166,8 +166,8 @@ public class GpsFictionThing {
     public GpsFictionActivity getmGpsFictionActivity() {
         return mGpsFictionData.getmGpsFictionActivity();
     }
-    public MyLocationListener getmMyLocationListener () {
-        return getmGpsFictionActivity().getmMyLocationListener();
+    public MyLocationListenerService getmMyLocationListenerService () {
+        return getmGpsFictionActivity().getmMyLocationListenerService();
     }
     public int getIconId() {
         return this.valint[VALINT.iconId];

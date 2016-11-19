@@ -13,7 +13,7 @@ public class EnigmeALaonMainActivity extends GpsFictionActivity {
         super.onCreate(savedInstanceState);
         if ( ! ( getmGpsFictionData().isAllreadyConfigured() ) ) {
             setResourcedZones(R.raw.enigmealaon);
-            getmMyLocationListener().firePlayerLocationListener();
+            getmMyLocationListenerService().firePlayerLocationListener();
             getmGpsFictionData().setAllreadyConfigured(true);
         }
     }

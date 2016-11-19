@@ -43,10 +43,10 @@
             android:name=".activities.GpsFictionActivity"
             android:alwaysRetainTaskState="true"
             android:configChanges="locale"
-            android:launchMode="singleInstance">
+            >
             <!--
             <intent-filter>
-                <action android:name="android.intent.action.MAI" />
+                <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
                 <category android:name="android.intent.category.HOME" />
                 <category android:name="android.intent.category.DEFAULT" />
@@ -57,6 +57,12 @@
 
         <service
             android:name=".activities.CalcRouteAndSpeakService"
+            android:enabled="true"
+            android:exported="true"
+            android:launchMode="singleTop"
+            android:persistent="true" />
+        <service
+            android:name=".classes.MyLocationListenerService"
             android:enabled="true"
             android:exported="true"
             android:launchMode="singleTop"

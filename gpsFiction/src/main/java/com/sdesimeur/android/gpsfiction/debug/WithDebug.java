@@ -4,7 +4,7 @@ import android.util.Log;
 
 import com.sdesimeur.android.gpsfiction.activities.GpsFictionActivity;
 import com.sdesimeur.android.gpsfiction.classes.GpsFictionThing;
-import com.sdesimeur.android.gpsfiction.classes.MyLocationListener;
+import com.sdesimeur.android.gpsfiction.classes.MyLocationListenerService;
 import com.sdesimeur.android.gpsfiction.classes.PlayerBearingListener;
 import com.sdesimeur.android.gpsfiction.classes.PlayerLocationListener;
 import com.sdesimeur.android.gpsfiction.classes.Zone;
@@ -169,15 +169,15 @@ public abstract class WithDebug {
         }
     }
 
-    public final static void afficheObjectPlayerLocationListener(GpsFictionActivity gpsFictionActivity, MyLocationListener.REGISTER register) {
+    public final static void afficheObjectPlayerLocationListener(GpsFictionActivity gpsFictionActivity, MyLocationListenerService.REGISTER register) {
         // TODO Auto-generated method stub
-        if (gpsFictionActivity.getmMyLocationListener() == null) {
+        if (gpsFictionActivity.getmMyLocationListenerService() == null) {
             //Debug.myLog("afficheObjectPlayerLocationListener", "pas de myLocationListener");
         } else {
-            if (gpsFictionActivity.getmMyLocationListener().getPlayerLocationListener(register) == null) {
+            if (gpsFictionActivity.getmMyLocationListenerService().getPlayerLocationListener(register) == null) {
                 //Debug.myLog("afficheObjectPlayerLocationListener", "pas de getPlayerLocationListener");
             } else {
-                HashSet<PlayerLocationListener> playerLocationListener = gpsFictionActivity.getmMyLocationListener().getPlayerLocationListener(register);
+                HashSet<PlayerLocationListener> playerLocationListener = gpsFictionActivity.getmMyLocationListenerService().getPlayerLocationListener(register);
                 Iterator<PlayerLocationListener> it = playerLocationListener.iterator();
                 while (it.hasNext()) {
                     PlayerLocationListener gft = it.next();

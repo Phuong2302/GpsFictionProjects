@@ -9,7 +9,7 @@ import android.view.View;
 
 import com.sdesimeur.android.gpsfiction.R;
 import com.sdesimeur.android.gpsfiction.activities.GpsFictionActivity;
-import com.sdesimeur.android.gpsfiction.classes.MyLocationListener;
+import com.sdesimeur.android.gpsfiction.classes.MyLocationListenerService;
 import com.sdesimeur.android.gpsfiction.classes.PlayerBearingListener;
 import com.sdesimeur.android.gpsfiction.classes.Zone;
 
@@ -64,7 +64,7 @@ public class MiniCompassView extends View implements PlayerBearingListener {
     public void init(GpsFictionActivity gpsFictionActivity, Zone zone) {
         mGpsFictionActivity = gpsFictionActivity;
         this.attachedZone = zone;
-        mGpsFictionActivity.getmMyLocationListener().addPlayerBearingListener(MyLocationListener.REGISTER.VIEW, this);
+        mGpsFictionActivity.getmMyLocationListenerService().addPlayerBearingListener(MyLocationListenerService.REGISTER.VIEW, this);
         this.invalidate();
     }
 

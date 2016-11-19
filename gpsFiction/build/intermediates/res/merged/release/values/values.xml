@@ -657,6 +657,7 @@
     <string name="app_name">GpsFiction Applications</string>
     <string name="appbar_scrolling_view_behavior" translatable="false">android.support.design.widget.AppBarLayout$ScrollingViewBehavior</string>
     <string name="bottom_sheet_behavior" translatable="false">android.support.design.widget.BottomSheetBehavior</string>
+    <string name="change_admin_password">Change Admin Password</string>
     <string name="character_counter_pattern" translatable="false">%1$d / %2$d</string>
     <string name="dialogButtonCancel">Cancel</string>
     <string name="dialogButtonNo">No</string>
@@ -677,8 +678,12 @@
     <string name="noZoneDistance">---</string>
     <string name="noZoneTitle">You don\'t select an area.</string>
     <string name="nullstring"/>
+    <string name="passwd_different">Passwords don\'t match</string>
+    <string name="passwd_saved">Password saved</string>
+    <string name="reset_games_new_player">Reset Games (new Player)</string>
     <string name="rulesName">Rules.</string>
     <string name="search_menu_title">Search</string>
+    <string name="start_games">Start Games</string>
     <string name="status_bar_notification_info_overflow">999+</string>
     <string name="titleCharacters">The characters.</string>
     <string name="titleCompass">The Compass.</string>

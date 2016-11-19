@@ -4,7 +4,7 @@ import android.os.Bundle;
 
 import com.sdesimeur.android.gpsfiction.activities.GpsFictionActivity;
 import com.sdesimeur.android.gpsfiction.activities.MyDialogFragment;
-import com.sdesimeur.android.gpsfiction.classes.MyLocationListener;
+import com.sdesimeur.android.gpsfiction.classes.MyLocationListenerService;
 import com.sdesimeur.android.gpsfiction.classes.PlayerLocationListener;
 import com.sdesimeur.android.gpsfiction.classes.Zone;
 import com.sdesimeur.android.gpsfiction.geopoint.MyGeoPoint;
@@ -41,7 +41,7 @@ public class MissionDestructionMainActivity extends GpsFictionActivity implement
         if (!(getmGpsFictionData().isAllreadyConfigured())) {
             getmGpsFictionData().setRules(R.string.rulesDef);
             getmGpsFictionData().setTitle(R.string.rulesName);
-            getmMyLocationListener().addPlayerLocationListener(MyLocationListener.REGISTER.FRAGMENT,this);
+            getmMyLocationListenerService().addPlayerLocationListener(MyLocationListenerService.REGISTER.FRAGMENT,this);
         }
     }
     @Override
@@ -64,7 +64,7 @@ public class MissionDestructionMainActivity extends GpsFictionActivity implement
             firstDialogBoxAllreadyOpened = true;
             df.show(fragmentManager);
         } else {
-            getmMyLocationListener().removePlayerLocationListener(MyLocationListener.REGISTER.FRAGMENT,this);
+            getmMyLocationListenerService().removePlayerLocationListener(MyLocationListenerService.REGISTER.FRAGMENT,this);
         }
     }
 
@@ -75,7 +75,7 @@ public class MissionDestructionMainActivity extends GpsFictionActivity implement
                 angle = ((int) Math.round(360 * Math.random()));
                 createAllZoneAmi();
                 createAllZoneEnnemi();
-                getmMyLocationListener().firePlayerLocationListener();
+                getmMyLocationListenerService().firePlayerLocationListener();
                 getmGpsFictionData().setAllreadyConfigured(true);
             }
             if (reponse == R.string.dialogButtonNo) {
@@ -151,7 +151,7 @@ public class MissionDestructionMainActivity extends GpsFictionActivity implement
         zoneGlobale.setVisible(false);
         zoneGlobale.setActive(false);
         zoneGlobale.setId(R.string.zoneGlobale);
-        newZp = getmMyLocationListener().getPlayerGeoPoint();
+        newZp = getmMyLocationListenerService().getPlayerGeoPoint();
         zoneGlobale.setShape(newZp, radius_zone_globale);
         zoneGlobale.validate();
 

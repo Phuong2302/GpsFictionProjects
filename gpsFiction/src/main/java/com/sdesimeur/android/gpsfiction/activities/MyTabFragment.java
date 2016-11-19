@@ -4,7 +4,7 @@ import android.app.Fragment;
 import android.view.View;
 
 import com.sdesimeur.android.gpsfiction.classes.GpsFictionData;
-import com.sdesimeur.android.gpsfiction.classes.MyLocationListener;
+import com.sdesimeur.android.gpsfiction.classes.MyLocationListenerService;
 
 
 public abstract class MyTabFragment extends Fragment implements MyTabFragmentImpl {
@@ -38,10 +38,10 @@ public abstract class MyTabFragment extends Fragment implements MyTabFragmentImp
     public GpsFictionActivity getmGpsFictionActivity() {
         return (GpsFictionActivity) getActivity();
     }
-    public MyLocationListener getmMyLocationListener() {
+    public MyLocationListenerService getmMyLocationListenerService() {
         if (getmGpsFictionActivity()==null)
             return null;
         else
-            return getmGpsFictionActivity().getmMyLocationListener();
+            return getmGpsFictionActivity().getmMyLocationListenerService();
     }
 }

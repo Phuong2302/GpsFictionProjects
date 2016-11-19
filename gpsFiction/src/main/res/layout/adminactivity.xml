@@ -24,7 +24,7 @@ android:layout_height="match_parent"
 
 
 <Switch
-    android:text="Reset Games (new Player)"
+    android:text="@string/reset_games_new_player"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:padding="@dimen/buttonsPadding"
@@ -38,7 +38,7 @@ android:layout_height="match_parent"
 
 
 <Button
-    android:text="Start Games"
+    android:text="@string/start_games"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:textAlignment="center"
@@ -95,7 +95,7 @@ android:layout_height="match_parent"
         android:layout_margin="@dimen/buttonsPadding"
         android:textAlignment="center"
         android:background="@drawable/buttonstate"
-        android:text="Change Admin Password"
+        android:text="@string/change_admin_password"
         android:onClick="changeAdminPassword"
         />
     </LinearLayout>

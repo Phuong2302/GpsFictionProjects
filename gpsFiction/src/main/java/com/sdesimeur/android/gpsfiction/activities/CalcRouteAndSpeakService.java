@@ -3,7 +3,9 @@ package com.sdesimeur.android.gpsfiction.activities;
 import android.app.Notification;
 import android.app.PendingIntent;
 import android.app.Service;
+import android.content.ComponentName;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.os.AsyncTask;
 import android.os.Binder;
 import android.os.Build;
@@ -33,7 +35,7 @@ import com.graphhopper.util.Translation;
 import com.graphhopper.util.TranslationMap;
 import com.sdesimeur.android.gpsfiction.R;
 import com.sdesimeur.android.gpsfiction.classes.GpsFictionData;
-import com.sdesimeur.android.gpsfiction.classes.MyLocationListener;
+import com.sdesimeur.android.gpsfiction.classes.MyLocationListenerService;
 import com.sdesimeur.android.gpsfiction.classes.PlayerLocationListener;
 import com.sdesimeur.android.gpsfiction.classes.VehiculeSelectedIdListener;
 import com.sdesimeur.android.gpsfiction.classes.Zone;
@@ -59,12 +61,21 @@ public class CalcRouteAndSpeakService extends Service implements TextToSpeech.On
 
     private GpsFictionData gpsFictionData = null;
 
-    public MyLocationListener getMyLocationListener() {
-        return myLocationListener;
-    }
-
-    private MyLocationListener myLocationListener = null;
-
+    private MyLocationListenerService mMyLocationListenerService;
+    private boolean isBound;
+    private ServiceConnection serviceConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            MyLocationListenerService.MyBinder binder = (MyLocationListenerService.MyBinder) service;
+            mMyLocationListenerService = binder.getService();
+            isBound = true;
+        }
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            mMyLocationListenerService = null;
+            isBound = false;
+        }
+    };
     @Override
     public void onLocationPlayerChanged(MyGeoPoint pl) {
         playerLocation = pl;
@@ -97,11 +108,6 @@ public class CalcRouteAndSpeakService extends Service implements TextToSpeech.On
         gpsFictionData.addVehiculeSelectedIdListener(this);
     }
 
-    public void setMyLocationListener(MyLocationListener mll) {
-        this.myLocationListener = mll;
-        myLocationListener.addPlayerLocationListener(MyLocationListener.REGISTER.SERVICE,this);
-    }
-
     public void setMapFragment(MapFragment mapFragment) {
         this.mapFragment = mapFragment;
     }
@@ -112,7 +118,6 @@ public class CalcRouteAndSpeakService extends Service implements TextToSpeech.On
     }
 
     public interface ACTION {
-
         public static String STARTFOREGROUND = "com.sdesimeur.android.gpsfiction.action.startforeground";
         public static String STOPFOREGROUND = "com.sdesimeur.android.gpsfiction.action.stopforeground";
         public static String CHANGEVEHICULESELECTEDID = "com.sdesimeur.android.gpsfiction.action.vehiculeselectedidchange";
@@ -165,6 +170,7 @@ public class CalcRouteAndSpeakService extends Service implements TextToSpeech.On
     }
     @Override
     public IBinder onBind(Intent intent) {
+        mMyLocationListenerService.addPlayerLocationListener(MyLocationListenerService.REGISTER.SERVICE, this);
         return myBinder;
     }
 
@@ -172,7 +178,7 @@ public class CalcRouteAndSpeakService extends Service implements TextToSpeech.On
     public boolean onUnbind(Intent intent) {
         gpsFictionData.removeZoneSelectListener(GpsFictionData.REGISTER.SERVICE,this);
         gpsFictionData.removeVehiculeSelectedIdListener(this);
-        myLocationListener.removePlayerLocationListener(MyLocationListener.REGISTER.SERVICE,this);
+        mMyLocationListenerService.removePlayerLocationListener(MyLocationListenerService.REGISTER.SERVICE,this);
         return false;
     }
 
@@ -235,26 +241,6 @@ public class CalcRouteAndSpeakService extends Service implements TextToSpeech.On
                 this.stopForeground(true);
                 this.stopSelf();
                 break;
-            /*
-            case ACTION.CHANGEVEHICULESELECTEDID:
-                /////// TODO prendre en compte les valeurs nulles
-                int temp = intent.getIntExtra("vehiculeSelectedId",R.drawable.compass);
-                if (vehiculeSelectedId != temp) calcPathIfNecessar();
-                vehiculeSelectedId = temp;
-                break;
-            case ACTION.CHANGEGEOPOINT4ZONESELECTED:
-                /////// TODO prendre en compte les valeurs nulles
-                bd = intent.getExtras();
-                destLocation = MyGeoPoint.setByBundle(bd);
-                calcPathIfNecessar();
-                break;
-            case ACTION.CHANGEGEOPOINT4PLAYER:
-                /////// TODO prendre en compte les valeurs nulles
-                bd = intent.getExtras();
-                playerLocation = MyGeoPoint.setByBundle(bd);
-                calcPathIfNecessar();
-                break;
-            */
             default:
                 break;
         }

@@ -10,7 +10,7 @@ import android.widget.TextView;
 
 import com.sdesimeur.android.gpsfiction.R;
 import com.sdesimeur.android.gpsfiction.classes.GpsFictionThing;
-import com.sdesimeur.android.gpsfiction.classes.MyLocationListener;
+import com.sdesimeur.android.gpsfiction.classes.MyLocationListenerService;
 import com.sdesimeur.android.gpsfiction.classes.PlayerLocationListener;
 import com.sdesimeur.android.gpsfiction.classes.Zone;
 import com.sdesimeur.android.gpsfiction.classes.ZoneChangeListener;
@@ -40,7 +40,7 @@ public class Adapter4TabZones extends BaseAdapter implements PlayerLocationListe
             Zone zn = (Zone) it.next();
             if (zn.isVisible()) zonesToOrder.add(zn);
         }
-        mMyTabFragmentImpl.getmMyLocationListener().addPlayerLocationListener(MyLocationListener.REGISTER.ADAPTERVIEW, this);
+        mMyTabFragmentImpl.getmMyLocationListenerService().addPlayerLocationListener(MyLocationListenerService.REGISTER.ADAPTERVIEW, this);
         mMyTabFragmentImpl.getmGpsFictionData().addZoneChangeListener(this);
     }
 
@@ -112,7 +112,7 @@ public class Adapter4TabZones extends BaseAdapter implements PlayerLocationListe
         reOrderZones();
     }
     public void destroy () {
-        mMyTabFragmentImpl.getmMyLocationListener().removePlayerLocationListener(MyLocationListener.REGISTER.ADAPTERVIEW, this);
+        mMyTabFragmentImpl.getmMyLocationListenerService().removePlayerLocationListener(MyLocationListenerService.REGISTER.ADAPTERVIEW, this);
         mMyTabFragmentImpl.getmGpsFictionData().removeZoneChangeListener(this);
     }
 }

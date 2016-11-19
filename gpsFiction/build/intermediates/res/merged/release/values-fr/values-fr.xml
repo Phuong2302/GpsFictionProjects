@@ -29,6 +29,7 @@
     <string msgid="3421042268587513524" name="abc_shareactionprovider_share_with">"Partager avec"</string>
     <string msgid="7165123711973476752" name="abc_shareactionprovider_share_with_application">"Partager avec %s"</string>
     <string msgid="1603543279005712093" name="abc_toolbar_collapse_description">"Réduire"</string>
+    <string name="change_admin_password">Changer mot de passe administrateur</string>
     <string name="dialogButtonCancel">Annuler</string>
     <string name="dialogButtonNo">Non</string>
     <string name="dialogButtonValidate">Valider</string>
@@ -46,8 +47,12 @@
     <string name="inventory">Mon Inventaire</string>
     <string name="noZoneTitle">Vous n\'avez sélectionné aucun lieu.</string>
     <string name="nullstring"/>
+    <string name="passwd_different">Mots de passe différents</string>
+    <string name="passwd_saved">Mot de passe sauvegardé</string>
+    <string name="reset_games_new_player">RAZ des jeux (nouveau joueur)</string>
     <string name="rulesName">Règles.</string>
     <string msgid="146198913615257606" name="search_menu_title">"Rechercher"</string>
+    <string name="start_games">Démarrer les jeux</string>
     <string msgid="2869576371154716097" name="status_bar_notification_info_overflow">">999"</string>
     <string name="titleCharacters">Les personnages.</string>
     <string name="titleCompass">La boussole.</string>

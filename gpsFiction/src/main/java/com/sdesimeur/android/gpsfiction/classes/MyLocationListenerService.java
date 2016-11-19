@@ -1,7 +1,12 @@
 package com.sdesimeur.android.gpsfiction.classes;
 
 import android.Manifest;
+import android.app.Notification;
+import android.app.PendingIntent;
+import android.app.Service;
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -10,21 +15,25 @@ import android.hardware.SensorManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.Binder;
 import android.os.Bundle;
+import android.os.IBinder;
+import android.preference.PreferenceManager;
 import android.support.v4.app.ActivityCompat;
 import android.text.format.Time;
 
-import com.sdesimeur.android.gpsfiction.activities.GpsFictionActivity;
+import com.sdesimeur.android.gpsfiction.R;
 import com.sdesimeur.android.gpsfiction.geopoint.MyGeoPoint;
 
 import java.util.HashMap;
 import java.util.HashSet;
 
-public class MyLocationListener implements LocationListener, SensorEventListener {
+public class MyLocationListenerService extends Service implements LocationListener, SensorEventListener {
+    private static int NOTIFICATIONID = 1025;
     private final static float MINBEARINGCHANGED = 5;
     private final static float SPEEDLIMIT = 0.003f;
-    private HashMap<MyLocationListener.REGISTER, HashSet<PlayerBearingListener>> playerBearingListener = null;
-    private HashMap<MyLocationListener.REGISTER, HashSet<PlayerLocationListener>> playerLocationListener = null;
+    private HashMap<MyLocationListenerService.REGISTER, HashSet<PlayerBearingListener>> playerBearingListener = null;
+    private HashMap<MyLocationListenerService.REGISTER, HashSet<PlayerLocationListener>> playerLocationListener = null;
     //private static final HashSet <PlayerLocationListener> playerLocationListener = new HashSet <PlayerLocationListener> ();
     //private static final HashSet <PlayerLocationListener> playerLocationListenerZone = new HashSet <PlayerLocationListener> ();
     private MyGeoPoint lastPlayerGeoPoint = null;
@@ -38,9 +47,64 @@ public class MyLocationListener implements LocationListener, SensorEventListener
     private float compassBearing;
     private float locationBearing;
     private Sensor sensorsOrientation = null;
-    private GpsFictionActivity gpsFictionActivity = null;
+    public MyLocationListenerService() {
+    }
+    public interface ACTION {
+        public static String STARTFOREGROUND = "com.sdesimeur.android.gpsfiction.action.startforeground";
+        public static String STOPFOREGROUND = "com.sdesimeur.android.gpsfiction.action.stopforeground";
+    }
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        Bundle bd = null;
+        switch (intent.getAction()) {
+            case ACTION.STARTFOREGROUND:
+                Intent notificationIntent = new Intent(this, MyLocationListenerService.class);
+                notificationIntent.setAction(ACTION.STARTFOREGROUND);
+                notificationIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
+                PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+                Notification notification = null;
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN) {
+                    notification = new Notification.Builder(this)
+                            .setSmallIcon(R.drawable.bearing)
+                            .setContentTitle("MyLocationListenerService")
+                            .setContentText("Started")
+                            .setWhen(System.currentTimeMillis())
+                            .setContentIntent(pendingIntent)
+                            .build();
+                }
+                this.startForeground(NOTIFICATIONID, notification);
+                break;
+            case ACTION.STOPFOREGROUND:
+                this.stopForeground(true);
+                this.stopSelf();
+                break;
+            default:
+                break;
+        }
 
-    public MyLocationListener() {
+        return Service.START_REDELIVER_INTENT;
+        //return super.onStartCommand(intent, flags, startId);
+    }
+
+
+    private IBinder myBinder = new MyBinder();
+    public class MyBinder extends Binder {
+        public MyLocationListenerService getService() {
+            return MyLocationListenerService.this;
+        }
+    }
+    @Override
+    public IBinder onBind(Intent intent) {
+        startLocationListener();
+        return myBinder;
+    }
+    @Override
+    public boolean onUnbind(Intent intent) {
+
+        return false;
+    }
+    @Override
+    public void onCreate () {
         playerBearingListener = new HashMap<>();
         playerLocationListener = new HashMap<>();
         for (REGISTER i : REGISTER.values()) {
@@ -50,11 +114,18 @@ public class MyLocationListener implements LocationListener, SensorEventListener
         timePlayerGeoPoint = new Time();
         lastTimePlayerGeoPoint = new Time();
         compassActive = false;
-        bearingOfPlayer = 0;
-        compassBearing = 0;
-        locationBearing = 0;
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
+        bearingOfPlayer = settings.getFloat("bop",0);
+        compassBearing = settings.getFloat("cb",0);
+        locationBearing = settings.getFloat("lb",0);
     }
-
+    @Override
+    public void onDestroy() {
+        SharedPreferences.Editor ed = PreferenceManager.getDefaultSharedPreferences(this).edit();
+        ed.putFloat("bop", bearingOfPlayer);
+        ed.putFloat("cb", compassBearing);
+        ed.putFloat("lb", locationBearing);
+    }
     public HashSet<PlayerBearingListener> getPlayerBearingListener(REGISTER i) {
         return playerBearingListener.get(i);
     }
@@ -91,12 +162,6 @@ public class MyLocationListener implements LocationListener, SensorEventListener
         timePlayerGeoPoint.set(in.getLong("tpgp"));
         lastTimePlayerGeoPoint.set(in.getLong("ltpgp"));
         */
-    }
-
-    public void init(GpsFictionActivity gfa) {
-        gpsFictionActivity = gfa;
-        startLocationListener();
-
     }
 
     /*static public enum SENSORTOREGISTER  {
@@ -184,8 +249,8 @@ public class MyLocationListener implements LocationListener, SensorEventListener
     }
 
     public void startLocationListener() {
-        LocationManager locationManager = (LocationManager) getGpsFictionActivity().getSystemService(Context.LOCATION_SERVICE);
-        if (ActivityCompat.checkSelfPermission(getGpsFictionActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getGpsFictionActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
             //    ActivityCompat#requestPermissions
             // here to request the missing permissions, and then overriding
@@ -200,8 +265,8 @@ public class MyLocationListener implements LocationListener, SensorEventListener
     }
 
     public void removeGpsFictionUpdates() {
-        LocationManager locationManager = (LocationManager) getGpsFictionActivity().getSystemService(Context.LOCATION_SERVICE);
-        if (ActivityCompat.checkSelfPermission(getGpsFictionActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getGpsFictionActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
             //    ActivityCompat#requestPermissions
             // here to request the missing permissions, and then overriding
@@ -214,10 +279,6 @@ public class MyLocationListener implements LocationListener, SensorEventListener
         locationManager.removeUpdates(this);
     }
 
-    public GpsFictionActivity getGpsFictionActivity() {
-        return gpsFictionActivity;
-    }
-
     public MyGeoPoint getPlayerGeoPoint() {
         return playerGeoPoint;
     }
@@ -227,7 +288,7 @@ public class MyLocationListener implements LocationListener, SensorEventListener
     }
 
     public void setCompassActive() {
-        SensorManager sensorManager = (SensorManager) getGpsFictionActivity().getSystemService(Context.SENSOR_SERVICE);
+        SensorManager sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         if (sensorManager != null) {
             float speed = 0f;
             if ((lastPlayerGeoPoint != null) && (playerGeoPoint != null)) {

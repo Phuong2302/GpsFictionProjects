@@ -82,9 +82,9 @@ public class AdminActivity extends Activity {
             settings.edit().putString("PassWord",shaHex);
             ed1.setText("");
             ed2.setText("");
-            Toast.makeText(this,"mot de passe sauvegarde",Toast.LENGTH_LONG);
+            Toast.makeText(this, R.string.passwd_saved,Toast.LENGTH_LONG).show();
         } else {
-            Toast.makeText(this,"mots de passe differents",Toast.LENGTH_LONG);
+            Toast.makeText(this, R.string.passwd_different,Toast.LENGTH_LONG).show();
         }
 
     }
