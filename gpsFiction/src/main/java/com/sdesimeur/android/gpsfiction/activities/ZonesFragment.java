@@ -8,22 +8,29 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 
 import com.sdesimeur.android.gpsfiction.R;
+import com.sdesimeur.android.gpsfiction.classes.MyLocationListenerService;
+import com.sdesimeur.android.gpsfiction.helpers.BindToMyLocationListenerHelper;
 
 
 public class ZonesFragment extends MyTabFragment
 {
     private ListView listZones = null;
-    private Adapter4TabZones adapter = null;
+    private Adapter4TabZones adapter = new Adapter4TabZones();
     private DataSetObserver mDataSetObserver = null;
+    private BindToMyLocationListenerHelper mBindToMyLocationListenerHelper;
+    private MyLocationListenerService mMyLocationListenerService;
 
     //TODO add tmpZonesToOrder
     public ZonesFragment() {
         super();
     }
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    private void onBindWithMyLocationListener() {
+        mMyLocationListenerService.addPlayerLocationListener(MyLocationListenerService.REGISTER.ADAPTERVIEW, adapter);
+    }
+
+    private void onUnBindWithMyLocationListener() {
+        mMyLocationListenerService.removePlayerLocationListener(MyLocationListenerService.REGISTER.ADAPTERVIEW, adapter);
     }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -39,11 +46,20 @@ public class ZonesFragment extends MyTabFragment
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
-        if (adapter == null) {
-            adapter = new Adapter4TabZones();
-        }
+    public void onResume() {
+        super.onResume();
+        mBindToMyLocationListenerHelper = new BindToMyLocationListenerHelper(getActivity()) {
+            @Override
+            protected void onBindWithMyLocationListener(MyLocationListenerService mlls) {
+                mMyLocationListenerService = mlls;
+                ZonesFragment.this.onBindWithMyLocationListener();
+            }
+            @Override
+            public void onUnBindWithMyLocationListener() {
+                ZonesFragment.this.onUnBindWithMyLocationListener();
+                super.onUnBindWithMyLocationListener();
+            }
+        };
         listZones.setAdapter(adapter);
         mDataSetObserver = new DataSetObserver() {
             public void onChanged () {
@@ -52,13 +68,18 @@ public class ZonesFragment extends MyTabFragment
         };
         adapter.registerDataSetObserver(mDataSetObserver);
         adapter.register(this);
+        getmGpsFictionData().addZoneChangeListener(adapter);
     }
 
     @Override
-    public void onStop() {
-        super.onStop();
+    public void onPause() {
+        super.onPause();
+        mBindToMyLocationListenerHelper.onUnBindWithMyLocationListener();
         adapter.unregisterDataSetObserver(mDataSetObserver);
-        adapter.destroy();
-        adapter=null;
+        getmGpsFictionData().removeZoneChangeListener(adapter);
+    }
+    @Override
+    public void onStop () {
+        super.onStop();
     }
 }

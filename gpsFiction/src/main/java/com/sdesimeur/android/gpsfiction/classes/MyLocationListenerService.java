@@ -46,7 +46,6 @@ public class MyLocationListenerService extends Service implements LocationListen
     private float bearingOfPlayer;
     private float compassBearing;
     private float locationBearing;
-    private Sensor sensorsOrientation = null;
     public MyLocationListenerService() {
     }
     public interface ACTION {
@@ -55,7 +54,6 @@ public class MyLocationListenerService extends Service implements LocationListen
     }
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Bundle bd = null;
         switch (intent.getAction()) {
             case ACTION.STARTFOREGROUND:
                 Intent notificationIntent = new Intent(this, MyLocationListenerService.class);
@@ -87,7 +85,7 @@ public class MyLocationListenerService extends Service implements LocationListen
     }
 
 
-    private IBinder myBinder = new MyBinder();
+    private final IBinder myBinder = new MyBinder();
     public class MyBinder extends Binder {
         public MyLocationListenerService getService() {
             return MyLocationListenerService.this;
@@ -95,16 +93,15 @@ public class MyLocationListenerService extends Service implements LocationListen
     }
     @Override
     public IBinder onBind(Intent intent) {
-        startLocationListener();
         return myBinder;
     }
     @Override
     public boolean onUnbind(Intent intent) {
-
         return false;
     }
     @Override
     public void onCreate () {
+        startLocationListener();
         playerBearingListener = new HashMap<>();
         playerLocationListener = new HashMap<>();
         for (REGISTER i : REGISTER.values()) {
@@ -121,6 +118,7 @@ public class MyLocationListenerService extends Service implements LocationListen
     }
     @Override
     public void onDestroy() {
+        removeGpsFictionUpdates();
         SharedPreferences.Editor ed = PreferenceManager.getDefaultSharedPreferences(this).edit();
         ed.putFloat("bop", bearingOfPlayer);
         ed.putFloat("cb", compassBearing);
@@ -289,23 +287,22 @@ public class MyLocationListenerService extends Service implements LocationListen
 
     public void setCompassActive() {
         SensorManager sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        Sensor sensorsOrientation;
         if (sensorManager != null) {
+            sensorsOrientation = sensorManager.getDefaultSensor(Sensor.TYPE_ORIENTATION);
             float speed = 0f;
             if ((lastPlayerGeoPoint != null) && (playerGeoPoint != null)) {
                 float deltaTimeInMilliSeconds = (float) (timePlayerGeoPoint.toMillis(true) - lastTimePlayerGeoPoint.toMillis(true));
                 speed = 3600 * lastPlayerGeoPoint.distanceTo(playerGeoPoint) / deltaTimeInMilliSeconds;
             }
             compassActive = (speed < SPEEDLIMIT);
-        } else {
-            compassActive = false;
-        }
-        if (compassActive) {
-            sensorsOrientation = sensorManager.getDefaultSensor(Sensor.TYPE_ORIENTATION);
-            sensorManager.registerListener(this, sensorsOrientation, SensorManager.SENSOR_DELAY_GAME);
-        } else {
-            if (sensorManager != null) {
+            if (compassActive) {
+                sensorManager.registerListener(this, sensorsOrientation, SensorManager.SENSOR_DELAY_GAME);
+            } else {
                 sensorManager.unregisterListener(this, sensorsOrientation);
             }
+        } else {
+            compassActive = false;
         }
         calculateNewPlayerBearing();
     }

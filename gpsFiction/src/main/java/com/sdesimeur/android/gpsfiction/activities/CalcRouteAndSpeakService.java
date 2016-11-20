@@ -3,9 +3,7 @@ package com.sdesimeur.android.gpsfiction.activities;
 import android.app.Notification;
 import android.app.PendingIntent;
 import android.app.Service;
-import android.content.ComponentName;
 import android.content.Intent;
-import android.content.ServiceConnection;
 import android.os.AsyncTask;
 import android.os.Binder;
 import android.os.Build;
@@ -41,6 +39,7 @@ import com.sdesimeur.android.gpsfiction.classes.VehiculeSelectedIdListener;
 import com.sdesimeur.android.gpsfiction.classes.Zone;
 import com.sdesimeur.android.gpsfiction.classes.ZoneSelectListener;
 import com.sdesimeur.android.gpsfiction.geopoint.MyGeoPoint;
+import com.sdesimeur.android.gpsfiction.helpers.BindToMyLocationListenerHelper;
 import com.sdesimeur.android.gpsfiction.helpers.DistanceToTextHelper;
 import com.sdesimeur.android.gpsfiction.polygon.MyPolygon;
 
@@ -54,6 +53,7 @@ import java.util.Locale;
 public class CalcRouteAndSpeakService extends Service implements TextToSpeech.OnInitListener, PlayerLocationListener, ZoneSelectListener, VehiculeSelectedIdListener {
     private static int NOTIFICATIONID = 1024;
     private MapFragment mapFragment = null;
+    private BindToMyLocationListenerHelper mBindToMyLocationListenerHelper;
 
     public PathLayer getRoutePathLayer() {
         return gpsFictionData.getRoutePathLayer();
@@ -62,20 +62,6 @@ public class CalcRouteAndSpeakService extends Service implements TextToSpeech.On
     private GpsFictionData gpsFictionData = null;
 
     private MyLocationListenerService mMyLocationListenerService;
-    private boolean isBound;
-    private ServiceConnection serviceConnection = new ServiceConnection() {
-        @Override
-        public void onServiceConnected(ComponentName name, IBinder service) {
-            MyLocationListenerService.MyBinder binder = (MyLocationListenerService.MyBinder) service;
-            mMyLocationListenerService = binder.getService();
-            isBound = true;
-        }
-        @Override
-        public void onServiceDisconnected(ComponentName name) {
-            mMyLocationListenerService = null;
-            isBound = false;
-        }
-    };
     @Override
     public void onLocationPlayerChanged(MyGeoPoint pl) {
         playerLocation = pl;
@@ -170,8 +156,27 @@ public class CalcRouteAndSpeakService extends Service implements TextToSpeech.On
     }
     @Override
     public IBinder onBind(Intent intent) {
-        mMyLocationListenerService.addPlayerLocationListener(MyLocationListenerService.REGISTER.SERVICE, this);
+         mBindToMyLocationListenerHelper = new BindToMyLocationListenerHelper(this) {
+            @Override
+            protected void onBindWithMyLocationListener(MyLocationListenerService mlls) {
+                mMyLocationListenerService = mlls;
+                CalcRouteAndSpeakService.this.onBindWithMyLocationListener();
+            }
+            @Override
+            public void onUnBindWithMyLocationListener() {
+                CalcRouteAndSpeakService.this.onUnBindWithMyLocationListener();
+                super.onUnBindWithMyLocationListener();
+            }
+        };
         return myBinder;
+    }
+
+    private void onUnBindWithMyLocationListener() {
+        mMyLocationListenerService.removePlayerLocationListener(MyLocationListenerService.REGISTER.SERVICE, this);
+    }
+
+    private void onBindWithMyLocationListener() {
+        mMyLocationListenerService.addPlayerLocationListener(MyLocationListenerService.REGISTER.SERVICE, this);
     }
 
     @Override

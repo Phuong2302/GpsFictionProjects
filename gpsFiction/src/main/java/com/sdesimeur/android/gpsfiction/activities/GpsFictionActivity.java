@@ -35,6 +35,7 @@ import com.sdesimeur.android.gpsfiction.gpx.GPXParser;
 import com.sdesimeur.android.gpsfiction.gpx.beans.GPX;
 import com.sdesimeur.android.gpsfiction.gpx.beans.Track;
 import com.sdesimeur.android.gpsfiction.gpx.beans.Waypoint;
+import com.sdesimeur.android.gpsfiction.helpers.BindToMyLocationListenerHelper;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -56,6 +57,7 @@ public class GpsFictionActivity extends Activity {
     private float dX;
     private float dY;
     private static final float MINMOVE = 20;
+    private BindToMyLocationListenerHelper mBindToMyLocationListenerHelper;
 
     public GpsFictionData getmGpsFictionData() {
         return mGpsFictionData;
@@ -68,7 +70,7 @@ public class GpsFictionActivity extends Activity {
     protected GpsFictionData mGpsFictionData = null;
     protected FragmentManager fragmentManager;
     protected HashSet<MyDialogFragment> dialogFragments = new HashSet<>();
-    private MyLocationListenerService mMyLocationListenerService = null;
+    protected MyLocationListenerService mMyLocationListenerService = null;
     private NavigationView navigationView;
     private DrawerLayout drawerLayout;
     private HashMap<Integer, MyTabFragmentImpl> menuItem2Fragments;
@@ -254,23 +256,6 @@ public class GpsFictionActivity extends Activity {
         }
     };
 
-    private boolean isBoundToMyLocationListenerService;
-    private ServiceConnection serviceConnectionToMyLocationListenerService = new ServiceConnection() {
-        @Override
-        public void onServiceConnected(ComponentName name, IBinder service) {
-            MyLocationListenerService.MyBinder binder = (MyLocationListenerService.MyBinder) service;
-            mMyLocationListenerService = binder.getService();
-            isBoundToMyLocationListenerService = true;
-            mMyLocationListenerService.firePlayerLocationListener();
-            mMyLocationListenerService.firePlayerBearingListener();
-        }
-        @Override
-        public void onServiceDisconnected(ComponentName name) {
-            mCalcRouteAndSpeakService = null;
-            isBoundToMyLocationListenerService = false;
-        }
-    };
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         //this.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -296,10 +281,13 @@ public class GpsFictionActivity extends Activity {
         Intent myIntent1 = new Intent(this, CalcRouteAndSpeakService.class);
         myIntent1.setAction(CalcRouteAndSpeakService.ACTION.STARTFOREGROUND);
         bindService(myIntent1, serviceConnectionToCalcRouteAndSpeakService, Context.BIND_AUTO_CREATE);
-        Intent myIntent2 = new Intent(this, MyLocationListenerService.class);
-        myIntent2.setAction(MyLocationListenerService.ACTION.STARTFOREGROUND);
-        bindService(myIntent2, serviceConnectionToMyLocationListenerService, Context.BIND_AUTO_CREATE);
-
+        mBindToMyLocationListenerHelper = new BindToMyLocationListenerHelper(this) {
+            @Override
+            protected void onBindWithMyLocationListener(MyLocationListenerService mlls) {
+                mMyLocationListenerService = mlls;
+                GpsFictionActivity.this.onBindWithMyLocationListener();
+            }
+        };
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_view);
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -351,6 +339,9 @@ public class GpsFictionActivity extends Activity {
         setFragmentInContainer();
     }
 
+    protected void onBindWithMyLocationListener() {
+    }
+
     @Override
     public void onRestart() {
         super.onRestart();
@@ -399,10 +390,13 @@ public class GpsFictionActivity extends Activity {
     @Override
     public void onDestroy() {
         unbindService(serviceConnectionToCalcRouteAndSpeakService);
-        unbindService(serviceConnectionToMyLocationListenerService);
-        Intent myIntent = new Intent(this, CalcRouteAndSpeakService.class);
-        myIntent.setAction(CalcRouteAndSpeakService.ACTION.STOPFOREGROUND);
-        startService(myIntent);
+        mBindToMyLocationListenerHelper.onUnBindWithMyLocationListener();
+        Intent myIntent1 = new Intent(this, CalcRouteAndSpeakService.class);
+        myIntent1.setAction(CalcRouteAndSpeakService.ACTION.STOPFOREGROUND);
+        startService(myIntent1);
+        Intent myIntent2 = new Intent(this, MyLocationListenerService.class);
+        myIntent2.setAction(MyLocationListenerService.ACTION.STOPFOREGROUND);
+        startService(myIntent2);
     }
     private void testTTS() {
         Intent checkIntent = new Intent();

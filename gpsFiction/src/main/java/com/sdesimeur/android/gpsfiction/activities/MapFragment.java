@@ -32,6 +32,7 @@ import com.sdesimeur.android.gpsfiction.classes.ZoneChangeListener;
 import com.sdesimeur.android.gpsfiction.classes.ZoneSelectListener;
 import com.sdesimeur.android.gpsfiction.classes.ZoneViewHelper;
 import com.sdesimeur.android.gpsfiction.geopoint.MyGeoPoint;
+import com.sdesimeur.android.gpsfiction.helpers.BindToMyLocationListenerHelper;
 import com.sdesimeur.android.gpsfiction.helpers.DistanceToTextHelper;
 
 import org.oscim.android.MapView;
@@ -90,6 +91,8 @@ public class MapFragment
     private float dX1;
     private float dY1;
     private float distanceToEnd = 0;
+    private BindToMyLocationListenerHelper mBindToMyLocationListenerHelper;
+    private MyLocationListenerService mMyLocationListenerService;
 
 
     private static class MapDirection {
@@ -134,7 +137,7 @@ public class MapFragment
     }
 
     public MyGeoPoint getPlayerLocation() {
-        return getmMyLocationListenerService().getPlayerGeoPoint();
+        return mMyLocationListenerService.getPlayerGeoPoint();
     }
 
     public MapFragment() {
@@ -150,6 +153,18 @@ public class MapFragment
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mBindToMyLocationListenerHelper = new BindToMyLocationListenerHelper(getActivity()) {
+            @Override
+            protected void onBindWithMyLocationListener(MyLocationListenerService mlls) {
+                mMyLocationListenerService = mlls;
+                MapFragment.this.onBindWithMyLocationListener();
+            }
+            @Override
+            public void onUnBindWithMyLocationListener() {
+                MapFragment.this.onUnBindWithMyLocationListener();
+                super.onUnBindWithMyLocationListener();
+            }
+        };
             boolean greaterOrEqKitkat = Build.VERSION.SDK_INT >= 19;
             File dir = null;
             if (greaterOrEqKitkat) {
@@ -160,6 +175,16 @@ public class MapFragment
             }
             dir = new File (dir, "/sdesimeur/");
             this.mapsFolder = new File (dir , "/mapsforge/");
+    }
+
+    private void onUnBindWithMyLocationListener() {
+        mMyLocationListenerService.removePlayerLocationListener(MyLocationListenerService.REGISTER.FRAGMENT, this);
+        mMyLocationListenerService.removePlayerBearingListener(MyLocationListenerService.REGISTER.FRAGMENT, this);
+    }
+
+    private void onBindWithMyLocationListener() {
+        mMyLocationListenerService.addPlayerLocationListener(MyLocationListenerService.REGISTER.FRAGMENT, this);
+        mMyLocationListenerService.addPlayerBearingListener(MyLocationListenerService.REGISTER.FRAGMENT, this);
     }
 
     @Override
@@ -204,7 +229,7 @@ public class MapFragment
                                   onLocationPlayerChanged(getPlayerLocation());
                                   viewForMapDirection.setTag(MapDirection.FIX);
                                   fixViewForMapDirection();
-                                  onBearingPlayerChanged(getmMyLocationListenerService().getBearingOfPlayer());
+                                  onBearingPlayerChanged(mMyLocationListenerService.getBearingOfPlayer());
     	                  break;
     	              default:
     	                  return false;
@@ -265,8 +290,6 @@ public class MapFragment
         //mPrefs.load(mapView.map());
         mapView.onResume();
         registerAllZones();
-        getmMyLocationListenerService().addPlayerLocationListener(MyLocationListenerService.REGISTER.FRAGMENT, this);
-        getmMyLocationListenerService().addPlayerBearingListener(MyLocationListenerService.REGISTER.FRAGMENT, this);
         getmGpsFictionData().addZoneSelectListener(GpsFictionData.REGISTER.FRAGMENT, this);
         getmGpsFictionData().addZoneChangeListener(this);
         getmGpsFictionActivity().getmCalcRouteAndSpeakService().setMapFragment(this);
@@ -275,8 +298,6 @@ public class MapFragment
     @Override
     public void onPause() {
         super.onPause();
-        getmMyLocationListenerService().removePlayerLocationListener(MyLocationListenerService.REGISTER.FRAGMENT, this);
-        getmMyLocationListenerService().removePlayerBearingListener(MyLocationListenerService.REGISTER.FRAGMENT, this);
         getmGpsFictionData().removeZoneSelectListener(GpsFictionData.REGISTER.FRAGMENT, this);
         getmGpsFictionData().removeZoneChangeListener(this);
     }
@@ -297,6 +318,7 @@ public class MapFragment
     }
     @Override
     public void onDestroy() {
+        mBindToMyLocationListenerHelper.onUnBindWithMyLocationListener();
         super.onDestroy();
     }
 
@@ -445,7 +467,7 @@ public class MapFragment
                 }
                 fixViewForMapDirection();
                 fixViewForMapPosition();
-                onBearingPlayerChanged(getmMyLocationListenerService().getBearingOfPlayer());
+                onBearingPlayerChanged(mMyLocationListenerService.getBearingOfPlayer());
                 //if (id == MapDirection.NORTH)
                     onLocationPlayerChanged(getPlayerLocation());
             }

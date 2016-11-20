@@ -41,8 +41,11 @@ public class MissionDestructionMainActivity extends GpsFictionActivity implement
         if (!(getmGpsFictionData().isAllreadyConfigured())) {
             getmGpsFictionData().setRules(R.string.rulesDef);
             getmGpsFictionData().setTitle(R.string.rulesName);
-            getmMyLocationListenerService().addPlayerLocationListener(MyLocationListenerService.REGISTER.FRAGMENT,this);
         }
+    }
+    @Override
+    protected void onBindWithMyLocationListener () {
+        mMyLocationListenerService.addPlayerLocationListener(MyLocationListenerService.REGISTER.FRAGMENT,this);
     }
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {

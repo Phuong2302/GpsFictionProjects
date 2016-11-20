@@ -3,7 +3,6 @@ package com.sdesimeur.android.gpsfiction.activities;
 import android.view.View;
 
 import com.sdesimeur.android.gpsfiction.classes.GpsFictionData;
-import com.sdesimeur.android.gpsfiction.classes.MyLocationListenerService;
 
 /**
  * Created by sam on 30/06/16.
@@ -13,5 +12,4 @@ public interface MyTabFragmentImpl {
     public void setRootView(View rootView);
     public GpsFictionData getmGpsFictionData();
     public GpsFictionActivity getmGpsFictionActivity();
-    public MyLocationListenerService getmMyLocationListenerService();
 }
