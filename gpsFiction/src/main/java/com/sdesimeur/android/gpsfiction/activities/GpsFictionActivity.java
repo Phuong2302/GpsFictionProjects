@@ -261,6 +261,8 @@ public class GpsFictionActivity extends Activity {
             MyLocationListenerService.MyBinder binder = (MyLocationListenerService.MyBinder) service;
             mMyLocationListenerService = binder.getService();
             isBoundToMyLocationListenerService = true;
+            mMyLocationListenerService.firePlayerLocationListener();
+            mMyLocationListenerService.firePlayerBearingListener();
         }
         @Override
         public void onServiceDisconnected(ComponentName name) {
@@ -287,17 +289,16 @@ public class GpsFictionActivity extends Activity {
         if (savedInstanceState != null) {
             Bundle toPass = savedInstanceState.getBundle("GpsFictionData");
             mGpsFictionData.setByBundle(toPass);
-            toPass = savedInstanceState.getBundle("MyLocationListener");
-            mMyLocationListenerService.setByBundle(toPass);
-            mMyLocationListenerService.firePlayerLocationListener();
-            mMyLocationListenerService.firePlayerBearingListener();
             selectedFragmentId = savedInstanceState.getInt("lastSelectedFragmentId",R.id.Zones);
         } else {
             mGpsFictionData.init();
         }
-            Intent myIntent = new Intent(this, CalcRouteAndSpeakService.class);
-            myIntent.setAction(CalcRouteAndSpeakService.ACTION.STARTFOREGROUND);
-            bindService(myIntent, serviceConnectionToCalcRouteAndSpeakService, Context.BIND_AUTO_CREATE);
+        Intent myIntent1 = new Intent(this, CalcRouteAndSpeakService.class);
+        myIntent1.setAction(CalcRouteAndSpeakService.ACTION.STARTFOREGROUND);
+        bindService(myIntent1, serviceConnectionToCalcRouteAndSpeakService, Context.BIND_AUTO_CREATE);
+        Intent myIntent2 = new Intent(this, MyLocationListenerService.class);
+        myIntent2.setAction(MyLocationListenerService.ACTION.STARTFOREGROUND);
+        bindService(myIntent2, serviceConnectionToMyLocationListenerService, Context.BIND_AUTO_CREATE);
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_view);

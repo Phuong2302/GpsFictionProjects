@@ -28,16 +28,17 @@
             android:configChanges="locale"
             android:label="@string/app_name"
             android:launchMode="singleInstance" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-                <!--
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.HOME" />
-                <category android:name="android.intent.category.MONKEY" />
-                -->
+            <!--
+        <intent-filter>
+            <action android:name="android.intent.action.MAIN" />
+
+            <category android:name="android.intent.category.LAUNCHER" />
+            <category android:name="android.intent.category.DEFAULT" />
+            <category android:name="android.intent.category.HOME" />
+            <category android:name="android.intent.category.MONKEY" />
             </intent-filter>
+            -->
         </activity>
         <activity
             android:name="com.sdesimeur.android.gpsfiction.activities.GpsFictionActivity"
@@ -62,7 +63,7 @@
             android:launchMode="singleTop"
             android:persistent="true" />
         <service
-            android:name="com.sdesimeur.android.gpsfiction.activities.MyLocationListenerService"
+            android:name="com.sdesimeur.android.gpsfiction.classes.MyLocationListenerService"
             android:enabled="true"
             android:exported="true"
             android:launchMode="singleTop"
