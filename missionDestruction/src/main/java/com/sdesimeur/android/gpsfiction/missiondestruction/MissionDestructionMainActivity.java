@@ -38,10 +38,12 @@ public class MissionDestructionMainActivity extends GpsFictionActivity implement
         if (savedInstanceState != null) {
             firstDialogBoxAllreadyOpened = savedInstanceState.getInt("firstDialogBoxAllreadyOpened",-1)==1;
         }
+        /*
         if (!(getmGpsFictionData().isAllreadyConfigured())) {
             getmGpsFictionData().setRules(R.string.rulesDef);
             getmGpsFictionData().setTitle(R.string.rulesName);
         }
+        */
     }
     @Override
     protected void onBindWithMyLocationListener () {

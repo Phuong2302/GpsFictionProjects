@@ -11,9 +11,10 @@
         android:theme="@style/MyAppTheme" >
         <activity
             android:name=".EnigmeALaonMainActivity"
-            android:label="@string/app_name">
+            android:label="@string/rulesName"
+            android:description="@string/rulesName">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.RUN" />
                 <!-- <category android:name="android.intent.category.HOME" />
                 <category android:name="android.intent.category.LAUNCHER" />
                 <category android:name="android.intent.category.DEFAULT" />

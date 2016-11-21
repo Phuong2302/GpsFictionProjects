@@ -9,6 +9,8 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.content.pm.ActivityInfo;
+import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.Typeface;
@@ -271,6 +273,16 @@ public class GpsFictionActivity extends Activity {
             mGpsFictionData = new GpsFictionData();
             mGpsFictionData.setmGpsFictionActivity(this);
         }
+        try {
+            ActivityInfo activityInfo = getPackageManager().getActivityInfo(getComponentName(), PackageManager.GET_META_DATA);
+            int stringId = activityInfo.labelRes;
+            getmGpsFictionData().setTitle(stringId);
+            stringId = activityInfo.descriptionRes;
+            getmGpsFictionData().setRules(stringId);
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+
         if (savedInstanceState != null) {
             Bundle toPass = savedInstanceState.getBundle("GpsFictionData");
             mGpsFictionData.setByBundle(toPass);

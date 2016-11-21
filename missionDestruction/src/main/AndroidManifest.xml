@@ -12,7 +12,8 @@
         android:name="android.support.multidex.MultiDexApplication">>
         <activity
             android:name=".MissionDestructionMainActivity"
-            android:label="@string/title_activity_main">
+            android:label="@string/rulesName"
+            android:description="@string/rulesDef">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <!--<category android:name="android.intent.category.LAUNCHER" />
