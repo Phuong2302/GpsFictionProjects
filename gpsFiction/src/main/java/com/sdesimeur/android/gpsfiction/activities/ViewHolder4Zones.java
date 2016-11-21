@@ -12,6 +12,15 @@ import com.sdesimeur.android.gpsfiction.views.ZoneDistance4ListView;
 
 public class ViewHolder4Zones implements ZoneSelectListener {
     private TextView zoneTitleView = null;
+
+    public ZoneDistance4ListView getDistanceToZoneView() {
+        return distanceToZoneView;
+    }
+
+    public MiniCompassView getMiniCompassView() {
+        return miniCompassView;
+    }
+
     private ZoneDistance4ListView distanceToZoneView = null;
     //	private TextView directionOfZone;
     private MiniCompassView miniCompassView = null;

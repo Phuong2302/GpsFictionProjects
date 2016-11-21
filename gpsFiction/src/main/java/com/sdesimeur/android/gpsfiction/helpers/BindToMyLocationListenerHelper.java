@@ -14,7 +14,11 @@ import com.sdesimeur.android.gpsfiction.classes.MyLocationListenerService;
 
 public abstract class BindToMyLocationListenerHelper {
 
-    private boolean isBoundToMyLocationListenerService;
+    public boolean isBoundToMyLocationListenerService() {
+        return isBoundToMyLocationListenerService;
+    }
+
+    private boolean isBoundToMyLocationListenerService = false;
     private MyLocationListenerService mMyLocationListenerService;
     private ServiceConnection serviceConnectionToMyLocationListenerService = new ServiceConnection() {
         @Override
@@ -23,8 +27,6 @@ public abstract class BindToMyLocationListenerHelper {
             mMyLocationListenerService = binder.getService();
             isBoundToMyLocationListenerService = true;
             onBindWithMyLocationListener(mMyLocationListenerService);
-            mMyLocationListenerService.firePlayerLocationListener();
-            mMyLocationListenerService.firePlayerBearingListener();
         }
 
         @Override
@@ -43,7 +45,8 @@ public abstract class BindToMyLocationListenerHelper {
     }
     protected abstract void onBindWithMyLocationListener(MyLocationListenerService mlls);
     public void onUnBindWithMyLocationListener() {
-        context.unbindService(serviceConnectionToMyLocationListenerService);
+        if (isBoundToMyLocationListenerService)
+            context.unbindService(serviceConnectionToMyLocationListenerService);
     }
 
 

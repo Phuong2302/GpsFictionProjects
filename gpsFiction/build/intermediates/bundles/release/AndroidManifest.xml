@@ -44,16 +44,16 @@
             android:name="com.sdesimeur.android.gpsfiction.activities.GpsFictionActivity"
             android:alwaysRetainTaskState="true"
             android:configChanges="locale" >
-
-            <!--
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
+
+                <category android:name="android.intent.category.GPSFICTIONACTIVITY" />
+                <!--
                 <category android:name="android.intent.category.HOME" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.MONKEY" />
+                -->
             </intent-filter>
-            -->
         </activity>
 
         <service

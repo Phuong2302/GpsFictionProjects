@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.sdesimeur.android.gpsfiction.R;
 import com.sdesimeur.android.gpsfiction.classes.GpsFictionThing;
+import com.sdesimeur.android.gpsfiction.classes.MyLocationListenerService;
 import com.sdesimeur.android.gpsfiction.classes.PlayerLocationListener;
 import com.sdesimeur.android.gpsfiction.classes.Zone;
 import com.sdesimeur.android.gpsfiction.classes.ZoneChangeListener;
@@ -23,7 +24,13 @@ import java.util.Iterator;
 import java.util.LinkedList;
 
 public class Adapter4TabZones extends BaseAdapter implements PlayerLocationListener, ZoneChangeListener {
-    private HashMap<Zone, View> zone2View = null;
+    private MyLocationListenerService myLocationListenerService = null;
+
+    public HashMap<Zone, View> getZone2View() {
+        return zone2View;
+    }
+
+    private HashMap<Zone, View> zone2View = new HashMap<>();
     private LinkedList<Zone> zonesToOrder = null;
     private MyTabFragmentImpl mMyTabFragmentImpl = null;
 
@@ -65,7 +72,6 @@ public class Adapter4TabZones extends BaseAdapter implements PlayerLocationListe
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        if (zone2View == null ) zone2View = new HashMap<>();
         LinearLayout layoutItem;
         LayoutInflater mLayoutInflater = LayoutInflater.from(mMyTabFragmentImpl.getmGpsFictionActivity());
         ViewHolder4Zones holder;
@@ -89,6 +95,10 @@ public class Adapter4TabZones extends BaseAdapter implements PlayerLocationListe
                     return true;
                 }
             });
+            if (myLocationListenerService != null) {
+                myLocationListenerService.addPlayerLocationListener(MyLocationListenerService.REGISTER.VIEW,holder.getDistanceToZoneView());
+                myLocationListenerService.addPlayerBearingListener(MyLocationListenerService.REGISTER.VIEW,holder.getMiniCompassView());
+            }
             zone2View.put(attachedZone, layoutItem);
         }
         return layoutItem;
@@ -107,5 +117,9 @@ public class Adapter4TabZones extends BaseAdapter implements PlayerLocationListe
             zonesToOrder.remove(zone);
         }
         reOrderZones();
+    }
+
+    public void setMyLocationListenerService(MyLocationListenerService mlls) {
+        myLocationListenerService = mlls;
     }
 }
