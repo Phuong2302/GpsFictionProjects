@@ -68,6 +68,12 @@
             android:exported="true"
             android:launchMode="singleTop"
             android:persistent="true" />
+
+        <activity
+            android:name="com.sdesimeur.android.gpsfiction.activities.GamesActivity"
+            android:alwaysRetainTaskState="true"
+            android:configChanges="locale" >
+        </activity>
     </application>
 
 </manifest>
