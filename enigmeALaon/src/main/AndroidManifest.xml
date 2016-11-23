@@ -15,6 +15,7 @@
             android:description="@string/rulesName">
             <intent-filter>
                 <action android:name="android.intent.action.RUN" />
+                <category android:name="com.sdesimeur.android.gpsfiction.intent.category.GPSFICTIONACTIVITY" />
                 <!-- <category android:name="android.intent.category.HOME" />
                 <category android:name="android.intent.category.LAUNCHER" />
                 <category android:name="android.intent.category.DEFAULT" />

@@ -17,6 +17,8 @@ import com.sdesimeur.android.gpsfiction.R;
 import com.sdesimeur.android.gpsfiction.activities.dummy.DummyContent;
 import com.sdesimeur.android.gpsfiction.activities.dummy.DummyContent.DummyItem;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -73,15 +75,29 @@ public class GameFragment extends Fragment {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            Intent intent = new Intent(Intent.ACTION_MAIN, null);
+            Intent intent = new Intent(Intent.ACTION_RUN, null);
             intent.addCategory("com.sdesimeur.android.gpsfiction.intent.category.GPSFICTIONACTIVITY");
             PackageManager pm = getActivity().getPackageManager();
             List<ResolveInfo> list = pm.queryIntentActivities(intent, 0);
-            recyclerView.setAdapter(new MyGameRecyclerViewAdapter(DummyContent.ITEMS, mListener));
+            List <GameItem> contentList = new ArrayList<>();
+            Iterator iterator = list.iterator();
+            while (iterator.hasNext()) {
+                GameItem gi = new GameItem();
+                ResolveInfo re = (ResolveInfo) iterator.next();
+                gi.name = getResources().getString(re.labelRes);
+                gi.desc = getResources().getString(re.describeContents());
+                gi.theClass = re.getClass();
+                contentList.add(gi);
+            }
+            recyclerView.setAdapter(new MyGameRecyclerViewAdapter(contentList, mListener));
         }
         return view;
     }
-
+    public class GameItem {
+        public String name;
+        public String desc;
+        public Class theClass;
+    }
 
     @Override
     public void onAttach(Context context) {
@@ -112,6 +128,6 @@ public class GameFragment extends Fragment {
      */
     public interface OnListFragmentInteractionListener {
         // TODO: Update argument type and name
-        void onListFragmentInteraction(DummyItem item);
+        void onListFragmentInteraction(GameItem item);
     }
 }

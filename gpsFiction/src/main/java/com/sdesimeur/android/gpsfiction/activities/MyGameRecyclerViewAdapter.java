@@ -20,10 +20,10 @@ import java.util.List;
  */
 public class MyGameRecyclerViewAdapter extends RecyclerView.Adapter<MyGameRecyclerViewAdapter.ViewHolder> {
 
-    private final List<DummyItem> mValues;
+    private final List<GameFragment.GameItem> mValues;
     private final OnListFragmentInteractionListener mListener;
 
-    public MyGameRecyclerViewAdapter(List<DummyItem> items, OnListFragmentInteractionListener listener) {
+    public MyGameRecyclerViewAdapter(List<GameFragment.GameItem> items, OnListFragmentInteractionListener listener) {
         mValues = items;
         mListener = listener;
     }
@@ -38,8 +38,8 @@ public class MyGameRecyclerViewAdapter extends RecyclerView.Adapter<MyGameRecycl
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
-        holder.mGameNameView.setText(mValues.get(position).id);
-        holder.mGameDescriptionView.setText(mValues.get(position).content);
+        holder.mGameNameView.setText(mValues.get(position).name);
+        holder.mGameDescriptionView.setText(mValues.get(position).desc);
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -62,7 +62,7 @@ public class MyGameRecyclerViewAdapter extends RecyclerView.Adapter<MyGameRecycl
         public final View mView;
         public final Button mGameNameView;
         public final TextView mGameDescriptionView;
-        public DummyItem mItem;
+        public GameFragment.GameItem mItem;
 
         public ViewHolder(View view) {
             super(view);
