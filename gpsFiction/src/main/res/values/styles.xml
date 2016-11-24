@@ -107,5 +107,10 @@
     <dimen name="buttonsVehiculesPadding">4dip</dimen>
     <dimen name="buttonsVehiculesSize">48dp</dimen>
     <dimen name="mapzoneborderwidth">1dip</dimen>
+    <dimen name="text_margin">16dp</dimen>
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="scrollbarsize">5dip</dimen>
+
 
 </resources>

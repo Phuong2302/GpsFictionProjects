@@ -76,17 +76,6 @@ android:layout_height="match_parent"
             android:background="@color/white"
             />
 
-        <EditText
-            android:id="@+id/pass2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="textPassword"
-            android:ems="10"
-            android:textSize="@dimen/adminTextSize"
-            android:padding="@dimen/buttonsPadding"
-            android:background="@color/white"
-            />
-
         <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

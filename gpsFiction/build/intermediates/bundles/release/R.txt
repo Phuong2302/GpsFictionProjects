@@ -628,13 +628,14 @@ int dimen notification_small_icon_size_as_large 0x7f08009b
 int dimen notification_subtext_size 0x7f08009c
 int dimen notification_top_pad 0x7f08009d
 int dimen notification_top_pad_large_text 0x7f08009e
+int dimen scrollbarsize 0x7f08009f
 int dimen tabMinHeight 0x7f080012
-int dimen text_margin 0x7f08009f
+int dimen text_margin 0x7f0800a0
 int dimen titleMinHeight 0x7f080013
 int dimen titleTextPadding 0x7f080014
 int dimen titleTextSize 0x7f080015
-int dimen widthOfRouteLine 0x7f0800a0
-int dimen widthOfZoneShape 0x7f0800a1
+int dimen widthOfRouteLine 0x7f0800a1
+int dimen widthOfZoneShape 0x7f0800a2
 int drawable abc_ab_share_pack_mtrl_alpha 0x7f020000
 int drawable abc_action_bar_item_background_material 0x7f020001
 int drawable abc_btn_borderless_material 0x7f020002

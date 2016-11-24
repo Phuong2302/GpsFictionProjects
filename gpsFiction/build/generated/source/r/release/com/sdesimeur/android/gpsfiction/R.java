@@ -2696,13 +2696,14 @@ containing a value of this type.
         public static int notification_subtext_size=0x7f08009c;
         public static int notification_top_pad=0x7f08009d;
         public static int notification_top_pad_large_text=0x7f08009e;
+        public static int scrollbarsize=0x7f08009f;
         public static int tabMinHeight=0x7f080012;
-        public static int text_margin=0x7f08009f;
+        public static int text_margin=0x7f0800a0;
         public static int titleMinHeight=0x7f080013;
         public static int titleTextPadding=0x7f080014;
         public static int titleTextSize=0x7f080015;
-        public static int widthOfRouteLine=0x7f0800a0;
-        public static int widthOfZoneShape=0x7f0800a1;
+        public static int widthOfRouteLine=0x7f0800a1;
+        public static int widthOfZoneShape=0x7f0800a2;
     }
     public static final class drawable {
         public static int abc_ab_share_pack_mtrl_alpha=0x7f020000;

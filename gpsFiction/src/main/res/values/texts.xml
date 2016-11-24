@@ -58,5 +58,7 @@
     <string name="change_admin_password">Change Admin Password</string>
     <string name="passwd_saved">Password saved</string>
     <string name="passwd_different">Passwords don\'t match</string>
+    <string name="gps_network_not_enabled">The location by GPS isn\'t activated, please activate it</string>
+    <string name="open_location_settings">Open location settings</string>
 
 </resources>

@@ -14,8 +14,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.sdesimeur.android.gpsfiction.R;
-import com.sdesimeur.android.gpsfiction.activities.dummy.DummyContent;
-import com.sdesimeur.android.gpsfiction.activities.dummy.DummyContent.DummyItem;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -34,6 +32,7 @@ public class GameFragment extends Fragment {
     // TODO: Customize parameters
     private int mColumnCount = 1;
     private OnListFragmentInteractionListener mListener;
+    private boolean isStopped=true;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -84,8 +83,8 @@ public class GameFragment extends Fragment {
             while (iterator.hasNext()) {
                 GameItem gi = new GameItem();
                 ResolveInfo re = (ResolveInfo) iterator.next();
-                gi.name = getResources().getString(re.labelRes);
-                gi.desc = getResources().getString(re.describeContents());
+                gi.name = (String) re.activityInfo.applicationInfo.loadLabel(pm);
+                gi.desc = (String) re.activityInfo.applicationInfo.loadDescription(pm);
                 gi.theClass = re.getClass();
                 contentList.add(gi);
             }

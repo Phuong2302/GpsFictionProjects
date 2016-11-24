@@ -8,6 +8,9 @@
     android:layout_height="match_parent"
     android:layout_marginLeft="16dp"
     android:layout_marginRight="16dp"
+    android:scrollbars="vertical"
+    android:scrollbarThumbVertical="@android:color/darker_gray"
+    android:scrollbarSize="@dimen/scrollbarsize"
     app:layoutManager="LinearLayoutManager"
     tools:context="com.sdesimeur.android.gpsfiction.activities.GameFragment"
     tools:listitem="@layout/fragment_game" />

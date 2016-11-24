@@ -409,6 +409,7 @@ public class GpsFictionActivity extends Activity {
         Intent myIntent2 = new Intent(this, MyLocationListenerService.class);
         myIntent2.setAction(MyLocationListenerService.ACTION.STOPFOREGROUND);
         startService(myIntent2);
+        super.onDestroy();
     }
     private void testTTS() {
         Intent checkIntent = new Intent();

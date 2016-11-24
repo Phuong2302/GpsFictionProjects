@@ -9,12 +9,11 @@ import android.widget.TextView;
 
 import com.sdesimeur.android.gpsfiction.R;
 import com.sdesimeur.android.gpsfiction.activities.GameFragment.OnListFragmentInteractionListener;
-import com.sdesimeur.android.gpsfiction.activities.dummy.DummyContent.DummyItem;
 
 import java.util.List;
 
 /**
- * {@link RecyclerView.Adapter} that can display a {@link DummyItem} and makes a call to the
+ * {@link RecyclerView.Adapter} that can display a {@link GameItem} and makes a call to the
  * specified {@link OnListFragmentInteractionListener}.
  * TODO: Replace the implementation with code for your data type.
  */
@@ -41,7 +40,7 @@ public class MyGameRecyclerViewAdapter extends RecyclerView.Adapter<MyGameRecycl
         holder.mGameNameView.setText(mValues.get(position).name);
         holder.mGameDescriptionView.setText(mValues.get(position).desc);
 
-        holder.mView.setOnClickListener(new View.OnClickListener() {
+        holder.mGameNameView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (null != mListener) {

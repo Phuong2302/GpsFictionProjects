@@ -1,11 +1,17 @@
 package com.sdesimeur.android.gpsfiction.activities;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.provider.Settings;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ArrayAdapter;
@@ -34,8 +40,60 @@ public class AdminActivity extends Activity {
     private HashMap <String, Locale> string2locale = new HashMap<>();
     private Spinner languageLocaleSpinner;
 
+public static boolean isLocationEnabled(Context context) {
+    int locationMode = 0;
+    String locationProviders;
+
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT){
+        try {
+            locationMode = Settings.Secure.getInt(context.getContentResolver(), Settings.Secure.LOCATION_MODE);
+
+        } catch (Settings.SettingNotFoundException e) {
+            e.printStackTrace();
+            return false;
+        }
+
+        return locationMode != Settings.Secure.LOCATION_MODE_OFF;
+
+    }else{
+        locationProviders = Settings.Secure.getString(context.getContentResolver(), Settings.Secure.LOCATION_PROVIDERS_ALLOWED);
+        return !TextUtils.isEmpty(locationProviders);
+    }
+
+
+}
+    private void testLocation () {
+//        LocationManager lm = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
+//        if(!lm.getAllProviders().contains(LocationManager.GPS_PROVIDER)) {
+        if (!isLocationEnabled(this)) {
+            // notify user
+            AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+            dialog.setMessage(getResources().getString(R.string.gps_network_not_enabled));
+            dialog.setPositiveButton(getResources().getString(R.string.open_location_settings), new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface paramDialogInterface, int paramInt) {
+                    // TODO Auto-generated method stub
+                    Intent myIntent = new Intent( Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                    startActivity(myIntent);
+                    testLocation();
+                    //get gps
+                }
+            });
+            /*
+            dialog.setNegativeButton(getString(R.string.dialogButtonCancel), new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface paramDialogInterface, int paramInt) {
+                    // TODO Auto-generated method stub
+                }
+            });
+            */
+            dialog.show();
+        }
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        testLocation();
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION|View.SYSTEM_UI_FLAG_LOW_PROFILE);
         super.onCreate(savedInstanceState);
@@ -75,17 +133,11 @@ public class AdminActivity extends Activity {
 
     public void changeAdminPassword(View v) {
         EditText ed1 = (EditText) findViewById(R.id.pass1);
-        EditText ed2 = (EditText) findViewById(R.id.pass2);
-        if (ed2.getText().toString().equals(ed1.getText().toString())) {
             SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
             String shaHex= new String(Hex.encodeHex(DigestUtils.sha(ed1.getText().toString())));
             settings.edit().putString("PassWord",shaHex);
             ed1.setText("");
-            ed2.setText("");
             Toast.makeText(this, R.string.passwd_saved,Toast.LENGTH_LONG).show();
-        } else {
-            Toast.makeText(this, R.string.passwd_different,Toast.LENGTH_LONG).show();
-        }
 
     }
     public void startGames (View v) {
@@ -97,5 +149,8 @@ public class AdminActivity extends Activity {
             }
         getResources().updateConfiguration(cfg,null);
         recreate();
+
+        /// ask passwd in dialogbox
+        Toast.makeText(this, R.string.passwd_different,Toast.LENGTH_LONG).show();
     }
 }
