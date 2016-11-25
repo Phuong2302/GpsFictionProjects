@@ -29,6 +29,10 @@
     <string msgid="3421042268587513524" name="abc_shareactionprovider_share_with">"Partager avec"</string>
     <string msgid="7165123711973476752" name="abc_shareactionprovider_share_with_application">"Partager avec %s"</string>
     <string msgid="1603543279005712093" name="abc_toolbar_collapse_description">"Réduire"</string>
+    <string name="askpassmessage">Veuillez entrer le mot de passe pour vérification.</string>
+    <string name="askpassmessagereturn">Veuillez entrer le mot de passe pour quitter l\'application</string>
+    <string name="askpasstitlereturn">Arrêt de l\'application</string>
+    <string name="askpasstittle">Démarrage de l\'application</string>
     <string name="change_admin_password">Changer mot de passe administrateur</string>
     <string name="dialogButtonCancel">Annuler</string>
     <string name="dialogButtonNo">Non</string>
@@ -44,9 +48,11 @@
     <string name="err_parse_lat">Désolé, c:geo n\'arrive pas à lire la latitude.</string>
     <string name="err_parse_lat_lon">Désolé, c:geo n\'arrive pas à lire la latitude ou la longitude.</string>
     <string name="err_parse_lon">Désolé, c:geo n\'arrive pas à lire la longitude.</string>
+    <string name="gps_network_not_enabled">La localisation par GPS n\'est pas activée, veuillez l\'activer</string>
     <string name="inventory">Mon Inventaire</string>
     <string name="noZoneTitle">Vous n\'avez sélectionné aucun lieu.</string>
     <string name="nullstring"/>
+    <string name="open_location_settings">Ouvrir les paramètres de Localisation</string>
     <string name="passwd_different">Mots de passe différents</string>
     <string name="passwd_saved">Mot de passe sauvegardé</string>
     <string name="reset_games_new_player">RAZ des jeux (nouveau joueur)</string>

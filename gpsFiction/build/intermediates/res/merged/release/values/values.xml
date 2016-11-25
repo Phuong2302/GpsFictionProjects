@@ -708,6 +708,10 @@
     <string name="abc_toolbar_collapse_description">Collapse</string>
     <string name="app_name">GpsFiction Applications</string>
     <string name="appbar_scrolling_view_behavior" translatable="false">android.support.design.widget.AppBarLayout$ScrollingViewBehavior</string>
+    <string name="askpassmessage">Please enter the password for verification.</string>
+    <string name="askpassmessagereturn">Please enter the password to leave the application</string>
+    <string name="askpasstitle">Starting the application</string>
+    <string name="askpasstitlereturn">Stopping the application</string>
     <string name="bottom_sheet_behavior" translatable="false">android.support.design.widget.BottomSheetBehavior</string>
     <string name="change_admin_password">Change Admin Password</string>
     <string name="character_counter_pattern" translatable="false">%1$d / %2$d</string>
@@ -725,11 +729,13 @@
     <string name="err_parse_lat">Sorry, c:geo can\'t parse latitude.</string>
     <string name="err_parse_lat_lon">Sorry, c:geo can\'t parse latitude or longitude.</string>
     <string name="err_parse_lon">Sorry, c:geo can\'t parse longitude.</string>
+    <string name="gps_network_not_enabled">The location by GPS isn\'t activated, please activate it</string>
     <string name="inventory">My Inventory</string>
     <string name="noZoneBearing">--- °</string>
     <string name="noZoneDistance">---</string>
     <string name="noZoneTitle">You don\'t select an area.</string>
     <string name="nullstring"/>
+    <string name="open_location_settings">Open location settings</string>
     <string name="passwd_different">Passwords don\'t match</string>
     <string name="passwd_saved">Password saved</string>
     <string name="reset_games_new_player">Reset Games (new Player)</string>
@@ -1765,7 +1771,7 @@
         <item name="tabSelectedTextColor">?android:textColorPrimary</item>
     </style>
     <style name="DialogButton">
-        <!-- 	    <item name="android:textStyle">bold|italic</item> -->
+        
         <item name="android:textSize">@dimen/dialogButtonTextSize</item>
         <item name="android:paddingLeft">@dimen/dialogButtonPadding</item>
         <item name="android:paddingRight">@dimen/dialogButtonPadding</item>
@@ -1963,9 +1969,9 @@
         <item name="android:gravity">center</item>
     </style>
     <style name="TabOneLineMiniCompass">
-        <!-- 	    <item name="android:minWidth">@dimen/miniCompassSize</item> -->
+        
         <item name="android:layout_width">@dimen/miniCompassSize</item>
-        <!--    	<item name="android:minHeight">@dimen/miniCompassSize</item> -->
+        
         <item name="android:layout_height">@dimen/miniCompassSize</item>
         <item name="android:gravity">left</item>
         <item name="android:background">@color/minicompassbackground</item>
@@ -1983,7 +1989,7 @@
     </style>
     <style name="TabTheme">
         <item name="android:minHeight">@dimen/tabMinHeight</item>
-        <!-- 	    <item name="android:background">@color/background4menu</item> -->
+        
         <item name="android:textSize">@dimen/titleTextSize</item>
         <item name="android:textStyle">bold</item>
     </style>

@@ -60,5 +60,9 @@
     <string name="passwd_different">Passwords don\'t match</string>
     <string name="gps_network_not_enabled">The location by GPS isn\'t activated, please activate it</string>
     <string name="open_location_settings">Open location settings</string>
+    <string name="askpasstitle">Starting the application</string>
+    <string name="askpassmessage">Please enter the password for verification.</string>
+    <string name="askpasstitlereturn">Stopping the application</string>
+    <string name="askpassmessagereturn">Please enter the password to leave the application</string>
 
 </resources>

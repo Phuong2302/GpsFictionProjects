@@ -24,6 +24,7 @@ android:layout_height="match_parent"
 
 
 <Switch
+    android:id="@+id/ResetGames"
     android:text="@string/reset_games_new_player"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -48,15 +49,6 @@ android:layout_height="match_parent"
     android:background="@drawable/buttonstate"
     android:onClick="startGames"
     />
-    <TextView
-        android:layout_height="wrap_content"
-        android:layout_width="match_parent"
-        android:id="@+id/mytext"
-        android:textAlignment="center"
-        android:padding="@dimen/buttonsPadding"
-        android:textSize="@dimen/adminTextSize"
-        android:background="@color/white"
-        />
     </LinearLayout>
 
     <LinearLayout android:layout_height="wrap_content"

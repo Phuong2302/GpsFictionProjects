@@ -1,6 +1,7 @@
 package com.sdesimeur.android.gpsfiction.activities;
 
 import android.app.Fragment;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -85,9 +86,10 @@ public class GameFragment extends Fragment {
                 ResolveInfo re = (ResolveInfo) iterator.next();
                 gi.name = (String) re.activityInfo.applicationInfo.loadLabel(pm);
                 gi.desc = (String) re.activityInfo.applicationInfo.loadDescription(pm);
-                gi.theClass = re.getClass();
+                gi.theComponentName = new ComponentName(re.activityInfo.applicationInfo.packageName,re.activityInfo.name);
                 contentList.add(gi);
             }
+            mListener = (OnListFragmentInteractionListener) getActivity();
             recyclerView.setAdapter(new MyGameRecyclerViewAdapter(contentList, mListener));
         }
         return view;
@@ -95,7 +97,7 @@ public class GameFragment extends Fragment {
     public class GameItem {
         public String name;
         public String desc;
-        public Class theClass;
+        public ComponentName theComponentName;
     }
 
     @Override
