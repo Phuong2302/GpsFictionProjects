@@ -6,6 +6,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -76,8 +78,28 @@ public class AdminActivity extends Activity {
         }
     }
 
+    private void changeHomeActivityInPref () {
+        Intent intent = new Intent("android.intent.action.MAIN");
+        intent.addCategory("android.intent.category.HOME");
+        ResolveInfo resolveinfo = (ResolveInfo) getPackageManager().queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences.Editor ed = settings.edit();
+        String packageName = resolveinfo.activityInfo.applicationInfo.packageName;
+        String name = resolveinfo.activityInfo.name;
+        if ( ! packageName.equals(getPackageName())) {
+            ed.putString("preferedHomeDefaultPackageName", packageName);
+            ed.putString("preferedHomeDefaultActivityName", name);
+            ed.putString("loadHomeDefaultPackageName", packageName);
+            ed.putString("loadHomeDefaultActivityName", name);
+        } else {
+            // dialogbox to choose prefered homeactivity
+        }
+        ed.commit();
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        this.getComponentName().getPackageName();
         testLocation();
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION|View.SYSTEM_UI_FLAG_LOW_PROFILE);
