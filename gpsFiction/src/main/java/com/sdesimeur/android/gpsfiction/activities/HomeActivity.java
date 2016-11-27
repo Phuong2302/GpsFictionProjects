@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 
@@ -13,12 +14,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class HomeActivity extends Activity {
-    private void launchAppChooser() {
-        Intent intent = new Intent(Intent.ACTION_MAIN);
-        intent.addCategory(Intent.CATEGORY_HOME);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(intent);
-    }
     private ComponentName appLauncherDefault(final String myPackageName ) {
         ComponentName toRet = null;
         final IntentFilter filter = new IntentFilter(Intent.ACTION_MAIN);
@@ -44,10 +39,15 @@ public class HomeActivity extends Activity {
     }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Intent intent = new Intent("android.intent.action.MAIN");
+        intent.addCategory("android.intent.category.HOME");
+        ResolveInfo resolveinfo = (ResolveInfo) getPackageManager().queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
+        String packageName = resolveinfo.activityInfo.applicationInfo.packageName;
+        String name = resolveinfo.activityInfo.name;
         super.onCreate(savedInstanceState);
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
-        String homeDefaultPackageName = settings.getString("loadHomeDefaultPackageName","com.sdesimeur.android.gpsfiction.activities");
-        String homeDefaultActivityName = settings.getString("loadHomeDefaultActivityName","AdminActivity");
+        String homeDefaultPackageName = settings.getString("loadHomeDefaultPackageName",packageName);
+        String homeDefaultActivityName = settings.getString("loadHomeDefaultActivityName",name);
         Intent homeIntent = new Intent(Intent.ACTION_MAIN);
         homeIntent.setComponent(new ComponentName(homeDefaultPackageName,homeDefaultActivityName));
         startActivity(homeIntent);

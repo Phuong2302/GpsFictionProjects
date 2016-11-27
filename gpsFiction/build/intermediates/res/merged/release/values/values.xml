@@ -707,6 +707,7 @@
     <string name="abc_shareactionprovider_share_with_application">Share with %s</string>
     <string name="abc_toolbar_collapse_description">Collapse</string>
     <string name="app_name">GpsFiction Applications</string>
+    <string name="app_name_home">GpsFiction Home Applications</string>
     <string name="appbar_scrolling_view_behavior" translatable="false">android.support.design.widget.AppBarLayout$ScrollingViewBehavior</string>
     <string name="askpassmessage">Please enter the password for verification.</string>
     <string name="askpassmessagereturn">Please enter the password to leave the application</string>

@@ -87,8 +87,6 @@ public class AdminActivity extends Activity {
         String packageName = resolveinfo.activityInfo.applicationInfo.packageName;
         String name = resolveinfo.activityInfo.name;
         if ( ! packageName.equals(getPackageName())) {
-            ed.putString("preferedHomeDefaultPackageName", packageName);
-            ed.putString("preferedHomeDefaultActivityName", name);
             ed.putString("loadHomeDefaultPackageName", packageName);
             ed.putString("loadHomeDefaultActivityName", name);
         } else {
@@ -97,9 +95,20 @@ public class AdminActivity extends Activity {
         ed.commit();
     }
 
+    private void launchAppChooser() {
+        Intent intent = new Intent(Intent.ACTION_MAIN);
+        intent.addCategory(Intent.CATEGORY_HOME);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+    }
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        this.getComponentName().getPackageName();
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences.Editor ed = settings.edit();
+        ed.putString("loadHomeDefaultPackageName", getPackageName());
+        ed.putString("loadHomeDefaultActivityName", com.sdesimeur.android.gpsfiction.activities.AdminActivity.class.toString());
         testLocation();
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION|View.SYSTEM_UI_FLAG_LOW_PROFILE);
