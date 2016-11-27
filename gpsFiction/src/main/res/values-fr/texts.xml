@@ -69,6 +69,7 @@
     <string name="askpasstitlereturn">Arrêt de l\'application</string>
     <string name="askpassmessagereturn">Veuillez entrer le mot de passe pour quitter l\'application</string>
     <string name="changeToMyHomeActivity">Veuillez choisir l\'application \"&apphomename;\" et validez par \"toujours\"</string>
-    <string name="dialoghomeactivitychoosertitle" />
-    <string name="dialoghomeactivitychoosermessage" />
+    <string name="dialoghomeactivitychoosertitle">Application au démarrage</string>
+    <string name="dialoghomeactivitychoosermessage">Veuillez choisir votre launcher préféré</string>
+    <string name="changehomeactivity">Changer de launcher au démarrage</string>
 </resources>

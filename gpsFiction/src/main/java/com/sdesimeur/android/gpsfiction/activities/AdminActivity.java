@@ -84,7 +84,7 @@ public class AdminActivity extends Activity {
         }
     }
 
-    private void changeHomeActivityInPref () {
+    private void changeHomeActivityInPref (View v ) {
         final HashMap <String, ActivityInfo> string2activityinfo = new HashMap<>();
         ArrayList<String> homeActivities = new ArrayList<>();
         ArrayAdapter adapter = new ArrayAdapter(this, R.layout.spinnerhomeactivityselect, homeActivities);
