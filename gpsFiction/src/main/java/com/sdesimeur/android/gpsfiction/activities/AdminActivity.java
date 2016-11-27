@@ -45,6 +45,12 @@ import java.util.Set;
  * status bar and navigation/system bar) with user interaction.
  */
 public class AdminActivity extends Activity {
+    static final String HOMEDEFAULTACTIVITY = "loadHomeDefaultActivityName";
+    static final String LOCALE = "locale";
+    static final String PASSWORD = "password";
+    static final String RESETGAMES = "resetGames";
+    static final String HOMEDEFAULTPACKAGE = "loadHomeDefaultPackageName";
+    static final String ALLREADYSTARTED = "allreadyStarted";
     private HashMap <String, Locale> string2locale = new HashMap<>();
     private Spinner languageLocaleSpinner;
     private Switch sw;
@@ -84,7 +90,7 @@ public class AdminActivity extends Activity {
         }
     }
 
-    private void changeHomeActivityInPref (View v ) {
+    public void changeHomeActivityInPref (View v) {
         final HashMap <String, ActivityInfo> string2activityinfo = new HashMap<>();
         ArrayList<String> homeActivities = new ArrayList<>();
         ArrayAdapter adapter = new ArrayAdapter(this, R.layout.spinnerhomeactivityselect, homeActivities);
@@ -119,8 +125,8 @@ public class AdminActivity extends Activity {
                 String homePackageName = resolveInfo.applicationInfo.packageName;
                 String homeActivityName = resolveInfo.name;
                 if ( ! homePackageName.equals(getPackageName())) {
-                    ed.putString("loadHomeDefaultPackageName", homePackageName);
-                    ed.putString("loadHomeDefaultActivityName", homeActivityName);
+                    ed.putString(HOMEDEFAULTPACKAGE, homePackageName);
+                    ed.putString(HOMEDEFAULTACTIVITY, homeActivityName);
                 }
                 ed.commit();
             }
@@ -130,10 +136,18 @@ public class AdminActivity extends Activity {
     }
 
     private void launchAppChooser() {
-        Intent intent = new Intent(Intent.ACTION_MAIN);
-        intent.addCategory(Intent.CATEGORY_HOME);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(Intent.createChooser(intent,getString(R.string.changeToMyHomeActivity)));
+        if (! isMyAppLauncherDefault()) {
+            //PackageManager p = getPackageManager();
+            //ComponentName cN = new ComponentName(this, HomeActivity.class);
+            //p.setComponentEnabledSetting(cN, PackageManager.COMPONENT_ENABLED_STATE_ENABLED, PackageManager.DONT_KILL_APP);
+            Intent intent = new Intent(Intent.ACTION_MAIN);
+            intent.addCategory(Intent.CATEGORY_HOME);
+            //intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            //startActivity(intent);
+            startActivity(Intent.createChooser(intent, getString(R.string.changeToMyHomeActivity)));
+            //p.setComponentEnabledSetting(cN, PackageManager.COMPONENT_ENABLED_STATE_DISABLED, PackageManager.DONT_KILL_APP);
+        }
     }
 
     private boolean isMyAppLauncherDefault() {
@@ -159,12 +173,12 @@ public class AdminActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
+        if  (settings.getBoolean(ALLREADYSTARTED,false)) startGamesActivity();
         SharedPreferences.Editor ed = settings.edit();
-        ed.putString("loadHomeDefaultPackageName", getPackageName());
-        ed.putString("loadHomeDefaultActivityName", com.sdesimeur.android.gpsfiction.activities.AdminActivity.class.toString());
-        while (! isMyAppLauncherDefault()) {
-            launchAppChooser();
-        }
+        ed.putString(HOMEDEFAULTPACKAGE, getPackageName());
+        ed.putString(HOMEDEFAULTACTIVITY, com.sdesimeur.android.gpsfiction.activities.AdminActivity.class.getName());
+        ed.commit();
+        launchAppChooser();
         testLocation();
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION|View.SYSTEM_UI_FLAG_LOW_PROFILE);
@@ -205,18 +219,18 @@ public class AdminActivity extends Activity {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
         String shaHex= new String(Hex.encodeHex(DigestUtils.sha(ed1.getText().toString())));
         SharedPreferences.Editor ed = settings.edit();
-        ed.putString("PassWord",shaHex);
+        ed.putString(PASSWORD,shaHex);
         ed.commit();
         ed1.setText("");
         Toast.makeText(this, R.string.passwd_saved,Toast.LENGTH_LONG).show();
     }
     public void startGames (View v) {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
-        SharedPreferences.Editor ed = settings.edit();
+        final SharedPreferences.Editor ed = settings.edit();
         Locale locale = string2locale.get(languageLocaleSpinner.getSelectedItem());
         String localeString = locale.toString();
-        ed.putString("Locale",localeString);
-        ed.putBoolean("ResetGames",sw.isChecked());
+        ed.putString(LOCALE,localeString);
+        ed.putBoolean(RESETGAMES,sw.isChecked());
         ed.commit();
         AlertDialog.Builder dialogBox = new AlertDialog.Builder(this);
         dialogBox.setTitle(R.string.askpasstitle);
@@ -229,12 +243,12 @@ public class AdminActivity extends Activity {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(AdminActivity.this);
-                String passsave = settings.getString("PassWord","&é(-è_çà)=");
+                String passsave = settings.getString(PASSWORD,"&é(-è_çà)=");
                 String passsha = new String (Hex.encodeHex(DigestUtils.sha(input.getText().toString())));
                 if (passsha.equals(passsave)) {
-                    Intent intent = new Intent(AdminActivity.this,GamesActivity.class);
-                    intent.setAction(Intent.ACTION_RUN);
-                    startActivity(intent);
+                    ed.putBoolean(ALLREADYSTARTED,true);
+                    ed.commit();
+                    startGamesActivity();
                 } else {
                     Toast.makeText(AdminActivity.this, R.string.passwd_different,Toast.LENGTH_LONG).show();
                 }
@@ -242,6 +256,11 @@ public class AdminActivity extends Activity {
         });
         dialogBox.setNegativeButton(R.string.dialogButtonCancel,null);
         dialogBox.show();
+    }
+    public void startGamesActivity () {
+        Intent intent = new Intent(AdminActivity.this,GamesActivity.class);
+        intent.setAction(Intent.ACTION_RUN);
+        startActivity(intent);
     }
 }
 

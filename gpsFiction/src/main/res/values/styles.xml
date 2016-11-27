@@ -85,32 +85,33 @@
     </style>
 
     <!--<integer name="compassFont">@raw/font_dancing</integer>-->
-    <dimen name="compassLineWidth">5dip</dimen>
-    <dimen name="miniCompassSize">80dip</dimen>
-    <dimen name="compassSize">300dip</dimen>
+    <dimen name="compassLineWidth">5dp</dimen>
+    <dimen name="miniCompassSize">80dp</dimen>
+    <dimen name="compassSize">300dp</dimen>
     <dimen name="titleTextSize">24sp</dimen>
     <dimen name="normalTextSize">24sp</dimen>
     <dimen name="bigTextSize">30sp</dimen>
     <dimen name="tabMinHeight">40dp</dimen>
     <dimen name="titleMinHeight">28dp</dimen>
-    <dimen name="normalTextPadding">60dip</dimen>
-    <dimen name="titleTextPadding">30dip</dimen>
+    <dimen name="normalTextPadding">60dp</dimen>
+    <dimen name="titleTextPadding">30dp</dimen>
     <dimen name="dialogButtonTextSize">18sp</dimen>
-    <dimen name="dialogButtonPadding">30dip</dimen>
-    <dimen name="navigation_drawer_width">240dip</dimen>
-    <dimen name="action_button_margin">16dip</dimen>
-    <dimen name="widthOfZoneShape">2dip</dimen>
-    <dimen name="widthOfRouteLine">5dip</dimen>
-    <dimen name="buttonsPadding">8dip</dimen>
+    <dimen name="dialogButtonPadding">30dp</dimen>
+    <dimen name="navigation_drawer_width">240dp</dimen>
+    <dimen name="action_button_margin">16dp</dimen>
+    <dimen name="widthOfZoneShape">2dp</dimen>
+    <dimen name="widthOfRouteLine">5dp</dimen>
+    <dimen name="buttonsPadding">8dp</dimen>
     <dimen name="adminTextSize">18sp</dimen>
 
-    <dimen name="buttonsVehiculesPadding">4dip</dimen>
+    <dimen name="buttonsVehiculesPadding">4dp</dimen>
     <dimen name="buttonsVehiculesSize">48dp</dimen>
-    <dimen name="mapzoneborderwidth">1dip</dimen>
+    <dimen name="mapzoneborderwidth">1dp</dimen>
     <dimen name="text_margin">16dp</dimen>
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
-    <dimen name="scrollbarsize">5dip</dimen>
+    <dimen name="scrollbarsize">5dp</dimen>
+    <dimen name="spacinginadminactivity">30dp</dimen>
 
 
 </resources>

@@ -28,7 +28,7 @@ public class GamesActivity extends Activity implements GameFragment.OnListFragme
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
-        String localeString = settings.getString("Locale","fr_FR");
+        String localeString = settings.getString(AdminActivity.LOCALE,"fr_FR");
         Locale locale = new Locale(localeString);
         Locale.setDefault(locale);
         Configuration cfg = getResources().getConfiguration();
@@ -58,9 +58,12 @@ public class GamesActivity extends Activity implements GameFragment.OnListFragme
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(GamesActivity.this);
-                String passsave = settings.getString("PassWord","&é(-è_çà)=");
+                String passsave = settings.getString(AdminActivity.PASSWORD,"&é(-è_çà)=");
                 String passsha = new String (Hex.encodeHex(DigestUtils.sha(input.getText().toString())));
                 if (passsha.equals(passsave)) {
+                    SharedPreferences.Editor ed = settings.edit();
+                    ed.putBoolean(AdminActivity.ALLREADYSTARTED,false);
+                    ed.commit();
                     GamesActivity.this.finish();
                 } else {
                     Toast.makeText(GamesActivity.this, R.string.passwd_different,Toast.LENGTH_LONG).show();
@@ -75,11 +78,11 @@ public class GamesActivity extends Activity implements GameFragment.OnListFragme
     public void onListFragmentInteraction(GameFragment.GameItem item) {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
         // TODO  put the locale in string
-        String locale = settings.getString("Locale","fr_FR");
+        String locale = settings.getString(AdminActivity.LOCALE,"fr_FR");
         Intent intent = new Intent();
         intent.setAction(Intent.ACTION_RUN);
         intent.setComponent(item.theComponentName);
-        intent.putExtra("Locale",locale);
+        intent.putExtra(AdminActivity.LOCALE,locale);
         startActivity(intent);
         isStopped = false;
     }

@@ -70,7 +70,7 @@
     <string name="askpassmessage">Please enter the password for verification.</string>
     <string name="askpasstitlereturn">Stopping the application</string>
     <string name="askpassmessagereturn">Please enter the password to leave the application</string>
-    <string name="changeToMyHomeActivity">lease choose the application \"&apphomename;\" and validate by \"always\"</string>
+    <string name="changeToMyHomeActivity">Please choose the application \"&apphomename;\" and validate by \"always\"</string>
     <string name="dialoghomeactivitychoosertitle">Application at startup</string>
     <string name="dialoghomeactivitychoosermessage">Please select your preferred launcher</string>
     <string name="changehomeactivity">Change your launcher at startup</string>

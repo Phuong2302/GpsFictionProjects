@@ -29,17 +29,23 @@
     <string msgid="3421042268587513524" name="abc_shareactionprovider_share_with">"Partager avec"</string>
     <string msgid="7165123711973476752" name="abc_shareactionprovider_share_with_application">"Partager avec %s"</string>
     <string msgid="1603543279005712093" name="abc_toolbar_collapse_description">"Réduire"</string>
+    <string name="app_name">GpsFiction Applications</string>
+    <string name="app_name_home">GpsFiction Home Applications</string>
     <string name="askpassmessage">Veuillez entrer le mot de passe pour vérification.</string>
     <string name="askpassmessagereturn">Veuillez entrer le mot de passe pour quitter l\'application</string>
     <string name="askpasstitlereturn">Arrêt de l\'application</string>
     <string name="askpasstittle">Démarrage de l\'application</string>
+    <string name="changeToMyHomeActivity">Veuillez choisir l\'application \"GpsFiction Home Applications\" et validez par \"toujours\"</string>
     <string name="change_admin_password">Changer mot de passe administrateur</string>
+    <string name="changehomeactivity">Changer de launcher au démarrage</string>
     <string name="dialogButtonCancel">Annuler</string>
     <string name="dialogButtonNo">Non</string>
     <string name="dialogButtonValidate">Valider</string>
     <string name="dialogButtonYes">Oui</string>
     <string name="dialogCloseTaskText">Sauvegarder la partie ?</string>
     <string name="dialogCloseTaskTitle">Pour finir...</string>
+    <string name="dialoghomeactivitychoosermessage">Veuillez choisir votre launcher préféré</string>
+    <string name="dialoghomeactivitychoosertitle">Application au démarrage</string>
     <string name="distanceNull">Vous êtes dans la zone.</string>
     <string name="distanceToDest">Distance à destination</string>
     <string name="distance_initiale">100 m</string>

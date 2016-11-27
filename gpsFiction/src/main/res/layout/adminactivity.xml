@@ -1,9 +1,9 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
 android:id="@+id/ContentAdmin"
 android:layout_width="match_parent"
-android:layout_height="match_parent"
     android:background="@color/black"
     android:padding="@dimen/buttonsPadding"
+     android:layout_height="wrap_content"
     >
 
     <LinearLayout android:layout_height="wrap_content"
@@ -49,13 +49,13 @@ android:layout_height="match_parent"
     android:background="@drawable/buttonstate"
     android:onClick="startGames"
     />
-    </LinearLayout>
 
-    <LinearLayout android:layout_height="wrap_content"
-        android:layout_width="match_parent"
-        android:layout_alignParentBottom="true"
-        android:orientation="vertical"
-        >
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/spacinginadminactivity"
+            >
+
+        </FrameLayout>
 
         <EditText
             android:id="@+id/pass1"
@@ -79,6 +79,14 @@ android:layout_height="match_parent"
         android:text="@string/change_admin_password"
         android:onClick="changeAdminPassword"
         />
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/spacinginadminactivity"
+            >
+
+        </FrameLayout>
+
         <Button
             android:text="@string/changehomeactivity"
             android:layout_width="match_parent"
@@ -92,4 +100,4 @@ android:layout_height="match_parent"
             />
     </LinearLayout>
 
-</RelativeLayout>
+</ScrollView>
