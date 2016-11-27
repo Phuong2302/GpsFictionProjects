@@ -1,4 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE resources [
+    <!ENTITY appname "GpsFiction Applications">
+    <!ENTITY apphomename "GpsFiction Home Applications">
+    <!ENTITY author "sdesimeur">
+    ]>
 <resources>
     <string name="title_activity_gps_fiction_main">GPS Fiction</string>
     <string name="err_parse_lat">Sorry, c:geo can\'t parse latitude.</string>
@@ -9,8 +14,8 @@
 
     <string name="nullstring"></string>
     <string name="distance_initiale">100 m</string>
-    <string name="app_name">GpsFiction Applications</string>
-    <string name="app_name_home">GpsFiction Home Applications</string>
+    <string name="app_name">&appname;</string>
+    <string name="app_name_home">&apphomename;</string>
 
     <string name="distanceNull">You are in this area.</string>
     <string name="noZoneTitle">You don\'t select an area.</string>
@@ -65,5 +70,8 @@
     <string name="askpassmessage">Please enter the password for verification.</string>
     <string name="askpasstitlereturn">Stopping the application</string>
     <string name="askpassmessagereturn">Please enter the password to leave the application</string>
+    <string name="changeToMyHomeActivity">lease choose the application \"&apphomename;\" and validate by \"always\"</string>
+    <string name="dialoghomeactivitychoosertitle" />
+    <string name="dialoghomeactivitychoosermessage" />
 
 </resources>

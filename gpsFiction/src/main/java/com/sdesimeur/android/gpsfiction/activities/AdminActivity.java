@@ -2,10 +2,13 @@ package com.sdesimeur.android.gpsfiction.activities;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.os.Build;
@@ -14,6 +17,7 @@ import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.text.InputType;
 import android.text.TextUtils;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ArrayAdapter;
@@ -31,6 +35,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 
@@ -79,36 +85,86 @@ public class AdminActivity extends Activity {
     }
 
     private void changeHomeActivityInPref () {
+        final HashMap <String, ActivityInfo> string2activityinfo = new HashMap<>();
+        ArrayList<String> homeActivities = new ArrayList<>();
+        ArrayAdapter adapter = new ArrayAdapter(this, R.layout.spinnerhomeactivityselect, homeActivities);
         Intent intent = new Intent("android.intent.action.MAIN");
         intent.addCategory("android.intent.category.HOME");
-        ResolveInfo resolveinfo = (ResolveInfo) getPackageManager().queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
-        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
-        SharedPreferences.Editor ed = settings.edit();
-        String packageName = resolveinfo.activityInfo.applicationInfo.packageName;
-        String name = resolveinfo.activityInfo.name;
-        if ( ! packageName.equals(getPackageName())) {
-            ed.putString("loadHomeDefaultPackageName", packageName);
-            ed.putString("loadHomeDefaultActivityName", name);
-        } else {
-            // dialogbox to choose prefered homeactivity
+        PackageManager pm = getPackageManager();
+        List<ResolveInfo> list = pm.queryIntentActivities(intent, 0);
+        Iterator<ResolveInfo> it = list.iterator();
+        while (it.hasNext()) {
+            ActivityInfo act = it.next().activityInfo;
+            if (! act.name.equals(com.sdesimeur.android.gpsfiction.activities.HomeActivity.class.getName())) {
+                String st = (String) act.loadLabel(pm);
+                adapter.add(st);
+                string2activityinfo.put(st,act);
+            }
         }
-        ed.commit();
+
+        LayoutInflater inflater = getLayoutInflater();
+        final Spinner spinner = (Spinner) inflater.inflate(R.layout.homeactivitychooser,null);
+        AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+        dialog.setView(spinner);
+        spinner.setAdapter(adapter);
+
+        dialog.setTitle(R.string.dialoghomeactivitychoosertitle);
+        dialog.setMessage(R.string.dialoghomeactivitychoosermessage);
+        dialog.setPositiveButton(R.string.dialogButtonValidate, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(AdminActivity.this);
+                SharedPreferences.Editor ed = settings.edit();
+                ActivityInfo resolveInfo = string2activityinfo.get(spinner.getSelectedItem());
+                String homePackageName = resolveInfo.applicationInfo.packageName;
+                String homeActivityName = resolveInfo.name;
+                if ( ! homePackageName.equals(getPackageName())) {
+                    ed.putString("loadHomeDefaultPackageName", homePackageName);
+                    ed.putString("loadHomeDefaultActivityName", homeActivityName);
+                }
+                ed.commit();
+            }
+        });
+        dialog.show();
+
     }
 
     private void launchAppChooser() {
         Intent intent = new Intent(Intent.ACTION_MAIN);
         intent.addCategory(Intent.CATEGORY_HOME);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(intent);
+        startActivity(Intent.createChooser(intent,getString(R.string.changeToMyHomeActivity)));
     }
 
+    private boolean isMyAppLauncherDefault() {
+        final IntentFilter filter = new IntentFilter(Intent.ACTION_MAIN);
+        filter.addCategory(Intent.CATEGORY_HOME);
 
+        List<IntentFilter> filters = new ArrayList<>();
+        filters.add(filter);
+
+        final String myClassName = com.sdesimeur.android.gpsfiction.activities.HomeActivity.class.getName();
+        List<ComponentName> activities = new ArrayList<ComponentName>();
+        final PackageManager packageManager = (PackageManager) getPackageManager();
+
+        packageManager.getPreferredActivities(filters, activities, null);
+
+        for (ComponentName activity : activities) {
+            if (myClassName.equals(activity.getClassName())) {
+                return true;
+            }
+        }
+        return false;
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
         SharedPreferences.Editor ed = settings.edit();
         ed.putString("loadHomeDefaultPackageName", getPackageName());
         ed.putString("loadHomeDefaultActivityName", com.sdesimeur.android.gpsfiction.activities.AdminActivity.class.toString());
+        while (! isMyAppLauncherDefault()) {
+            launchAppChooser();
+        }
         testLocation();
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION|View.SYSTEM_UI_FLAG_LOW_PROFILE);
@@ -188,3 +244,4 @@ public class AdminActivity extends Activity {
         dialogBox.show();
     }
 }
+
