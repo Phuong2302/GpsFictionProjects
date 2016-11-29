@@ -31,6 +31,8 @@
     <string msgid="1603543279005712093" name="abc_toolbar_collapse_description">"Réduire"</string>
     <string name="app_name">GpsFiction Applications</string>
     <string name="app_name_home">GpsFiction Home Applications</string>
+    <string name="askchangepassmessage">Veuillez entrer le mot de passe</string>
+    <string name="askchangepasstitle">Changer le mot de passe</string>
     <string name="askpassmessage">Veuillez entrer le mot de passe pour vérification.</string>
     <string name="askpassmessagereturn">Veuillez entrer le mot de passe pour quitter l\'application</string>
     <string name="askpasstitlereturn">Arrêt de l\'application</string>

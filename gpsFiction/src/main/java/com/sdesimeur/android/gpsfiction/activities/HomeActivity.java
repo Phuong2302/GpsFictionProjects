@@ -11,13 +11,16 @@ import android.preference.PreferenceManager;
 
 public class HomeActivity extends Activity {
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
+    @Override
+    public void onResume () {
         Intent intent = new Intent("android.intent.action.MAIN");
         intent.addCategory("android.intent.category.HOME");
         ResolveInfo resolveinfo = getPackageManager().queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY).get(0);
         String packageName = resolveinfo.activityInfo.applicationInfo.packageName;
         String name = resolveinfo.activityInfo.name;
-        super.onCreate(savedInstanceState);
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
         String homeDefaultPackageName = settings.getString(AdminActivity.HOMEDEFAULTPACKAGE,packageName);
         String homeDefaultActivityName = settings.getString(AdminActivity.HOMEDEFAULTACTIVITY,name);
@@ -25,6 +28,7 @@ public class HomeActivity extends Activity {
         intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
         homeIntent.setComponent(new ComponentName(homeDefaultPackageName,homeDefaultActivityName));
         startActivity(homeIntent);
-        finish();
+        super.onResume();
     }
+
 }

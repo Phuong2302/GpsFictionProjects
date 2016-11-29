@@ -72,4 +72,6 @@
     <string name="dialoghomeactivitychoosertitle">Application au démarrage</string>
     <string name="dialoghomeactivitychoosermessage">Veuillez choisir votre launcher préféré</string>
     <string name="changehomeactivity">Changer de launcher au démarrage</string>
+    <string name="askchangepasstitle">Changer le mot de passe</string>
+    <string name="askchangepassmessage">Veuillez entrer le mot de passe</string>
 </resources>

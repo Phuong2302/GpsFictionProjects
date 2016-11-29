@@ -171,9 +171,18 @@ public class AdminActivity extends Activity {
         return false;
     }
     @Override
+    protected void onResume() {
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
+        Boolean temp = settings.getBoolean(ALLREADYSTARTED, false);
+        if  (temp) {
+            startGamesActivity();
+            finish();
+        }
+        super.onResume();
+    }
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
-        if  (settings.getBoolean(ALLREADYSTARTED,false)) startGamesActivity();
         SharedPreferences.Editor ed = settings.edit();
         ed.putString(HOMEDEFAULTPACKAGE, getPackageName());
         ed.putString(HOMEDEFAULTACTIVITY, com.sdesimeur.android.gpsfiction.activities.AdminActivity.class.getName());
@@ -186,6 +195,9 @@ public class AdminActivity extends Activity {
        // mContentView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN|View.SYSTEM_UI_FLAG_LOW_PROFILE|View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
         setContentView(R.layout.adminactivity);
         languageLocaleSpinner = (Spinner) findViewById(R.id.LanguageListSpinner);
+        languageLocaleSpinner.setFocusable(true);
+        languageLocaleSpinner.setFocusableInTouchMode(true);
+        languageLocaleSpinner.requestFocus();
         sw = (Switch) findViewById(R.id.ResetGames);
         Set<String> codeCountryArray = new HashSet<>();
         Collections.addAll(codeCountryArray,getResources().getStringArray(R.array.countryCodeArray));
@@ -215,14 +227,32 @@ public class AdminActivity extends Activity {
     }
 
     public void changeAdminPassword(View v) {
-        EditText ed1 = (EditText) findViewById(R.id.pass1);
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
-        String shaHex= new String(Hex.encodeHex(DigestUtils.sha(ed1.getText().toString())));
-        SharedPreferences.Editor ed = settings.edit();
-        ed.putString(PASSWORD,shaHex);
-        ed.commit();
-        ed1.setText("");
+        final SharedPreferences.Editor ed = settings.edit();
+        AlertDialog.Builder dialogBox = new AlertDialog.Builder(this);
+        dialogBox.setTitle(R.string.askchangepasstitle);
+        dialogBox.setMessage(R.string.askchangepassmessage);
+        final EditText input = new EditText(this);
+        input.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD);
+        //input.setTransformationMethod(PasswordTransformationMethod.getInstance());
+        dialogBox.setView(input);
+        dialogBox.setPositiveButton(R.string.dialogButtonValidate, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                String shaHex = new String (Hex.encodeHex(DigestUtils.sha(input.getText().toString())));
+                ed.putString(PASSWORD,shaHex);
+                ed.commit();
+            }
+        });
+        dialogBox.setNegativeButton(R.string.dialogButtonCancel,null);
+        dialogBox.show();
+
+        //EditText ed1 = (EditText) findViewById(R.id.pass1);
+        //String shaHex= new String(Hex.encodeHex(DigestUtils.sha(ed1.getText().toString())));
+        //ed.putString(PASSWORD,shaHex);
+        //ed.commit();
         Toast.makeText(this, R.string.passwd_saved,Toast.LENGTH_LONG).show();
+        //ed1.setText("");
     }
     public void startGames (View v) {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
