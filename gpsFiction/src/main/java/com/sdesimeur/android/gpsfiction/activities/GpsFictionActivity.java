@@ -9,8 +9,6 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
-import android.content.pm.ActivityInfo;
-import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.Typeface;
@@ -29,6 +27,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 
+import com.google.gson.Gson;
 import com.sdesimeur.android.gpsfiction.R;
 import com.sdesimeur.android.gpsfiction.classes.GpsFictionData;
 import com.sdesimeur.android.gpsfiction.classes.MyLocationListenerService;
@@ -116,7 +115,7 @@ public class GpsFictionActivity extends Activity {
     public void getReponseFromMyDialogFragment(int why, int reponse) {
         if (why == R.string.dialogCloseTaskTitle) {
             if (reponse == R.string.dialogButtonNo) {
-                mGpsFictionData.toSave = false;
+            //    mGpsFictionData.toSave = false;
                 this.finish();
             }
         }
@@ -273,18 +272,19 @@ public class GpsFictionActivity extends Activity {
             mGpsFictionData = new GpsFictionData();
             mGpsFictionData.setmGpsFictionActivity(this);
         }
+        /*
         try {
             ActivityInfo activityInfo = getPackageManager().getActivityInfo(getComponentName(), PackageManager.GET_META_DATA);
             int stringId = activityInfo.labelRes;
-            getmGpsFictionData().setTitle(stringId);
             stringId = activityInfo.descriptionRes;
-            getmGpsFictionData().setRules(stringId);
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }
+        */
 
         if (savedInstanceState != null) {
             Bundle toPass = savedInstanceState.getBundle("GpsFictionData");
+
             mGpsFictionData.setByBundle(toPass);
             selectedFragmentId = savedInstanceState.getInt("lastSelectedFragmentId",R.id.Zones);
         } else {
@@ -386,11 +386,14 @@ public class GpsFictionActivity extends Activity {
 
     @Override
     protected void onSaveInstanceState(Bundle savedInstanceState) {
-        if (mGpsFictionData.toSave) {
+        //if (mGpsFictionData.toSave) {
+        Gson gson = new Gson();
+        String test = gson.toJson(mGpsFictionData);
             Bundle toPass = mGpsFictionData.getByBundle();
             savedInstanceState.putBundle("GpsFictionData", toPass);
+        savedInstanceState.putString("GpsFictionDataAsJson",test);
             savedInstanceState.putInt("lastSelectedFragmentId", selectedFragmentId);
-        }
+        //}
         super.onSaveInstanceState(savedInstanceState);
     }
 

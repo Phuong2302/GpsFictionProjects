@@ -8,7 +8,7 @@ import com.sdesimeur.android.gpsfiction.activities.GpsFictionActivity;
 
 
 public class GpsFictionThing {
-    private GpsFictionData mGpsFictionData = null;
+    private transient GpsFictionData mGpsFictionData = null;
     private int[] valint = new int[]{
             0,
             0,

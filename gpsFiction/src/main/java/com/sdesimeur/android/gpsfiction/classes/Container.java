@@ -9,7 +9,7 @@ import java.util.Iterator;
 public class Container extends GpsFictionThing {
     private int maxIncludedThings = 0;
     private boolean transportable = true;
-    private HashSet<GpsFictionThing> includedThings = new HashSet<GpsFictionThing>();
+    private transient HashSet<GpsFictionThing> includedThings = new HashSet<GpsFictionThing>();
 
     public Container() {
         super();
@@ -73,11 +73,11 @@ public class Container extends GpsFictionThing {
     /**
      * @param maxThings the maxThings to set
      */
-    public void setMaxThings(int maxThings) {
+    public void setMaxIncludedThings(int maxThings) {
         this.maxIncludedThings = maxThings;
     }
 
-    public int getMaxThings(int maxThings) {
+    public int getMaxIncludedThings() {
         return this.maxIncludedThings;
     }
 

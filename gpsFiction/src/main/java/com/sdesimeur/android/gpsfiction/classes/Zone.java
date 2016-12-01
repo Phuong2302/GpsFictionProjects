@@ -20,20 +20,25 @@ import java.util.Iterator;
 public class Zone extends Container implements ZoneEnterOrExitInterface, PlayerLocationListener, PlayerBearingListener, Comparable<Zone> {
     private final static double RAPPORT = 2 * Math.PI / 0.005;
     private final static int NB_MIN_DE_COTES = 8;
-    private final boolean transportable = false;
-    private MyGeoPoint nearestPoint2Player = new MyGeoPoint(0,0);
-    private DistanceToTextHelper distance2Player = new DistanceToTextHelper(0);
-    private float bearingPlayer = 0;
-    private float bearing2Zone = 0;
-    private float anglePlayer2Zone = 0;
-    private boolean playerIsInThisZone = false;
+    private transient final boolean transportable = false;
+    private transient MyGeoPoint nearestPoint2Player = new MyGeoPoint(0,0);
+    private transient DistanceToTextHelper distance2Player = new DistanceToTextHelper(0);
+    private transient float bearingPlayer = 0;
+    private transient float bearing2Zone = 0;
+    private transient float anglePlayer2Zone = 0;
+    private transient boolean playerIsInThisZone = false;
 //    private Polyline zonePolyline = null;
-    private MarkerItem zoneMarkerItem = null;
-    private float radius = 0; // distance max entre points de zone et centre de zone ou rayon pour une zone circulaire.
-    private MyGeoPoint centerPoint = null; // moyenne des points ou centre d'une zone circulaire,
+    private transient MarkerItem zoneMarkerItem = null;
+    private transient float radius = 0; // distance max entre points de zone et centre de zone ou rayon pour une zone circulaire.
+    private transient MyGeoPoint centerPoint = null; // moyenne des points ou centre d'une zone circulaire,
+
+    public void setShape(MyPolygon shape) {
+        this.shape = shape;
+    }
+
     private MyPolygon shape = new MyPolygon(); // contour de zone
-    private MarkerSymbol zoneMarkerSymbol = null;
-    private PathLayer zonePathLayer = null;
+    private transient MarkerSymbol zoneMarkerSymbol = null;
+    private transient PathLayer zonePathLayer = null;
 
     /*    static final Parcelable.Creator<Zone> CREATOR = new Parcelable.Creator<Zone>() {
             public Zone createFromParcel(Parcel in) {
@@ -59,8 +64,8 @@ public class Zone extends Container implements ZoneEnterOrExitInterface, PlayerL
         Bundle toPass = super.getByBundle();
         Bundle dest = new Bundle();
         dest.putBundle("Parent", toPass);
-        boolean val = (this == getmGpsFictionData().getSelectedZone());
-        dest.putBoolean("selectedZone", val);
+        //boolean val = (this == getmGpsFictionData().getSelectedZone());
+        //dest.putBoolean("selectedZone", val);
         dest.putBundle("shape",this.shape.getByBundle());
         return dest;
     }
@@ -68,12 +73,12 @@ public class Zone extends Container implements ZoneEnterOrExitInterface, PlayerL
     public void setByBundle(Bundle in) {
         Bundle toPass = in.getBundle("Parent");
         super.setByBundle(toPass);
-        boolean isSelectedZone = in.getBoolean("selectedZone");
+        //boolean isSelectedZone = in.getBoolean("selectedZone");
         shape = new MyPolygon();
         toPass = in.getBundle("shape");
         shape.setByBundle(toPass);
         this.validate();
-        if (isSelectedZone) getmGpsFictionData().setSelectedZone(this);
+        //if (isSelectedZone) getmGpsFictionData().setSelectedZone(this);
     }
 
     /*public boolean isThisZoneSelected() {

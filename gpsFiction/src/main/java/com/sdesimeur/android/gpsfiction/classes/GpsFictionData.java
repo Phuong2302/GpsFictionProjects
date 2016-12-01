@@ -27,19 +27,13 @@ public class GpsFictionData {
     private static final String PASSASBUNDLE = "PassAsBundle";
     private static final String GFTINCLUDED = "GFTIncluded";
     protected boolean allreadyConfigured = false; // Parcel
-    protected Item inventory = null; // Parcel
-    private Zone selectedZone = null;
-    private Zone unSelectedZone = null;
-    private int rules;
-    private int title;
-    private GpsFictionActivity mGpsFictionActivity = null;
-    private HashSet<VehiculeSelectedIdListener> vehiculeSelectedIdListener = new HashSet<>();
+    protected transient Item inventory = null; // Parcel
+    private transient Zone selectedZone = null;
+    private transient Zone unSelectedZone = null;
+    private transient GpsFictionActivity mGpsFictionActivity = null;
+    private transient HashSet<VehiculeSelectedIdListener> vehiculeSelectedIdListener = new HashSet<>();
 
-    public PathLayer getRoutePathLayer() {
-        return routePathLayer;
-    }
-
-    private PathLayer routePathLayer = null;
+    private transient PathLayer routePathLayer = null;
 
     public int getZoomLevel() {
         return zoomLevel;
@@ -48,6 +42,7 @@ public class GpsFictionData {
     public void setZoomLevel(int zoomLevel) {
         this.zoomLevel = zoomLevel;
     }
+
     public int getZoomLevelIncr() {
         zoomLevel++;
         return zoomLevel;
@@ -56,15 +51,14 @@ public class GpsFictionData {
         zoomLevel--;
         return zoomLevel;
     }
-
     private int zoomLevel = INITZOOMLEVEL;
-//    private MyLocationListener mMyLocationListener = null;
-    private HashMap<GpsFictionData.REGISTER, HashSet<ZoneSelectListener>> zoneSelectListener = new HashMap<>();
-    private HashSet<GpsFictionThing> gpsFictionThings = new HashSet<>();
-    private HashSet<ZoneChangeListener> zoneChangeListener = new HashSet<> ();
-    public boolean toSave=true;
-    private int vehiculeSelectedId = R.drawable.compass;
 
+    //    private MyLocationListener mMyLocationListener = null;
+    private transient HashMap<GpsFictionData.REGISTER, HashSet<ZoneSelectListener>> zoneSelectListener = new HashMap<>();
+    private HashSet<GpsFictionThing> gpsFictionThings = new HashSet<>();
+    private transient HashSet<ZoneChangeListener> zoneChangeListener = new HashSet<> ();
+    //public transient boolean toSave=true;
+    private int vehiculeSelectedId = R.drawable.compass;
     public int getVehiculeSelectedId() {
         return vehiculeSelectedId;
     }
@@ -76,11 +70,15 @@ public class GpsFictionData {
         }
     }
 
-
     public GpsFictionData() {
         for (GpsFictionData.REGISTER i : GpsFictionData.REGISTER.values()) {
             this.zoneSelectListener.put(i, new HashSet<ZoneSelectListener>());
         }
+    }
+
+
+    public PathLayer getRoutePathLayer() {
+        return routePathLayer;
     }
 
     public Bundle getByBundle() {
@@ -124,6 +122,7 @@ public class GpsFictionData {
             }
             indexGpsFictionThings++;
         }
+        dest.putIntArray("selectedZone",getSelectedZone().getUUID());
         return dest;
     }
 
@@ -176,6 +175,7 @@ public class GpsFictionData {
                 ((Container) gft).addThingToContainer(this.findGpsFictionThingByUUID(uuid));
             }
         }
+        setSelectedZone((Zone) findGpsFictionThingByUUID(in.getIntArray("selectedZone")));
         indexGpsFictionThings++;
     }
 
@@ -239,42 +239,6 @@ public class GpsFictionData {
     public HashSet<GpsFictionThing> getGpsFictionThing() {
         // TODO Auto-generated method stub
         return this.gpsFictionThings;
-    }
-
-    /**
-     * @return the rules
-     */
-    public int getRules() {
-        return rules;
-    }
-
-    /**
-     * @param rules the rules to set
-     */
-    public void setRules(int rules) {
-        this.rules = rules;
-    }
-
-    /**
-     * @param the name of a thing
-     * @return the thing with this name
-     */
-    /*public GpsFictionThing getThing(String name){
-		return this.things.get(name);
-	}*/
-
-    /**
-     * @return the title
-     */
-    public int getTitle() {
-        return title;
-    }
-
-    /**
-     * @param title the title to set
-     */
-    public void setTitle(int title) {
-        this.title = title;
     }
 
     public Zone getSelectedZone() {
