@@ -391,7 +391,7 @@ public class GpsFictionActivity extends Activity {
         String test = gson.toJson(mGpsFictionData);
             Bundle toPass = mGpsFictionData.getByBundle();
             savedInstanceState.putBundle("GpsFictionData", toPass);
-        savedInstanceState.putString("GpsFictionDataAsJson",test);
+        //savedInstanceState.putString("GpsFictionDataAsJson",test);
             savedInstanceState.putInt("lastSelectedFragmentId", selectedFragmentId);
         //}
         super.onSaveInstanceState(savedInstanceState);
@@ -418,14 +418,6 @@ public class GpsFictionActivity extends Activity {
         Intent checkIntent = new Intent();
         checkIntent.setAction(TextToSpeech.Engine.ACTION_CHECK_TTS_DATA);
         startActivityForResult(checkIntent, 0x01);
-    }
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == 0x01) {
-            if (resultCode == TextToSpeech.Engine.CHECK_VOICE_DATA_PASS) {
-                ///// TODO send result to CalcRouteAndSpeakService which "startTts"
-                getmCalcRouteAndSpeakService().startTts();
-            }
-        }
     }
 
 }

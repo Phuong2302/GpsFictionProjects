@@ -1,14 +1,9 @@
 package com.sdesimeur.android.gpsfiction.classes;
 
-import android.content.ComponentName;
-import android.content.Context;
-import android.content.Intent;
-import android.content.ServiceConnection;
 import android.os.Bundle;
-import android.os.IBinder;
 
+import com.google.gson.Gson;
 import com.sdesimeur.android.gpsfiction.R;
-import com.sdesimeur.android.gpsfiction.activities.CalcRouteAndSpeakService;
 import com.sdesimeur.android.gpsfiction.activities.GpsFictionActivity;
 
 import org.oscim.layers.PathLayer;
@@ -98,8 +93,12 @@ public class GpsFictionData {
         dest.putStringArrayList("GFTNameArray", gftn);
         it = this.gpsFictionThings.iterator();
         Bundle toPass;
+        Gson gson = null;
         while (it.hasNext()) {
+            gson = new Gson();
             gft = it.next();
+            String name = gft.getName();
+            String test = gson.toJson(gft);
             toPass = gft.getByBundle();
             dest.putBundle("PassAsBundle" + index, toPass);
             index++;
@@ -122,7 +121,7 @@ public class GpsFictionData {
             }
             indexGpsFictionThings++;
         }
-        dest.putIntArray("selectedZone",getSelectedZone().getUUID());
+        dest.putIntArray("selectedZone", (getSelectedZone()!=null)?getSelectedZone().getUUID(): new int[]{});
         return dest;
     }
 
@@ -175,7 +174,8 @@ public class GpsFictionData {
                 ((Container) gft).addThingToContainer(this.findGpsFictionThingByUUID(uuid));
             }
         }
-        setSelectedZone((Zone) findGpsFictionThingByUUID(in.getIntArray("selectedZone")));
+        int[] tmp = in.getIntArray("selectedZone");
+        if (tmp.length != 0) setSelectedZone((Zone) findGpsFictionThingByUUID(tmp));
         indexGpsFictionThings++;
     }
 

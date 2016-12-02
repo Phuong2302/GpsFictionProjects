@@ -1,4 +1,4 @@
-package com.sdesimeur.android.gpsfiction.activities;
+package com.sdesimeur.android.gpsfiction.gpsfictionprojects.activities;
 
 import android.app.Activity;
 import android.app.AlertDialog;

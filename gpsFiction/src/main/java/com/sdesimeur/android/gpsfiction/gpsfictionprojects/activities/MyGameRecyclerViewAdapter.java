@@ -1,4 +1,4 @@
-package com.sdesimeur.android.gpsfiction.activities;
+package com.sdesimeur.android.gpsfiction.gpsfictionprojects.activities;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -8,7 +8,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.sdesimeur.android.gpsfiction.R;
-import com.sdesimeur.android.gpsfiction.activities.GameFragment.OnListFragmentInteractionListener;
+import com.sdesimeur.android.gpsfiction.gpsfictionprojects.activities.GameFragment.OnListFragmentInteractionListener;
 
 import java.util.List;
 

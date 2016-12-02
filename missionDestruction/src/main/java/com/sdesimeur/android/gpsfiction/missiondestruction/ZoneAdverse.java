@@ -12,10 +12,10 @@ public abstract class ZoneAdverse extends Zone {
 
     private final static float dist_min = MissionDestructionMainActivity.COEF * 3f;
     private final static int replacementTableId = R.array.numeros;
-    private static float radiusStdZone;
-    private static float distStdEntreZonesAdverses = MissionDestructionMainActivity.COEF * 3f;
-    private static float distStdEntreZones;
-    private MissionDestructionMainActivity mainActivity = null;
+    private transient static float radiusStdZone;
+    private transient static float distStdEntreZonesAdverses = MissionDestructionMainActivity.COEF * 3f;
+    private transient static float distStdEntreZones;
+    private transient MissionDestructionMainActivity mainActivity = null;
 
     public ZoneAdverse() {
         super();

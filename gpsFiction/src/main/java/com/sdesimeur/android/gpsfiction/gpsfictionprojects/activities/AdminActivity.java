@@ -1,4 +1,4 @@
-package com.sdesimeur.android.gpsfiction.activities;
+package com.sdesimeur.android.gpsfiction.gpsfictionprojects.activities;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -101,7 +101,7 @@ public class AdminActivity extends Activity {
         Iterator<ResolveInfo> it = list.iterator();
         while (it.hasNext()) {
             ActivityInfo act = it.next().activityInfo;
-            if (! act.name.equals(com.sdesimeur.android.gpsfiction.activities.HomeActivity.class.getName())) {
+            if (! act.name.equals(com.sdesimeur.android.gpsfiction.gpsfictionprojects.activities.HomeActivity.class.getName())) {
                 String st = (String) act.loadLabel(pm);
                 adapter.add(st);
                 string2activityinfo.put(st,act);
@@ -157,7 +157,7 @@ public class AdminActivity extends Activity {
         List<IntentFilter> filters = new ArrayList<>();
         filters.add(filter);
 
-        final String myClassName = com.sdesimeur.android.gpsfiction.activities.HomeActivity.class.getName();
+        final String myClassName = com.sdesimeur.android.gpsfiction.gpsfictionprojects.activities.HomeActivity.class.getName();
         List<ComponentName> activities = new ArrayList<ComponentName>();
         final PackageManager packageManager = (PackageManager) getPackageManager();
 
@@ -185,7 +185,7 @@ public class AdminActivity extends Activity {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
         SharedPreferences.Editor ed = settings.edit();
         ed.putString(HOMEDEFAULTPACKAGE, getPackageName());
-        ed.putString(HOMEDEFAULTACTIVITY, com.sdesimeur.android.gpsfiction.activities.AdminActivity.class.getName());
+        ed.putString(HOMEDEFAULTACTIVITY, com.sdesimeur.android.gpsfiction.gpsfictionprojects.activities.AdminActivity.class.getName());
         ed.commit();
         launchAppChooser();
         testLocation();

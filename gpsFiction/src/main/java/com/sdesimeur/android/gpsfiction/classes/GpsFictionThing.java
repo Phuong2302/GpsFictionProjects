@@ -9,6 +9,23 @@ import com.sdesimeur.android.gpsfiction.activities.GpsFictionActivity;
 
 public class GpsFictionThing {
     private transient GpsFictionData mGpsFictionData = null;
+
+    public int[] getValint() {
+        return valint;
+    }
+
+    public void setValint(int[] valint) {
+        this.valint = valint;
+    }
+
+    public boolean[] getValbool() {
+        return valbool;
+    }
+
+    public void setValbool(boolean[] valbool) {
+        this.valbool = valbool;
+    }
+
     private int[] valint = new int[]{
             0,
             0,
