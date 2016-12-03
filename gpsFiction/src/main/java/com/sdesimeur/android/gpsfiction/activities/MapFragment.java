@@ -21,6 +21,7 @@ import android.widget.TextView;
 import android.widget.ZoomControls;
 
 import com.sdesimeur.android.gpsfiction.R;
+import com.sdesimeur.android.gpsfiction.classes.DistanceByRouteListener;
 import com.sdesimeur.android.gpsfiction.classes.GpsFictionControler;
 import com.sdesimeur.android.gpsfiction.classes.GpsFictionData;
 import com.sdesimeur.android.gpsfiction.classes.GpsFictionThing;
@@ -67,7 +68,7 @@ import static org.oscim.layers.marker.MarkerSymbol.HotspotPlace;
 
 public class MapFragment
         extends MyTabFragment
-        implements PlayerBearingListener, ZoneChangeListener, PlayerLocationListener,
+        implements PlayerBearingListener, ZoneChangeListener, PlayerLocationListener, DistanceByRouteListener,
                     ZoneSelectListener, ItemizedLayer.OnItemGestureListener<MarkerItem> {
     private static final float MINMOVE = 20;
     MapView mapView;
@@ -93,6 +94,12 @@ public class MapFragment
 
     public GpsFictionData getmGpsFictionData() {
         return getmGpsFictionControler().getmGpsFictionData();
+    }
+
+    @Override
+    public void onDistanceByRouteChanged(float distance) {
+        distanceToEnd = distance;
+        setViewDistanceToDest();
     }
 
     private static class MapDirection {
@@ -252,7 +259,7 @@ public class MapFragment
         int lineColor = getColor(getActivity(),R.color.colorOfRouteLine);
         LineStyle ls = new LineStyle(lineColor, lineWidth, org.oscim.backend.canvas.Paint.Cap.ROUND);
         routePathLayer.setStyle(ls);
-        getmGpsFictionData().setRoutePathLayer(routePathLayer);
+        getmGpsFictionControler().setRoutePathLayer(routePathLayer);
         ViewGroup vg = (ViewGroup) getRootView();
         addViewGroupForVehiculesButtons(vg);
         viewForDistanceToDest = (TextView) vg.findViewById(R.id.forDistanceToDest);
@@ -279,8 +286,8 @@ public class MapFragment
         gfc.addPlayerLocationListener(GpsFictionControler.REGISTER.FRAGMENT, this);
         gfc.addPlayerBearingListener(GpsFictionControler.REGISTER.FRAGMENT, this);
         gfc.addZoneSelectListener(GpsFictionControler.REGISTER.FRAGMENT, this);
+        gfc.addDistanceByRouteChangeListener(this);
         gfc.addZoneChangeListener(this);
-        gfc.getmCalcRouteAndSpeakService().setMapFragment(this);
     }
 
     @Override
@@ -290,6 +297,7 @@ public class MapFragment
         gfc.removePlayerLocationListener(GpsFictionControler.REGISTER.FRAGMENT, this);
         gfc.removePlayerBearingListener(GpsFictionControler.REGISTER.FRAGMENT, this);
         gfc.removeZoneSelectListener(GpsFictionControler.REGISTER.FRAGMENT, this);
+        gfc.removeDistanceByRouteChangeListener(this);
         gfc.removeZoneChangeListener(this);
     }
 
@@ -300,8 +308,6 @@ public class MapFragment
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        GpsFictionControler gfc = getmGpsFictionControler();
-        gfc.getmCalcRouteAndSpeakService().setMapFragment(null);
     }
 
     @Override
@@ -566,7 +572,7 @@ public class MapFragment
 
     public void setViewDistanceToDest () {
         if ((routePathLayer!=null) && (routePathLayer.getPoints().size() > 1)) {
-                DistanceToTextHelper d = new DistanceToTextHelper(getmGpsFictionData().getDistanceToEnd());
+                DistanceToTextHelper d = new DistanceToTextHelper(distanceToEnd);
                 ((ViewGroup)viewForDistanceToDest.getParent()).setVisibility(View.VISIBLE);
                 viewForDistanceToDest.setText(d.getDistanceInText());
         } else {

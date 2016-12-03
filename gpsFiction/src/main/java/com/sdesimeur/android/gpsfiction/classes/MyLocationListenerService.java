@@ -142,7 +142,8 @@ public class MyLocationListenerService extends Service implements LocationListen
 
     public void onLocationChanged(Location location) {
         setNewPlayerGeopoint(location);
-        gpsFictionControler.firePlayerLocationListener();
+        if (gpsFictionControler != null)
+            gpsFictionControler.firePlayerLocationListener();
     }
 
     @Override
@@ -181,7 +182,8 @@ public class MyLocationListenerService extends Service implements LocationListen
         } else {
             bearingOfPlayer = locationBearing;
         }
-        gpsFictionControler.firePlayerBearingListener();
+        if (gpsFictionControler != null)
+            gpsFictionControler.firePlayerBearingListener();
     }
 
     public void startLocationListener() {

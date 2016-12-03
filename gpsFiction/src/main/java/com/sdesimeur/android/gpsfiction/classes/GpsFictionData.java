@@ -258,11 +258,7 @@ public class GpsFictionData {
 
     public void setRoutePathLayer(PathLayer layer) {
         routePathLayer = layer;
-        mGpsFictionControler.getmCalcRouteAndSpeakService().clearAndCalc();
-    }
-
-    public float getDistanceToEnd() {
-        return mGpsFictionControler.getmCalcRouteAndSpeakService().getDistanceToEnd();
+        mGpsFictionControler.clearAndCalc();
     }
 
     public void setmGpsFictionControler(GpsFictionControler mGpsFictionControler) {

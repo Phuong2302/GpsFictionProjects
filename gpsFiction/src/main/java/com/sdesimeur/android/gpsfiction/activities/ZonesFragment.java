@@ -25,7 +25,7 @@ public class ZonesFragment extends MyTabFragment
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         this.setRootView(inflater.inflate(R.layout.zones_view, container, false));
         this.listZones = (ListView) this.getRootView().findViewById(R.id.listZones);
-
+        listZones.setAdapter(adapter);
         return this.getRootView();
     }
 
@@ -41,10 +41,9 @@ public class ZonesFragment extends MyTabFragment
     @Override
     public void onResume () {
         super.onResume();
-        listZones.setAdapter(adapter);
         mDataSetObserver = new DataSetObserver() {
             public void onChanged () {
-                listZones.invalidateViews();
+                if (listZones != null) listZones.invalidateViews();
             }
         };
         adapter.registerDataSetObserver(mDataSetObserver);

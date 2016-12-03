@@ -4,7 +4,6 @@ import android.app.Notification;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
-import android.content.ServiceConnection;
 import android.os.AsyncTask;
 import android.os.Binder;
 import android.os.Build;
@@ -52,7 +51,6 @@ import java.util.Locale;
 
 public class CalcRouteAndSpeakService extends Service implements TextToSpeech.OnInitListener, PlayerLocationListener, ZoneSelectListener, VehiculeSelectedIdListener {
     private static int NOTIFICATIONID = 1024;
-    private MapFragment mapFragment = null;
     private GpsFictionControler gpsFictionControler;
 
     public PathLayer getRoutePathLayer() {
@@ -87,23 +85,18 @@ public class CalcRouteAndSpeakService extends Service implements TextToSpeech.On
         listOfPoints.clear();
         calcPathIfNecessar();
     }
-    public void setGpsFictionControler(GpsFictionControler gfc) {
-        gpsFictionControler = gfc;
-        gpsFictionControler.addZoneSelectListener(GpsFictionControler.REGISTER.SERVICE,this);
-        gpsFictionControler.addVehiculeSelectedIdListener(this);
-    }
-
-    public void setMapFragment(MapFragment mapFragment) {
-        this.mapFragment = mapFragment;
-    }
 
     private void setDistanceToEnd(float distanceToEnd) {
         this.distanceToEnd = distanceToEnd;
-        if (mapFragment != null) mapFragment.setViewDistanceToDest();
+        gpsFictionControler.fireDistanceByRouteChangeListener(distanceToEnd);
     }
 
-    public void setGpsFictionControler(ServiceConnection gpsFictionControler) {
-        this.gpsFictionControler = (GpsFictionControler) gpsFictionControler;
+    public void setGpsFictionControler(GpsFictionControler gpsFictionControler) {
+        this.gpsFictionControler = gpsFictionControler;
+        this.gpsFictionControler.addPlayerLocationListener(GpsFictionControler.REGISTER.SERVICE, this);
+        this.gpsFictionControler.addZoneSelectListener(GpsFictionControler.REGISTER.SERVICE,this);
+        this.gpsFictionControler.addVehiculeSelectedIdListener(this);
+        startTts();
     }
 
     public interface ACTION {
@@ -159,8 +152,6 @@ public class CalcRouteAndSpeakService extends Service implements TextToSpeech.On
     }
     @Override
     public IBinder onBind(Intent intent) {
-        startTts();
-        gpsFictionControler.addPlayerLocationListener(GpsFictionControler.REGISTER.SERVICE, this);
         return myBinder;
     }
 

@@ -41,6 +41,13 @@ public class Adapter4TabZones extends BaseAdapter implements PlayerLocationListe
         mMyTabFragment = mtfi;
         GpsFictionControler gfc = mMyTabFragment.getmGpsFictionControler();
         gfc.addPlayerLocationListener(GpsFictionControler.REGISTER.ADAPTERVIEW, this);
+        /*
+        for ( View v : getZone2View().values()) {
+            ViewHolder4Zones v1 = (ViewHolder4Zones)v.getTag();
+            gfc.addPlayerLocationListener(GpsFictionControler.REGISTER.VIEW,v1.getDistanceToZoneView());
+            gfc.addPlayerBearingListener(GpsFictionControler.REGISTER.VIEW,v1.getMiniCompassView());
+        }
+        */
         gfc.addZoneChangeListener(this);
         Iterator<GpsFictionThing> it = mMyTabFragment.getmGpsFictionControler().getmGpsFictionData().getGpsFictionThing(Zone.class).iterator();
         while (it.hasNext()) {
@@ -119,11 +126,13 @@ public class Adapter4TabZones extends BaseAdapter implements PlayerLocationListe
     public void unregister() {
         GpsFictionControler gfc = mMyTabFragment.getmGpsFictionControler();
         gfc.removePlayerLocationListener(GpsFictionControler.REGISTER.ADAPTERVIEW, this);
+        /*
         for ( View v : getZone2View().values()) {
             ViewHolder4Zones v1 = (ViewHolder4Zones)v.getTag();
             gfc.removePlayerLocationListener(GpsFictionControler.REGISTER.VIEW,v1.getDistanceToZoneView());
             gfc.removePlayerBearingListener(GpsFictionControler.REGISTER.VIEW,v1.getMiniCompassView());
         }
+        */
         gfc.removeZoneChangeListener(this);
     }
 }

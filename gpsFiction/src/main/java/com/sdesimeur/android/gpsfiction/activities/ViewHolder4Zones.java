@@ -1,6 +1,7 @@
 package com.sdesimeur.android.gpsfiction.activities;
 
 import android.content.res.Resources;
+import android.view.View;
 import android.widget.TextView;
 
 import com.sdesimeur.android.gpsfiction.R;
@@ -14,14 +15,6 @@ public class ViewHolder4Zones implements ZoneSelectListener {
     private TextView zoneTitleView = null;
     private MyTabFragment myTabFragment;
 
-    public ZoneDistance4ListView getDistanceToZoneView() {
-        return distanceToZoneView;
-    }
-
-    public MiniCompassView getMiniCompassView() {
-        return miniCompassView;
-    }
-
     private ZoneDistance4ListView distanceToZoneView = null;
     //	private TextView directionOfZone;
     private MiniCompassView miniCompassView = null;
@@ -32,7 +25,6 @@ public class ViewHolder4Zones implements ZoneSelectListener {
     }
 
     private void updateZoneTitleView() {
-        // TODO Auto-generated method stub
         Resources res = myTabFragment.getResources();
         int titlebackgroundcolor = 0;
         if (myTabFragment.getmGpsFictionControler().getSelectedZone() == attachedZone) {
@@ -61,8 +53,17 @@ public class ViewHolder4Zones implements ZoneSelectListener {
         myTabFragment= mtf;
         attachedZone = aZone;
         zoneTitleView.setText(attachedZone.getName());
+        zoneTitleView.addOnAttachStateChangeListener(new View.OnAttachStateChangeListener() {
+            @Override
+            public void onViewAttachedToWindow(View view) {
+                myTabFragment.getmGpsFictionControler().addZoneSelectListener(GpsFictionControler.REGISTER.HOLDERVIEW, ViewHolder4Zones.this);
+            }
+            @Override
+            public void onViewDetachedFromWindow(View view) {
+                myTabFragment.getmGpsFictionControler().removeZoneSelectListener(GpsFictionControler.REGISTER.HOLDERVIEW, ViewHolder4Zones.this);
+            }
+        });
         updateZoneTitleView();
-        myTabFragment.getmGpsFictionControler().addZoneSelectListener(GpsFictionControler.REGISTER.HOLDERVIEW, this);
         miniCompassView.init(myTabFragment, attachedZone);
         distanceToZoneView.init(myTabFragment, attachedZone);
     }

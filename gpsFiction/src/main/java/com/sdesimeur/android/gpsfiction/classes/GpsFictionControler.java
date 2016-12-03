@@ -9,7 +9,6 @@ import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.IBinder;
 
-import com.google.gson.Gson;
 import com.sdesimeur.android.gpsfiction.activities.CalcRouteAndSpeakService;
 import com.sdesimeur.android.gpsfiction.geopoint.MyGeoPoint;
 import com.sdesimeur.android.gpsfiction.gpx.GPXParser;
@@ -41,6 +40,7 @@ public class GpsFictionControler {
     private transient HashSet<VehiculeSelectedIdListener> vehiculeSelectedIdListener = new HashSet<>();
     private transient HashMap<REGISTER, HashSet<ZoneSelectListener>> zoneSelectListener = new HashMap<>();
     private transient HashSet<ZoneChangeListener> zoneChangeListener = new HashSet<> ();
+    private transient HashSet<DistanceByRouteListener> distanceByRouteListener = new HashSet<> ();
     private Resources resources;
 
 
@@ -78,6 +78,14 @@ public class GpsFictionControler {
 
     public void setSelectedZone(Zone selectedZone) {
         mGpsFictionData.setSelectedZone(selectedZone);
+    }
+
+    public void setRoutePathLayer(PathLayer routePathLayer) {
+        mGpsFictionData.setRoutePathLayer(routePathLayer);
+    }
+
+    public void clearAndCalc() {
+        if (mCalcRouteAndSpeakService != null) mCalcRouteAndSpeakService.clearAndCalc();
     }
 
     static public enum REGISTER {
@@ -175,6 +183,18 @@ public class GpsFictionControler {
         clearFragmentListener();
         clearViewListener();
         //clearZoneListener();
+    }
+    public void addDistanceByRouteChangeListener(DistanceByRouteListener listener) {
+        this.distanceByRouteListener.add(listener);
+    }
+    public void removeDistanceByRouteChangeListener(DistanceByRouteListener listener) {
+        this.distanceByRouteListener.remove(listener);
+    }
+
+    public void fireDistanceByRouteChangeListener(float d) {
+        for (DistanceByRouteListener listener : this.distanceByRouteListener) {
+            listener.onDistanceByRouteChanged(d);
+        }
     }
     public void addZoneChangeListener(ZoneChangeListener listener) {
         Zone sz = mGpsFictionData.getSelectedZone();
@@ -276,7 +296,7 @@ public class GpsFictionControler {
         public void onServiceConnected(ComponentName name, IBinder service) {
             CalcRouteAndSpeakService.MyBinder binder = (CalcRouteAndSpeakService.MyBinder) service;
             mCalcRouteAndSpeakService = binder.getService();
-            mCalcRouteAndSpeakService.setGpsFictionControler(this);
+            mCalcRouteAndSpeakService.setGpsFictionControler(GpsFictionControler.this);
             isBoundToCalcRouteAndSpeakService = true;
         }
 
@@ -331,8 +351,8 @@ public class GpsFictionControler {
     }
     public void onSaveInstanceState(Bundle savedInstanceState) {
         //if (mGpsFictionData.toSave) {
-        Gson gson = new Gson();
-        String test = gson.toJson(mGpsFictionData);
+        //Gson gson = new Gson();
+        //String test = gson.toJson(mGpsFictionData);
         Bundle toPass = mGpsFictionData.getByBundle();
         savedInstanceState.putBundle("GpsFictionData", toPass);
         //savedInstanceState.putString("GpsFictionDataAsJson",test);
