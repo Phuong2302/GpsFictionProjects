@@ -25,17 +25,10 @@ import android.text.format.Time;
 import com.sdesimeur.android.gpsfiction.R;
 import com.sdesimeur.android.gpsfiction.geopoint.MyGeoPoint;
 
-import java.util.HashMap;
-import java.util.HashSet;
-
 public class MyLocationListenerService extends Service implements LocationListener, SensorEventListener {
     private static int NOTIFICATIONID = 1025;
     private final static float MINBEARINGCHANGED = 5;
     private final static float SPEEDLIMIT = 0.003f;
-    private HashMap<MyLocationListenerService.REGISTER, HashSet<PlayerBearingListener>> playerBearingListener = null;
-    private HashMap<MyLocationListenerService.REGISTER, HashSet<PlayerLocationListener>> playerLocationListener = null;
-    //private static final HashSet <PlayerLocationListener> playerLocationListener = new HashSet <PlayerLocationListener> ();
-    //private static final HashSet <PlayerLocationListener> playerLocationListenerZone = new HashSet <PlayerLocationListener> ();
     private MyGeoPoint lastPlayerGeoPoint = null;
     private Time lastTimePlayerGeoPoint = null;
     private MyGeoPoint playerGeoPoint = null;
@@ -46,8 +39,15 @@ public class MyLocationListenerService extends Service implements LocationListen
     private float bearingOfPlayer;
     private float compassBearing;
     private float locationBearing;
+    private GpsFictionControler gpsFictionControler;
+
     public MyLocationListenerService() {
     }
+
+    public void setGpsFictionControler(GpsFictionControler gpsFictionControler) {
+        this.gpsFictionControler = gpsFictionControler;
+    }
+
     public interface ACTION {
         public static String STARTFOREGROUND = "com.sdesimeur.android.gpsfiction.action.startforeground";
         public static String STOPFOREGROUND = "com.sdesimeur.android.gpsfiction.action.stopforeground";
@@ -102,12 +102,6 @@ public class MyLocationListenerService extends Service implements LocationListen
     @Override
     public void onCreate () {
         startLocationListener();
-        playerBearingListener = new HashMap<>();
-        playerLocationListener = new HashMap<>();
-        for (REGISTER i : REGISTER.values()) {
-            playerBearingListener.put(i, new HashSet<PlayerBearingListener>());
-            playerLocationListener.put(i, new HashSet<PlayerLocationListener>());
-        }
         timePlayerGeoPoint = new Time();
         lastTimePlayerGeoPoint = new Time();
         compassActive = false;
@@ -124,14 +118,6 @@ public class MyLocationListenerService extends Service implements LocationListen
         ed.putFloat("cb", compassBearing);
         ed.putFloat("lb", locationBearing);
     }
-    public HashSet<PlayerBearingListener> getPlayerBearingListener(REGISTER i) {
-        return playerBearingListener.get(i);
-    }
-
-    public HashSet<PlayerLocationListener> getPlayerLocationListener(REGISTER i) {
-        return playerLocationListener.get(i);
-    }
-
     public Bundle getByBundle() {
         Bundle dest = new Bundle();
         dest.putFloat("bop", bearingOfPlayer);
@@ -152,59 +138,11 @@ public class MyLocationListenerService extends Service implements LocationListen
         bearingOfPlayer = in.getFloat("bop");
         compassBearing = in.getFloat("cb");
         locationBearing = in.getFloat("lb");
-        /*
-        double[] coord = in.getDoubleArray("pgp");
-        playerGeoPoint = new MyGeoPoint(coord[0], coord[1]);
-        coord = in.getDoubleArray("lpgp");
-        lastPlayerGeoPoint = new MyGeoPoint(coord[0], coord[1]);
-        timePlayerGeoPoint.set(in.getLong("tpgp"));
-        lastTimePlayerGeoPoint.set(in.getLong("ltpgp"));
-        */
-    }
-
-    /*static public enum SENSORTOREGISTER  {
-        BEARING,
-        LOCATION
-    }*/
-    public void addPlayerLocationListener(REGISTER type, PlayerLocationListener listener) {
-        playerLocationListener.get(type).add(listener);
-        if (playerGeoPoint != null) listener.onLocationPlayerChanged(playerGeoPoint);
-    }
-
-    public void removePlayerLocationListener(REGISTER type, PlayerLocationListener listener) {
-        playerLocationListener.get(type).remove(listener);
-    }
-
-    public void addPlayerBearingListener(REGISTER type, PlayerBearingListener listener) {
-        playerBearingListener.get(type).add(listener);
-            listener.onBearingPlayerChanged(bearingOfPlayer);
-    }
-
-    public void removePlayerBearingListener(REGISTER type, PlayerBearingListener listener) {
-        playerBearingListener.get(type).remove(listener);
-    }
-
-    public void firePlayerLocationListener() {
-        if (playerGeoPoint != null) {
-            for (REGISTER i : REGISTER.values()) {
-                for (PlayerLocationListener listener : playerLocationListener.get(i)) {
-                    listener.onLocationPlayerChanged(playerGeoPoint);
-                }
-            }
-        }
-    }
-
-    public void firePlayerBearingListener() {
-        for (REGISTER i : REGISTER.values()) {
-            for (PlayerBearingListener listener : playerBearingListener.get(i)) {
-                listener.onBearingPlayerChanged(bearingOfPlayer);
-            }
-        }
     }
 
     public void onLocationChanged(Location location) {
         setNewPlayerGeopoint(location);
-        firePlayerLocationListener();
+        gpsFictionControler.firePlayerLocationListener();
     }
 
     @Override
@@ -243,7 +181,7 @@ public class MyLocationListenerService extends Service implements LocationListen
         } else {
             bearingOfPlayer = locationBearing;
         }
-        firePlayerBearingListener();
+        gpsFictionControler.firePlayerBearingListener();
     }
 
     public void startLocationListener() {
@@ -327,35 +265,5 @@ public class MyLocationListenerService extends Service implements LocationListen
         return bearingOfPlayer;
     }
 
-    public void clearFragmentListener() {
-        getPlayerBearingListener(REGISTER.FRAGMENT).clear();
-        getPlayerLocationListener(REGISTER.FRAGMENT).clear();
-    }
 
-    public void clearZoneListener() {
-        getPlayerBearingListener(REGISTER.ZONE).clear();
-        getPlayerLocationListener(REGISTER.ZONE).clear();
-    }
-
-    public void clearViewListener() {
-        getPlayerBearingListener(REGISTER.VIEW).clear();
-        getPlayerLocationListener(REGISTER.VIEW).clear();
-    }
-
-    public void clearAllListener() {
-        clearFragmentListener();
-        clearViewListener();
-        //clearZoneListener();
-    }
-
-    static public enum REGISTER {
-        SERVICE,
-        MARKER,
-        ZONE,
-        HOLDERVIEW,
-        ADAPTERVIEW,
-        VIEW,
-        LAYOUT,
-        FRAGMENT
-    }
 }

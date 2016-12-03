@@ -6,7 +6,7 @@ import android.widget.TextView;
 
 import com.sdesimeur.android.gpsfiction.R;
 import com.sdesimeur.android.gpsfiction.activities.GpsFictionActivity;
-import com.sdesimeur.android.gpsfiction.classes.GpsFictionData;
+import com.sdesimeur.android.gpsfiction.classes.GpsFictionControler;
 import com.sdesimeur.android.gpsfiction.classes.PlayerLocationListener;
 import com.sdesimeur.android.gpsfiction.classes.Zone;
 import com.sdesimeur.android.gpsfiction.classes.ZoneSelectListener;
@@ -32,15 +32,16 @@ public class ZoneDistance4CompassView extends TextView implements PlayerLocation
     public void init(GpsFictionActivity gpsFictionActivity) {
         mGpsFictionActivity = gpsFictionActivity;
 //        mGpsFictionActivity.getmMyLocationListenerService().addPlayerLocationListener(MyLocationListenerService.REGISTER.VIEW, this);
-        mGpsFictionActivity.getmGpsFictionData().addZoneSelectListener(GpsFictionData.REGISTER.VIEW, this);
+        mGpsFictionActivity.getmGpsFictionControler().addZoneSelectListener(GpsFictionControler.REGISTER.VIEW, this);
 //		gpsFictionActivity.getGpsFictionData().addZoneSelectListener(GpsFictionData.REGISTER.VIEW, this);
     }
 
     @Override
     public void onLocationPlayerChanged(MyGeoPoint playerLocation) {
-        String distanceText = (mGpsFictionActivity.getmGpsFictionData().getSelectedZone() == null) ?
+
+        String distanceText = (mGpsFictionActivity.getmGpsFictionControler().getSelectedZone() == null) ?
                 getResources().getString(R.string.noZoneDistance) :
-                mGpsFictionActivity.getmGpsFictionData().getSelectedZone().getStringDistance2Player();
+                mGpsFictionActivity.getmGpsFictionControler().getSelectedZone().getStringDistance2Player();
         setText(distanceText);
         if (isShown()) invalidate();
     }

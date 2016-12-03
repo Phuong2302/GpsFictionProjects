@@ -18,7 +18,7 @@ public abstract class MyTabFragment extends Fragment implements MyTabFragmentImp
         if (getmGpsFictionActivity()==null)
             return null;
         else
-            return getmGpsFictionActivity().getmGpsFictionData();
+            return getmGpsFictionActivity().getmGpsFictionControler().getmGpsFictionData();
     }
 
     public View getRootView() {

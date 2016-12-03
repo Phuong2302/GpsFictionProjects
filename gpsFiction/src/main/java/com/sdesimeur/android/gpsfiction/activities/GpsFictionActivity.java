@@ -5,16 +5,10 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
-import android.content.ComponentName;
-import android.content.Context;
-import android.content.Intent;
-import android.content.ServiceConnection;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.os.IBinder;
-import android.speech.tts.TextToSpeech;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.multidex.MultiDex;
@@ -27,26 +21,16 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 
-import com.google.gson.Gson;
 import com.sdesimeur.android.gpsfiction.R;
-import com.sdesimeur.android.gpsfiction.classes.GpsFictionData;
-import com.sdesimeur.android.gpsfiction.classes.MyLocationListenerService;
-import com.sdesimeur.android.gpsfiction.classes.Zone;
-import com.sdesimeur.android.gpsfiction.gpx.GPXParser;
-import com.sdesimeur.android.gpsfiction.gpx.beans.GPX;
-import com.sdesimeur.android.gpsfiction.gpx.beans.Track;
-import com.sdesimeur.android.gpsfiction.gpx.beans.Waypoint;
-import com.sdesimeur.android.gpsfiction.helpers.BindToMyLocationListenerHelper;
+import com.sdesimeur.android.gpsfiction.classes.GpsFictionControler;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 
 
 public class GpsFictionActivity extends Activity {
@@ -58,24 +42,22 @@ public class GpsFictionActivity extends Activity {
     private float dX;
     private float dY;
     private static final float MINMOVE = 20;
-    private BindToMyLocationListenerHelper mBindToMyLocationListenerHelper;
-
-    public GpsFictionData getmGpsFictionData() {
-        return mGpsFictionData;
-    }
-
-    public void setmGpsFictionData(GpsFictionData mGpsFictionData) {
-        this.mGpsFictionData = mGpsFictionData;
-    }
-
-    protected GpsFictionData mGpsFictionData = null;
+    
+    
     protected FragmentManager fragmentManager;
     protected HashSet<MyDialogFragment> dialogFragments = new HashSet<>();
-    protected MyLocationListenerService mMyLocationListenerService = null;
     private NavigationView navigationView;
     private DrawerLayout drawerLayout;
     private HashMap<Integer, MyTabFragmentImpl> menuItem2Fragments;
+
     private int selectedFragmentId = R.id.Zones;
+
+    protected GpsFictionControler mGpsFictionControler;
+
+    public GpsFictionControler getmGpsFictionControler() {
+        return mGpsFictionControler;
+    }
+
     private void defineFragments() {
         menuItem2Fragments = new HashMap<>();
         String[] fragmentNames = getResources().getStringArray(R.array.fragmentsNames);
@@ -121,35 +103,6 @@ public class GpsFictionActivity extends Activity {
         }
     }
 
-    public MyLocationListenerService getmMyLocationListenerService() {
-        // TODO Auto-generated method stub
-        return mMyLocationListenerService;
-    }
-
-    public void setResourcedZones(int gpxRes) {
-        InputStream in = getResources().openRawResource(gpxRes);
-        GPXParser p = new GPXParser();
-        Zone zn = null;
-        try {
-            GPX gpx = p.parseGPX(in);
-            Iterator<Track> it = gpx.getTracks().iterator();
-            Track tr;
-            while (it.hasNext()) {
-                tr = it.next();
-                ArrayList<Waypoint> wpts = tr.getTrackPoints();
-                wpts.remove(0);
-                String name = "zone" + tr.getName();
-                int res = getResources().getIdentifier(name, "string", getPackageName());
-                zn = new Zone();
-                zn.init(mGpsFictionData);
-                zn.setId(res);
-                zn.setShape(wpts);
-                zn.validate();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
 
     public Typeface getFontFromRes(int resource) {
         Typeface tf = null;
@@ -233,30 +186,6 @@ public class GpsFictionActivity extends Activity {
         }
         return super.onOptionsItemSelected(item);
     }
-
-    public CalcRouteAndSpeakService getmCalcRouteAndSpeakService() {
-        return mCalcRouteAndSpeakService;
-    }
-
-    private CalcRouteAndSpeakService mCalcRouteAndSpeakService;
-    private boolean isBoundToCalcRouteAndSpeakService;
-    private ServiceConnection serviceConnectionToCalcRouteAndSpeakService = new ServiceConnection() {
-        @Override
-        public void onServiceConnected(ComponentName name, IBinder service) {
-            CalcRouteAndSpeakService.MyBinder binder = (CalcRouteAndSpeakService.MyBinder) service;
-            mCalcRouteAndSpeakService = binder.getService();
-            mCalcRouteAndSpeakService.setGpsFictionData(getmGpsFictionData());
-            testTTS();
-            isBoundToCalcRouteAndSpeakService = true;
-        }
-
-        @Override
-        public void onServiceDisconnected(ComponentName name) {
-            mCalcRouteAndSpeakService = null;
-            isBoundToCalcRouteAndSpeakService = false;
-        }
-    };
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         //this.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -265,41 +194,11 @@ public class GpsFictionActivity extends Activity {
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED);
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION|View.SYSTEM_UI_FLAG_LOW_PROFILE);
-//        getWindow().addFlags(WindowManager.LayoutParams.TYPE_SYSTEM_OVERLAY);
-//        if (mMyLocationListener == null) mMyLocationListener = new MyLocationListener();
-//        mMyLocationListener.init(this);
-        if (mGpsFictionData == null) {
-            mGpsFictionData = new GpsFictionData();
-            mGpsFictionData.setmGpsFictionActivity(this);
-        }
-        /*
-        try {
-            ActivityInfo activityInfo = getPackageManager().getActivityInfo(getComponentName(), PackageManager.GET_META_DATA);
-            int stringId = activityInfo.labelRes;
-            stringId = activityInfo.descriptionRes;
-        } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
-        }
-        */
-
+        mGpsFictionControler = new GpsFictionControler(this);
         if (savedInstanceState != null) {
-            Bundle toPass = savedInstanceState.getBundle("GpsFictionData");
-
-            mGpsFictionData.setByBundle(toPass);
-            selectedFragmentId = savedInstanceState.getInt("lastSelectedFragmentId",R.id.Zones);
-        } else {
-            mGpsFictionData.init();
+            mGpsFictionControler.onCreate(savedInstanceState);
+            selectedFragmentId = savedInstanceState.getInt("lastSelectedFragmentId", R.id.Zones);
         }
-        Intent myIntent1 = new Intent(this, CalcRouteAndSpeakService.class);
-        myIntent1.setAction(CalcRouteAndSpeakService.ACTION.STARTFOREGROUND);
-        bindService(myIntent1, serviceConnectionToCalcRouteAndSpeakService, Context.BIND_AUTO_CREATE);
-        mBindToMyLocationListenerHelper = new BindToMyLocationListenerHelper(this) {
-            @Override
-            protected void onBindWithMyLocationListener(MyLocationListenerService mlls) {
-                mMyLocationListenerService = mlls;
-                GpsFictionActivity.this.onBindWithMyLocationListener();
-            }
-        };
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_view);
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -351,9 +250,6 @@ public class GpsFictionActivity extends Activity {
         setFragmentInContainer();
     }
 
-    protected void onBindWithMyLocationListener() {
-    }
-
     @Override
     public void onRestart() {
         super.onRestart();
@@ -386,14 +282,8 @@ public class GpsFictionActivity extends Activity {
 
     @Override
     protected void onSaveInstanceState(Bundle savedInstanceState) {
-        //if (mGpsFictionData.toSave) {
-        Gson gson = new Gson();
-        String test = gson.toJson(mGpsFictionData);
-            Bundle toPass = mGpsFictionData.getByBundle();
-            savedInstanceState.putBundle("GpsFictionData", toPass);
-        //savedInstanceState.putString("GpsFictionDataAsJson",test);
-            savedInstanceState.putInt("lastSelectedFragmentId", selectedFragmentId);
-        //}
+        mGpsFictionControler.onSaveInstanceState(savedInstanceState);
+        savedInstanceState.putInt("lastSelectedFragmentId", selectedFragmentId);
         super.onSaveInstanceState(savedInstanceState);
     }
 
@@ -404,20 +294,8 @@ public class GpsFictionActivity extends Activity {
 
     @Override
     public void onDestroy() {
-        unbindService(serviceConnectionToCalcRouteAndSpeakService);
-        mBindToMyLocationListenerHelper.onUnBindWithMyLocationListener();
-        Intent myIntent1 = new Intent(this, CalcRouteAndSpeakService.class);
-        myIntent1.setAction(CalcRouteAndSpeakService.ACTION.STOPFOREGROUND);
-        startService(myIntent1);
-        Intent myIntent2 = new Intent(this, MyLocationListenerService.class);
-        myIntent2.setAction(MyLocationListenerService.ACTION.STOPFOREGROUND);
-        startService(myIntent2);
+        mGpsFictionControler.onDestroy();
         super.onDestroy();
-    }
-    private void testTTS() {
-        Intent checkIntent = new Intent();
-        checkIntent.setAction(TextToSpeech.Engine.ACTION_CHECK_TTS_DATA);
-        startActivityForResult(checkIntent, 0x01);
     }
 
 }

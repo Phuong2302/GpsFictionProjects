@@ -34,10 +34,6 @@ public abstract class ZoneAdverse extends Zone {
         super.setByBundle(toPass);
     }
 
-    public MissionDestructionMainActivity getMainActivity() {
-        return (MissionDestructionMainActivity) getmGpsFictionActivity();
-    }
-
     public void initnew(GpsFictionData gpsFictionData) {
         super.init(gpsFictionData);
         this.findCenterAndSetShapeIfAllIsSet();
@@ -50,7 +46,7 @@ public abstract class ZoneAdverse extends Zone {
     }
 
     protected void findCenterAndSetShapeIfAllIsSet() {
-        if ((getmGpsFictionData() != null) && (getId() != 0)) findCenterAndSetShape();
+        if ((mGpsFictionData != null) && (getId() != 0)) findCenterAndSetShape();
     }
 
     public void findCenterAndSetShape() {
@@ -83,8 +79,8 @@ public abstract class ZoneAdverse extends Zone {
 //			valideZoneAmie=true;
             distance = (MissionDestructionMainActivity.radius_zone_globale - radiusNewZone - ZoneAdverse.dist_min) * Math.random() + ZoneAdverse.dist_min;
             angle = Math.random() * 360;
-            newZp = this.getMainActivity().zoneGlobale.getCenterPoint().project(angle, distance);
-            Iterator<Zone> it = this.getMainActivity().zoneMultiples.iterator();
+            newZp = this.getMissionDestructionActivity().zoneGlobale.getCenterPoint().project(angle, distance);
+            Iterator<Zone> it = this.getMissionDestructionActivity().zoneMultiples.iterator();
             while (it.hasNext()) {
                 zn = it.next();
                 if (zn != this) {
@@ -122,4 +118,8 @@ public abstract class ZoneAdverse extends Zone {
     }
 
     public abstract void setIdAdverseNum(int numInTable4LongId);
+
+    public MissionDestructionMainActivity getMissionDestructionActivity() {
+        return (MissionDestructionMainActivity) mGpsFictionData.getmGpsFictionControler().getActivity();
+    }
 }

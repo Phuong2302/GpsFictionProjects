@@ -13,7 +13,7 @@ import android.view.View;
 
 import com.sdesimeur.android.gpsfiction.R;
 import com.sdesimeur.android.gpsfiction.activities.GpsFictionActivity;
-import com.sdesimeur.android.gpsfiction.classes.GpsFictionData;
+import com.sdesimeur.android.gpsfiction.classes.GpsFictionControler;
 import com.sdesimeur.android.gpsfiction.classes.PlayerBearingListener;
 import com.sdesimeur.android.gpsfiction.classes.Zone;
 import com.sdesimeur.android.gpsfiction.classes.ZoneSelectListener;
@@ -233,6 +233,6 @@ public class CompassView extends View implements PlayerBearingListener, ZoneSele
     public void init(GpsFictionActivity gpsFictionActivity) {
         mGpsFictionActivity = gpsFictionActivity;
 //        mGpsFictionActivity.getmMyLocationListenerService().addPlayerBearingListener(MyLocationListenerService.REGISTER.VIEW, this);
-        mGpsFictionActivity.getmGpsFictionData().addZoneSelectListener(GpsFictionData.REGISTER.VIEW, this);
+        mGpsFictionActivity.getmGpsFictionControler().addZoneSelectListener(GpsFictionControler.REGISTER.VIEW, this);
     }
 }

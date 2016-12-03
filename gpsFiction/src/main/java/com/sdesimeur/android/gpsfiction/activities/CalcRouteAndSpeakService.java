@@ -4,6 +4,7 @@ import android.app.Notification;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.os.AsyncTask;
 import android.os.Binder;
 import android.os.Build;
@@ -32,14 +33,13 @@ import com.graphhopper.util.StopWatch;
 import com.graphhopper.util.Translation;
 import com.graphhopper.util.TranslationMap;
 import com.sdesimeur.android.gpsfiction.R;
-import com.sdesimeur.android.gpsfiction.classes.GpsFictionData;
+import com.sdesimeur.android.gpsfiction.classes.GpsFictionControler;
 import com.sdesimeur.android.gpsfiction.classes.MyLocationListenerService;
 import com.sdesimeur.android.gpsfiction.classes.PlayerLocationListener;
 import com.sdesimeur.android.gpsfiction.classes.VehiculeSelectedIdListener;
 import com.sdesimeur.android.gpsfiction.classes.Zone;
 import com.sdesimeur.android.gpsfiction.classes.ZoneSelectListener;
 import com.sdesimeur.android.gpsfiction.geopoint.MyGeoPoint;
-import com.sdesimeur.android.gpsfiction.helpers.BindToMyLocationListenerHelper;
 import com.sdesimeur.android.gpsfiction.helpers.DistanceToTextHelper;
 import com.sdesimeur.android.gpsfiction.polygon.MyPolygon;
 
@@ -53,13 +53,12 @@ import java.util.Locale;
 public class CalcRouteAndSpeakService extends Service implements TextToSpeech.OnInitListener, PlayerLocationListener, ZoneSelectListener, VehiculeSelectedIdListener {
     private static int NOTIFICATIONID = 1024;
     private MapFragment mapFragment = null;
-    private BindToMyLocationListenerHelper mBindToMyLocationListenerHelper;
+    private GpsFictionControler gpsFictionControler;
 
     public PathLayer getRoutePathLayer() {
-        return gpsFictionData.getRoutePathLayer();
+        return gpsFictionControler.getRoutePathLayer();
     }
 
-    private GpsFictionData gpsFictionData = null;
 
     private MyLocationListenerService mMyLocationListenerService;
     @Override
@@ -88,10 +87,10 @@ public class CalcRouteAndSpeakService extends Service implements TextToSpeech.On
         listOfPoints.clear();
         calcPathIfNecessar();
     }
-    public void setGpsFictionData(GpsFictionData gfd) {
-        gpsFictionData = gfd;
-        gpsFictionData.addZoneSelectListener(GpsFictionData.REGISTER.SERVICE,this);
-        gpsFictionData.addVehiculeSelectedIdListener(this);
+    public void setGpsFictionControler(GpsFictionControler gfc) {
+        gpsFictionControler = gfc;
+        gpsFictionControler.addZoneSelectListener(GpsFictionControler.REGISTER.SERVICE,this);
+        gpsFictionControler.addVehiculeSelectedIdListener(this);
     }
 
     public void setMapFragment(MapFragment mapFragment) {
@@ -101,6 +100,10 @@ public class CalcRouteAndSpeakService extends Service implements TextToSpeech.On
     private void setDistanceToEnd(float distanceToEnd) {
         this.distanceToEnd = distanceToEnd;
         if (mapFragment != null) mapFragment.setViewDistanceToDest();
+    }
+
+    public void setGpsFictionControler(ServiceConnection gpsFictionControler) {
+        this.gpsFictionControler = (GpsFictionControler) gpsFictionControler;
     }
 
     public interface ACTION {
@@ -156,34 +159,15 @@ public class CalcRouteAndSpeakService extends Service implements TextToSpeech.On
     }
     @Override
     public IBinder onBind(Intent intent) {
-         mBindToMyLocationListenerHelper = new BindToMyLocationListenerHelper(this) {
-            @Override
-            protected void onBindWithMyLocationListener(MyLocationListenerService mlls) {
-                mMyLocationListenerService = mlls;
-                CalcRouteAndSpeakService.this.onBindWithMyLocationListener();
-            }
-            @Override
-            public void onUnBindWithMyLocationListener() {
-                CalcRouteAndSpeakService.this.onUnBindWithMyLocationListener();
-                super.onUnBindWithMyLocationListener();
-            }
-        };
+        gpsFictionControler.addPlayerLocationListener(GpsFictionControler.REGISTER.SERVICE, this);
         return myBinder;
-    }
-
-    private void onUnBindWithMyLocationListener() {
-        mMyLocationListenerService.removePlayerLocationListener(MyLocationListenerService.REGISTER.SERVICE, this);
-    }
-
-    private void onBindWithMyLocationListener() {
-        mMyLocationListenerService.addPlayerLocationListener(MyLocationListenerService.REGISTER.SERVICE, this);
     }
 
     @Override
     public boolean onUnbind(Intent intent) {
-        gpsFictionData.removeZoneSelectListener(GpsFictionData.REGISTER.SERVICE,this);
-        gpsFictionData.removeVehiculeSelectedIdListener(this);
-        mMyLocationListenerService.removePlayerLocationListener(MyLocationListenerService.REGISTER.SERVICE,this);
+        gpsFictionControler.removeZoneSelectListener(GpsFictionControler.REGISTER.SERVICE,this);
+        gpsFictionControler.removeVehiculeSelectedIdListener(this);
+        gpsFictionControler.removePlayerLocationListener(GpsFictionControler.REGISTER.SERVICE,this);
         return false;
     }
 

@@ -8,7 +8,7 @@ import com.sdesimeur.android.gpsfiction.activities.GpsFictionActivity;
 
 
 public class GpsFictionThing {
-    private transient GpsFictionData mGpsFictionData = null;
+    protected transient GpsFictionData mGpsFictionData = null;
 
     public int[] getValint() {
         return valint;
@@ -174,18 +174,9 @@ public class GpsFictionThing {
     }
 
     public Resources getResources() {
-        return getmGpsFictionActivity().getResources();
+        return mGpsFictionData.getResources();
     }
 
-    public GpsFictionData getmGpsFictionData() {
-        return this.mGpsFictionData;
-    }
-    public GpsFictionActivity getmGpsFictionActivity() {
-        return mGpsFictionData.getmGpsFictionActivity();
-    }
-    public MyLocationListenerService getmMyLocationListenerService () {
-        return getmGpsFictionActivity().getmMyLocationListenerService();
-    }
     public int getIconId() {
         return this.valint[VALINT.iconId];
     }

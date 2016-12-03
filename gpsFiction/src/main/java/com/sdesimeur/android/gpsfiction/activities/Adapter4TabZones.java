@@ -24,7 +24,6 @@ import java.util.Iterator;
 import java.util.LinkedList;
 
 public class Adapter4TabZones extends BaseAdapter implements PlayerLocationListener, ZoneChangeListener {
-    private MyLocationListenerService myLocationListenerService = null;
 
     public HashMap<Zone, View> getZone2View() {
         return zone2View;
@@ -119,7 +118,4 @@ public class Adapter4TabZones extends BaseAdapter implements PlayerLocationListe
         reOrderZones();
     }
 
-    public void setMyLocationListenerService(MyLocationListenerService mlls) {
-        myLocationListenerService = mlls;
-    }
 }

@@ -1,5 +1,6 @@
 package com.sdesimeur.android.gpsfiction.classes;
 
+import android.content.res.Resources;
 import android.os.Bundle;
 
 import com.google.gson.Gson;
@@ -25,10 +26,10 @@ public class GpsFictionData {
     protected transient Item inventory = null; // Parcel
     private transient Zone selectedZone = null;
     private transient Zone unSelectedZone = null;
-    private transient GpsFictionActivity mGpsFictionActivity = null;
-    private transient HashSet<VehiculeSelectedIdListener> vehiculeSelectedIdListener = new HashSet<>();
 
     private transient PathLayer routePathLayer = null;
+    private GpsFictionControler mGpsFictionControler;
+    private Resources resources;
 
     public int getZoomLevel() {
         return zoomLevel;
@@ -49,9 +50,7 @@ public class GpsFictionData {
     private int zoomLevel = INITZOOMLEVEL;
 
     //    private MyLocationListener mMyLocationListener = null;
-    private transient HashMap<GpsFictionData.REGISTER, HashSet<ZoneSelectListener>> zoneSelectListener = new HashMap<>();
     private HashSet<GpsFictionThing> gpsFictionThings = new HashSet<>();
-    private transient HashSet<ZoneChangeListener> zoneChangeListener = new HashSet<> ();
     //public transient boolean toSave=true;
     private int vehiculeSelectedId = R.drawable.compass;
     public int getVehiculeSelectedId() {
@@ -61,14 +60,11 @@ public class GpsFictionData {
     public void setVehiculeSelectedId(int id) {
         if (id != vehiculeSelectedId) {
             vehiculeSelectedId = id;
-            fireVehiculeSelectedIdListener();
+            mGpsFictionControler.fireVehiculeSelectedIdListener();
         }
     }
 
     public GpsFictionData() {
-        for (GpsFictionData.REGISTER i : GpsFictionData.REGISTER.values()) {
-            this.zoneSelectListener.put(i, new HashSet<ZoneSelectListener>());
-        }
     }
 
 
@@ -248,30 +244,11 @@ public class GpsFictionData {
     public void setSelectedZone(Zone sZone) {
         unSelectedZone = selectedZone;
         selectedZone = sZone;
-        this.fireZoneSelectListener();
+        mGpsFictionControler.fireZoneSelectListener();
     }
 
-    public void addZoneSelectListener(GpsFictionData.REGISTER type, ZoneSelectListener listener) {
-        this.zoneSelectListener.get(type).add(listener);
-        if (selectedZone != null) listener.onZoneSelectChanged(selectedZone,unSelectedZone);
-    }
-
-    public void removeZoneSelectListener(GpsFictionData.REGISTER type, ZoneSelectListener listener) {
-        this.zoneSelectListener.get(type).remove(listener);
-    }
-
-    public void fireZoneSelectListener() {
-        if (selectedZone != unSelectedZone) {
-            for (GpsFictionData.REGISTER i : GpsFictionData.REGISTER.values()) {
-                for (ZoneSelectListener listener : this.zoneSelectListener.get(i)) {
-                    listener.onZoneSelectChanged(selectedZone, unSelectedZone);
-                }
-            }
-        }
-    }
-
-    public GpsFictionActivity getmGpsFictionActivity() {
-        return mGpsFictionActivity;
+    public GpsFictionControler getmGpsFictionControler() {
+        return mGpsFictionControler;
     }
 
 
@@ -279,58 +256,29 @@ public class GpsFictionData {
 //        return mMyLocationListener;
 //    }
 
-    public void setmGpsFictionActivity(GpsFictionActivity gpsFictionActivity) {
-        mGpsFictionActivity = gpsFictionActivity;
-//        mMyLocationListener = mGpsFictionActivity.getmMyLocationListener();
-    }
-
     public void setRoutePathLayer(PathLayer layer) {
         routePathLayer = layer;
-        getmGpsFictionActivity().getmCalcRouteAndSpeakService().clearAndCalc();
+        mGpsFictionControler.getmCalcRouteAndSpeakService().clearAndCalc();
     }
 
     public float getDistanceToEnd() {
-        return mGpsFictionActivity.getmCalcRouteAndSpeakService().getDistanceToEnd();
+        return mGpsFictionControler.getmCalcRouteAndSpeakService().getDistanceToEnd();
     }
 
-    public enum REGISTER {
-        SERVICE,
-        ZONE,
-        HOLDERVIEW,
-        ADAPTERVIEW,
-        VIEW,
-        LAYOUT,
-        FRAGMENT
-    }
-    public void addZoneChangeListener(ZoneChangeListener listener) {
-        this.zoneChangeListener.add(listener);
-        if (selectedZone != null) listener.onZoneChanged(selectedZone);
+    public void setmGpsFictionControler(GpsFictionControler mGpsFictionControler) {
+        this.mGpsFictionControler = mGpsFictionControler;
+        resources = mGpsFictionControler.getResources();
     }
 
-    public void removeZoneChangeListener(ZoneChangeListener listener) {
-        this.zoneChangeListener.remove(listener);
-    }
-    public void fireZoneChangeListener(Zone zn) {
-            for (ZoneChangeListener listener : this.zoneChangeListener) {
-                listener.onZoneChanged(zn);
-            }
-        if (zn.isSelectedZone()) {
-            /////TODO send this to CalcRouteAndSpeakService
-            setSelectedZone(null);
-            fireZoneSelectListener();
-        }
-    }
-    public void addVehiculeSelectedIdListener(VehiculeSelectedIdListener listener) {
-        this.vehiculeSelectedIdListener.add(listener);
-        listener.onVehiculeSelectedId(vehiculeSelectedId);
+    public Resources getResources() {
+        return resources;
     }
 
-    public void removeVehiculeSelectedIdListener(VehiculeSelectedIdListener listener) {
-        this.vehiculeSelectedIdListener.remove(listener);
+    public Zone getUnSelectedZone() {
+        return unSelectedZone;
     }
-    public void fireVehiculeSelectedIdListener() {
-            for (VehiculeSelectedIdListener listener : this.vehiculeSelectedIdListener) {
-                listener.onVehiculeSelectedId(vehiculeSelectedId);
-            }
+
+    public void fireZoneChangeListener(Zone zone) {
+        mGpsFictionControler.fireZoneChangeListener(zone);
     }
 }

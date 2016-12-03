@@ -21,6 +21,7 @@ import android.widget.TextView;
 import android.widget.ZoomControls;
 
 import com.sdesimeur.android.gpsfiction.R;
+import com.sdesimeur.android.gpsfiction.classes.GpsFictionControler;
 import com.sdesimeur.android.gpsfiction.classes.GpsFictionData;
 import com.sdesimeur.android.gpsfiction.classes.GpsFictionThing;
 import com.sdesimeur.android.gpsfiction.classes.MyLocationListenerService;
@@ -91,9 +92,6 @@ public class MapFragment
     private float dX1;
     private float dY1;
     private float distanceToEnd = 0;
-    private BindToMyLocationListenerHelper mBindToMyLocationListenerHelper;
-    private MyLocationListenerService mMyLocationListenerService;
-
 
     private static class MapDirection {
         public static final int PLAYER=0;
@@ -177,15 +175,7 @@ public class MapFragment
             this.mapsFolder = new File (dir , "/mapsforge/");
     }
 
-    private void onUnBindWithMyLocationListener() {
-        mMyLocationListenerService.removePlayerLocationListener(MyLocationListenerService.REGISTER.FRAGMENT, this);
-        mMyLocationListenerService.removePlayerBearingListener(MyLocationListenerService.REGISTER.FRAGMENT, this);
-    }
 
-    private void onBindWithMyLocationListener() {
-        mMyLocationListenerService.addPlayerLocationListener(MyLocationListenerService.REGISTER.FRAGMENT, this);
-        mMyLocationListenerService.addPlayerBearingListener(MyLocationListenerService.REGISTER.FRAGMENT, this);
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -290,16 +280,22 @@ public class MapFragment
         //mPrefs.load(mapView.map());
         mapView.onResume();
         registerAllZones();
-        getmGpsFictionData().addZoneSelectListener(GpsFictionData.REGISTER.FRAGMENT, this);
-        getmGpsFictionData().addZoneChangeListener(this);
-        getmGpsFictionActivity().getmCalcRouteAndSpeakService().setMapFragment(this);
+        GpsFictionControler gfc = ((GpsFictionActivity)getActivity()).getmGpsFictionControler();
+        gfc.addPlayerLocationListener(GpsFictionControler.REGISTER.FRAGMENT, this);
+        gfc.addPlayerBearingListener(GpsFictionControler.REGISTER.FRAGMENT, this);
+        gfc.addZoneSelectListener(GpsFictionControler.REGISTER.FRAGMENT, this);
+        gfc.addZoneChangeListener(this);
+        gfc.getmCalcRouteAndSpeakService().setMapFragment(this);
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        getmGpsFictionData().removeZoneSelectListener(GpsFictionData.REGISTER.FRAGMENT, this);
-        getmGpsFictionData().removeZoneChangeListener(this);
+        GpsFictionControler gfc = ((GpsFictionActivity)getActivity()).getmGpsFictionControler();
+        gfc.removePlayerLocationListener(GpsFictionControler.REGISTER.FRAGMENT, this);
+        gfc.removePlayerBearingListener(GpsFictionControler.REGISTER.FRAGMENT, this);
+        gfc.removeZoneSelectListener(GpsFictionControler.REGISTER.FRAGMENT, this);
+        gfc.removeZoneChangeListener(this);
     }
 
     @Override
@@ -309,7 +305,8 @@ public class MapFragment
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        getmGpsFictionActivity().getmCalcRouteAndSpeakService().setMapFragment(null);
+        GpsFictionControler gfc = ((GpsFictionActivity)getActivity()).getmGpsFictionControler();
+        gfc.getmCalcRouteAndSpeakService().setMapFragment(null);
     }
 
     @Override
@@ -417,7 +414,8 @@ public class MapFragment
                 int alpha = (res == getVehiculeSelectedId()) ? MapFragment.SELECTEDBUTTON : MapFragment.UNSELECTEDBUTTON;
                 img.getDrawable().setAlpha(alpha);
                 viewGroupForVehiculesButtons.addView(img);
-                getmGpsFictionData().addVehiculeSelectedIdListener((VehiculeSelectedIdListener) img);
+                GpsFictionControler gfc = ((GpsFictionActivity)getActivity()).getmGpsFictionControler();
+                gfc.addVehiculeSelectedIdListener((VehiculeSelectedIdListener) img);
             }
         } else {
             setVehiculeSelectedId(vehicules.getResourceId(0,R.drawable.compass));

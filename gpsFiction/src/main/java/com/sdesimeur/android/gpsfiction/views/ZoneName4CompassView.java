@@ -6,7 +6,7 @@ import android.widget.TextView;
 
 import com.sdesimeur.android.gpsfiction.R;
 import com.sdesimeur.android.gpsfiction.activities.GpsFictionActivity;
-import com.sdesimeur.android.gpsfiction.classes.GpsFictionData;
+import com.sdesimeur.android.gpsfiction.classes.GpsFictionControler;
 import com.sdesimeur.android.gpsfiction.classes.Zone;
 import com.sdesimeur.android.gpsfiction.classes.ZoneSelectListener;
 
@@ -26,7 +26,7 @@ public class ZoneName4CompassView extends TextView implements ZoneSelectListener
     }
 
     public void init(GpsFictionActivity gpsFictionActivity) {
-        gpsFictionActivity.getmGpsFictionData().addZoneSelectListener(GpsFictionData.REGISTER.VIEW, this);
+        gpsFictionActivity.getmGpsFictionControler().addZoneSelectListener(GpsFictionControler.REGISTER.VIEW, this);
     }
 
     @Override
