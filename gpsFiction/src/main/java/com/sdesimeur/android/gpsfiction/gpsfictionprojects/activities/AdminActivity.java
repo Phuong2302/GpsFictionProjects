@@ -15,6 +15,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
+import android.speech.tts.TextToSpeech;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -182,6 +183,10 @@ public class AdminActivity extends Activity {
     }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Intent checkIntent = new Intent();
+        checkIntent.setAction(TextToSpeech.Engine.ACTION_CHECK_TTS_DATA);
+        startActivityForResult(checkIntent, 0x01);
+
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
         SharedPreferences.Editor ed = settings.edit();
         ed.putString(HOMEDEFAULTPACKAGE, getPackageName());
@@ -291,6 +296,14 @@ public class AdminActivity extends Activity {
         Intent intent = new Intent(AdminActivity.this,GamesActivity.class);
         intent.setAction(Intent.ACTION_RUN);
         startActivity(intent);
+    }
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == 0x01) {
+            if (resultCode != TextToSpeech.Engine.CHECK_VOICE_DATA_PASS) {
+                ///// TODO send result to CalcRouteAndSpeakService which "startTts"
+                Toast.makeText(this,R.string.nottsengine,Toast.LENGTH_LONG);
+            }
+        }
     }
 }
 

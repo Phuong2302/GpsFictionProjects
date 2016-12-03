@@ -4,7 +4,7 @@ import android.content.res.Resources;
 import android.widget.TextView;
 
 import com.sdesimeur.android.gpsfiction.R;
-import com.sdesimeur.android.gpsfiction.classes.GpsFictionData;
+import com.sdesimeur.android.gpsfiction.classes.GpsFictionControler;
 import com.sdesimeur.android.gpsfiction.classes.Zone;
 import com.sdesimeur.android.gpsfiction.classes.ZoneSelectListener;
 import com.sdesimeur.android.gpsfiction.views.MiniCompassView;
@@ -12,6 +12,7 @@ import com.sdesimeur.android.gpsfiction.views.ZoneDistance4ListView;
 
 public class ViewHolder4Zones implements ZoneSelectListener {
     private TextView zoneTitleView = null;
+    private MyTabFragment myTabFragment;
 
     public ZoneDistance4ListView getDistanceToZoneView() {
         return distanceToZoneView;
@@ -25,7 +26,6 @@ public class ViewHolder4Zones implements ZoneSelectListener {
     //	private TextView directionOfZone;
     private MiniCompassView miniCompassView = null;
     private Zone attachedZone = null;
-    private GpsFictionActivity mGpsFictionActivity = null;
 
     public Zone getAttachedZone() {
         return attachedZone;
@@ -33,9 +33,9 @@ public class ViewHolder4Zones implements ZoneSelectListener {
 
     private void updateZoneTitleView() {
         // TODO Auto-generated method stub
-        Resources res = mGpsFictionActivity.getResources();
+        Resources res = myTabFragment.getResources();
         int titlebackgroundcolor = 0;
-        if (mGpsFictionActivity.getmGpsFictionData().getSelectedZone() == attachedZone) {
+        if (myTabFragment.getmGpsFictionControler().getSelectedZone() == attachedZone) {
             titlebackgroundcolor = res.getColor(R.color.tabnameofzoneselected);
         } else {
             titlebackgroundcolor = res.getColor(R.color.tabnameofzone);
@@ -57,15 +57,14 @@ public class ViewHolder4Zones implements ZoneSelectListener {
         miniCompassView = miniCV;
     }
 
-    public void init(GpsFictionActivity gpsFictionActivity, Zone aZone) {
-        // TODO Auto-generated method stub
-        mGpsFictionActivity = gpsFictionActivity;
+    public void init(MyTabFragment mtf, Zone aZone) {
+        myTabFragment= mtf;
         attachedZone = aZone;
         zoneTitleView.setText(attachedZone.getName());
         updateZoneTitleView();
-        mGpsFictionActivity.getmGpsFictionData().addZoneSelectListener(GpsFictionData.REGISTER.HOLDERVIEW, this);
-        miniCompassView.init(mGpsFictionActivity, attachedZone);
-        distanceToZoneView.init(mGpsFictionActivity, attachedZone);
+        myTabFragment.getmGpsFictionControler().addZoneSelectListener(GpsFictionControler.REGISTER.HOLDERVIEW, this);
+        miniCompassView.init(myTabFragment, attachedZone);
+        distanceToZoneView.init(myTabFragment, attachedZone);
     }
 
     @Override

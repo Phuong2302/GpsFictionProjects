@@ -59,6 +59,7 @@
     <string name="gps_network_not_enabled">La localisation par GPS n\'est pas activée, veuillez l\'activer</string>
     <string name="inventory">Mon Inventaire</string>
     <string name="noZoneTitle">Vous n\'avez sélectionné aucun lieu.</string>
+    <string name="nottsengine">Pas de moteur TextToSpeech disponible</string>
     <string name="nullstring"/>
     <string name="open_location_settings">Ouvrir les paramètres de Localisation</string>
     <string name="passwd_different">Mots de passe différents</string>

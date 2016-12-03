@@ -159,6 +159,7 @@ public class CalcRouteAndSpeakService extends Service implements TextToSpeech.On
     }
     @Override
     public IBinder onBind(Intent intent) {
+        startTts();
         gpsFictionControler.addPlayerLocationListener(GpsFictionControler.REGISTER.SERVICE, this);
         return myBinder;
     }

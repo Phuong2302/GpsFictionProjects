@@ -74,4 +74,5 @@
     <string name="changehomeactivity">Changer de launcher au démarrage</string>
     <string name="askchangepasstitle">Changer le mot de passe</string>
     <string name="askchangepassmessage">Veuillez entrer le mot de passe</string>
+    <string name="nottsengine">Pas de moteur TextToSpeech disponible</string>
 </resources>

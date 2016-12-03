@@ -9,6 +9,8 @@ import android.view.View;
 
 import com.sdesimeur.android.gpsfiction.R;
 import com.sdesimeur.android.gpsfiction.activities.GpsFictionActivity;
+import com.sdesimeur.android.gpsfiction.activities.MyTabFragment;
+import com.sdesimeur.android.gpsfiction.classes.GpsFictionControler;
 import com.sdesimeur.android.gpsfiction.classes.PlayerBearingListener;
 import com.sdesimeur.android.gpsfiction.classes.Zone;
 
@@ -22,6 +24,7 @@ public class MiniCompassView extends View implements PlayerBearingListener {
     private long mNextTime;
     private Zone attachedZone;
     private GpsFictionActivity mGpsFictionActivity;
+    private MyTabFragment myTabFragment;
 
     public MiniCompassView(Context context) {
         super(context);
@@ -60,10 +63,9 @@ public class MiniCompassView extends View implements PlayerBearingListener {
         }
     }
 
-    public void init(GpsFictionActivity gpsFictionActivity, Zone zone) {
-        mGpsFictionActivity = gpsFictionActivity;
+    public void init(MyTabFragment mtf, Zone zone) {
+        myTabFragment = mtf ;
         this.attachedZone = zone;
-//        mGpsFictionActivity.getmMyLocationListenerService().addPlayerBearingListener(MyLocationListenerService.REGISTER.VIEW, this);
         this.invalidate();
     }
 
@@ -104,12 +106,14 @@ public class MiniCompassView extends View implements PlayerBearingListener {
     @Override
     protected void onAttachedToWindow() {
         mAnimate = true;
+        myTabFragment.getmGpsFictionControler().addPlayerBearingListener(GpsFictionControler.REGISTER.VIEW, this);
         super.onAttachedToWindow();
     }
 
     @Override
     protected void onDetachedFromWindow() {
         mAnimate = false;
+        myTabFragment.getmGpsFictionControler().removePlayerBearingListener(GpsFictionControler.REGISTER.VIEW, this);
         super.onDetachedFromWindow();
     }
 

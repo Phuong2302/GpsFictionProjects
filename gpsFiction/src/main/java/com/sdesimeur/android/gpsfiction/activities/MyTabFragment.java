@@ -3,7 +3,7 @@ package com.sdesimeur.android.gpsfiction.activities;
 import android.app.Fragment;
 import android.view.View;
 
-import com.sdesimeur.android.gpsfiction.classes.GpsFictionData;
+import com.sdesimeur.android.gpsfiction.classes.GpsFictionControler;
 
 
 public abstract class MyTabFragment extends Fragment implements MyTabFragmentImpl {
@@ -14,11 +14,11 @@ public abstract class MyTabFragment extends Fragment implements MyTabFragmentImp
     }
 
 
-    public GpsFictionData getmGpsFictionData() {
+    public GpsFictionControler getmGpsFictionControler() {
         if (getmGpsFictionActivity()==null)
             return null;
         else
-            return getmGpsFictionActivity().getmGpsFictionControler().getmGpsFictionData();
+            return getmGpsFictionActivity().getmGpsFictionControler();
     }
 
     public View getRootView() {

@@ -24,7 +24,6 @@ import com.sdesimeur.android.gpsfiction.R;
 import com.sdesimeur.android.gpsfiction.classes.GpsFictionControler;
 import com.sdesimeur.android.gpsfiction.classes.GpsFictionData;
 import com.sdesimeur.android.gpsfiction.classes.GpsFictionThing;
-import com.sdesimeur.android.gpsfiction.classes.MyLocationListenerService;
 import com.sdesimeur.android.gpsfiction.classes.PlayerBearingListener;
 import com.sdesimeur.android.gpsfiction.classes.PlayerLocationListener;
 import com.sdesimeur.android.gpsfiction.classes.VehiculeSelectedIdListener;
@@ -33,7 +32,6 @@ import com.sdesimeur.android.gpsfiction.classes.ZoneChangeListener;
 import com.sdesimeur.android.gpsfiction.classes.ZoneSelectListener;
 import com.sdesimeur.android.gpsfiction.classes.ZoneViewHelper;
 import com.sdesimeur.android.gpsfiction.geopoint.MyGeoPoint;
-import com.sdesimeur.android.gpsfiction.helpers.BindToMyLocationListenerHelper;
 import com.sdesimeur.android.gpsfiction.helpers.DistanceToTextHelper;
 
 import org.oscim.android.MapView;
@@ -93,6 +91,10 @@ public class MapFragment
     private float dY1;
     private float distanceToEnd = 0;
 
+    public GpsFictionData getmGpsFictionData() {
+        return getmGpsFictionControler().getmGpsFictionData();
+    }
+
     private static class MapDirection {
         public static final int PLAYER=0;
         public static final int FIX = 1;
@@ -134,13 +136,19 @@ public class MapFragment
         getmGpsFictionData().setSelectedZone(selectedZone);
     }
 
+    private float getBearingOfPlayer() {
+            return getmGpsFictionControler().getBearingOfPlayer();
+    }
+
     public MyGeoPoint getPlayerLocation() {
-        return mMyLocationListenerService.getPlayerGeoPoint();
+        return getmGpsFictionControler().getPlayerGeoPoint();
     }
 
     public MapFragment() {
         super();
     }
+
+
 
     public MapView getMapView() {
         return this.mapView;
@@ -151,18 +159,6 @@ public class MapFragment
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mBindToMyLocationListenerHelper = new BindToMyLocationListenerHelper(getActivity()) {
-            @Override
-            protected void onBindWithMyLocationListener(MyLocationListenerService mlls) {
-                mMyLocationListenerService = mlls;
-                MapFragment.this.onBindWithMyLocationListener();
-            }
-            @Override
-            public void onUnBindWithMyLocationListener() {
-                MapFragment.this.onUnBindWithMyLocationListener();
-                super.onUnBindWithMyLocationListener();
-            }
-        };
             boolean greaterOrEqKitkat = Build.VERSION.SDK_INT >= 19;
             File dir = null;
             if (greaterOrEqKitkat) {
@@ -174,8 +170,6 @@ public class MapFragment
             dir = new File (dir, "/sdesimeur/");
             this.mapsFolder = new File (dir , "/mapsforge/");
     }
-
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -219,7 +213,7 @@ public class MapFragment
                                   onLocationPlayerChanged(getPlayerLocation());
                                   viewForMapDirection.setTag(MapDirection.FIX);
                                   fixViewForMapDirection();
-                                  onBearingPlayerChanged(mMyLocationListenerService.getBearingOfPlayer());
+                                  onBearingPlayerChanged(getBearingOfPlayer());
     	                  break;
     	              default:
     	                  return false;
@@ -267,6 +261,7 @@ public class MapFragment
         addViewGroupForZoomButtons(vg);
         return getRootView();
     }
+
     @Override
     public void onStart() {
         super.onStart();
@@ -280,7 +275,7 @@ public class MapFragment
         //mPrefs.load(mapView.map());
         mapView.onResume();
         registerAllZones();
-        GpsFictionControler gfc = ((GpsFictionActivity)getActivity()).getmGpsFictionControler();
+        GpsFictionControler gfc = getmGpsFictionControler();
         gfc.addPlayerLocationListener(GpsFictionControler.REGISTER.FRAGMENT, this);
         gfc.addPlayerBearingListener(GpsFictionControler.REGISTER.FRAGMENT, this);
         gfc.addZoneSelectListener(GpsFictionControler.REGISTER.FRAGMENT, this);
@@ -291,7 +286,7 @@ public class MapFragment
     @Override
     public void onPause() {
         super.onPause();
-        GpsFictionControler gfc = ((GpsFictionActivity)getActivity()).getmGpsFictionControler();
+        GpsFictionControler gfc = getmGpsFictionControler();
         gfc.removePlayerLocationListener(GpsFictionControler.REGISTER.FRAGMENT, this);
         gfc.removePlayerBearingListener(GpsFictionControler.REGISTER.FRAGMENT, this);
         gfc.removeZoneSelectListener(GpsFictionControler.REGISTER.FRAGMENT, this);
@@ -305,7 +300,7 @@ public class MapFragment
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        GpsFictionControler gfc = ((GpsFictionActivity)getActivity()).getmGpsFictionControler();
+        GpsFictionControler gfc = getmGpsFictionControler();
         gfc.getmCalcRouteAndSpeakService().setMapFragment(null);
     }
 
@@ -315,7 +310,6 @@ public class MapFragment
     }
     @Override
     public void onDestroy() {
-        mBindToMyLocationListenerHelper.onUnBindWithMyLocationListener();
         super.onDestroy();
     }
 
@@ -414,7 +408,7 @@ public class MapFragment
                 int alpha = (res == getVehiculeSelectedId()) ? MapFragment.SELECTEDBUTTON : MapFragment.UNSELECTEDBUTTON;
                 img.getDrawable().setAlpha(alpha);
                 viewGroupForVehiculesButtons.addView(img);
-                GpsFictionControler gfc = ((GpsFictionActivity)getActivity()).getmGpsFictionControler();
+                GpsFictionControler gfc = getmGpsFictionControler();
                 gfc.addVehiculeSelectedIdListener((VehiculeSelectedIdListener) img);
             }
         } else {
@@ -465,7 +459,7 @@ public class MapFragment
                 }
                 fixViewForMapDirection();
                 fixViewForMapPosition();
-                onBearingPlayerChanged(mMyLocationListenerService.getBearingOfPlayer());
+                onBearingPlayerChanged(getBearingOfPlayer());
                 //if (id == MapDirection.NORTH)
                     onLocationPlayerChanged(getPlayerLocation());
             }

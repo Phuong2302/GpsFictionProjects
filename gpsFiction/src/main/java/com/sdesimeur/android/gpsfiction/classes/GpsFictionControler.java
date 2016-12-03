@@ -8,7 +8,6 @@ import android.content.ServiceConnection;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.speech.tts.TextToSpeech;
 
 import com.google.gson.Gson;
 import com.sdesimeur.android.gpsfiction.activities.CalcRouteAndSpeakService;
@@ -67,6 +66,18 @@ public class GpsFictionControler {
 
     public Zone getSelectedZone() {
         return mGpsFictionData.getSelectedZone();
+    }
+
+    public MyGeoPoint getPlayerGeoPoint() {
+        return (mMyLocationListenerService != null )?mMyLocationListenerService.getPlayerGeoPoint():new MyGeoPoint(0,0);
+    }
+
+    public float getBearingOfPlayer() {
+        return (mMyLocationListenerService != null )?mMyLocationListenerService.getBearingOfPlayer():0;
+    }
+
+    public void setSelectedZone(Zone selectedZone) {
+        mGpsFictionData.setSelectedZone(selectedZone);
     }
 
     static public enum REGISTER {
@@ -266,7 +277,6 @@ public class GpsFictionControler {
             CalcRouteAndSpeakService.MyBinder binder = (CalcRouteAndSpeakService.MyBinder) service;
             mCalcRouteAndSpeakService = binder.getService();
             mCalcRouteAndSpeakService.setGpsFictionControler(this);
-            testTTS();
             isBoundToCalcRouteAndSpeakService = true;
         }
 
@@ -309,12 +319,6 @@ public class GpsFictionControler {
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    private void testTTS() {
-        Intent checkIntent = new Intent();
-        checkIntent.setAction(TextToSpeech.Engine.ACTION_CHECK_TTS_DATA);
-        activity.startActivityForResult(checkIntent, 0x01);
     }
 
     public void onCreate(Bundle savedInstanceState) {

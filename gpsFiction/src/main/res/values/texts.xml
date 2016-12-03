@@ -76,5 +76,6 @@
     <string name="changehomeactivity">Change your launcher at startup</string>
     <string name="askchangepasstitle">Change password</string>
     <string name="askchangepassmessage">Please enter the password</string>
+    <string name="nottsengine">No TextToSpeech engine available</string>
 
 </resources>
