@@ -544,8 +544,6 @@ public class MapFragment
         }
         zvh.markerItem.setMarker(zone.isVisible()?zoneMarkerSymbol:null);
         mMarkerLayer.populate();
-
-
         Style st = (zone.isVisible()?
                 (zone.isSelectedZone() ? mStyle4SelectedZone : mStyle4UnSelectedZone):
                 mStyle4InvisibleZone);
@@ -572,9 +570,10 @@ public class MapFragment
 
     public void setViewDistanceToDest () {
         if ((routePathLayer!=null) && (routePathLayer.getPoints().size() > 1)) {
-                DistanceToTextHelper d = new DistanceToTextHelper(distanceToEnd);
-                ((ViewGroup)viewForDistanceToDest.getParent()).setVisibility(View.VISIBLE);
-                viewForDistanceToDest.setText(d.getDistanceInText());
+            DistanceToTextHelper d = new DistanceToTextHelper(distanceToEnd);
+            ((ViewGroup)viewForDistanceToDest.getParent()).setVisibility(View.VISIBLE);
+            viewForDistanceToDest.setText(d.getDistanceInText());
+            viewForDistanceToDest.invalidate();
         } else {
             ((ViewGroup)viewForDistanceToDest.getParent()).setVisibility(View.INVISIBLE);
         }
