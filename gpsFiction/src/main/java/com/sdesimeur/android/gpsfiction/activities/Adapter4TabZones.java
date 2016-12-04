@@ -1,10 +1,11 @@
 package com.sdesimeur.android.gpsfiction.activities;
 
+import android.content.res.Resources;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -14,6 +15,7 @@ import com.sdesimeur.android.gpsfiction.classes.GpsFictionThing;
 import com.sdesimeur.android.gpsfiction.classes.PlayerLocationListener;
 import com.sdesimeur.android.gpsfiction.classes.Zone;
 import com.sdesimeur.android.gpsfiction.classes.ZoneChangeListener;
+import com.sdesimeur.android.gpsfiction.classes.ZoneSelectListener;
 import com.sdesimeur.android.gpsfiction.geopoint.MyGeoPoint;
 import com.sdesimeur.android.gpsfiction.views.MiniCompassView;
 import com.sdesimeur.android.gpsfiction.views.ZoneDistance4ListView;
@@ -23,7 +25,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 
-public class Adapter4TabZones extends BaseAdapter implements PlayerLocationListener, ZoneChangeListener {
+public class Adapter4TabZones extends RecyclerView.Adapter<Adapter4TabZones.ViewHolder> implements PlayerLocationListener, ZoneChangeListener {
     public HashMap<Zone, View> getZone2View() {
         return zone2View;
     }
@@ -35,6 +37,24 @@ public class Adapter4TabZones extends BaseAdapter implements PlayerLocationListe
     public Adapter4TabZones() {
         super();
         if (zonesToOrder == null) zonesToOrder = new LinkedList<>();
+    }
+
+    @Override
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.zones_one_item_view, parent, false);
+        return new ViewHolder(v);
+    }
+
+    @Override
+    public void onBindViewHolder(ViewHolder holder, int position) {
+        Zone zn = zonesToOrder.get(position);
+        holder.miniCompassView.setTag(zn);
+        holder.distanceToZoneView.setTag(zn);
+        holder.setAttachedZone(zn);
+    }
+    @Override
+    public int getItemCount() {
+        return zonesToOrder.size();
     }
 
     public void register(MyTabFragment mtfi) {
@@ -56,11 +76,6 @@ public class Adapter4TabZones extends BaseAdapter implements PlayerLocationListe
         }
     }
 
-    @Override
-    public int getCount() {
-        return zonesToOrder.size();
-    }
-
     private void reOrderZones() {
         if (zonesToOrder != null) {
             Collections.sort(zonesToOrder, Zone.DISTANCE2PLAYERINCREASING);
@@ -69,19 +84,8 @@ public class Adapter4TabZones extends BaseAdapter implements PlayerLocationListe
     }
 
     @Override
-    public Object getItem(int position) {
-        return zonesToOrder.get(position);
-    }
-
-    @Override
-    public long getItemId(int position) {
-        return ((Zone)getItem(position)).getId();
-    }
-
-    @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         LinearLayout layoutItem;
-        LayoutInflater mLayoutInflater = LayoutInflater.from(mMyTabFragment.getmGpsFictionActivity());
         ViewHolder4Zones holder;
         final Zone attachedZone = this.zonesToOrder.get(position);
         if (zone2View.get(attachedZone) != null) {
@@ -134,5 +138,87 @@ public class Adapter4TabZones extends BaseAdapter implements PlayerLocationListe
         }
         */
         gfc.removeZoneChangeListener(this);
+    }
+
+    public class ViewHolder extends RecyclerView.ViewHolder implements ZoneSelectListener {
+        public TextView zoneTitleView = null;
+
+        public ZoneDistance4ListView distanceToZoneView = null;
+        //	private TextView directionOfZone;
+        public MiniCompassView miniCompassView = null;
+        private Zone attachedZone = null;
+
+        public ViewHolder(View itemView) {
+            super(itemView);
+            zoneTitleView = (TextView) itemView.findViewById(R.id.textNameOfZone);
+            distanceToZoneView = (ZoneDistance4ListView) itemView.findViewById(R.id.textDistance);
+            miniCompassView = (MiniCompassView) itemView.findViewById(R.id.miniCompassDirection);
+            zoneTitleView.setText(attachedZone.getName());
+            zoneTitleView.addOnAttachStateChangeListener(new View.OnAttachStateChangeListener() {
+                @Override
+                public void onViewAttachedToWindow(View view) {
+                    mMyTabFragment.getmGpsFictionControler().addZoneSelectListener(GpsFictionControler.REGISTER.HOLDERVIEW, ViewHolder4Zones.this);
+                }
+                @Override
+                public void onViewDetachedFromWindow(View view) {
+                    mMyTabFragment.getmGpsFictionControler().removeZoneSelectListener(GpsFictionControler.REGISTER.HOLDERVIEW, ViewHolder4Zones.this);
+                }
+            });
+            distanceToZoneView.addOnAttachStateChangeListener(new View.OnAttachStateChangeListener() {
+                @Override
+                public void onViewAttachedToWindow(View view) {
+                    mMyTabFragment.getmGpsFictionControler().addPlayerLocationListener(GpsFictionControler.REGISTER.VIEW, this);
+                    super.onViewAttachedToWindow(view);
+                }
+
+                @Override
+                public void onViewDetachedFromWindow(View view) {
+                    mMyTabFragment.getmGpsFictionControler().removePlayerLocationListener(GpsFictionControler.REGISTER.VIEW, this);
+                    super.onViewDetachedFromWindow(view);
+                }
+            });
+            miniCompassView.addOnAttachStateChangeListener(new View.OnAttachStateChangeListener() {
+                @Override
+                public void onViewAttachedToWindow(View view) {
+                    mMyTabFragment.getmGpsFictionControler().addPlayerBearingListener(GpsFictionControler.REGISTER.VIEW, this);
+                    super.onViewAttachedToWindow(view);
+                }
+
+                @Override
+                public void onViewDetachedFromWindow(View view) {
+                    mMyTabFragment.getmGpsFictionControler().removePlayerBearingListener(GpsFictionControler.REGISTER.VIEW, this);
+                    super.onViewDetachedFromWindow(view);
+                }
+            });
+        }
+
+        public Zone getAttachedZone() {
+            return attachedZone;
+        }
+
+        private void updateZoneTitleView() {
+            Resources res = mMyTabFragment.getResources();
+            int titlebackgroundcolor = 0;
+            if (mMyTabFragment.getmGpsFictionControler().getSelectedZone() == attachedZone) {
+                titlebackgroundcolor = res.getColor(R.color.tabnameofzoneselected);
+            } else {
+                titlebackgroundcolor = res.getColor(R.color.tabnameofzone);
+            }
+            zoneTitleView.setBackgroundColor(titlebackgroundcolor);
+            if (zoneTitleView.isShown())
+                zoneTitleView.invalidate();
+        }
+
+        public void setAttachedZone (Zone aZone) {
+            attachedZone = aZone;
+            updateZoneTitleView();
+        }
+
+        @Override
+        public void onZoneSelectChanged(Zone selectedZone, Zone uSZ) {
+            // TODO Auto-generated method stub
+            updateZoneTitleView();
+        }
+
     }
 }
