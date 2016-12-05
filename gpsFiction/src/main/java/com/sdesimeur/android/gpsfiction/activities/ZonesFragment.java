@@ -26,7 +26,9 @@ public class ZonesFragment extends MyTabFragment
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         this.setRootView(inflater.inflate(R.layout.zones_view, container, false));
         this.listZones = (RecyclerView) this.getRootView().findViewById(R.id.listZones);
+        listZones.setTag(getmGpsFictionControler());
         listZones.setAdapter(adapter);
+        listZones.setLayoutManager(new LinearLayoutManager(getActivity()));
         return this.getRootView();
     }
 
@@ -42,18 +44,9 @@ public class ZonesFragment extends MyTabFragment
     @Override
     public void onResume () {
         super.onResume();
-        mDataSetObserver = new DataSetObserver() {
-            public void onChanged () {
-                if (listZones != null) listZones.invalidateViews();
-            }
-        };
-        adapter.registerDataSetObserver(mDataSetObserver);
-        adapter.register(this);
     }
     @Override
     public void onPause () {
-        adapter.unregisterDataSetObserver(mDataSetObserver);
-        adapter.unregister();
         super.onPause();
     }
 

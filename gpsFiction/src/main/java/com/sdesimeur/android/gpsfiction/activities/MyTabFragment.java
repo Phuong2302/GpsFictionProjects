@@ -4,6 +4,7 @@ import android.app.Fragment;
 import android.view.View;
 
 import com.sdesimeur.android.gpsfiction.classes.GpsFictionControler;
+import com.sdesimeur.android.gpsfiction.classes.GpsFictionData;
 
 
 public abstract class MyTabFragment extends Fragment implements MyTabFragmentImpl {
@@ -14,6 +15,12 @@ public abstract class MyTabFragment extends Fragment implements MyTabFragmentImp
     }
 
 
+    public GpsFictionData getmGpsFictionData() {
+        if (getmGpsFictionControler()==null)
+            return null;
+        else
+            return getmGpsFictionControler().getmGpsFictionData();
+    }
     public GpsFictionControler getmGpsFictionControler() {
         if (getmGpsFictionActivity()==null)
             return null;
