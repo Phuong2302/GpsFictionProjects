@@ -14,6 +14,10 @@
         <TextView
             android:id="@+id/textNameOfZone"
             style="@style/TabOneLineTitle"
+            android:clickable="true"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:background="@drawable/color4zoneselected"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:gravity="center_vertical" />

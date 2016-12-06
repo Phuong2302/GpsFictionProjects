@@ -25,7 +25,7 @@
         <item name="android:textStyle">bold|italic</item>
         <item name="android:textSize">@dimen/titleTextSize</item>
         <item name="android:paddingLeft">@dimen/titleTextPadding</item>
-        <item name="android:background">@color/tabnameofzone</item>
+        <item name="android:background">@drawable/color4zoneselected</item>
     </style>
 
     <style name="TabOneLineMiniCompass">

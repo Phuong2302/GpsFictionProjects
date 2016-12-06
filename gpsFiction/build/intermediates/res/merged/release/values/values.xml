@@ -1780,7 +1780,7 @@
         <item name="tabSelectedTextColor">?android:textColorPrimary</item>
     </style>
     <style name="DialogButton">
-        
+        <!-- 	    <item name="android:textStyle">bold|italic</item> -->
         <item name="android:textSize">@dimen/dialogButtonTextSize</item>
         <item name="android:paddingLeft">@dimen/dialogButtonPadding</item>
         <item name="android:paddingRight">@dimen/dialogButtonPadding</item>
@@ -1978,9 +1978,9 @@
         <item name="android:gravity">center</item>
     </style>
     <style name="TabOneLineMiniCompass">
-        
+        <!-- 	    <item name="android:minWidth">@dimen/miniCompassSize</item> -->
         <item name="android:layout_width">@dimen/miniCompassSize</item>
-        
+        <!--    	<item name="android:minHeight">@dimen/miniCompassSize</item> -->
         <item name="android:layout_height">@dimen/miniCompassSize</item>
         <item name="android:gravity">left</item>
         <item name="android:background">@color/minicompassbackground</item>
@@ -1994,11 +1994,11 @@
         <item name="android:textStyle">bold|italic</item>
         <item name="android:textSize">@dimen/titleTextSize</item>
         <item name="android:paddingLeft">@dimen/titleTextPadding</item>
-        <item name="android:background">@color/tabnameofzone</item>
+        <item name="android:background">@drawable/color4zoneselected</item>
     </style>
     <style name="TabTheme">
         <item name="android:minHeight">@dimen/tabMinHeight</item>
-        
+        <!-- 	    <item name="android:background">@color/background4menu</item> -->
         <item name="android:textSize">@dimen/titleTextSize</item>
         <item name="android:textStyle">bold</item>
     </style>
