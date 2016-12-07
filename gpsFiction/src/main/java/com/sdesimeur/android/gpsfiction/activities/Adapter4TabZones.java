@@ -29,7 +29,8 @@ public class Adapter4TabZones extends RecyclerView.Adapter<Adapter4TabZones.View
 
     public Adapter4TabZones() {
         super();
-        if (zonesToOrder == null) zonesToOrder = new LinkedList<>();
+        //if (zonesToOrder == null)
+            zonesToOrder = new LinkedList<>();
     }
 
     @Override
@@ -126,7 +127,7 @@ public class Adapter4TabZones extends RecyclerView.Adapter<Adapter4TabZones.View
 
     @Override
     public void onLocationPlayerChanged(MyGeoPoint playerLocation) {
-        this.reOrderZones();
+        reOrderZones();
     }
 
     @Override
