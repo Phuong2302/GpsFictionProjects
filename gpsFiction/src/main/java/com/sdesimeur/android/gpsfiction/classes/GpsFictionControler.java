@@ -15,7 +15,7 @@ import com.sdesimeur.android.gpsfiction.gpx.GPXParser;
 import com.sdesimeur.android.gpsfiction.gpx.beans.GPX;
 import com.sdesimeur.android.gpsfiction.gpx.beans.Track;
 import com.sdesimeur.android.gpsfiction.gpx.beans.Waypoint;
-import com.sdesimeur.android.gpsfiction.helpers.BindToMyLocationListenerHelper;
+import helpers.BindToMyLocationListenerHelper;
 
 import org.oscim.layers.PathLayer;
 

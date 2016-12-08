@@ -1,4 +1,4 @@
-package com.sdesimeur.android.gpsfiction.helpers;
+package helpers;
 
 import java.text.NumberFormat;
 

@@ -33,7 +33,7 @@ import com.sdesimeur.android.gpsfiction.classes.ZoneChangeListener;
 import com.sdesimeur.android.gpsfiction.classes.ZoneSelectListener;
 import com.sdesimeur.android.gpsfiction.classes.ZoneViewHelper;
 import com.sdesimeur.android.gpsfiction.geopoint.MyGeoPoint;
-import com.sdesimeur.android.gpsfiction.helpers.DistanceToTextHelper;
+import helpers.DistanceToTextHelper;
 
 import org.oscim.android.MapView;
 import org.oscim.android.canvas.AndroidBitmap;

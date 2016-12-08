@@ -6,7 +6,7 @@ import android.os.Bundle;
 import com.sdesimeur.android.gpsfiction.R;
 import com.sdesimeur.android.gpsfiction.geopoint.MyGeoPoint;
 import com.sdesimeur.android.gpsfiction.gpx.beans.Waypoint;
-import com.sdesimeur.android.gpsfiction.helpers.DistanceToTextHelper;
+import helpers.DistanceToTextHelper;
 import com.sdesimeur.android.gpsfiction.polygon.MyPolygon;
 
 import org.oscim.layers.PathLayer;

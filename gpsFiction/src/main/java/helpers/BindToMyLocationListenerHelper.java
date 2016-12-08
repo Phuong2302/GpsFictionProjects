@@ -1,4 +1,4 @@
-package com.sdesimeur.android.gpsfiction.helpers;
+package helpers;
 
 import android.content.ComponentName;
 import android.content.Context;
