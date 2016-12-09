@@ -5,7 +5,6 @@ import android.util.AttributeSet;
 import android.widget.TextView;
 
 import com.sdesimeur.android.gpsfiction.R;
-import com.sdesimeur.android.gpsfiction.activities.GpsFictionActivity;
 import com.sdesimeur.android.gpsfiction.classes.GpsFictionControler;
 import com.sdesimeur.android.gpsfiction.classes.PlayerLocationListener;
 import com.sdesimeur.android.gpsfiction.classes.Zone;
@@ -13,8 +12,6 @@ import com.sdesimeur.android.gpsfiction.classes.ZoneSelectListener;
 import com.sdesimeur.android.gpsfiction.geopoint.MyGeoPoint;
 
 public class ZoneDistance4CompassView extends TextView implements PlayerLocationListener, ZoneSelectListener {
-
-    private GpsFictionActivity mGpsFictionActivity = null;
 
     public ZoneDistance4CompassView(Context context) {
         super(context);
@@ -29,19 +26,32 @@ public class ZoneDistance4CompassView extends TextView implements PlayerLocation
         super(context, attrs, defStyle);
     }
 
-    public void init(GpsFictionActivity gpsFictionActivity) {
-        mGpsFictionActivity = gpsFictionActivity;
-//        mGpsFictionActivity.getmMyLocationListenerService().addPlayerLocationListener(MyLocationListenerService.REGISTER.VIEW, this);
-        mGpsFictionActivity.getmGpsFictionControler().addZoneSelectListener(GpsFictionControler.REGISTER.VIEW, this);
-//		gpsFictionActivity.getGpsFictionData().addZoneSelectListener(GpsFictionData.REGISTER.VIEW, this);
+    @Override
+    protected void onAttachedToWindow() {
+        GpsFictionControler gfc = (GpsFictionControler) getTag();
+        gfc.addPlayerLocationListener(GpsFictionControler.REGISTER.VIEW, this);
+        gfc.addZoneSelectListener(GpsFictionControler.REGISTER.VIEW, this);
+        super.onAttachedToWindow();
     }
 
     @Override
-    public void onLocationPlayerChanged(MyGeoPoint playerLocation) {
+    protected void onDetachedFromWindow() {
+        GpsFictionControler gfc = (GpsFictionControler) getTag();
+        gfc.removePlayerLocationListener(GpsFictionControler.REGISTER.VIEW, this);
+        gfc.removeZoneSelectListener(GpsFictionControler.REGISTER.VIEW, this);
+        super.onDetachedFromWindow();
+    }
 
-        String distanceText = (mGpsFictionActivity.getmGpsFictionControler().getSelectedZone() == null) ?
-                getResources().getString(R.string.noZoneDistance) :
-                mGpsFictionActivity.getmGpsFictionControler().getSelectedZone().getStringDistance2Player();
+
+    @Override
+    public void onLocationPlayerChanged(MyGeoPoint playerLocation) {
+        GpsFictionControler gfc = (GpsFictionControler) getTag();
+        String distanceText ;
+        if (gfc.getSelectedZone() == null) {
+            distanceText = getResources().getString(R.string.noZoneDistance);
+        } else {
+            distanceText = gfc.getSelectedZone().getStringDistance2Player();
+        }
         setText(distanceText);
         if (isShown()) invalidate();
     }

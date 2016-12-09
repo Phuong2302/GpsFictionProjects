@@ -35,8 +35,8 @@
     <string name="askchangepasstitle">Changer le mot de passe</string>
     <string name="askpassmessage">Veuillez entrer le mot de passe pour vérification.</string>
     <string name="askpassmessagereturn">Veuillez entrer le mot de passe pour quitter l\'application</string>
+    <string name="askpasstitle">Démarrage de l\'application</string>
     <string name="askpasstitlereturn">Arrêt de l\'application</string>
-    <string name="askpasstittle">Démarrage de l\'application</string>
     <string name="changeToMyHomeActivity">Veuillez choisir l\'application \"GpsFiction Home Applications\" et validez par \"toujours\"</string>
     <string name="change_admin_password">Changer mot de passe administrateur</string>
     <string name="changehomeactivity">Changer de launcher au démarrage</string>

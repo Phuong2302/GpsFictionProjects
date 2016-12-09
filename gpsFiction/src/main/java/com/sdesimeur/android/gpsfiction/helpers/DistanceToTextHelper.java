@@ -17,19 +17,20 @@ public class DistanceToTextHelper {
         distance=d;
     }
     public String getDistanceInText () {
+        float d=0;
         String distanceText = "";
         if (distance >= 10) {
-            distance = (float) ((Math.ceil(distance * 10)) / 10);
-            distanceText = NumberFormat.getInstance().format(distance) + " km";
-        } else if ((distance >= 0.800) && (distance < 10)) {
-            distance = (float) ((Math.ceil(distance * 100)) / 100);
-            distanceText = NumberFormat.getInstance().format(distance) + " km";
-        } else if ((distance >= 0.060) && (distance < 0.800)) {
-            distance = (float) Math.ceil(distance * 1000);
-            distanceText = NumberFormat.getInstance().format(distance) + " m";
+            d = (float) ((Math.ceil(distance * 10)) / 10);
+            distanceText = NumberFormat.getInstance().format(d) + " km";
+        } else if ((distance >= 0.200) && (distance < 10)) {
+            d = (float) ((Math.ceil(distance * 100)) * 10);
+            distanceText = NumberFormat.getInstance().format(d) + " m";
+        } else if ((distance >= 0.060) && (distance < 0.200)) {
+            d = (float) Math.ceil(distance * 1000);
+            distanceText = NumberFormat.getInstance().format(d) + " m";
         } else {
-            distance = (float) (Math.ceil(distance * 10000) / 10);
-            distanceText = NumberFormat.getInstance().format(distance) + " m";
+            d = (float) (Math.ceil(distance * 10000) / 10);
+            distanceText = NumberFormat.getInstance().format(d) + " m";
         }
         //return distanceText.replaceFirst("[\\.,]00* ", " ");
         return distanceText;

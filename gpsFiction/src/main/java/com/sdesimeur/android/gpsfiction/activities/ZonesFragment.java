@@ -1,6 +1,5 @@
 package com.sdesimeur.android.gpsfiction.activities;
 
-import android.database.DataSetObserver;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -15,7 +14,7 @@ public class ZonesFragment extends MyTabFragment
 {
     private RecyclerView listZones = null;
     private Adapter4TabZones adapter = new Adapter4TabZones();
-    private DataSetObserver mDataSetObserver = null;
+    //private DataSetObserver mDataSetObserver = null;
 
     //TODO add tmpZonesToOrder
     public ZonesFragment() {

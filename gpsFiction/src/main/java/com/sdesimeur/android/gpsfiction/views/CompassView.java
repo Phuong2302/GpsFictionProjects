@@ -12,7 +12,6 @@ import android.util.AttributeSet;
 import android.view.View;
 
 import com.sdesimeur.android.gpsfiction.R;
-import com.sdesimeur.android.gpsfiction.activities.GpsFictionActivity;
 import com.sdesimeur.android.gpsfiction.classes.GpsFictionControler;
 import com.sdesimeur.android.gpsfiction.classes.PlayerBearingListener;
 import com.sdesimeur.android.gpsfiction.classes.Zone;
@@ -38,7 +37,6 @@ public class CompassView extends View implements PlayerBearingListener, ZoneSele
     private float bearingOfPlayer = 0;
     private Typeface typeface = null;
     private boolean firstTimePathsDefined = true;
-    private GpsFictionActivity mGpsFictionActivity;
     public CompassView(Context context) {
         super(context);
         // TODO Auto-generated constructor stub
@@ -203,11 +201,17 @@ public class CompassView extends View implements PlayerBearingListener, ZoneSele
 
     @Override
     protected void onAttachedToWindow() {
+        GpsFictionControler gfc = (GpsFictionControler) getTag();
+        gfc.addPlayerBearingListener(GpsFictionControler.REGISTER.VIEW, this);
+        gfc.addZoneSelectListener(GpsFictionControler.REGISTER.VIEW, this);
         super.onAttachedToWindow();
     }
 
     @Override
     protected void onDetachedFromWindow() {
+        GpsFictionControler gfc = (GpsFictionControler) getTag();
+        gfc.removePlayerBearingListener(GpsFictionControler.REGISTER.VIEW, this);
+        gfc.removeZoneSelectListener(GpsFictionControler.REGISTER.VIEW, this);
         super.onDetachedFromWindow();
     }
 
@@ -228,11 +232,5 @@ public class CompassView extends View implements PlayerBearingListener, ZoneSele
         // TODO Auto-generated method stub
         bearingOfPlayer = angle;
         invalidate();
-    }
-
-    public void init(GpsFictionActivity gpsFictionActivity) {
-        mGpsFictionActivity = gpsFictionActivity;
-//        mGpsFictionActivity.getmMyLocationListenerService().addPlayerBearingListener(MyLocationListenerService.REGISTER.VIEW, this);
-        mGpsFictionActivity.getmGpsFictionControler().addZoneSelectListener(GpsFictionControler.REGISTER.VIEW, this);
     }
 }

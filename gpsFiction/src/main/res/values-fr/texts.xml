@@ -64,7 +64,7 @@
     <string name="passwd_different">Mots de passe différents</string>
     <string name="gps_network_not_enabled">La localisation par GPS n\'est pas activée, veuillez l\'activer</string>
     <string name="open_location_settings">Ouvrir les paramètres de Localisation</string>
-    <string name="askpasstittle">Démarrage de l\'application</string>
+    <string name="askpasstitle">Démarrage de l\'application</string>
     <string name="askpassmessage">Veuillez entrer le mot de passe pour vérification.</string>
     <string name="askpasstitlereturn">Arrêt de l\'application</string>
     <string name="askpassmessagereturn">Veuillez entrer le mot de passe pour quitter l\'application</string>

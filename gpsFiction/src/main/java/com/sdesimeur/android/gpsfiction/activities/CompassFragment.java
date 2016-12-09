@@ -26,22 +26,20 @@ public class CompassFragment extends MyTabFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         setRootView(inflater.inflate(R.layout.compass_view, container, false));
         textviewName = (ZoneName4CompassView) (getRootView().findViewById(R.id.textNameOfZone));
-        textviewName.init(getmGpsFictionActivity());
+        textviewName.setTag(getmGpsFictionControler());
         textviewDistance = (ZoneDistance4CompassView) (getRootView().findViewById(R.id.textDistance));
-        textviewDistance.init(getmGpsFictionActivity());
+        textviewDistance.setTag(getmGpsFictionControler());
         compassView = (CompassView) (getRootView().findViewById(R.id.compassDirection));
-        compassView.init(getmGpsFictionActivity());
+        compassView.setTag(getmGpsFictionControler());
         compassView.setTypeface(getmGpsFictionActivity().getFontFromRes(R.raw.font_dancing));
         GpsFictionControler gfc = getmGpsFictionActivity().getmGpsFictionControler();
         gfc.addPlayerLocationListener(GpsFictionControler.REGISTER.VIEW,CompassFragment.this.textviewDistance);
-        gfc.addPlayerBearingListener(GpsFictionControler.REGISTER.VIEW,CompassFragment.this.compassView);
         return getRootView();
     }
     @Override
     public void onDestroy() {
         GpsFictionControler gfc = getmGpsFictionActivity().getmGpsFictionControler();
         gfc.removePlayerLocationListener(GpsFictionControler.REGISTER.VIEW,CompassFragment.this.textviewDistance);
-        gfc.removePlayerBearingListener(GpsFictionControler.REGISTER.VIEW,CompassFragment.this.compassView);
         super.onDestroy();
     }
 }
