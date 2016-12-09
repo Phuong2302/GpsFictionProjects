@@ -1,8 +1,8 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 25
-    buildToolsVersion '25.0.0'
+    compileSdkVersion 24
+    buildToolsVersion '25.0.1'
     defaultConfig {
         applicationId "com.sdesimeur.android.gpsfiction.enigmealaon"
         minSdkVersion 15
@@ -17,6 +17,10 @@ android {
         }
     }
     productFlavors {
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
 }
 
