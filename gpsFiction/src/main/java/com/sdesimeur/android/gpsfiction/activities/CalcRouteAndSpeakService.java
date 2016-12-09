@@ -39,7 +39,7 @@ import com.sdesimeur.android.gpsfiction.classes.VehiculeSelectedIdListener;
 import com.sdesimeur.android.gpsfiction.classes.Zone;
 import com.sdesimeur.android.gpsfiction.classes.ZoneSelectListener;
 import com.sdesimeur.android.gpsfiction.geopoint.MyGeoPoint;
-import helpers.DistanceToTextHelper;
+import com.sdesimeur.android.gpsfiction.helpers.DistanceToTextHelper;
 import com.sdesimeur.android.gpsfiction.polygon.MyPolygon;
 
 import org.oscim.layers.PathLayer;

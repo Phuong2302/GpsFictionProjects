@@ -17,7 +17,17 @@
             <option value="$PROJECT_DIR$/omim/android" />
           </set>
         </option>
-        <option name="resolveModulePerSourceSet" value="false" />
+        <option name="myModules">
+          <set>
+            <option value="$PROJECT_DIR$" />
+            <option value="$PROJECT_DIR$/app" />
+            <option value="$PROJECT_DIR$/enigmeALaon" />
+            <option value="$PROJECT_DIR$/gpsFiction" />
+            <option value="$PROJECT_DIR$/missionDestruction" />
+            <option value="$PROJECT_DIR$/omim" />
+            <option value="$PROJECT_DIR$/omim/android" />
+          </set>
+        </option>
       </GradleProjectSettings>
     </option>
   </component>
