@@ -201,7 +201,7 @@ public class CompassView extends View implements PlayerBearingListener, ZoneSele
 
     @Override
     protected void onAttachedToWindow() {
-        GpsFictionControler gfc = (GpsFictionControler) getTag();
+        GpsFictionControler gfc = (GpsFictionControler) getTag(R.id.gpsFictionControlerId);
         gfc.addPlayerBearingListener(GpsFictionControler.REGISTER.VIEW, this);
         gfc.addZoneSelectListener(GpsFictionControler.REGISTER.VIEW, this);
         super.onAttachedToWindow();
@@ -209,7 +209,7 @@ public class CompassView extends View implements PlayerBearingListener, ZoneSele
 
     @Override
     protected void onDetachedFromWindow() {
-        GpsFictionControler gfc = (GpsFictionControler) getTag();
+        GpsFictionControler gfc = (GpsFictionControler) getTag(R.id.gpsFictionControlerId);
         gfc.removePlayerBearingListener(GpsFictionControler.REGISTER.VIEW, this);
         gfc.removeZoneSelectListener(GpsFictionControler.REGISTER.VIEW, this);
         super.onDetachedFromWindow();

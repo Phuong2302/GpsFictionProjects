@@ -13,7 +13,7 @@ import com.sdesimeur.android.gpsfiction.R;
 public class ZonesFragment extends MyTabFragment
 {
     private RecyclerView listZones = null;
-    private Adapter4TabZones adapter = new Adapter4TabZones();
+    private Adapter4TabZones adapter;
     //private DataSetObserver mDataSetObserver = null;
 
     //TODO add tmpZonesToOrder
@@ -25,7 +25,9 @@ public class ZonesFragment extends MyTabFragment
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         this.setRootView(inflater.inflate(R.layout.zones_view, container, false));
         this.listZones = (RecyclerView) this.getRootView().findViewById(R.id.listZones);
-        listZones.setTag(getmGpsFictionControler());
+        int id = R.id.gpsFictionControlerId;
+        listZones.setTag(id,getmGpsFictionControler());
+        adapter = new Adapter4TabZones();
         listZones.setAdapter(adapter);
         listZones.setLayoutManager(new LinearLayoutManager(getActivity()));
         return this.getRootView();

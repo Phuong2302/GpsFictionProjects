@@ -13,6 +13,7 @@ android {
         targetSdkVersion 25
         jackOptions {
             enabled true
+            multiDexEnabled true
         }
     }
     buildTypes {

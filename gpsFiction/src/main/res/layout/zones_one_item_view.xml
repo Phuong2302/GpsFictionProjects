@@ -6,12 +6,12 @@
     android:orientation="horizontal">
 
     <LinearLayout
-        android:id="@+id/contentTextForEachZone"
+        android:id="@+id/contenAllForEachZone"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <TextView
+        <com.sdesimeur.android.gpsfiction.views.ZoneName4ListView
             android:id="@+id/textNameOfZone"
             style="@style/TabOneLineTitle"
             android:clickable="true"
@@ -29,7 +29,7 @@
             android:gravity="center_vertical"
             android:orientation="horizontal">
 
-            <com.sdesimeur.android.gpsfiction.views.MiniCompassView
+            <com.sdesimeur.android.gpsfiction.views.MiniCompass4ListView
                 android:id="@+id/miniCompassDirection"
                 style="@style/TabOneLineMiniCompass" />
 

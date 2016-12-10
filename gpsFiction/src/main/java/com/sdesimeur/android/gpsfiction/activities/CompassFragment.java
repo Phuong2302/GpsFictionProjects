@@ -26,11 +26,11 @@ public class CompassFragment extends MyTabFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         setRootView(inflater.inflate(R.layout.compass_view, container, false));
         textviewName = (ZoneName4CompassView) (getRootView().findViewById(R.id.textNameOfZone));
-        textviewName.setTag(getmGpsFictionControler());
+        textviewName.setTag(R.id.gpsFictionControlerId,getmGpsFictionControler());
         textviewDistance = (ZoneDistance4CompassView) (getRootView().findViewById(R.id.textDistance));
-        textviewDistance.setTag(getmGpsFictionControler());
+        textviewDistance.setTag(R.id.gpsFictionControlerId,getmGpsFictionControler());
         compassView = (CompassView) (getRootView().findViewById(R.id.compassDirection));
-        compassView.setTag(getmGpsFictionControler());
+        compassView.setTag(R.id.gpsFictionControlerId,getmGpsFictionControler());
         compassView.setTypeface(getmGpsFictionActivity().getFontFromRes(R.raw.font_dancing));
         GpsFictionControler gfc = getmGpsFictionActivity().getmGpsFictionControler();
         gfc.addPlayerLocationListener(GpsFictionControler.REGISTER.VIEW,CompassFragment.this.textviewDistance);

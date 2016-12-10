@@ -28,7 +28,7 @@ public class ZoneDistance4CompassView extends TextView implements PlayerLocation
 
     @Override
     protected void onAttachedToWindow() {
-        GpsFictionControler gfc = (GpsFictionControler) getTag();
+        GpsFictionControler gfc = (GpsFictionControler) getTag(R.id.gpsFictionControlerId);
         gfc.addPlayerLocationListener(GpsFictionControler.REGISTER.VIEW, this);
         gfc.addZoneSelectListener(GpsFictionControler.REGISTER.VIEW, this);
         super.onAttachedToWindow();
@@ -36,7 +36,7 @@ public class ZoneDistance4CompassView extends TextView implements PlayerLocation
 
     @Override
     protected void onDetachedFromWindow() {
-        GpsFictionControler gfc = (GpsFictionControler) getTag();
+        GpsFictionControler gfc = (GpsFictionControler) getTag(R.id.gpsFictionControlerId);
         gfc.removePlayerLocationListener(GpsFictionControler.REGISTER.VIEW, this);
         gfc.removeZoneSelectListener(GpsFictionControler.REGISTER.VIEW, this);
         super.onDetachedFromWindow();
@@ -45,7 +45,7 @@ public class ZoneDistance4CompassView extends TextView implements PlayerLocation
 
     @Override
     public void onLocationPlayerChanged(MyGeoPoint playerLocation) {
-        GpsFictionControler gfc = (GpsFictionControler) getTag();
+        GpsFictionControler gfc = (GpsFictionControler) getTag(R.id.gpsFictionControlerId);
         String distanceText ;
         if (gfc.getSelectedZone() == null) {
             distanceText = getResources().getString(R.string.noZoneDistance);

@@ -8,11 +8,12 @@ import android.util.AttributeSet;
 import android.view.View;
 
 import com.sdesimeur.android.gpsfiction.R;
+import com.sdesimeur.android.gpsfiction.classes.GpsFictionControler;
 import com.sdesimeur.android.gpsfiction.classes.PlayerBearingListener;
 import com.sdesimeur.android.gpsfiction.classes.Zone;
 
 
-public class MiniCompassView extends View implements PlayerBearingListener {
+public class MiniCompass4ListView extends View implements PlayerBearingListener {
     private Paint arrowPaint = new Paint();
     private Path arrowPathCompass = null;
     private Path arrowPathPlayerInZone = null;
@@ -20,7 +21,7 @@ public class MiniCompassView extends View implements PlayerBearingListener {
     private boolean mAnimate;
     private long mNextTime;
 
-    public MiniCompassView(Context context) {
+    public MiniCompass4ListView(Context context) {
         super(context);
     }
 
@@ -28,11 +29,11 @@ public class MiniCompassView extends View implements PlayerBearingListener {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
         this.setMeasuredDimension(this.getSize(), this.getSize());
     }*/
-    public MiniCompassView(Context context, AttributeSet attrs) {
+    public MiniCompass4ListView(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public MiniCompassView(Context context, AttributeSet attrs, int defStyle) {
+    public MiniCompass4ListView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
     }
 
@@ -70,7 +71,7 @@ public class MiniCompassView extends View implements PlayerBearingListener {
         canvas.translate(tx, tx);
         this.setArrowPaths();
         canvas.drawColor(this.getResources().getColor(R.color.minicompassbackground));
-        if (((Zone)getTag()).isPlayerInThisZone()) {
+        if (((Zone)getTag(R.id.attachedZoneId)).isPlayerInThisZone()) {
             this.arrowPaint.setAntiAlias(true);
             this.arrowPaint.setColor(this.getResources().getColor(R.color.minicompassarrow));
             this.arrowPaint.setStyle(Paint.Style.STROKE);
@@ -83,24 +84,12 @@ public class MiniCompassView extends View implements PlayerBearingListener {
             this.arrowPaint.setAntiAlias(true);
             this.arrowPaint.setColor(this.getResources().getColor(R.color.minicompassarrow));
             this.arrowPaint.setStyle(Paint.Style.FILL);
-            canvas.rotate(((Zone)getTag()).getAnglePlayer2Zone());
+            canvas.rotate(((Zone)getTag(R.id.attachedZoneId)).getAnglePlayer2Zone());
             canvas.drawPath(this.arrowPathCompass, this.arrowPaint);
             this.arrowPaint.setColor(this.getResources().getColor(R.color.minicompasscenter));
 //            this.arrowPaint.setStyle(Paint.Style.FILL);
             canvas.drawPath(this.centerPath, this.arrowPaint);
         }
-    }
-
-    @Override
-    protected void onAttachedToWindow() {
-        mAnimate = true;
-        super.onAttachedToWindow();
-    }
-
-    @Override
-    protected void onDetachedFromWindow() {
-        mAnimate = false;
-        super.onDetachedFromWindow();
     }
 
     @Override
@@ -111,6 +100,23 @@ public class MiniCompassView extends View implements PlayerBearingListener {
     private int getSize() {
         int size = getResources().getDimensionPixelSize(R.dimen.miniCompassSize);
         return size;
+    }
+    @Override
+    protected void onAttachedToWindow() {
+        mAnimate = true;
+        int id = R.id.gpsFictionControlerId;
+        GpsFictionControler gfc = (GpsFictionControler) getTag(id);
+        gfc.addPlayerBearingListener(GpsFictionControler.REGISTER.VIEW, this);
+        super.onAttachedToWindow();
+    }
+
+    @Override
+    protected void onDetachedFromWindow() {
+        mAnimate = false;
+        int id = R.id.gpsFictionControlerId;
+        GpsFictionControler gfc = (GpsFictionControler) getTag(id);
+        gfc.removePlayerBearingListener(GpsFictionControler.REGISTER.VIEW, this);
+        super.onDetachedFromWindow();
     }
 
 }

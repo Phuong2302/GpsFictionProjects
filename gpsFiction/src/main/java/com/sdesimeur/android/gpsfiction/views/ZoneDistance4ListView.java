@@ -4,6 +4,8 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.widget.TextView;
 
+import com.sdesimeur.android.gpsfiction.R;
+import com.sdesimeur.android.gpsfiction.classes.GpsFictionControler;
 import com.sdesimeur.android.gpsfiction.classes.PlayerLocationListener;
 import com.sdesimeur.android.gpsfiction.classes.Zone;
 import com.sdesimeur.android.gpsfiction.geopoint.MyGeoPoint;
@@ -25,7 +27,8 @@ public class ZoneDistance4ListView extends TextView implements PlayerLocationLis
 
     @Override
     public void onLocationPlayerChanged(MyGeoPoint playerLocation) {
-        String distanceText = ((Zone)getTag()).getStringDistance2Player();
+        int id = R.id.attachedZoneId;
+        String distanceText = ((Zone)getTag(id)).getStringDistance2Player();
         this.setText(distanceText);
         if (this.isShown())
             this.invalidate();
@@ -36,4 +39,21 @@ public class ZoneDistance4ListView extends TextView implements PlayerLocationLis
         if (this.isShown())
             this.invalidate();
     }
+
+    @Override
+    protected void onAttachedToWindow() {
+        int id = R.id.gpsFictionControlerId;
+        GpsFictionControler gfc = (GpsFictionControler) getTag(id);
+        gfc.addPlayerLocationListener(GpsFictionControler.REGISTER.VIEW, this);
+        super.onAttachedToWindow();
+    }
+
+    @Override
+    protected void onDetachedFromWindow() {
+        int id = R.id.gpsFictionControlerId;
+        GpsFictionControler gfc = (GpsFictionControler) getTag(id);
+        gfc.removePlayerLocationListener(GpsFictionControler.REGISTER.VIEW, this);
+        super.onDetachedFromWindow();
+    }
+
 }
