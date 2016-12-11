@@ -64,14 +64,14 @@ public class Adapter4TabZones extends RecyclerView.Adapter<Adapter4TabZones.View
     public void onAttachedToRecyclerView (RecyclerView view) {
         int id = R.id.gpsFictionControlerId;
         GpsFictionControler gfc = (GpsFictionControler) view.getTag(id);
-        gfc.addPlayerLocationListener(GpsFictionControler.REGISTER.ADAPTERVIEW, this);
-        gfc.addZoneChangeListener(this);
         Iterator<GpsFictionThing> it = gfc.getmGpsFictionData().getGpsFictionThing(Zone.class).iterator();
         while (it.hasNext()) {
             Zone zn = (Zone) it.next();
             if (zn.isVisible()) zonesToOrder.add(zn);
         }
         reOrderZones();
+        gfc.addPlayerLocationListener(GpsFictionControler.REGISTER.ADAPTERVIEW, this);
+        gfc.addZoneChangeListener(this);
         super.onAttachedToRecyclerView(view);
     }
     @Override
