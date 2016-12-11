@@ -27,6 +27,11 @@ public class Task extends GpsFictionThing {
         this.complete = val[0];
     }
 
+    @Override
+    public void validate() {
+
+    }
+
     public void setAttrs(boolean visible, boolean active, boolean complete) {
         this.setComplete(complete);
         this.setAttrs(visible, active);

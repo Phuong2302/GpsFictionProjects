@@ -22,19 +22,22 @@ public class GpsFictionData {
     private static final String NBGFT = "nbGpsFictionThings";
     private static final String PASSASBUNDLE = "PassAsBundle";
     private static final String GFTINCLUDED = "GFTIncluded";
-    protected boolean allreadyConfigured = false; // Parcel
     protected transient Item inventory = null; // Parcel
     private transient Zone selectedZone = null;
     private transient Zone unSelectedZone = null;
 
     private transient PathLayer routePathLayer = null;
-    private GpsFictionControler mGpsFictionControler;
-    private Resources resources;
+    private transient GpsFictionControler mGpsFictionControler;
+    private transient Resources resources;
+
+    protected boolean allreadyConfigured = false; // Parcel
+    private int vehiculeSelectedId = R.drawable.compass;
+    private HashSet<GpsFictionThing> gpsFictionThings = new HashSet<>();
+    private int zoomLevel = INITZOOMLEVEL;
 
     public int getZoomLevel() {
         return zoomLevel;
     }
-
     public void setZoomLevel(int zoomLevel) {
         this.zoomLevel = zoomLevel;
     }
@@ -47,12 +50,6 @@ public class GpsFictionData {
         zoomLevel--;
         return zoomLevel;
     }
-    private int zoomLevel = INITZOOMLEVEL;
-
-    //    private MyLocationListener mMyLocationListener = null;
-    private HashSet<GpsFictionThing> gpsFictionThings = new HashSet<>();
-    //public transient boolean toSave=true;
-    private int vehiculeSelectedId = R.drawable.compass;
     public int getVehiculeSelectedId() {
         return vehiculeSelectedId;
     }

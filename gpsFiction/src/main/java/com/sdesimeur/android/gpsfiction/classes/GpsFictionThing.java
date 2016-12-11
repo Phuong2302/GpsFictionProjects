@@ -7,8 +7,21 @@ import com.sdesimeur.android.gpsfiction.R;
 import com.sdesimeur.android.gpsfiction.activities.GpsFictionActivity;
 
 
-public class GpsFictionThing {
+public abstract class GpsFictionThing {
     protected transient GpsFictionData mGpsFictionData = null;
+
+    protected boolean[] valbool = {
+            true,
+            true
+    };
+
+    protected int[] valint = new int[]{
+            0,
+            0,
+            -1,
+            0,
+            R.drawable.flag_green
+    };
 
     public int[] getValint() {
         return valint;
@@ -21,22 +34,9 @@ public class GpsFictionThing {
     public boolean[] getValbool() {
         return valbool;
     }
-
     public void setValbool(boolean[] valbool) {
         this.valbool = valbool;
     }
-
-    private int[] valint = new int[]{
-            0,
-            0,
-            -1,
-            0,
-            R.drawable.flag_green
-    };
-    private boolean[] valbool = {
-            true,
-            true
-    };
 
     public GpsFictionThing() {
     }
@@ -197,7 +197,5 @@ public class GpsFictionThing {
         static int visible = 0;
         static int active = 1;
     }
-    public void validate() {
-
-    }
+    public abstract void validate();
 }

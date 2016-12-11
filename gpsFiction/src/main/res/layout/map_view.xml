@@ -42,7 +42,7 @@
                 style="@style/MapDistanceTitle"
                 android:text="@string/distanceToDest"
                 />
-            <TextView
+            <com.sdesimeur.android.gpsfiction.views.ZoneDistance4MapFragment
                 android:id="@+id/forDistanceToDest"
                 style="@style/MapDistance"
                 android:layout_width="wrap_content"

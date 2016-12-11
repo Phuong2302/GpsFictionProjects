@@ -22,5 +22,10 @@ public class Character extends Container {
         super.setByBundle(toPass);
     }
 
+    @Override
+    public void validate() {
+
+    }
+
 
 }

@@ -17,11 +17,9 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.ZoomControls;
 
 import com.sdesimeur.android.gpsfiction.R;
-import com.sdesimeur.android.gpsfiction.classes.DistanceByRouteListener;
 import com.sdesimeur.android.gpsfiction.classes.GpsFictionControler;
 import com.sdesimeur.android.gpsfiction.classes.GpsFictionData;
 import com.sdesimeur.android.gpsfiction.classes.GpsFictionThing;
@@ -33,7 +31,6 @@ import com.sdesimeur.android.gpsfiction.classes.ZoneChangeListener;
 import com.sdesimeur.android.gpsfiction.classes.ZoneSelectListener;
 import com.sdesimeur.android.gpsfiction.classes.ZoneViewHelper;
 import com.sdesimeur.android.gpsfiction.geopoint.MyGeoPoint;
-import com.sdesimeur.android.gpsfiction.helpers.DistanceToTextHelper;
 
 import org.oscim.android.MapView;
 import org.oscim.android.canvas.AndroidBitmap;
@@ -68,8 +65,7 @@ import static org.oscim.layers.marker.MarkerSymbol.HotspotPlace;
 
 public class MapFragment
         extends MyTabFragment
-        implements PlayerBearingListener, ZoneChangeListener, PlayerLocationListener, DistanceByRouteListener,
-                    ZoneSelectListener, ItemizedLayer.OnItemGestureListener<MarkerItem> {
+        implements PlayerBearingListener, ZoneChangeListener, PlayerLocationListener, ZoneSelectListener, ItemizedLayer.OnItemGestureListener<MarkerItem> {
     private static final float MINMOVE = 20;
     MapView mapView;
     Map mMap;
@@ -79,7 +75,6 @@ public class MapFragment
     private static final int UNSELECTEDBUTTON = 100;
     private ImageView viewForMapDirection;
     private ImageView viewForMapPosition;
-    private TextView viewForDistanceToDest;
     //int clickCount;
     //private int PositionTouchX;
     //private int PositionTouchY;
@@ -90,16 +85,9 @@ public class MapFragment
     //private int lastAction;
     private float dX1;
     private float dY1;
-    private float distanceToEnd = 0;
 
     public GpsFictionData getmGpsFictionData() {
         return getmGpsFictionControler().getmGpsFictionData();
-    }
-
-    @Override
-    public void onDistanceByRouteChanged(float distance) {
-        distanceToEnd = distance;
-        setViewDistanceToDest();
     }
 
     private static class MapDirection {
@@ -262,7 +250,8 @@ public class MapFragment
         getmGpsFictionControler().setRoutePathLayer(routePathLayer);
         ViewGroup vg = (ViewGroup) getRootView();
         addViewGroupForVehiculesButtons(vg);
-        viewForDistanceToDest = (TextView) vg.findViewById(R.id.forDistanceToDest);
+        View viewForDistanceToDest = vg.findViewById(R.id.forDistanceToDest);
+        viewForDistanceToDest.setTag(R.id.gpsFictionControlerId,getmGpsFictionControler());
         addViewForMapDirection(vg);
         addViewForMapPosition(vg);
         addViewGroupForZoomButtons(vg);
@@ -286,7 +275,6 @@ public class MapFragment
         gfc.addPlayerLocationListener(GpsFictionControler.REGISTER.FRAGMENT, this);
         gfc.addPlayerBearingListener(GpsFictionControler.REGISTER.FRAGMENT, this);
         gfc.addZoneSelectListener(GpsFictionControler.REGISTER.FRAGMENT, this);
-        gfc.addDistanceByRouteChangeListener(this);
         gfc.addZoneChangeListener(this);
     }
 
@@ -297,7 +285,6 @@ public class MapFragment
         gfc.removePlayerLocationListener(GpsFictionControler.REGISTER.FRAGMENT, this);
         gfc.removePlayerBearingListener(GpsFictionControler.REGISTER.FRAGMENT, this);
         gfc.removeZoneSelectListener(GpsFictionControler.REGISTER.FRAGMENT, this);
-        gfc.removeDistanceByRouteChangeListener(this);
         gfc.removeZoneChangeListener(this);
     }
 
@@ -357,24 +344,6 @@ public class MapFragment
             }
         });
     }
-/*
-    private void onVehiculeChange(View v) {
-            ImageView v1 = (ImageView) v;
-            int res = (int) v1.getTag();
-            if (getVehiculeSelectedId() != res) {
-                setVehiculeSelectedId(res);
-                v1.getDrawable().setAlpha(MapFragment.SELECTEDBUTTON);
-                v1.invalidate();
-                for (int idx=0; idx < viewGroupForVehiculesButtons.getChildCount(); idx++) {
-                    ImageView v2 = (ImageView) viewGroupForVehiculesButtons.getChildAt(idx);
-                    if (((int) v2.getTag()) != res) {
-                        v2.getDrawable().setAlpha(MapFragment.UNSELECTEDBUTTON);
-                        v2.invalidate();
-                    }
-                }
-            }
-    }
-*/
     private void addViewGroupForVehiculesButtons(ViewGroup vg) {
         TypedArray vehicules = getResources().obtainTypedArray(R.array.vehicules_array);
         if (vehicules.length() > 1) {
@@ -486,7 +455,6 @@ public class MapFragment
         if (sZnO != null) {
             onZoneChanged(sZnO);
         }
-        setViewDistanceToDest();
     }
     @Override
     public void onLocationPlayerChanged(MyGeoPoint playerLocation) {
@@ -499,7 +467,6 @@ public class MapFragment
                 mMap.setMapPosition(pos);
                 mMap.updateMap(true);
             }
-            setViewDistanceToDest();
         }
     }
 
@@ -568,16 +535,6 @@ public class MapFragment
         mMarkerLayer.populate();
     }
 
-    public void setViewDistanceToDest () {
-        if ((routePathLayer!=null) && (routePathLayer.getPoints().size() > 1)) {
-            DistanceToTextHelper d = new DistanceToTextHelper(distanceToEnd);
-            ((ViewGroup)viewForDistanceToDest.getParent()).setVisibility(View.VISIBLE);
-            viewForDistanceToDest.setText(d.getDistanceInText());
-            viewForDistanceToDest.invalidate();
-        } else {
-            ((ViewGroup)viewForDistanceToDest.getParent()).setVisibility(View.INVISIBLE);
-        }
-    }
     private Bitmap getRotatedBitmap (Bitmap bitmap , float angle, boolean keepSize){
         Matrix m = new Matrix();
         m.setRotate(angle, bitmap.getWidth()/2, bitmap.getHeight()/2);

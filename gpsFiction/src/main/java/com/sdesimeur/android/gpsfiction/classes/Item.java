@@ -22,4 +22,9 @@ public class Item extends Container {
         super.setByBundle(toPass);
     }
 
+    @Override
+    public void validate() {
+
+    }
+
 }

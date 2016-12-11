@@ -3,7 +3,6 @@ package com.sdesimeur.android.gpsfiction.enigmealaon;
 import android.os.Bundle;
 
 import com.sdesimeur.android.gpsfiction.activities.GpsFictionActivity;
-import com.sdesimeur.android.gpsfiction.R;
 /**
  * Created by sam on 06/09/15.
  */

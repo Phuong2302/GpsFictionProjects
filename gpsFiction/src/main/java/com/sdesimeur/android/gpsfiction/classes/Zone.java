@@ -9,10 +9,6 @@ import com.sdesimeur.android.gpsfiction.gpx.beans.Waypoint;
 import com.sdesimeur.android.gpsfiction.helpers.DistanceToTextHelper;
 import com.sdesimeur.android.gpsfiction.polygon.MyPolygon;
 
-import org.oscim.layers.PathLayer;
-import org.oscim.layers.marker.MarkerItem;
-import org.oscim.layers.marker.MarkerSymbol;
-
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Iterator;
@@ -20,25 +16,21 @@ import java.util.Iterator;
 public class Zone extends Container implements ZoneEnterOrExitInterface, PlayerLocationListener, PlayerBearingListener, Comparable<Zone> {
     private final static double RAPPORT = 2 * Math.PI / 0.005;
     private final static int NB_MIN_DE_COTES = 8;
-    private transient final boolean transportable = false;
     private transient MyGeoPoint nearestPoint2Player = new MyGeoPoint(0,0);
     private transient DistanceToTextHelper distance2Player = new DistanceToTextHelper(0);
     private transient float bearingPlayer = 0;
     private transient float bearing2Zone = 0;
     private transient float anglePlayer2Zone = 0;
     private transient boolean playerIsInThisZone = false;
-//    private Polyline zonePolyline = null;
-    private transient MarkerItem zoneMarkerItem = null;
     private transient float radius = 0; // distance max entre points de zone et centre de zone ou rayon pour une zone circulaire.
     private transient MyGeoPoint centerPoint = null; // moyenne des points ou centre d'une zone circulaire,
+
+    private MyPolygon shape = new MyPolygon(); // contour de zone
+
 
     public void setShape(MyPolygon shape) {
         this.shape = shape;
     }
-
-    private MyPolygon shape = new MyPolygon(); // contour de zone
-    private transient MarkerSymbol zoneMarkerSymbol = null;
-    private transient PathLayer zonePathLayer = null;
 
     /*    static final Parcelable.Creator<Zone> CREATOR = new Parcelable.Creator<Zone>() {
             public Zone createFromParcel(Parcel in) {
@@ -251,8 +243,6 @@ public class Zone extends Container implements ZoneEnterOrExitInterface, PlayerL
     }
 
     public void validate() {
-        super.validate();
-       // getGpsFictionActivity().getGpsFictionData().addZoneSelectListener(GpsFictionData.REGISTER.ZONE, this);
         mGpsFictionData.getmGpsFictionControler().addPlayerLocationListener(GpsFictionControler.REGISTER.ZONE, this);
         mGpsFictionData.getmGpsFictionControler().addPlayerBearingListener(GpsFictionControler.REGISTER.ZONE, this);
         mGpsFictionData.fireZoneChangeListener(this);
@@ -276,7 +266,10 @@ public class Zone extends Container implements ZoneEnterOrExitInterface, PlayerL
         // TODO Auto-generated method stub
 
     }
-
+    public void init (GpsFictionData gfd) {
+        super.init(gfd);
+        transportable = false;
+    }
     public boolean isSelectedZone() {
         return (this == mGpsFictionData.getSelectedZone());
     }

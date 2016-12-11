@@ -6,10 +6,10 @@ import java.util.HashSet;
 import java.util.Iterator;
 
 
-public class Container extends GpsFictionThing {
-    private int maxIncludedThings = 0;
-    private boolean transportable = true;
-    private transient HashSet<GpsFictionThing> includedThings = new HashSet<GpsFictionThing>();
+public abstract class Container extends GpsFictionThing {
+    protected int maxIncludedThings = 0;
+    protected boolean transportable = true;
+    protected transient HashSet<GpsFictionThing> includedThings = new HashSet<GpsFictionThing>();
 
     public Container() {
         super();
