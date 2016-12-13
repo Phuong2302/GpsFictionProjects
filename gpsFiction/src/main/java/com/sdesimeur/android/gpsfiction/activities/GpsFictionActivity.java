@@ -5,10 +5,12 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.multidex.MultiDex;
@@ -21,6 +23,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 
+import com.google.gson.Gson;
 import com.sdesimeur.android.gpsfiction.R;
 import com.sdesimeur.android.gpsfiction.classes.GpsFictionControler;
 
@@ -35,6 +38,7 @@ import java.util.HashSet;
 
 public class GpsFictionActivity extends Activity {
     private static final String TAGFONT = "FONT";
+    private static final String BUNDLEASJSON = "BundleAsJson";
     private FloatingActionButton fabCreate;
     private int lastFabAction;
     private float dYFab;
@@ -167,6 +171,7 @@ public class GpsFictionActivity extends Activity {
 
     @Override
     public void onBackPressed() {
+        /*
         if (this.dialogFragments.isEmpty()) {
             MyDialogFragment df = new MyDialogFragment();
             df.init(R.string.dialogCloseTaskTitle, R.string.dialogCloseTaskText);
@@ -175,6 +180,7 @@ public class GpsFictionActivity extends Activity {
             df.show(this.fragmentManager);
         }
         return;
+        */
     }
 
     @Override
@@ -195,6 +201,13 @@ public class GpsFictionActivity extends Activity {
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED);
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION|View.SYSTEM_UI_FLAG_LOW_PROFILE);
         mGpsFictionControler = new GpsFictionControler(this);
+        Gson gson = new Gson();
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
+        String tmp = settings.getString(BUNDLEASJSON, null);
+        if (tmp != null) {
+            Bundle in = gson.fromJson(tmp , Bundle.class);
+            mGpsFictionControler.getmGpsFictionData().setByBundle(in);
+        }
         if (savedInstanceState != null) {
             mGpsFictionControler.onCreate(savedInstanceState);
             selectedFragmentId = savedInstanceState.getInt("lastSelectedFragmentId", R.id.Zones);
@@ -294,6 +307,12 @@ public class GpsFictionActivity extends Activity {
 
     @Override
     public void onDestroy() {
+        Bundle toPass = mGpsFictionControler.getmGpsFictionData().getByBundle();
+        Gson gson = new Gson();
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences.Editor ed = settings.edit();
+        ed.putString(BUNDLEASJSON, gson.toJson(toPass));
+        ed.commit();
         mGpsFictionControler.onDestroy();
         super.onDestroy();
     }

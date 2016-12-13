@@ -352,12 +352,12 @@ public class GpsFictionControler {
     }
     public void onSaveInstanceState(Bundle savedInstanceState) {
         //if (mGpsFictionData.toSave) {
-        Gson gson = new Gson();
-        String test = gson.toJson(mGpsFictionData);
         Bundle toPass = mGpsFictionData.getByBundle();
         savedInstanceState.putBundle("GpsFictionData", toPass);
         //savedInstanceState.putString("GpsFictionDataAsJson",test);
         //}
+        Gson gson = new Gson();
+        String test = gson.toJson(toPass);
     }
 
 }
