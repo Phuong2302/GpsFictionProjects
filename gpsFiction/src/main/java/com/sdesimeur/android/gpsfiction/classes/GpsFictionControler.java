@@ -9,7 +9,6 @@ import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.IBinder;
 
-import com.google.gson.Gson;
 import com.sdesimeur.android.gpsfiction.activities.CalcRouteAndSpeakService;
 import com.sdesimeur.android.gpsfiction.geopoint.MyGeoPoint;
 import com.sdesimeur.android.gpsfiction.gpx.GPXParser;
@@ -356,8 +355,6 @@ public class GpsFictionControler {
         savedInstanceState.putBundle("GpsFictionData", toPass);
         //savedInstanceState.putString("GpsFictionDataAsJson",test);
         //}
-        Gson gson = new Gson();
-        String test = gson.toJson(toPass);
     }
 
 }

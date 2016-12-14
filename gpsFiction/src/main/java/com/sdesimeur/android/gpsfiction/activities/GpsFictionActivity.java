@@ -10,6 +10,7 @@ import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.os.Parcel;
 import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -102,7 +103,7 @@ public class GpsFictionActivity extends Activity {
         if (why == R.string.dialogCloseTaskTitle) {
             if (reponse == R.string.dialogButtonNo) {
             //    mGpsFictionData.toSave = false;
-                this.finish();
+                finish();
             }
         }
     }
@@ -169,9 +170,9 @@ public class GpsFictionActivity extends Activity {
    //     drawerLayout.openDrawer(Gravity.LEFT);
     }
 
+        /*
     @Override
     public void onBackPressed() {
-        /*
         if (this.dialogFragments.isEmpty()) {
             MyDialogFragment df = new MyDialogFragment();
             df.init(R.string.dialogCloseTaskTitle, R.string.dialogCloseTaskText);
@@ -180,8 +181,8 @@ public class GpsFictionActivity extends Activity {
             df.show(this.fragmentManager);
         }
         return;
-        */
     }
+        */
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -205,8 +206,8 @@ public class GpsFictionActivity extends Activity {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
         String tmp = settings.getString(BUNDLEASJSON, null);
         if (tmp != null) {
-            Bundle in = gson.fromJson(tmp , Bundle.class);
-            mGpsFictionControler.getmGpsFictionData().setByBundle(in);
+ //           Bundle in = gson.fromJson(tmp , Bundle.class);
+ //           mGpsFictionControler.getmGpsFictionData().setByBundle(in);
         }
         if (savedInstanceState != null) {
             mGpsFictionControler.onCreate(savedInstanceState);
@@ -308,10 +309,13 @@ public class GpsFictionActivity extends Activity {
     @Override
     public void onDestroy() {
         Bundle toPass = mGpsFictionControler.getmGpsFictionData().getByBundle();
+        Parcel p = Parcel.obtain();
+        toPass.writeToParcel(p,0);
         Gson gson = new Gson();
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
         SharedPreferences.Editor ed = settings.edit();
-        ed.putString(BUNDLEASJSON, gson.toJson(toPass));
+        String tmp = gson.toJson(toPass);
+        ed.putString(BUNDLEASJSON, tmp);
         ed.commit();
         mGpsFictionControler.onDestroy();
         super.onDestroy();

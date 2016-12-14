@@ -6,8 +6,14 @@ import android.os.Bundle;
 import com.sdesimeur.android.gpsfiction.R;
 import com.sdesimeur.android.gpsfiction.activities.GpsFictionActivity;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 
 public abstract class GpsFictionThing {
+    private static final String VALBOOLID = "ValBoolId";
+    private static final String VALINTID = "ValIntId";
     protected transient GpsFictionData mGpsFictionData = null;
 
     protected boolean[] valbool = {
@@ -43,16 +49,40 @@ public abstract class GpsFictionThing {
 
     public Bundle getByBundle() {
         Bundle dest = new Bundle();
-        dest.putBooleanArray("ValBool", this.valbool);
-        dest.putIntArray("ValInt", this.valint);
+        dest.putBooleanArray(VALBOOLID, this.valbool);
+        dest.putIntArray(VALINTID, this.valint);
         return dest;
+    }
+    public JSONObject getJson() {
+        JSONObject obj = new JSONObject();
+        JSONArray arr1 = new JSONArray();
+        JSONArray arr2 = new JSONArray();
+        arr1.put( valbool );
+        arr2.put( valint );
+        try {
+            obj.put(VALBOOLID,arr1);
+            obj.put(VALINTID,arr2);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return  obj;
     }
 
     public void setByBundle(Bundle in) {
-        this.valbool = in.getBooleanArray("ValBool");
-        this.valint = in.getIntArray("ValInt");
+        this.valbool = in.getBooleanArray(VALBOOLID);
+        this.valint = in.getIntArray(VALINTID);
     }
-
+    public void setJson (JSONObject obj) {
+        JSONArray arr1;
+        JSONArray arr2;
+        try {
+            arr1 = obj.getJSONArray(VALBOOLID);
+            arr2 = obj.getJSONArray(VALINTID);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        arr1.getBoolean()
+    }
     public void init(GpsFictionData gpsFictionData) {
         mGpsFictionData = gpsFictionData;
         mGpsFictionData.addGpsFictionThing(this);

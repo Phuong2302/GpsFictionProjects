@@ -86,12 +86,8 @@ public class GpsFictionData {
         dest.putStringArrayList("GFTNameArray", gftn);
         it = this.gpsFictionThings.iterator();
         Bundle toPass;
-        Gson gson = null;
         while (it.hasNext()) {
-            gson = new Gson();
             gft = it.next();
-            String name = gft.getName();
-            String test = gson.toJson(gft);
             toPass = gft.getByBundle();
             dest.putBundle("PassAsBundle" + index, toPass);
             index++;
