@@ -7,6 +7,7 @@ import com.google.gson.Gson;
 import com.sdesimeur.android.gpsfiction.R;
 import com.sdesimeur.android.gpsfiction.activities.GpsFictionActivity;
 
+import org.json.JSONException;
 import org.oscim.layers.PathLayer;
 
 import java.util.ArrayList;
@@ -69,7 +70,7 @@ public class GpsFictionData {
         return routePathLayer;
     }
 
-    public Bundle getByBundle() {
+    public Bundle getByBundle() throws JSONException {
         Bundle dest = new Bundle();
         int index = 0;
         boolean[] valbool = {this.allreadyConfigured};
@@ -114,7 +115,7 @@ public class GpsFictionData {
         return dest;
     }
 
-    public void setByBundle(Bundle in) {
+    public void setByBundle(Bundle in) throws JSONException {
         boolean[] val = new boolean[1];
         Class myclass = null;
         GpsFictionThing gft = null;

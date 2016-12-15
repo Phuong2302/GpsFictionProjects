@@ -9,6 +9,8 @@ import com.sdesimeur.android.gpsfiction.gpx.beans.Waypoint;
 import com.sdesimeur.android.gpsfiction.helpers.DistanceToTextHelper;
 import com.sdesimeur.android.gpsfiction.polygon.MyPolygon;
 
+import org.json.JSONException;
+
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Iterator;
@@ -52,7 +54,7 @@ public class Zone extends Container implements ZoneEnterOrExitInterface, PlayerL
         // TODO Auto-generated constructor stub
     }
 
-    public Bundle getByBundle() {
+    public Bundle getByBundle() throws JSONException {
         Bundle toPass = super.getByBundle();
         Bundle dest = new Bundle();
         dest.putBundle("Parent", toPass);
@@ -62,7 +64,7 @@ public class Zone extends Container implements ZoneEnterOrExitInterface, PlayerL
         return dest;
     }
 
-    public void setByBundle(Bundle in) {
+    public void setByBundle(Bundle in) throws JSONException {
         Bundle toPass = in.getBundle("Parent");
         super.setByBundle(toPass);
         //boolean isSelectedZone = in.getBoolean("selectedZone");

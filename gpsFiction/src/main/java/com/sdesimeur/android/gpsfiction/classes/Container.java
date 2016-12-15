@@ -2,13 +2,16 @@ package com.sdesimeur.android.gpsfiction.classes;
 
 import android.os.Bundle;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.HashSet;
 import java.util.Iterator;
 
 
 public abstract class Container extends GpsFictionThing {
-    protected int maxIncludedThings = 0;
-    protected boolean transportable = true;
+    protected Integer maxIncludedThings = 0;
+    protected Boolean transportable = true;
     protected transient HashSet<GpsFictionThing> includedThings = new HashSet<GpsFictionThing>();
 
     public Container() {
@@ -35,23 +38,38 @@ public abstract class Container extends GpsFictionThing {
         return includedThingsByUUID;
     }
 
-    public Bundle getByBundle() {
+    public Bundle getByBundle() throws JSONException {
         Bundle toPass = super.getByBundle();
         Bundle dest = new Bundle();
-        dest.putBundle("Parent", toPass);
+        dest.putBundle(JSonStrings.PARENTJSON, toPass);
         boolean[] val = {this.transportable};
-        dest.putBooleanArray("Transportable", val);
-        dest.putInt("maxIncludedThings", this.maxIncludedThings);
+        dest.putBooleanArray(JSonStrings.TRANSPORTABLE, val);
+        dest.putInt(JSonStrings.MAXINCLUDEDTHINGS, this.maxIncludedThings);
         return dest;
     }
 
-    public void setByBundle(Bundle in) {
-        Bundle toPass = in.getBundle("Parent");
+    public void setByBundle(Bundle in) throws JSONException {
+        Bundle toPass = in.getBundle(JSonStrings.PARENTJSON);
         super.setByBundle(toPass);
         boolean[] val = new boolean[1];
-        val = in.getBooleanArray("Transportable");
+        val = in.getBooleanArray(JSonStrings.TRANSPORTABLE);
         this.transportable = val[0];
-        this.maxIncludedThings = in.getInt("maxIncludedThings");
+        this.maxIncludedThings = in.getInt(JSonStrings.MAXINCLUDEDTHINGS);
+    }
+
+    public JSONObject getJson() throws JSONException {
+        JSONObject objsuper = super.getJson();
+        JSONObject obj  = new JSONObject();
+        obj.put(JSonStrings.PARENTJSON,objsuper);
+        obj.put(JSonStrings.TRANSPORTABLE,transportable);
+        obj.put(JSonStrings.MAXINCLUDEDTHINGS, maxIncludedThings);
+        return  obj;
+    }
+
+    public void setJson (JSONObject obj) throws JSONException {
+        super.setJson(obj.getJSONObject(JSonStrings.PARENTJSON));
+        transportable = obj.getBoolean(JSonStrings.TRANSPORTABLE);
+        maxIncludedThings = obj.getInt(JSonStrings.MAXINCLUDEDTHINGS);
     }
 
     public void setAttrs(boolean visible, boolean active, boolean transportable) {

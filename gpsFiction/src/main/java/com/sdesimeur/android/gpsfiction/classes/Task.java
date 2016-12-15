@@ -2,29 +2,46 @@ package com.sdesimeur.android.gpsfiction.classes;
 
 import android.os.Bundle;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+
 public class Task extends GpsFictionThing {
-    private boolean complete = false;
+    private Boolean complete = false;
 
     public Task() {
         super();
         // TODO Auto-generated constructor stub
     }
 
-    public Bundle getByBundle() {
+    public Bundle getByBundle() throws JSONException {
         Bundle toPass = super.getByBundle();
         Bundle dest = new Bundle();
-        dest.putBundle("Parent", toPass);
+        dest.putBundle(JSonStrings.PARENTJSON, toPass);
         boolean val[] = {this.complete};
-        dest.putBooleanArray("Complete", val);
+        dest.putBooleanArray(complete.getClass().getCanonicalName(), val);
         return dest;
     }
 
-    public void setByBundle(Bundle in) {
-        Bundle toPass = in.getBundle("Parent");
+    public void setByBundle(Bundle in) throws JSONException {
+        Bundle toPass = in.getBundle(JSonStrings.PARENTJSON);
         super.setByBundle(toPass);
         boolean val[] = new boolean[1];
-        val = in.getBooleanArray("Complete");
+        val = in.getBooleanArray(complete.getClass().getCanonicalName());
         this.complete = val[0];
+    }
+
+    public JSONObject getJson() throws JSONException {
+        JSONObject objsuper = super.getJson();
+        JSONObject obj  = new JSONObject();
+        obj.put(JSonStrings.PARENTJSON,objsuper);
+        obj.put(JSonStrings.COMPLETE,complete);
+        return  obj;
+    }
+
+    public void setJson (JSONObject obj) throws JSONException {
+        super.setJson(obj.getJSONObject(JSonStrings.PARENTJSON));
+        complete = obj.getBoolean(JSonStrings.COMPLETE);
     }
 
     @Override

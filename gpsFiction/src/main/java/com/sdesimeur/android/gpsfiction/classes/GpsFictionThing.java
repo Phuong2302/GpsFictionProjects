@@ -2,9 +2,9 @@ package com.sdesimeur.android.gpsfiction.classes;
 
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.support.annotation.CallSuper;
 
 import com.sdesimeur.android.gpsfiction.R;
-import com.sdesimeur.android.gpsfiction.activities.GpsFictionActivity;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -12,76 +12,67 @@ import org.json.JSONObject;
 
 
 public abstract class GpsFictionThing {
-    private static final String VALBOOLID = "ValBoolId";
-    private static final String VALINTID = "ValIntId";
     protected transient GpsFictionData mGpsFictionData = null;
 
-    protected boolean[] valbool = {
-            true,
-            true
-    };
+    protected class Identification {
+        public int nameId = 0;
+        public int replacementNameInLongId = 0;
+        public int numInTable4LongId = -1;
+        public int definitionId = 0;
+        public int iconId = R.drawable.flag_green;
+        public void setJson (JSONArray arr) throws JSONException {
+                nameId = arr.getInt(0);
+                replacementNameInLongId = arr.getInt(1);
+                numInTable4LongId = arr.getInt(2);
+                definitionId = arr.getInt(3);
+                iconId = arr.getInt(4);
+        }
+        public JSONArray getJson () throws JSONException {
+            JSONArray arr = new JSONArray();
+                arr.put(0,nameId);
+                arr.put(1,replacementNameInLongId);
+                arr.put(2,numInTable4LongId);
+                arr.put(3,definitionId);
+                arr.put(4,iconId);
+            return arr;
+        }
 
-    protected int[] valint = new int[]{
-            0,
-            0,
-            -1,
-            0,
-            R.drawable.flag_green
-    };
-
-    public int[] getValint() {
-        return valint;
     }
-
-    public void setValint(int[] valint) {
-        this.valint = valint;
-    }
-
-    public boolean[] getValbool() {
-        return valbool;
-    }
-    public void setValbool(boolean[] valbool) {
-        this.valbool = valbool;
-    }
+    protected Identification idx = new Identification();
+    protected Boolean visible = true;
+    protected Boolean active = true;
 
     public GpsFictionThing() {
     }
 
-    public Bundle getByBundle() {
+    @CallSuper
+    public Bundle getByBundle() throws JSONException {
         Bundle dest = new Bundle();
-        dest.putBooleanArray(VALBOOLID, this.valbool);
-        dest.putIntArray(VALINTID, this.valint);
+        dest.putBoolean("active", active);
+        dest.putBoolean("visible",visible);
+            dest.putString(JSonStrings.IDENTIFICATION,idx.getJson().toString(0));
         return dest;
     }
-    public JSONObject getJson() {
-        JSONObject obj = new JSONObject();
-        JSONArray arr1 = new JSONArray();
-        JSONArray arr2 = new JSONArray();
-        arr1.put( valbool );
-        arr2.put( valint );
-        try {
-            obj.put(VALBOOLID,arr1);
-            obj.put(VALINTID,arr2);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+    @CallSuper
+    public JSONObject getJson() throws JSONException {
+        JSONObject obj  = new JSONObject();
+        obj.put(JSonStrings.ACTIVE,active);
+        obj.put(JSonStrings.VISIBLE,visible);
+        obj.put(JSonStrings.IDENTIFICATION,idx.getJson());
         return  obj;
     }
 
-    public void setByBundle(Bundle in) {
-        this.valbool = in.getBooleanArray(VALBOOLID);
-        this.valint = in.getIntArray(VALINTID);
+    @CallSuper
+    public void setByBundle(Bundle in) throws JSONException {
+        active = in.getBoolean("active");
+        visible = in.getBoolean("visible");
+        idx.setJson(new JSONArray(in.getString(JSonStrings.IDENTIFICATION)));
     }
-    public void setJson (JSONObject obj) {
-        JSONArray arr1;
-        JSONArray arr2;
-        try {
-            arr1 = obj.getJSONArray(VALBOOLID);
-            arr2 = obj.getJSONArray(VALINTID);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        arr1.getBoolean()
+    @CallSuper
+    public void setJson (JSONObject obj) throws JSONException {
+        active = obj.getBoolean(JSonStrings.ACTIVE);
+        visible = obj.getBoolean(JSonStrings.VISIBLE);
+        idx.setJson(obj.getJSONArray(JSonStrings.IDENTIFICATION));
     }
     public void init(GpsFictionData gpsFictionData) {
         mGpsFictionData = gpsFictionData;
@@ -111,81 +102,60 @@ public abstract class GpsFictionThing {
     }
 
     public void setId(int longId, int replacementNameInLongId) {
-        this.valint[VALINT.id] = longId;
+        idx.nameId = longId;
         //this.longId = longId;
-        this.valint[VALINT.replacementNameInLongId] = replacementNameInLongId;
-        this.valint[VALINT.numInTable4LongId] = -1;
+        idx.replacementNameInLongId = replacementNameInLongId;
+        idx.numInTable4LongId = -1;
     }
 
     public void setId(int longId, int replacementNameInLongId, int numInTable4LongId) {
         this.setId(longId, replacementNameInLongId);
         //this.replacementIsATableInLongId=true;
-        this.valint[VALINT.numInTable4LongId] = numInTable4LongId;
+        idx.numInTable4LongId = numInTable4LongId;
     }
 
-    /**
-     * @return the definition
-     */
     public int getDefinitionId() {
-        return this.valint[VALINT.definitionId];
+        return idx.definitionId;
     }
 
-    /**
-     * @param definition the definition to set
-     */
     public void setDefinitionId(int definitionId) {
-        this.valint[VALINT.definitionId] = definitionId;
+        idx.definitionId = definitionId;
     }
 
-    /**
-     * @return the visible
-     */
     public boolean isVisible() {
-        return this.valbool[VALBOOL.visible];
+        return visible;
     }
 
-    /**
-     * @param visible the visible to set
-     */
-    public void setVisible(boolean visible) {
-        this.valbool[VALBOOL.visible] = visible;
+    public void setVisible(boolean v) {
+        visible = v;
     }
 
-    /**
-     * @return the active
-     */
     public boolean isActive() {
-        return this.valbool[VALBOOL.active];
+        return active;
     }
 
-    /**
-     * @param active the active to set
-     */
-    public void setActive(boolean active) {
-        this.valbool[VALBOOL.active] = active;
+    public void setActive(boolean a) {
+        active = a;
     }
 
-    /**
-     * @return the name
-     */
     public int getNameId() {
-        return this.valint[VALINT.id];
+        return idx.nameId;
     }
 
     public int getId() {
-        return this.valint[VALINT.id];
+        return idx.nameId;
     }
 
     public void setId(int id) {
-        this.valint[VALINT.id] = id;
+        idx.nameId = id;
     }
 
     public int getReplacementNameInLongId() {
-        return this.valint[VALINT.replacementNameInLongId];
+        return idx.replacementNameInLongId;
     }
 
     public int getNumInTable4LongId() {
-        return this.valint[VALINT.numInTable4LongId];
+        return idx.numInTable4LongId;
     }
 
     public String getName() {
@@ -208,24 +178,12 @@ public abstract class GpsFictionThing {
     }
 
     public int getIconId() {
-        return this.valint[VALINT.iconId];
+        return idx.iconId;
     }
 
     public void setIconId(int iconId) {
-        this.valint[VALINT.iconId] = iconId;
+        idx.iconId = iconId;
     }
 
-    public static class VALINT {
-        static int id = 0;
-        static int replacementNameInLongId = 1;
-        static int numInTable4LongId = 2;
-        static int definitionId = 3;
-        static int iconId = 4;
-    }
-
-    public static class VALBOOL {
-        static int visible = 0;
-        static int active = 1;
-    }
     public abstract void validate();
 }

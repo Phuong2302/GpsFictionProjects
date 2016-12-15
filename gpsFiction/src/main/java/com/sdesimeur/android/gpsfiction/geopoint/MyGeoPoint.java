@@ -3,8 +3,12 @@ package com.sdesimeur.android.gpsfiction.geopoint;
 import android.location.Location;
 import android.os.Bundle;
 
+import com.sdesimeur.android.gpsfiction.classes.JSonStrings;
 import com.sdesimeur.android.gpsfiction.gpx.beans.Waypoint;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.oscim.core.GeoPoint;
 
 
@@ -108,7 +112,18 @@ public class MyGeoPoint extends GeoPoint {
             coord = in.getDoubleArray("GeoPoint");
             return new MyGeoPoint(coord[0],coord[1]);
     }
- /*   
+    public JSONArray getJson() throws JSONException {
+        JSONArray obj  = new JSONArray();
+        obj.put(JSonStrings.MYGEOPOINT.LATITUDE,getLatitudeE6());
+        obj.put(JSonStrings.MYGEOPOINT.LONGITUDE,getLongitudeE6());
+        return  obj;
+    }
+
+    public MyGeoPoint newFromJson (JSONObject obj) throws JSONException {
+        return new MyGeoPoint(obj.getInt(String.valueOf(JSonStrings.MYGEOPOINT.LATITUDE)),obj.getInt(String.valueOf(JSonStrings.MYGEOPOINT.LONGITUDE)));
+    }
+
+ /*
     public void setMyGeoPoint(Location loc) {
         this.setMyGeoPoint(loc.getLatitude(), loc.getLongitude());
     }

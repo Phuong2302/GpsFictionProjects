@@ -2,6 +2,9 @@ package com.sdesimeur.android.gpsfiction.classes;
 
 import android.os.Bundle;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class Item extends Container {
 
     public Item() {
@@ -9,17 +12,29 @@ public class Item extends Container {
         // TODO Auto-generated constructor stub
     }
 
-    public Bundle getByBundle() {
+    public Bundle getByBundle() throws JSONException {
         Bundle dest = new Bundle();
         Bundle toPass = super.getByBundle();
-        dest.putBundle("Parent", toPass);
+        dest.putBundle(JSonStrings.PARENTJSON, toPass);
         return dest;
     }
 
-    public void setByBundle(Bundle in) {
-        Bundle toPass = in.getBundle("Parent");
+    public void setByBundle(Bundle in) throws JSONException {
+        Bundle toPass = in.getBundle(JSonStrings.PARENTJSON);
         Bundle dest = new Bundle();
         super.setByBundle(toPass);
+    }
+
+
+    public JSONObject getJson() throws JSONException {
+        JSONObject objsuper = super.getJson();
+        JSONObject obj  = new JSONObject();
+        obj.put(JSonStrings.PARENTJSON,objsuper);
+        return  obj;
+    }
+
+    public void setJson (JSONObject obj) throws JSONException {
+        super.setJson(obj.getJSONObject(JSonStrings.PARENTJSON));
     }
 
     @Override
