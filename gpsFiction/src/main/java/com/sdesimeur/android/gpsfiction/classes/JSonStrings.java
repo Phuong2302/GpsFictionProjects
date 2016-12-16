@@ -14,6 +14,15 @@ public final class JSonStrings {
     public static final String MAXINCLUDEDTHINGS = "MaxIncludedThings";
     public static final String MYGEOPOINTJSON = "MyGeoPoint";
     public static final String MYPOLYGON = "MyPolygon";
+    public static final String ALLREADYCONFIGURED = "AllReadyConfigured";
+    public static final String ZOOMLEVEL = "ZoomLevel";
+    public static final String VEHICULESELECTEDID = "VehiculeSelectedId";
+    public static final String GFTCLASS = "GFTClassName";
+    public static final String GFTDEFINE = "GFTDefine";
+    public static final String ALLGFT = "AllGFT";
+    public static final String NBMAXINCLUDEDTHINGS = "NbMaxIncludedThings";
+    public static final String INCLUDEDTHINGS = "IncludedThings";
+    public static final String SELECTEDZONEID = "SelectedZoneId";
 
     public static final class MYGEOPOINT {
         public static  final int LATITUDE = 0;

@@ -3,15 +3,14 @@ package com.sdesimeur.android.gpsfiction.classes;
 import android.content.res.Resources;
 import android.os.Bundle;
 
-import com.google.gson.Gson;
 import com.sdesimeur.android.gpsfiction.R;
-import com.sdesimeur.android.gpsfiction.activities.GpsFictionActivity;
 
+import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 import org.oscim.layers.PathLayer;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 
@@ -114,8 +113,71 @@ public class GpsFictionData {
         dest.putIntArray("selectedZone", (getSelectedZone()!=null)?getSelectedZone().getUUID(): new int[]{});
         return dest;
     }
+    public JSONObject getJson() throws JSONException {
+        JSONObject obj  = new JSONObject();
+        obj.put(JSonStrings.ALLREADYCONFIGURED,allreadyConfigured);
+        obj.put(JSonStrings.ZOOMLEVEL,zoomLevel);
+        obj.put(JSonStrings.VEHICULESELECTEDID,vehiculeSelectedId);
+        JSONArray arr = new JSONArray();
+        Iterator <GpsFictionThing> it = gpsFictionThings.iterator();
+        GpsFictionThing gft = null;
+        while (it.hasNext()) {
+            gft = it.next();
+            JSONObject obj1 = new JSONObject();
+            obj1.put(JSonStrings.GFTCLASS,gft.getClass().getCanonicalName());
+            obj1.put(JSonStrings.GFTDEFINE,gft.getJson());
+            int nbgfts = 0;
+            if ( gft instanceof Container) {
+                nbgfts = ((Container) gft).getMaxIncludedThings());
+                JSONArray arr1 = new JSONArray();
+                Iterator<GpsFictionThing> it1 = ((Container) gft).getIncludedThings().iterator();
+                while (it1.hasNext()) {
+                    arr1.put(it.next().getIdx().getJsonArray());
+                }
+                obj1.put(JSonStrings.INCLUDEDTHINGS, arr1);
+            }
+            obj1.put(JSonStrings.NBMAXINCLUDEDTHINGS, nbgfts);
+            arr.put(obj1);
+        }
+        obj.put(JSonStrings.ALLGFT,arr);
+        obj.put(JSonStrings.SELECTEDZONEID,(getSelectedZone()!=null)?getSelectedZone().getIdx().getJsonArray(): new JSONArray());
+        return  obj;
+    }
 
-    public void setByBundle(Bundle in) throws JSONException {
+    public void setJson (JSONObject obj) throws JSONException, ClassNotFoundException, IllegalAccessException, InstantiationException {
+        allreadyConfigured = obj.getBoolean(JSonStrings.ALLREADYCONFIGURED);
+        zoomLevel = obj.getInt(JSonStrings.ZOOMLEVEL);
+        vehiculeSelectedId = obj.getInt(JSonStrings.VEHICULESELECTEDID);
+        JSONArray arr = obj.getJSONArray(JSonStrings.ALLGFT);
+        Class myclass = null;
+        GpsFictionThing gft = null;
+        for (int index = 0; index < arr.length() ;index++) {
+            JSONObject obj1 = arr.getJSONObject(index);
+            myclass = Class.forName(obj1.getString(JSonStrings.GFTCLASS));
+            gft = (GpsFictionThing) myclass.newInstance();
+            gft.init(this);
+            gft.setJson(obj1.getJSONObject(JSonStrings.GFTDEFINE));
+            gpsFictionThings.add(gft);
+        }
+        for (int index = 0; index < arr.length() ;index++) {
+            JSONObject obj1 = arr.getJSONObject(index);
+            int nb = obj1.getInt(JSonStrings.NBMAXINCLUDEDTHINGS);
+            if (nb != 0) {
+                Container gft1 = ((Container) findGpsFictionThingByJSONArray(arr));
+                JSONArray arr1 = obj1.getJSONArray(JSonStrings.INCLUDEDTHINGS);
+                for (int index1 = 0 ; index1 < arr1.length() ; index1++) {
+                    GpsFictionThing gft2 = findGpsFictionThingByJSONArray(arr1.getJSONArray(index1));
+                    gft1.addThingToContainer(gft2);
+                }
+            }
+        }
+        JSONArray arr3 = obj.getJSONArray(JSonStrings.SELECTEDZONEID);
+        if (arr3.length() != 0) {
+            selectedZone = (Zone) findGpsFictionThingByJSONArray(arr3);
+        }
+    }
+
+    public void setByBundle(Bundle in) throws JSONException, ClassNotFoundException, IllegalAccessException, InstantiationException {
         boolean[] val = new boolean[1];
         Class myclass = null;
         GpsFictionThing gft = null;
@@ -130,19 +192,8 @@ public class GpsFictionData {
         int index = 0;
         while (it.hasNext()) {
             String name = it.next();
-            try {
                 myclass = Class.forName(name);
                 gft = (GpsFictionThing) (myclass.newInstance());
-            } catch (ClassNotFoundException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            } catch (InstantiationException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            } catch (IllegalAccessException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
             gft.init(this);
             toPass = in.getBundle("PassAsBundle" + index);
             gft.setByBundle(toPass);
@@ -169,6 +220,7 @@ public class GpsFictionData {
         indexGpsFictionThings++;
     }
 
+
     private GpsFictionThing findGpsFictionThingByUUID(int[] uuid) {
         GpsFictionThing gft = null;
         Iterator<GpsFictionThing> it = this.gpsFictionThings.iterator();
@@ -178,19 +230,16 @@ public class GpsFictionData {
         }
         return gft;
     }
-    
- 
-/*    static final Parcelable.Creator<GpsFictionData> CREATOR
-            = new Parcelable.Creator<GpsFictionData>() {
- 
-    	public GpsFictionData createFromParcel(Parcel in) {
-            return new GpsFictionData(in);
+
+    private GpsFictionThing findGpsFictionThingByJSONArray(JSONArray arr) throws JSONException {
+        GpsFictionThing gft = null;
+        Iterator<GpsFictionThing> it = this.gpsFictionThings.iterator();
+        while (it.hasNext()) {
+            gft = it.next();
+            if (gft.getIdx().getJsonArray().equals(arr)) break;
         }
- 
-    	public GpsFictionData[] newArray(int size) {
-            return new GpsFictionData[size];
-        }
-    };*/
+        return gft;
+    }
 
     public boolean isAllreadyConfigured() {
         return this.allreadyConfigured;
@@ -206,9 +255,6 @@ public class GpsFictionData {
         this.inventory.setId(R.string.inventory);
     }
 
-    /**
-     * @param the name of a thing, the thing
-     */
     public void addGpsFictionThing(GpsFictionThing thing) {
         this.gpsFictionThings.add(thing);
     }
@@ -227,7 +273,6 @@ public class GpsFictionData {
     }
 
     public HashSet<GpsFictionThing> getGpsFictionThing() {
-        // TODO Auto-generated method stub
         return this.gpsFictionThings;
     }
 
@@ -244,11 +289,6 @@ public class GpsFictionData {
     public GpsFictionControler getmGpsFictionControler() {
         return mGpsFictionControler;
     }
-
-
-//    public MyLocationListener getmMyLocationListener() {
-//        return mMyLocationListener;
-//    }
 
     public void setRoutePathLayer(PathLayer layer) {
         routePathLayer = layer;

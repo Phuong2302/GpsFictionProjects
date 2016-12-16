@@ -10,6 +10,7 @@ import com.sdesimeur.android.gpsfiction.helpers.DistanceToTextHelper;
 import com.sdesimeur.android.gpsfiction.polygon.MyPolygon;
 
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -34,32 +35,19 @@ public class Zone extends Container implements ZoneEnterOrExitInterface, PlayerL
         this.shape = shape;
     }
 
-    /*    static final Parcelable.Creator<Zone> CREATOR = new Parcelable.Creator<Zone>() {
-            public Zone createFromParcel(Parcel in) {
-                return new Zone(in);
-            }
-            public Zone[] newArray(int size) {
-                return new Zone[size];
-            }
-        };
-    */
-    public static final Comparator<Zone> DISTANCE2PLAYERINCREASING =
-                                        new Comparator<Zone>() {
+    public static final Comparator<Zone> DISTANCE2PLAYERINCREASING = new Comparator<Zone>() {
             public int compare(Zone z1, Zone z2) {
                 return ((Float)(z1.getDistance2Player())).compareTo(((Float)z2.getDistance2Player()));
             }
     };
     public Zone() {
         super();
-        // TODO Auto-generated constructor stub
     }
 
     public Bundle getByBundle() throws JSONException {
         Bundle toPass = super.getByBundle();
         Bundle dest = new Bundle();
         dest.putBundle("Parent", toPass);
-        //boolean val = (this == getmGpsFictionData().getSelectedZone());
-        //dest.putBoolean("selectedZone", val);
         dest.putBundle("shape",this.shape.getByBundle());
         return dest;
     }
@@ -67,17 +55,25 @@ public class Zone extends Container implements ZoneEnterOrExitInterface, PlayerL
     public void setByBundle(Bundle in) throws JSONException {
         Bundle toPass = in.getBundle("Parent");
         super.setByBundle(toPass);
-        //boolean isSelectedZone = in.getBoolean("selectedZone");
         shape = new MyPolygon();
         toPass = in.getBundle("shape");
         shape.setByBundle(toPass);
         this.validate();
-        //if (isSelectedZone) getmGpsFictionData().setSelectedZone(this);
+    }
+    public JSONObject getJson() throws JSONException {
+        JSONObject objsuper = super.getJson();
+        JSONObject obj  = new JSONObject();
+        obj.put(JSonStrings.PARENTJSON,objsuper);
+        obj.put(JSonStrings.MYPOLYGON,shape.getJsonArray());
+        return  obj;
     }
 
-    /*public boolean isThisZoneSelected() {
-        return thisZoneSelected;
-	}*/
+    public void setJson (JSONObject obj) throws JSONException {
+        super.setJson(obj.getJSONObject(JSonStrings.PARENTJSON));
+        shape = new MyPolygon();
+        shape.setJsonArray(obj.getJSONArray(JSonStrings.MYPOLYGON));
+        validate();
+    }
 
     public void onLocationPlayerChanged(MyGeoPoint playerLocation) {
         this.playerIsInThisZone = this.isInThisZone(playerLocation);
@@ -122,13 +118,10 @@ public class Zone extends Container implements ZoneEnterOrExitInterface, PlayerL
     }
 
     public void setShape(MyGeoPoint point, float radius) {
-//		this.setCenterPoint(point);
-//		this.setRadius(radius);
         this.setCircularShape(point, radius);
     }
 
     public void setCircularShape(MyGeoPoint centerPoint, float radius) {
-//		this.setCircularZone(true);
         this.centerPoint = centerPoint;
         this.radius = radius;
         int nbDePas = Math.max(NB_MIN_DE_COTES, (int) Math.floor(RAPPORT * radius));
@@ -154,28 +147,15 @@ public class Zone extends Container implements ZoneEnterOrExitInterface, PlayerL
         return centerPoint;
     }
 
-    /*	public void setCenterPoint (GeoPoint point) {
-            this.centerPoint = point;
-        }
-        */
     public float getRadius() {
         return this.radius;
     }
 
-    /*	public void setCircularZone (boolean circular) {
-            this.circularZone=circular;
-        }
-    */
     public void setRadius(float radius) {
         this.radius = radius;
         mGpsFictionData.fireZoneChangeListener(this);
     }
 
-    /*
-        public boolean isCircularZone() {
-            return this.circularZone;
-        }
-    */
     private float distanceMaxToShape(MyGeoPoint point) {
         float distance = 0;
         for (int i = 0; i < this.shape.size(); i++)
@@ -184,7 +164,6 @@ public class Zone extends Container implements ZoneEnterOrExitInterface, PlayerL
     }
 
     public boolean isInThisZone(MyGeoPoint point) {
-		/* TODO*/
         return this.shape.contains(point);
     }
 
@@ -217,7 +196,6 @@ public class Zone extends Container implements ZoneEnterOrExitInterface, PlayerL
     }
 
     public String getStringBearing2Go() {
-        // TODO Auto-generated method stub
         String directionText;
         if (playerIsInThisZone) {
             directionText = mGpsFictionData.getResources().getString(R.string.noZoneBearing);
@@ -235,12 +213,10 @@ public class Zone extends Container implements ZoneEnterOrExitInterface, PlayerL
     }
 
     public float getAnglePlayer2Zone() {
-        // TODO Auto-generated method stub
         return anglePlayer2Zone;
     }
 
     public float getBearingPlayer() {
-        // TODO Auto-generated method stub
         return bearingPlayer;
     }
 
@@ -259,14 +235,10 @@ public class Zone extends Container implements ZoneEnterOrExitInterface, PlayerL
 
     @Override
     public void onEnter() {
-        // TODO Auto-generated method stub
-
     }
 
     @Override
     public void onExit() {
-        // TODO Auto-generated method stub
-
     }
     public void init (GpsFictionData gfd) {
         super.init(gfd);

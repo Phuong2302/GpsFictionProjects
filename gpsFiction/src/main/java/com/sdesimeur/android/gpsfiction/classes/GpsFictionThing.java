@@ -20,14 +20,14 @@ public abstract class GpsFictionThing {
         public int numInTable4LongId = -1;
         public int definitionId = 0;
         public int iconId = R.drawable.flag_green;
-        public void setJson (JSONArray arr) throws JSONException {
+        public void setJsonArray (JSONArray arr) throws JSONException {
                 nameId = arr.getInt(0);
                 replacementNameInLongId = arr.getInt(1);
                 numInTable4LongId = arr.getInt(2);
                 definitionId = arr.getInt(3);
                 iconId = arr.getInt(4);
         }
-        public JSONArray getJson () throws JSONException {
+        public JSONArray getJsonArray () throws JSONException {
             JSONArray arr = new JSONArray();
                 arr.put(0,nameId);
                 arr.put(1,replacementNameInLongId);
@@ -38,6 +38,15 @@ public abstract class GpsFictionThing {
         }
 
     }
+
+    public Identification getIdx() {
+        return idx;
+    }
+
+    public void setIdx(Identification idx) {
+        this.idx = idx;
+    }
+
     protected Identification idx = new Identification();
     protected Boolean visible = true;
     protected Boolean active = true;
@@ -50,7 +59,7 @@ public abstract class GpsFictionThing {
         Bundle dest = new Bundle();
         dest.putBoolean("active", active);
         dest.putBoolean("visible",visible);
-            dest.putString(JSonStrings.IDENTIFICATION,idx.getJson().toString(0));
+            dest.putString(JSonStrings.IDENTIFICATION,idx.getJsonArray().toString(0));
         return dest;
     }
     @CallSuper
@@ -58,7 +67,7 @@ public abstract class GpsFictionThing {
         JSONObject obj  = new JSONObject();
         obj.put(JSonStrings.ACTIVE,active);
         obj.put(JSonStrings.VISIBLE,visible);
-        obj.put(JSonStrings.IDENTIFICATION,idx.getJson());
+        obj.put(JSonStrings.IDENTIFICATION,idx.getJsonArray());
         return  obj;
     }
 
@@ -66,13 +75,13 @@ public abstract class GpsFictionThing {
     public void setByBundle(Bundle in) throws JSONException {
         active = in.getBoolean("active");
         visible = in.getBoolean("visible");
-        idx.setJson(new JSONArray(in.getString(JSonStrings.IDENTIFICATION)));
+        idx.setJsonArray(new JSONArray(in.getString(JSonStrings.IDENTIFICATION)));
     }
     @CallSuper
     public void setJson (JSONObject obj) throws JSONException {
         active = obj.getBoolean(JSonStrings.ACTIVE);
         visible = obj.getBoolean(JSonStrings.VISIBLE);
-        idx.setJson(obj.getJSONArray(JSonStrings.IDENTIFICATION));
+        idx.setJsonArray(obj.getJSONArray(JSonStrings.IDENTIFICATION));
     }
     public void init(GpsFictionData gpsFictionData) {
         mGpsFictionData = gpsFictionData;

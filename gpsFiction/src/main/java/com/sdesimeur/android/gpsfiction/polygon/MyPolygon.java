@@ -5,6 +5,9 @@ import android.os.Bundle;
 import com.sdesimeur.android.gpsfiction.geopoint.MyGeoPoint;
 import com.sdesimeur.android.gpsfiction.math.Vector;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.oscim.core.GeoPoint;
 
 import java.util.Iterator;
@@ -13,7 +16,6 @@ import java.util.List;
 
 public class MyPolygon extends LinkedList<MyGeoPoint> {
 
-    //private static final int BIG_VALUE = 400000000;
     public MyPolygon() {
         super();
     }
@@ -40,9 +42,25 @@ public class MyPolygon extends LinkedList<MyGeoPoint> {
         }
     }
 
-    /*public boolean isThisZoneSelected() {
-        return thisZoneSelected;
-	}*/
+    public JSONArray getJsonArray() throws JSONException {
+        JSONArray obj  = new JSONArray();
+        Iterator<MyGeoPoint> it = this.iterator();
+        MyGeoPoint gp = null;
+        while (it.hasNext()) {
+            gp = it.next();
+            obj.put(gp.getJsonArray());
+        }
+        return  obj;
+    }
+
+    public void setJsonArray (JSONArray obj) throws JSONException {
+        MyGeoPoint gp = null;
+        for (int index=0; index < obj.length(); index ++) {
+            gp = MyGeoPoint.newFromJsonArray(obj.getJSONArray(index));
+            this.add(gp);
+        }
+    }
+
     public void addMyGeoPoint(MyGeoPoint gp) {
         this.add(gp);
     }

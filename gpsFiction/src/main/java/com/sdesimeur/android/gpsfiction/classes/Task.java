@@ -11,7 +11,6 @@ public class Task extends GpsFictionThing {
 
     public Task() {
         super();
-        // TODO Auto-generated constructor stub
     }
 
     public Bundle getByBundle() throws JSONException {
@@ -54,16 +53,10 @@ public class Task extends GpsFictionThing {
         this.setAttrs(visible, active);
     }
 
-    /**
-     * @return the complete
-     */
     public boolean isComplete() {
         return this.complete;
     }
 
-    /**
-     * @param complete the complete to set
-     */
     public void setComplete(boolean complete) {
         this.complete = complete;
     }
