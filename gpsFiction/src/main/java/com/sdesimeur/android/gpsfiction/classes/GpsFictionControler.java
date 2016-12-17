@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.res.Resources;
-import android.os.Bundle;
 import android.os.IBinder;
 
 import com.sdesimeur.android.gpsfiction.activities.CalcRouteAndSpeakService;
@@ -17,8 +16,6 @@ import com.sdesimeur.android.gpsfiction.gpx.beans.Track;
 import com.sdesimeur.android.gpsfiction.gpx.beans.Waypoint;
 import com.sdesimeur.android.gpsfiction.helpers.BindToMyLocationListenerHelper;
 
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.oscim.layers.PathLayer;
 
 import java.io.InputStream;
@@ -342,24 +339,4 @@ public class GpsFictionControler {
             e.printStackTrace();
         }
     }
-
-    public void onCreate(Bundle savedInstanceState) throws ClassNotFoundException, InstantiationException, JSONException, IllegalAccessException {
-        if (savedInstanceState != null) {
-            //Bundle toPass = savedInstanceState.getBundle("GpsFictionData");
-            //mGpsFictionData.setByBundle(toPass);
-            String test = savedInstanceState.getString("GpsFictionDataAsJson");
-            mGpsFictionData.setJson(new JSONObject(test));
-        } else {
-            mGpsFictionData.init();
-        }
-    }
-    public void onSaveInstanceState(Bundle savedInstanceState) throws JSONException {
-        //if (mGpsFictionData.toSave) {
-        //Bundle toPass = mGpsFictionData.getByBundle();
-        //savedInstanceState.putBundle("GpsFictionData", toPass);
-        String test = mGpsFictionData.getJson().toString();
-        savedInstanceState.putString("GpsFictionDataAsJson",test);
-        //}
-    }
-
 }

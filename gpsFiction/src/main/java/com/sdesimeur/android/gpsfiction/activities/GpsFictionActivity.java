@@ -6,6 +6,7 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.Typeface;
@@ -13,6 +14,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
+import android.support.multidex.MultiDex;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
 import android.view.Gravity;
@@ -24,8 +26,10 @@ import android.view.WindowManager;
 
 import com.sdesimeur.android.gpsfiction.R;
 import com.sdesimeur.android.gpsfiction.classes.GpsFictionControler;
+import com.sdesimeur.android.gpsfiction.classes.JSonStrings;
 
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -39,6 +43,7 @@ import java.util.HashSet;
 public class GpsFictionActivity extends Activity {
     private static final String TAGFONT = "FONT";
     private static final String BUNDLEASJSON = "BundleAsJson";
+    private static final String LASTSELECTEDFRAGMENTID  = "LastSelectedFragmentId";
     private FloatingActionButton fabCreate;
     private int lastFabAction;
     private float dYFab;
@@ -184,6 +189,12 @@ public class GpsFictionActivity extends Activity {
         */
 
     @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        // refresh your views here
+        super.onConfigurationChanged(newConfig);
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
@@ -195,32 +206,31 @@ public class GpsFictionActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         //this.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        //MultiDex.install(this);
+        MultiDex.install(this);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED);
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION|View.SYSTEM_UI_FLAG_LOW_PROFILE);
         mGpsFictionControler = new GpsFictionControler(this);
-        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
-        String tmp = null;
-        if (tmp != null) {
- //           Bundle in = gson.fromJson(tmp , Bundle.class);
- //           mGpsFictionControler.getmGpsFictionData().setByBundle(in);
-        }
         if (savedInstanceState != null) {
+            selectedFragmentId = savedInstanceState.getInt(LASTSELECTEDFRAGMENTID, R.id.Zones);
+        }
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
+        String tmp = settings.getString(JSonStrings.ALLDATA, null);
+        if (tmp != null) {
             try {
-                mGpsFictionControler.onCreate(savedInstanceState);
-            } catch (ClassNotFoundException e) {
-                e.printStackTrace();
-            } catch (InstantiationException e) {
-                e.printStackTrace();
+                mGpsFictionControler.getmGpsFictionData().setJson(new JSONObject(tmp));
             } catch (JSONException e) {
+                e.printStackTrace();
+            } catch (ClassNotFoundException e) {
                 e.printStackTrace();
             } catch (IllegalAccessException e) {
                 e.printStackTrace();
+            } catch (InstantiationException e) {
+                e.printStackTrace();
             }
-            selectedFragmentId = savedInstanceState.getInt("lastSelectedFragmentId", R.id.Zones);
-        }
+        } else mGpsFictionControler.getmGpsFictionData().init();
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_view);
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -299,17 +309,20 @@ public class GpsFictionActivity extends Activity {
 
     @Override
     public void onPause() {
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences.Editor ed = settings.edit();
+        try {
+            ed.putString(JSonStrings.ALLDATA,getmGpsFictionControler().getmGpsFictionData().getJson().toString());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        ed.commit();
         super.onPause();
     }
 
     @Override
     protected void onSaveInstanceState(Bundle savedInstanceState) {
-        try {
-            mGpsFictionControler.onSaveInstanceState(savedInstanceState);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        savedInstanceState.putInt("lastSelectedFragmentId", selectedFragmentId);
+        savedInstanceState.putInt(LASTSELECTEDFRAGMENTID, selectedFragmentId);
         super.onSaveInstanceState(savedInstanceState);
     }
 

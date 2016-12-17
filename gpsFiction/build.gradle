@@ -55,4 +55,5 @@ dependencies {
     compile 'com.android.support:support-v4:25.1.0'
     compile 'com.android.support:design:25.1.0'
     compile 'org.slf4j:slf4j-android:1.7.22'
+    compile 'com.android.support:multidex:1.0.1'
 }

@@ -3,9 +3,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     >
 
-    <application android:allowBackup="true" android:label="@string/appname"
+    <application
         tools:replace="android:label,android:icon,android:theme"
-        android:icon="@drawable/ic_launcher" android:supportsRtl="true"
+        android:allowBackup="true"
+        android:label="@string/appname"
+        android:icon="@drawable/ic_launcher"
+        android:supportsRtl="true"
+        android:name="android.support.multidex.MultiDexApplication"
         android:theme="@style/MyAppTheme" >
         <activity
             android:name=".activities.AdminActivity"

@@ -6,9 +6,9 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
-import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.multidex.MultiDex;
 import android.text.InputType;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -27,15 +27,19 @@ public class GamesActivity extends Activity implements GameFragment.OnListFragme
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        MultiDex.install(this);
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
         String localeString = settings.getString(AdminActivity.LOCALE,"fr_FR");
         Locale locale = new Locale(localeString);
-        Locale.setDefault(locale);
-        Configuration cfg = getResources().getConfiguration();
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-            cfg.setLocale(locale);
+        if (!Locale.getDefault().equals(locale)) {
+            Locale.setDefault(locale);
+            recreate();
         }
-        getResources().updateConfiguration(cfg,null);
+        //Configuration cfg = getResources().getConfiguration();
+        //if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+        //        cfg.setLocale(locale);
+        //}
+        //getResources().updateConfiguration(cfg,null) ;
         Intent myIntent2 = new Intent(this, MyLocationListenerService.class);
         myIntent2.setAction(MyLocationListenerService.ACTION.STARTFOREGROUND);
         startService(myIntent2);
@@ -43,7 +47,12 @@ public class GamesActivity extends Activity implements GameFragment.OnListFragme
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_games);
     }
-
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        // refresh your views here
+        super.onConfigurationChanged(newConfig);
+        recreate();
+    }
 
     @Override
     public void onBackPressed() {

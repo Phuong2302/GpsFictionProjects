@@ -29,4 +29,5 @@ public final class JSonStrings {
         public static  final int LONGITUDE = 1;
     }
 
+    public static final String ALLDATA = "AllData";
 }
