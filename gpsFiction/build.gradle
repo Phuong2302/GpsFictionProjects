@@ -6,17 +6,21 @@ repositories {
 }
 android {
     compileSdkVersion 25
-    buildToolsVersion '25.0.1'
-    dexOptions {
-        maxProcessCount 4 // this is the default value
-        javaMaxHeapSize "2g"
-        preDexLibraries = false
-    }
+    buildToolsVersion '25.0.2'
+//    dexOptions {
+//        maxProcessCount 4 // this is the default value
+//        javaMaxHeapSize "2g"
+//        preDexLibraries = false
+//    }
 
     defaultConfig {
         minSdkVersion 15
         targetSdkVersion 25
-        multiDexEnabled true
+        //multiDexEnabled true
+        //jackOptions {
+        //    enabled true
+        //    multiDexEnabled true
+        //}
     }
     buildTypes {
         release {
@@ -33,6 +37,7 @@ android {
 }
 
 dependencies {
+    compile 'commons-codec:commons-codec:20041127.091804'
     compile 'org.mapsforge:vtm-android:0.6.0-rc1:natives-armeabi'
     compile 'org.mapsforge:vtm-android:0.6.0-rc1:natives-armeabi-v7a'
     compile 'org.mapsforge:vtm-android:0.6.0-rc1:natives-x86'
@@ -42,15 +47,12 @@ dependencies {
     compile 'org.mapsforge:vtm-themes:0.6.0-rc2'
     compile 'org.mapsforge:vtm:0.6.0-rc2'
     compile 'net.sf.trove4j:trove4j:3.0.3'
-    compile 'com.android.support:support-v4:25.0.1'
-    compile 'com.android.support:design:25.0.1'
     compile 'org.mapsforge:vtm-jts:0.6.0'
-    compile 'com.android.support:multidex:1.0.1'
-    compile 'commons-codec:commons-codec:20041127.091804'
-    compile 'com.android.support:recyclerview-v7:25.0.1'
-    compile 'com.android.support:gridlayout-v7:25.0.1'
-    compile 'com.google.code.gson:gson:2.8.0'
     testCompile 'junit:junit:4.12'
-    compile 'junit:junit:4.12'
     compile 'com.carrotsearch:hppc:0.7.2'
+    compile 'com.android.support:recyclerview-v7:25.1.0'
+    compile 'com.android.support:gridlayout-v7:25.1.0'
+    compile 'com.android.support:support-v4:25.1.0'
+    compile 'com.android.support:design:25.1.0'
+    compile 'org.slf4j:slf4j-android:1.7.22'
 }

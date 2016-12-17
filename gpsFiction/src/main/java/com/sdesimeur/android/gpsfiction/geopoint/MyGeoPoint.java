@@ -100,6 +100,7 @@ public class MyGeoPoint extends GeoPoint {
     public MyGeoPoint(GeoPoint gp) {
         this(gp.getLatitude(),gp.getLongitude());
     }
+/*
     public Bundle getByBundle() {
         Bundle dest = new Bundle();
         double[] coord = null;
@@ -112,6 +113,7 @@ public class MyGeoPoint extends GeoPoint {
             coord = in.getDoubleArray("GeoPoint");
             return new MyGeoPoint(coord[0],coord[1]);
     }
+*/
     public JSONArray getJsonArray() throws JSONException {
         JSONArray obj  = new JSONArray();
         obj.put(JSonStrings.MYGEOPOINT.LATITUDE,getLatitudeE6());

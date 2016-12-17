@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="appname">GpsFiction: Enigma to Laon</string>
+    <string name="titleactivity">GpsFiction: Enigma to Laon</string>
+    <string name="zoneCathedrale">La cathédrale</string>
+    <string name="zoneAigles">Les aigles</string>
+    <string name="zoneEntreeRemparts">L\'entrée des remparts</string>
+</resources>

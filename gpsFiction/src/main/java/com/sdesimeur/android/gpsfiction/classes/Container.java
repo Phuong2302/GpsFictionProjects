@@ -1,7 +1,5 @@
 package com.sdesimeur.android.gpsfiction.classes;
 
-import android.os.Bundle;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -38,52 +36,53 @@ public abstract class Container extends GpsFictionThing {
         return includedThingsByUUID;
     }
 
-    public Bundle getByBundle() throws JSONException {
-        Bundle toPass = super.getByBundle();
-        Bundle dest = new Bundle();
-        dest.putBundle(JSonStrings.PARENTJSON, toPass);
-        boolean[] val = {this.transportable};
-        dest.putBooleanArray(JSonStrings.TRANSPORTABLE, val);
-        dest.putInt(JSonStrings.MAXINCLUDEDTHINGS, this.maxIncludedThings);
-        return dest;
-    }
+    /*
+        public Bundle getByBundle() throws JSONException {
+            Bundle toPass = super.getByBundle();
+            Bundle dest = new Bundle();
+            dest.putBundle(JSonStrings.PARENTJSON, toPass);
+            boolean[] val = {this.transportable};
+            dest.putBooleanArray(JSonStrings.TRANSPORTABLE, val);
+            dest.putInt(JSonStrings.MAXINCLUDEDTHINGS, this.maxIncludedThings);
+            return dest;
+        }
 
-    public void setByBundle(Bundle in) throws JSONException {
-        Bundle toPass = in.getBundle(JSonStrings.PARENTJSON);
-        super.setByBundle(toPass);
-        boolean[] val = new boolean[1];
-        val = in.getBooleanArray(JSonStrings.TRANSPORTABLE);
-        this.transportable = val[0];
-        this.maxIncludedThings = in.getInt(JSonStrings.MAXINCLUDEDTHINGS);
-    }
+        public void setByBundle(Bundle in) throws JSONException {
+            Bundle toPass = in.getBundle(JSonStrings.PARENTJSON);
+            super.setByBundle(toPass);
+            boolean[] val = new boolean[1];
+            val = in.getBooleanArray(JSonStrings.TRANSPORTABLE);
+            this.transportable = val[0];
+            this.maxIncludedThings = in.getInt(JSonStrings.MAXINCLUDEDTHINGS);
+        }
+   */
+        public JSONObject getJson() throws JSONException {
+            JSONObject objsuper = super.getJson();
+            JSONObject obj  = new JSONObject();
+            obj.put(JSonStrings.PARENTJSON,objsuper);
+            obj.put(JSonStrings.TRANSPORTABLE,transportable);
+            obj.put(JSonStrings.MAXINCLUDEDTHINGS, maxIncludedThings);
+            return  obj;
+        }
 
-    public JSONObject getJson() throws JSONException {
-        JSONObject objsuper = super.getJson();
-        JSONObject obj  = new JSONObject();
-        obj.put(JSonStrings.PARENTJSON,objsuper);
-        obj.put(JSonStrings.TRANSPORTABLE,transportable);
-        obj.put(JSonStrings.MAXINCLUDEDTHINGS, maxIncludedThings);
-        return  obj;
-    }
+        public void setJson (JSONObject obj) throws JSONException {
+            super.setJson(obj.getJSONObject(JSonStrings.PARENTJSON));
+            transportable = obj.getBoolean(JSonStrings.TRANSPORTABLE);
+            maxIncludedThings = obj.getInt(JSonStrings.MAXINCLUDEDTHINGS);
+        }
 
-    public void setJson (JSONObject obj) throws JSONException {
-        super.setJson(obj.getJSONObject(JSonStrings.PARENTJSON));
-        transportable = obj.getBoolean(JSonStrings.TRANSPORTABLE);
-        maxIncludedThings = obj.getInt(JSonStrings.MAXINCLUDEDTHINGS);
-    }
+        public void setAttrs(boolean visible, boolean active, boolean transportable) {
+            this.setTransportable(transportable);
+            this.setAttrs(visible, active);
+        }
 
-    public void setAttrs(boolean visible, boolean active, boolean transportable) {
-        this.setTransportable(transportable);
-        this.setAttrs(visible, active);
-    }
+        public boolean getTransportable() {
+            return this.transportable;
+        }
 
-    public boolean getTransportable() {
-        return this.transportable;
-    }
-
-    /**
-     * @param transportable the transportable to set
-     */
+        /**
+         * @param transportable the transportable to set
+         */
     public void setTransportable(boolean transportable) {
         this.transportable = transportable;
     }

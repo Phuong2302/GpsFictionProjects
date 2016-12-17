@@ -1,7 +1,6 @@
 package com.sdesimeur.android.gpsfiction.classes;
 
 import android.location.Location;
-import android.os.Bundle;
 
 import com.sdesimeur.android.gpsfiction.R;
 import com.sdesimeur.android.gpsfiction.geopoint.MyGeoPoint;
@@ -44,6 +43,7 @@ public class Zone extends Container implements ZoneEnterOrExitInterface, PlayerL
         super();
     }
 
+/*
     public Bundle getByBundle() throws JSONException {
         Bundle toPass = super.getByBundle();
         Bundle dest = new Bundle();
@@ -60,7 +60,8 @@ public class Zone extends Container implements ZoneEnterOrExitInterface, PlayerL
         shape.setByBundle(toPass);
         this.validate();
     }
-    public JSONObject getJson() throws JSONException {
+*/
+public JSONObject getJson() throws JSONException {
         JSONObject objsuper = super.getJson();
         JSONObject obj  = new JSONObject();
         obj.put(JSonStrings.PARENTJSON,objsuper);

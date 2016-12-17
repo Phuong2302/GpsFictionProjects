@@ -1,8 +1,5 @@
 package com.sdesimeur.android.gpsfiction.missiondestruction;
 
-import android.os.Bundle;
-
-
 public class ZoneEnnemie extends ZoneAdverse {
     protected final static float radiusStdZone = MissionDestructionMainActivity.COEF * 3f;
     protected final static float distStdEntreZones = MissionDestructionMainActivity.COEF * 20f;
@@ -12,19 +9,19 @@ public class ZoneEnnemie extends ZoneAdverse {
         super();
         // TODO Auto-generated constructor stub
     }
-
-    public Bundle getByBundle() {
+/*
+    public Bundle getByBundle() throws JSONException {
         Bundle toPass = super.getByBundle();
         Bundle dest = new Bundle();
         dest.putBundle("Parent", toPass);
         return dest;
     }
 
-    public void setByBundle(Bundle in) {
+    public void setByBundle(Bundle in) throws JSONException {
         Bundle toPass = in.getBundle("Parent");
         super.setByBundle(toPass);
     }
-
+*/
     @Override
     public void setIdAdverseNum(int numInTable4LongId) {
         this.setIdAdverse(displayNameId, numInTable4LongId);

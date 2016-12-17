@@ -19,6 +19,7 @@ public class MyPolygon extends LinkedList<MyGeoPoint> {
     public MyPolygon() {
         super();
     }
+/*
     public Bundle getByBundle() {
         Bundle dest = new Bundle();
         Iterator<MyGeoPoint> it = this.iterator();
@@ -41,7 +42,7 @@ public class MyPolygon extends LinkedList<MyGeoPoint> {
             this.add(gp);
         }
     }
-
+*/
     public JSONArray getJsonArray() throws JSONException {
         JSONArray obj  = new JSONArray();
         Iterator<MyGeoPoint> it = this.iterator();

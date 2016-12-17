@@ -1,7 +1,6 @@
 package com.sdesimeur.android.gpsfiction.classes;
 
 import android.content.res.Resources;
-import android.os.Bundle;
 import android.support.annotation.CallSuper;
 
 import com.sdesimeur.android.gpsfiction.R;
@@ -54,29 +53,30 @@ public abstract class GpsFictionThing {
     public GpsFictionThing() {
     }
 
-    @CallSuper
-    public Bundle getByBundle() throws JSONException {
-        Bundle dest = new Bundle();
-        dest.putBoolean("active", active);
-        dest.putBoolean("visible",visible);
-            dest.putString(JSonStrings.IDENTIFICATION,idx.getJsonArray().toString(0));
-        return dest;
-    }
-    @CallSuper
-    public JSONObject getJson() throws JSONException {
-        JSONObject obj  = new JSONObject();
-        obj.put(JSonStrings.ACTIVE,active);
-        obj.put(JSonStrings.VISIBLE,visible);
-        obj.put(JSonStrings.IDENTIFICATION,idx.getJsonArray());
-        return  obj;
-    }
-
-    @CallSuper
-    public void setByBundle(Bundle in) throws JSONException {
-        active = in.getBoolean("active");
-        visible = in.getBoolean("visible");
-        idx.setJsonArray(new JSONArray(in.getString(JSonStrings.IDENTIFICATION)));
-    }
+    /*
+        public Bundle getByBundle() throws JSONException {
+            Bundle dest = new Bundle();
+            dest.putBoolean("active", active);
+            dest.putBoolean("visible",visible);
+                dest.putString(JSonStrings.IDENTIFICATION,idx.getJsonArray().toString(0));
+            return dest;
+        }
+        */
+        @CallSuper
+        public JSONObject getJson() throws JSONException {
+            JSONObject obj  = new JSONObject();
+            obj.put(JSonStrings.ACTIVE,active);
+            obj.put(JSonStrings.VISIBLE,visible);
+            obj.put(JSonStrings.IDENTIFICATION,idx.getJsonArray());
+            return  obj;
+        }
+    /*
+        public void setByBundle(Bundle in) throws JSONException {
+            active = in.getBoolean("active");
+            visible = in.getBoolean("visible");
+            idx.setJsonArray(new JSONArray(in.getString(JSonStrings.IDENTIFICATION)));
+        }
+        */
     @CallSuper
     public void setJson (JSONObject obj) throws JSONException {
         active = obj.getBoolean(JSonStrings.ACTIVE);

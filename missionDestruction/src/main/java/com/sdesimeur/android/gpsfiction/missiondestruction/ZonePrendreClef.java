@@ -1,20 +1,19 @@
 package com.sdesimeur.android.gpsfiction.missiondestruction;
 
-import android.os.Bundle;
-
 public class ZonePrendreClef extends ZoneAmie {
-    public Bundle getByBundle() {
+/*
+    public Bundle getByBundle() throws JSONException {
         Bundle dest = new Bundle();
         Bundle toPass = super.getByBundle();
         dest.putBundle("Parent", toPass);
         return dest;
     }
 
-    public void setByBundle(Bundle in) {
+    public void setByBundle(Bundle in) throws JSONException {
         Bundle toPass = in.getBundle("Parent");
         super.setByBundle(toPass);
     }
-
+*/
     @Override
     public void onEnter() {
         // TODO Auto-generated method stub

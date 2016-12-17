@@ -1,7 +1,5 @@
 package com.sdesimeur.android.gpsfiction.missiondestruction;
 
-import android.os.Bundle;
-
 import com.sdesimeur.android.gpsfiction.classes.GpsFictionData;
 import com.sdesimeur.android.gpsfiction.classes.Zone;
 import com.sdesimeur.android.gpsfiction.geopoint.MyGeoPoint;
@@ -21,19 +19,19 @@ public abstract class ZoneAdverse extends Zone {
         super();
         // TODO Auto-generated constructor stub
     }
-
-    public Bundle getByBundle() {
+/*
+    public Bundle getByBundle() throws JSONException {
         Bundle toPass = super.getByBundle();
         Bundle dest = new Bundle();
         dest.putBundle("Parent", toPass);
         return dest;
     }
 
-    public void setByBundle(Bundle in) {
+    public void setByBundle(Bundle in) throws JSONException {
         Bundle toPass = in.getBundle("Parent");
         super.setByBundle(toPass);
     }
-
+*/
     public void initnew(GpsFictionData gpsFictionData) {
         super.init(gpsFictionData);
         this.findCenterAndSetShapeIfAllIsSet();

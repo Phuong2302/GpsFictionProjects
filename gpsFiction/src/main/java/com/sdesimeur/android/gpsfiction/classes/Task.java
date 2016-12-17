@@ -1,7 +1,5 @@
 package com.sdesimeur.android.gpsfiction.classes;
 
-import android.os.Bundle;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -13,6 +11,7 @@ public class Task extends GpsFictionThing {
         super();
     }
 
+/*
     public Bundle getByBundle() throws JSONException {
         Bundle toPass = super.getByBundle();
         Bundle dest = new Bundle();
@@ -29,7 +28,7 @@ public class Task extends GpsFictionThing {
         val = in.getBooleanArray(complete.getClass().getCanonicalName());
         this.complete = val[0];
     }
-
+*/
     public JSONObject getJson() throws JSONException {
         JSONObject objsuper = super.getJson();
         JSONObject obj  = new JSONObject();

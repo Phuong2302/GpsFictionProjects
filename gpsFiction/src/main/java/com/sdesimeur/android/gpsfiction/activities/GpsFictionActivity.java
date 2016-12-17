@@ -10,11 +10,9 @@ import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.os.Parcel;
 import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
-import android.support.multidex.MultiDex;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
 import android.view.Gravity;
@@ -24,9 +22,10 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 
-import com.google.gson.Gson;
 import com.sdesimeur.android.gpsfiction.R;
 import com.sdesimeur.android.gpsfiction.classes.GpsFictionControler;
+
+import org.json.JSONException;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -196,21 +195,30 @@ public class GpsFictionActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         //this.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        MultiDex.install(this);
+        //MultiDex.install(this);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED);
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION|View.SYSTEM_UI_FLAG_LOW_PROFILE);
         mGpsFictionControler = new GpsFictionControler(this);
-        Gson gson = new Gson();
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
-        String tmp = settings.getString(BUNDLEASJSON, null);
+        String tmp = null;
         if (tmp != null) {
  //           Bundle in = gson.fromJson(tmp , Bundle.class);
  //           mGpsFictionControler.getmGpsFictionData().setByBundle(in);
         }
         if (savedInstanceState != null) {
-            mGpsFictionControler.onCreate(savedInstanceState);
+            try {
+                mGpsFictionControler.onCreate(savedInstanceState);
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            } catch (InstantiationException e) {
+                e.printStackTrace();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
             selectedFragmentId = savedInstanceState.getInt("lastSelectedFragmentId", R.id.Zones);
         }
         super.onCreate(savedInstanceState);
@@ -296,7 +304,11 @@ public class GpsFictionActivity extends Activity {
 
     @Override
     protected void onSaveInstanceState(Bundle savedInstanceState) {
-        mGpsFictionControler.onSaveInstanceState(savedInstanceState);
+        try {
+            mGpsFictionControler.onSaveInstanceState(savedInstanceState);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
         savedInstanceState.putInt("lastSelectedFragmentId", selectedFragmentId);
         super.onSaveInstanceState(savedInstanceState);
     }
@@ -308,15 +320,9 @@ public class GpsFictionActivity extends Activity {
 
     @Override
     public void onDestroy() {
-        Bundle toPass = mGpsFictionControler.getmGpsFictionData().getByBundle();
-        Parcel p = Parcel.obtain();
-        toPass.writeToParcel(p,0);
-        Gson gson = new Gson();
-        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
-        SharedPreferences.Editor ed = settings.edit();
-        String tmp = gson.toJson(toPass);
-        ed.putString(BUNDLEASJSON, tmp);
-        ed.commit();
+        //SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
+        //SharedPreferences.Editor ed = settings.edit();
+        //ed.commit();
         mGpsFictionControler.onDestroy();
         super.onDestroy();
     }

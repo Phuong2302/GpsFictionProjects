@@ -1,19 +1,20 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.sdesimeur.android.gpsfiction.missiondestruction"
+    xmlns:tools="http://schemas.android.com/tools"
     android:versionCode="1"
     android:versionName="1.0">
 
     <uses-permission android:name="android.permission.SET_DEBUG_APP" />
 
     <application
+        tools:replace="android:label,android:icon,android:theme"
         android:icon="@drawable/ic_launcher"
-        android:label="@string/app_name"
+        android:label="@string/appname"
         android:description="@string/rulesDef"
-        android:theme="@style/MyAppTheme"
-        android:name="android.support.multidex.MultiDexApplication">
+        android:theme="@style/MyAppTheme">
         <activity
             android:name=".MissionDestructionMainActivity"
-            android:label="@string/app_name">
+            android:label="@string/appname">
             <intent-filter>
                 <action android:name="android.intent.action.RUN" />
                 <category android:name="com.sdesimeur.android.gpsfiction.intent.category.GPSFICTIONACTIVITY" />

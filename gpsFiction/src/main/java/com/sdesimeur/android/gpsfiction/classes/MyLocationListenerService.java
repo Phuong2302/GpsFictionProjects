@@ -36,9 +36,9 @@ public class MyLocationListenerService extends Service implements LocationListen
     //	private static final MyLocationListener staticLocationListener=new MyLocationListener();
 //	private static final SensorEventListener staticCompassListener = staticLocationListener;
     private boolean compassActive;
-    private float bearingOfPlayer;
-    private float compassBearing;
-    private float locationBearing;
+    private float bearingOfPlayer = 0;
+    private float compassBearing = 0;
+    private float locationBearing = 0;
     private GpsFictionControler gpsFictionControler;
 
     public MyLocationListenerService() {

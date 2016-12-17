@@ -1,7 +1,6 @@
 package com.sdesimeur.android.gpsfiction.classes;
 
 import android.content.res.Resources;
-import android.os.Bundle;
 
 import com.sdesimeur.android.gpsfiction.R;
 
@@ -10,7 +9,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.oscim.layers.PathLayer;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 
@@ -68,7 +66,7 @@ public class GpsFictionData {
     public PathLayer getRoutePathLayer() {
         return routePathLayer;
     }
-
+/*
     public Bundle getByBundle() throws JSONException {
         Bundle dest = new Bundle();
         int index = 0;
@@ -113,69 +111,6 @@ public class GpsFictionData {
         dest.putIntArray("selectedZone", (getSelectedZone()!=null)?getSelectedZone().getUUID(): new int[]{});
         return dest;
     }
-    public JSONObject getJson() throws JSONException {
-        JSONObject obj  = new JSONObject();
-        obj.put(JSonStrings.ALLREADYCONFIGURED,allreadyConfigured);
-        obj.put(JSonStrings.ZOOMLEVEL,zoomLevel);
-        obj.put(JSonStrings.VEHICULESELECTEDID,vehiculeSelectedId);
-        JSONArray arr = new JSONArray();
-        Iterator <GpsFictionThing> it = gpsFictionThings.iterator();
-        GpsFictionThing gft = null;
-        while (it.hasNext()) {
-            gft = it.next();
-            JSONObject obj1 = new JSONObject();
-            obj1.put(JSonStrings.GFTCLASS,gft.getClass().getCanonicalName());
-            obj1.put(JSonStrings.GFTDEFINE,gft.getJson());
-            int nbgfts = 0;
-            if ( gft instanceof Container) {
-                nbgfts = ((Container) gft).getMaxIncludedThings());
-                JSONArray arr1 = new JSONArray();
-                Iterator<GpsFictionThing> it1 = ((Container) gft).getIncludedThings().iterator();
-                while (it1.hasNext()) {
-                    arr1.put(it.next().getIdx().getJsonArray());
-                }
-                obj1.put(JSonStrings.INCLUDEDTHINGS, arr1);
-            }
-            obj1.put(JSonStrings.NBMAXINCLUDEDTHINGS, nbgfts);
-            arr.put(obj1);
-        }
-        obj.put(JSonStrings.ALLGFT,arr);
-        obj.put(JSonStrings.SELECTEDZONEID,(getSelectedZone()!=null)?getSelectedZone().getIdx().getJsonArray(): new JSONArray());
-        return  obj;
-    }
-
-    public void setJson (JSONObject obj) throws JSONException, ClassNotFoundException, IllegalAccessException, InstantiationException {
-        allreadyConfigured = obj.getBoolean(JSonStrings.ALLREADYCONFIGURED);
-        zoomLevel = obj.getInt(JSonStrings.ZOOMLEVEL);
-        vehiculeSelectedId = obj.getInt(JSonStrings.VEHICULESELECTEDID);
-        JSONArray arr = obj.getJSONArray(JSonStrings.ALLGFT);
-        Class myclass = null;
-        GpsFictionThing gft = null;
-        for (int index = 0; index < arr.length() ;index++) {
-            JSONObject obj1 = arr.getJSONObject(index);
-            myclass = Class.forName(obj1.getString(JSonStrings.GFTCLASS));
-            gft = (GpsFictionThing) myclass.newInstance();
-            gft.init(this);
-            gft.setJson(obj1.getJSONObject(JSonStrings.GFTDEFINE));
-            gpsFictionThings.add(gft);
-        }
-        for (int index = 0; index < arr.length() ;index++) {
-            JSONObject obj1 = arr.getJSONObject(index);
-            int nb = obj1.getInt(JSonStrings.NBMAXINCLUDEDTHINGS);
-            if (nb != 0) {
-                Container gft1 = ((Container) findGpsFictionThingByJSONArray(arr));
-                JSONArray arr1 = obj1.getJSONArray(JSonStrings.INCLUDEDTHINGS);
-                for (int index1 = 0 ; index1 < arr1.length() ; index1++) {
-                    GpsFictionThing gft2 = findGpsFictionThingByJSONArray(arr1.getJSONArray(index1));
-                    gft1.addThingToContainer(gft2);
-                }
-            }
-        }
-        JSONArray arr3 = obj.getJSONArray(JSonStrings.SELECTEDZONEID);
-        if (arr3.length() != 0) {
-            selectedZone = (Zone) findGpsFictionThingByJSONArray(arr3);
-        }
-    }
 
     public void setByBundle(Bundle in) throws JSONException, ClassNotFoundException, IllegalAccessException, InstantiationException {
         boolean[] val = new boolean[1];
@@ -218,6 +153,70 @@ public class GpsFictionData {
         int[] tmp = in.getIntArray("selectedZone");
         if (tmp.length != 0) setSelectedZone((Zone) findGpsFictionThingByUUID(tmp));
         indexGpsFictionThings++;
+    }
+    */
+    public JSONObject getJson() throws JSONException {
+        JSONObject obj  = new JSONObject();
+        obj.put(JSonStrings.ALLREADYCONFIGURED,allreadyConfigured);
+        obj.put(JSonStrings.ZOOMLEVEL,zoomLevel);
+        obj.put(JSonStrings.VEHICULESELECTEDID,vehiculeSelectedId);
+        JSONArray arr = new JSONArray();
+        Iterator <GpsFictionThing> it = gpsFictionThings.iterator();
+        GpsFictionThing gft = null;
+        while (it.hasNext()) {
+            gft = it.next();
+            JSONObject obj1 = new JSONObject();
+            obj1.put(JSonStrings.GFTCLASS,gft.getClass().getCanonicalName());
+            obj1.put(JSonStrings.GFTDEFINE,gft.getJson());
+            int nbgfts = 0;
+            if ( gft instanceof Container) {
+                nbgfts = ((Container) gft).getMaxIncludedThings();
+                JSONArray arr1 = new JSONArray();
+                Iterator<GpsFictionThing> it1 = ((Container) gft).getIncludedThings().iterator();
+                while (it1.hasNext()) {
+                    arr1.put(it1.next().getIdx().getJsonArray());
+                }
+                obj1.put(JSonStrings.INCLUDEDTHINGS, arr1);
+            }
+            obj1.put(JSonStrings.NBMAXINCLUDEDTHINGS, nbgfts);
+            arr.put(obj1);
+        }
+        obj.put(JSonStrings.ALLGFT,arr);
+        obj.put(JSonStrings.SELECTEDZONEID,(getSelectedZone()!=null)?getSelectedZone().getIdx().getJsonArray(): new JSONArray());
+        return  obj;
+    }
+
+    public void setJson (JSONObject obj) throws JSONException, ClassNotFoundException, IllegalAccessException, InstantiationException {
+        allreadyConfigured = obj.getBoolean(JSonStrings.ALLREADYCONFIGURED);
+        zoomLevel = obj.getInt(JSonStrings.ZOOMLEVEL);
+        vehiculeSelectedId = obj.getInt(JSonStrings.VEHICULESELECTEDID);
+        JSONArray arr = obj.getJSONArray(JSonStrings.ALLGFT);
+        Class myclass = null;
+        GpsFictionThing gft = null;
+        for (int index = 0; index < arr.length() ;index++) {
+            JSONObject obj1 = arr.getJSONObject(index);
+            myclass = Class.forName(obj1.getString(JSonStrings.GFTCLASS));
+            gft = (GpsFictionThing) myclass.newInstance();
+            gft.init(this);
+            gft.setJson(obj1.getJSONObject(JSonStrings.GFTDEFINE));
+            gpsFictionThings.add(gft);
+        }
+        for (int index = 0; index < arr.length() ;index++) {
+            JSONObject obj1 = arr.getJSONObject(index);
+            int nb = obj1.getInt(JSonStrings.NBMAXINCLUDEDTHINGS);
+            if (nb != 0) {
+                Container gft1 = ((Container) findGpsFictionThingByJSONArray(arr));
+                JSONArray arr1 = obj1.getJSONArray(JSonStrings.INCLUDEDTHINGS);
+                for (int index1 = 0 ; index1 < arr1.length() ; index1++) {
+                    GpsFictionThing gft2 = findGpsFictionThingByJSONArray(arr1.getJSONArray(index1));
+                    gft1.addThingToContainer(gft2);
+                }
+            }
+        }
+        JSONArray arr3 = obj.getJSONArray(JSonStrings.SELECTEDZONEID);
+        if (arr3.length() != 0) {
+            selectedZone = (Zone) findGpsFictionThingByJSONArray(arr3);
+        }
     }
 
 

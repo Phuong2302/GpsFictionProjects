@@ -1,7 +1,5 @@
 package com.sdesimeur.android.gpsfiction.classes;
 
-import android.os.Bundle;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -13,6 +11,7 @@ public class Character extends Container {
         // TODO Auto-generated constructor stub
     }
 
+/*
     public Bundle getByBundle() throws JSONException {
         Bundle toPass = super.getByBundle();
         Bundle dest = new Bundle();
@@ -24,7 +23,7 @@ public class Character extends Container {
         Bundle toPass = in.getBundle(JSonStrings.PARENTJSON);
         super.setByBundle(toPass);
     }
-
+*/
     public JSONObject getJson() throws JSONException {
         JSONObject objsuper = super.getJson();
         JSONObject obj  = new JSONObject();
