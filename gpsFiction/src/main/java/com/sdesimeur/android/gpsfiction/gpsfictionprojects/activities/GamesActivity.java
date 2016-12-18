@@ -6,8 +6,10 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.annotation.RequiresApi;
 import android.support.multidex.MultiDex;
 import android.text.InputType;
 import android.widget.EditText;
@@ -25,6 +27,7 @@ public class GamesActivity extends Activity implements GameFragment.OnListFragme
 
     private boolean isStopped;
 
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         MultiDex.install(this);
@@ -33,13 +36,11 @@ public class GamesActivity extends Activity implements GameFragment.OnListFragme
         Locale locale = new Locale(localeString);
         if (!Locale.getDefault().equals(locale)) {
             Locale.setDefault(locale);
+            Configuration cfg = getResources().getConfiguration();
+            cfg.setLocale(locale);
+            getResources().updateConfiguration(cfg,null) ;
             recreate();
         }
-        //Configuration cfg = getResources().getConfiguration();
-        //if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-        //        cfg.setLocale(locale);
-        //}
-        //getResources().updateConfiguration(cfg,null) ;
         Intent myIntent2 = new Intent(this, MyLocationListenerService.class);
         myIntent2.setAction(MyLocationListenerService.ACTION.STARTFOREGROUND);
         startService(myIntent2);
@@ -54,6 +55,7 @@ public class GamesActivity extends Activity implements GameFragment.OnListFragme
         recreate();
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)
     @Override
     public void onBackPressed() {
         AlertDialog.Builder dialogBox = new AlertDialog.Builder(this);
@@ -80,6 +82,9 @@ public class GamesActivity extends Activity implements GameFragment.OnListFragme
             }
         });
         dialogBox.setNegativeButton(R.string.dialogButtonCancel,null);
+        Configuration cfg = getResources().getConfiguration();
+        cfg.setLocale(Locale.getDefault());
+        dialogBox.getContext().getResources().updateConfiguration(cfg,getResources().getDisplayMetrics());
         dialogBox.show();
         return;
     }

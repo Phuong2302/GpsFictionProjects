@@ -11,11 +11,13 @@ import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.speech.tts.TextToSpeech;
+import android.support.annotation.RequiresApi;
 import android.support.multidex.MultiDex;
 import android.text.InputType;
 import android.text.TextUtils;
@@ -47,12 +49,12 @@ import java.util.Set;
  * status bar and navigation/system bar) with user interaction.
  */
 public class AdminActivity extends Activity {
-    static final String HOMEDEFAULTACTIVITY = "loadHomeDefaultActivityName";
-    static final String LOCALE = "locale";
-    static final String PASSWORD = "password";
-    static final String RESETGAMES = "resetGames";
-    static final String HOMEDEFAULTPACKAGE = "loadHomeDefaultPackageName";
-    static final String ALLREADYSTARTED = "allreadyStarted";
+    public static final String HOMEDEFAULTACTIVITY = "loadHomeDefaultActivityName";
+    public static final String LOCALE = "locale";
+    public static final String PASSWORD = "password";
+    public static final String RESETGAMES = "resetGames";
+    public static final String HOMEDEFAULTPACKAGE = "loadHomeDefaultPackageName";
+    public static final String ALLREADYSTARTED = "allreadyStarted";
     private HashMap <String, Locale> string2locale = new HashMap<>();
     private Spinner languageLocaleSpinner;
     private Switch sw;
@@ -261,6 +263,7 @@ public class AdminActivity extends Activity {
         Toast.makeText(this, R.string.passwd_saved,Toast.LENGTH_LONG).show();
         //ed1.setText("");
     }
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)
     public void startGames (View v) {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
         final SharedPreferences.Editor ed = settings.edit();
@@ -292,6 +295,9 @@ public class AdminActivity extends Activity {
             }
         });
         dialogBox.setNegativeButton(R.string.dialogButtonCancel,null);
+        Configuration cfg = getResources().getConfiguration();
+        cfg.setLocale(Locale.getDefault());
+        dialogBox.getContext().getResources().updateConfiguration(cfg,getResources().getDisplayMetrics());
         dialogBox.show();
     }
     public void startGamesActivity () {

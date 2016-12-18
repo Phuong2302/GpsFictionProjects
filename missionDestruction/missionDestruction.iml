@@ -131,8 +131,8 @@
     <orderEntry type="library" exported="" name="vtm-themes-0.6.0-rc2" level="project" />
     <orderEntry type="library" exported="" scope="TEST" name="hamcrest-core-1.3" level="project" />
     <orderEntry type="library" exported="" name="support-media-compat-25.1.0" level="project" />
-    <orderEntry type="library" exported="" scope="TEST" name="junit-4.12" level="project" />
     <orderEntry type="library" exported="" name="support-vector-drawable-25.1.0" level="project" />
+    <orderEntry type="library" exported="" scope="TEST" name="junit-4.12" level="project" />
     <orderEntry type="library" exported="" name="vtm-android-0.6.0-rc1-natives-armeabi" level="project" />
     <orderEntry type="library" exported="" name="appcompat-v7-25.1.0" level="project" />
     <orderEntry type="library" exported="" name="hppc-0.7.2" level="project" />

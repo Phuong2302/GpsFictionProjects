@@ -4,9 +4,14 @@ import android.app.Fragment;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.content.res.Configuration;
+import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.support.annotation.RequiresApi;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -19,6 +24,7 @@ import com.sdesimeur.android.gpsfiction.R;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * A fragment representing a list of Items.
@@ -61,6 +67,7 @@ public class GameFragment extends Fragment {
         }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -81,9 +88,19 @@ public class GameFragment extends Fragment {
             List<ResolveInfo> list = pm.queryIntentActivities(intent, 0);
             List <GameItem> contentList = new ArrayList<>();
             Iterator iterator = list.iterator();
+            SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getActivity());
+            String localeString = settings.getString(AdminActivity.LOCALE,"fr_FR");
+            Locale locale = new Locale(localeString);
+            Configuration cfg = new Configuration();
+            cfg.setLocale(locale);
             while (iterator.hasNext()) {
                 GameItem gi = new GameItem();
                 ResolveInfo re = (ResolveInfo) iterator.next();
+                try {
+                    pm.getResourcesForApplication(re.activityInfo.applicationInfo).updateConfiguration(cfg,getActivity().getResources().getDisplayMetrics());
+                } catch (PackageManager.NameNotFoundException e) {
+                    e.printStackTrace();
+                }
                 gi.name = (String) re.activityInfo.applicationInfo.loadLabel(pm);
                 gi.desc = (String) re.activityInfo.applicationInfo.loadDescription(pm);
                 gi.theComponentName = new ComponentName(re.activityInfo.applicationInfo.packageName,re.activityInfo.name);

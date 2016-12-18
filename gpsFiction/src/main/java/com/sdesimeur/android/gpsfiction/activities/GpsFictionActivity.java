@@ -10,8 +10,10 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.Typeface;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.annotation.RequiresApi;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.multidex.MultiDex;
@@ -27,6 +29,7 @@ import android.view.WindowManager;
 import com.sdesimeur.android.gpsfiction.R;
 import com.sdesimeur.android.gpsfiction.classes.GpsFictionControler;
 import com.sdesimeur.android.gpsfiction.classes.JSonStrings;
+import com.sdesimeur.android.gpsfiction.gpsfictionprojects.activities.AdminActivity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -38,6 +41,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Locale;
 
 
 public class GpsFictionActivity extends Activity {
@@ -203,10 +207,26 @@ public class GpsFictionActivity extends Activity {
         }
         return super.onOptionsItemSelected(item);
     }
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)
     @Override
     public void onCreate(Bundle savedInstanceState) {
         //this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         MultiDex.install(this);
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
+        String loc = getIntent().getStringExtra(AdminActivity.LOCALE);
+        if (loc != null) {
+            SharedPreferences.Editor ed = settings.edit();
+            ed.putString(AdminActivity.LOCALE,loc);
+        }
+        String localeString = settings.getString(AdminActivity.LOCALE,"fr_FR");
+        Locale locale = new Locale(localeString);
+        if (!Locale.getDefault().equals(locale)) {
+            Locale.setDefault(locale);
+            Configuration cfg = getResources().getConfiguration();
+            cfg.setLocale(locale);
+            getResources().updateConfiguration(cfg,null) ;
+            recreate();
+        }
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED);
@@ -215,7 +235,6 @@ public class GpsFictionActivity extends Activity {
         if (savedInstanceState != null) {
             selectedFragmentId = savedInstanceState.getInt(LASTSELECTEDFRAGMENTID, R.id.Zones);
         }
-        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
         String tmp = settings.getString(JSonStrings.ALLDATA, null);
         if (tmp != null) {
             try {
