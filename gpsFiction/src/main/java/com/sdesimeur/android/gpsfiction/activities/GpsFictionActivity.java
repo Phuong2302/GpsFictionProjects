@@ -29,7 +29,7 @@ import android.view.WindowManager;
 import com.sdesimeur.android.gpsfiction.R;
 import com.sdesimeur.android.gpsfiction.classes.GpsFictionControler;
 import com.sdesimeur.android.gpsfiction.classes.JSonStrings;
-import com.sdesimeur.android.gpsfiction.gpsfictionprojects.activities.AdminActivity;
+import com.sdesimeur.android.gpsfiction.gpsfictionprojects.admin.AdminActivity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -213,19 +213,26 @@ public class GpsFictionActivity extends Activity {
         //this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         MultiDex.install(this);
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
+        if (getIntent().getAction().equals(AdminActivity.RESETGAMES)) {
+            SharedPreferences.Editor ed = settings.edit();
+            ed.putString(JSonStrings.ALLDATA,"");
+            finish();
+        }
         String loc = getIntent().getStringExtra(AdminActivity.LOCALE);
         if (loc != null) {
             SharedPreferences.Editor ed = settings.edit();
             ed.putString(AdminActivity.LOCALE,loc);
+            ed.commit();
         }
         String localeString = settings.getString(AdminActivity.LOCALE,"fr_FR");
         Locale locale = new Locale(localeString);
-        if (!Locale.getDefault().equals(locale)) {
-            Locale.setDefault(locale);
-            Configuration cfg = getResources().getConfiguration();
-            cfg.setLocale(locale);
-            getResources().updateConfiguration(cfg,null) ;
-            recreate();
+        //if (!Locale.getDefault().equals(locale)) {
+        if (!getResources().getConfiguration().locale.equals(locale)) {
+                Locale.setDefault(locale);
+                Configuration cfg = getResources().getConfiguration();
+                cfg.setLocale(locale);
+                getResources().updateConfiguration(cfg,null) ;
+                recreate();
         }
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD);
