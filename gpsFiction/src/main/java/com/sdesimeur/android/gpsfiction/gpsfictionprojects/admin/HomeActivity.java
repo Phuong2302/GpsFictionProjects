@@ -18,8 +18,8 @@ public class HomeActivity extends Activity {
     }
     @Override
     public void onResume () {
-        Intent intent = new Intent("android.intent.action.MAIN");
-        intent.addCategory("android.intent.category.HOME");
+        Intent intent = new Intent(Intent.ACTION_MAIN);
+        intent.addCategory(Intent.CATEGORY_HOME);
         ResolveInfo resolveinfo = getPackageManager().queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY).get(0);
         String packageName = resolveinfo.activityInfo.applicationInfo.packageName;
         String name = resolveinfo.activityInfo.name;

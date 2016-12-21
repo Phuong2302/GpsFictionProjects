@@ -42,16 +42,15 @@ public class GamesActivity extends Activity implements GameFragment.OnListFragme
         if (tmp != null) ed.putString(AdminActivity.LOCALE,tmp);
         Boolean resetAll = extras.getBoolean(AdminActivity.RESETGAMES,false);
         if (resetAll) {
-            Intent intent = new Intent(Intent.ACTION_RUN, null);
-            intent.addCategory("com.sdesimeur.android.gpsfiction.intent.category.GPSFICTIONACTIVITY");
+            Intent intent = new Intent(Intent.ACTION_MAIN, null);
+            intent.addCategory(AdminActivity.ALLGPSFICTIONCATEGORY);
             PackageManager pm = getPackageManager();
             List<ResolveInfo> list = pm.queryIntentActivities(intent, 0);
             Iterator iterator = list.iterator();
             while (iterator.hasNext()) {
                 ResolveInfo re = (ResolveInfo) iterator.next();
                 ComponentName theComponentName = new ComponentName(re.activityInfo.applicationInfo.packageName, re.activityInfo.name);
-                Intent intent1 = new Intent();
-                intent1.setAction(AdminActivity.RESETGAMES);
+                Intent intent1 = new Intent(AdminActivity.RESETGAMES);
                 intent1.setComponent(theComponentName);
                 startActivity(intent1);
             }

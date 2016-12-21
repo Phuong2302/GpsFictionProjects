@@ -84,7 +84,7 @@ public class GameFragment extends Fragment {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
             Intent intent = new Intent(Intent.ACTION_RUN, null);
-            intent.addCategory("com.sdesimeur.android.gpsfiction.intent.category.GPSFICTIONACTIVITY");
+            intent.addCategory(AdminActivity.ALLGPSFICTIONCATEGORY);
             PackageManager pm = getActivity().getPackageManager();
             List<ResolveInfo> list = pm.queryIntentActivities(intent, 0);
             List <GameItem> contentList = new ArrayList<>();

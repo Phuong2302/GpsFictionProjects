@@ -53,7 +53,8 @@ public class AdminActivity extends Activity {
     public static final String HOMEDEFAULTACTIVITY = "loadHomeDefaultActivityName";
     public static final String LOCALE = "com.sdesimeur.android.gpsfiction.gpsFictionprojects.admin.locale";
     public static final String PASSWORD = "com.sdesimeur.android.gpsfiction.gpsFictionprojects.admin.password";
-    public static final String RESETGAMES = "com.sdesimeur.android.gpsfiction.gpsFictionprojects.admin.resetGames";
+    public static final String RESETGAMES = "com.sdesimeur.android.gpsfiction.intent.action.RESETGAMES";
+    public static final String ALLGPSFICTIONCATEGORY = "com.sdesimeur.android.gpsfiction.intent.category.GPSFICTIONACTIVITY";
     public static final String HOMEDEFAULTPACKAGE = "loadHomeDefaultPackageName";
     public static final String ALLREADYSTARTED = "allreadyStarted";
     private static final String ADMINACTIVITYCLASSNAME = com.sdesimeur.android.gpsfiction.gpsfictionprojects.admin.AdminActivity.class.getName();
@@ -101,8 +102,8 @@ public class AdminActivity extends Activity {
         final HashMap <String, ActivityInfo> string2activityinfo = new HashMap<>();
         ArrayList<String> homeActivities = new ArrayList<>();
         ArrayAdapter adapter = new ArrayAdapter(this, R.layout.spinnerhomeactivityselect, homeActivities);
-        Intent intent = new Intent("android.intent.action.MAIN");
-        intent.addCategory("android.intent.category.HOME");
+        Intent intent = new Intent(Intent.ACTION_MAIN);
+        intent.addCategory(Intent.CATEGORY_HOME);
         PackageManager pm = getPackageManager();
         List<ResolveInfo> list = pm.queryIntentActivities(intent, 0);
         Iterator<ResolveInfo> it = list.iterator();
@@ -307,9 +308,10 @@ public class AdminActivity extends Activity {
         extras.putString(PASSWORD,settings.getString(PASSWORD,""));
         extras.putBoolean(RESETGAMES,settings.getBoolean(RESETGAMES,false));
         extras.putString(LOCALE,settings.getString(LOCALE,"fr_FR"));
-        Intent intent = new Intent(Intent.ACTION_RUN,GamesActivity.class);
-        intent.setAction(Intent.ACTION_RUN);
+        Intent intent = new Intent(Intent.ACTION_MAIN);
+        ComponentName cn = new ComponentName(GamesActivity.class.getPackage().getName(),GamesActivity.class.getCanonicalName());
         intent.putExtras(extras);
+        intent.setComponent(cn);
         startActivity(intent);
     }
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
