@@ -37,11 +37,12 @@ public abstract class BindToMyLocationListenerHelper {
     };
     private Context context;
     public BindToMyLocationListenerHelper (Context ct) {
-        context = ct;
-        Intent myIntent2 = new Intent(context, MyLocationListenerService.class);
-        myIntent2.setAction(MyLocationListenerService.ACTION.STARTFOREGROUND);
-        context.bindService(myIntent2, serviceConnectionToMyLocationListenerService, Context.BIND_AUTO_CREATE);
-
+        if (!isBoundToMyLocationListenerService) {
+            context = ct;
+            Intent myIntent2 = new Intent(context, MyLocationListenerService.class);
+            myIntent2.setAction(MyLocationListenerService.ACTION.STARTFOREGROUND);
+            context.bindService(myIntent2, serviceConnectionToMyLocationListenerService, Context.BIND_AUTO_CREATE);
+        }
     }
     protected abstract void onBindWithMyLocationListener(MyLocationListenerService mlls);
     public void onUnBindWithMyLocationListener() {

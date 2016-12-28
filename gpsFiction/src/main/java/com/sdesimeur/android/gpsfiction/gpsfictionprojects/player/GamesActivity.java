@@ -19,7 +19,6 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.sdesimeur.android.gpsfiction.R;
-import com.sdesimeur.android.gpsfiction.classes.MyLocationListenerService;
 import com.sdesimeur.android.gpsfiction.gpsfictionprojects.admin.AdminActivity;
 
 import org.apache.commons.codec.binary.Hex;
@@ -31,7 +30,7 @@ import java.util.Locale;
 
 public class GamesActivity extends Activity implements GameFragment.OnListFragmentInteractionListener {
 
-    private boolean isStopped;
+    //private boolean isStopped;
 
     private void parseExtras (Bundle extras) {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
@@ -74,10 +73,10 @@ public class GamesActivity extends Activity implements GameFragment.OnListFragme
             getResources().updateConfiguration(cfg,null) ;
             recreate();
         }
-        Intent myIntent2 = new Intent(this, MyLocationListenerService.class);
-        myIntent2.setAction(MyLocationListenerService.ACTION.STARTFOREGROUND);
-        startService(myIntent2);
-        isStopped = true;
+        //Intent myIntent2 = new Intent(this, MyLocationListenerService.class);
+        //myIntent2.setAction(MyLocationListenerService.ACTION.STARTFOREGROUND);
+        //startService(myIntent2);
+        //isStopped = true;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_games);
     }
@@ -131,15 +130,15 @@ public class GamesActivity extends Activity implements GameFragment.OnListFragme
         intent.setComponent(item.theComponentName);
         intent.putExtra(AdminActivity.LOCALE,locale);
         startActivity(intent);
-        isStopped = false;
+        //isStopped = false;
     }
     @Override
     public void onDestroy () {
-        if (isStopped) {
-            Intent myIntent2 = new Intent(this, MyLocationListenerService.class);
-            myIntent2.setAction(MyLocationListenerService.ACTION.STOPFOREGROUND);
-            startService(myIntent2);
-        }
+        //if (isStopped) {
+        //    Intent myIntent2 = new Intent(this, MyLocationListenerService.class);
+        //    myIntent2.setAction(MyLocationListenerService.ACTION.STOPFOREGROUND);
+        //    startService(myIntent2);
+        //}
         super.onDestroy();
     }
 }

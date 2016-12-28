@@ -296,11 +296,17 @@ public class GpsFictionControler {
             CalcRouteAndSpeakService.MyBinder binder = (CalcRouteAndSpeakService.MyBinder) service;
             mCalcRouteAndSpeakService = binder.getService();
             mCalcRouteAndSpeakService.setGpsFictionControler(GpsFictionControler.this);
+            addPlayerLocationListener(GpsFictionControler.REGISTER.SERVICE, mCalcRouteAndSpeakService);
+            addZoneSelectListener(GpsFictionControler.REGISTER.SERVICE,mCalcRouteAndSpeakService);
+            addVehiculeSelectedIdListener(mCalcRouteAndSpeakService);
             isBoundToCalcRouteAndSpeakService = true;
         }
 
         @Override
         public void onServiceDisconnected(ComponentName name) {
+            removeZoneSelectListener(GpsFictionControler.REGISTER.SERVICE, mCalcRouteAndSpeakService);
+            removeVehiculeSelectedIdListener(mCalcRouteAndSpeakService);
+            removePlayerLocationListener(GpsFictionControler.REGISTER.SERVICE, mCalcRouteAndSpeakService);
             mCalcRouteAndSpeakService = null;
             isBoundToCalcRouteAndSpeakService = false;
         }

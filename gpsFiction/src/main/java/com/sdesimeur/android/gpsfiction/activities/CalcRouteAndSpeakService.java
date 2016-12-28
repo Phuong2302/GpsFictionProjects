@@ -54,7 +54,7 @@ public class CalcRouteAndSpeakService extends Service implements TextToSpeech.On
     private GpsFictionControler gpsFictionControler;
 
     public PathLayer getRoutePathLayer() {
-        return gpsFictionControler.getRoutePathLayer();
+        return (gpsFictionControler!=null)?gpsFictionControler.getRoutePathLayer():null;
     }
 
 
@@ -88,14 +88,11 @@ public class CalcRouteAndSpeakService extends Service implements TextToSpeech.On
 
     private void setDistanceToEnd(float distanceToEnd) {
         this.distanceToEnd = distanceToEnd;
-        gpsFictionControler.fireDistanceByRouteChangeListener(distanceToEnd);
+        if (gpsFictionControler != null) gpsFictionControler.fireDistanceByRouteChangeListener(distanceToEnd);
     }
 
     public void setGpsFictionControler(GpsFictionControler gpsFictionControler) {
         this.gpsFictionControler = gpsFictionControler;
-        this.gpsFictionControler.addPlayerLocationListener(GpsFictionControler.REGISTER.SERVICE, this);
-        this.gpsFictionControler.addZoneSelectListener(GpsFictionControler.REGISTER.SERVICE,this);
-        this.gpsFictionControler.addVehiculeSelectedIdListener(this);
         startTts();
     }
 
@@ -157,9 +154,6 @@ public class CalcRouteAndSpeakService extends Service implements TextToSpeech.On
 
     @Override
     public boolean onUnbind(Intent intent) {
-        gpsFictionControler.removeZoneSelectListener(GpsFictionControler.REGISTER.SERVICE,this);
-        gpsFictionControler.removeVehiculeSelectedIdListener(this);
-        gpsFictionControler.removePlayerLocationListener(GpsFictionControler.REGISTER.SERVICE,this);
         return false;
     }
 
@@ -354,19 +348,21 @@ public class CalcRouteAndSpeakService extends Service implements TextToSpeech.On
     }
 
     protected void startTts() {
-        mTts = new TextToSpeech(this, this);
-        if (mTts.isLanguageAvailable(Locale.getDefault()) == TextToSpeech.LANG_COUNTRY_AVAILABLE) {
-            mTts.setLanguage(Locale.getDefault());
-        } else if (mTts.isLanguageAvailable(Locale.ENGLISH) == TextToSpeech.LANG_COUNTRY_AVAILABLE) {
-            mTts.setLanguage(Locale.ENGLISH);
+        if (! mTtsOK) {
+            mTts = new TextToSpeech(this, this);
+            if (mTts.isLanguageAvailable(Locale.getDefault()) == TextToSpeech.LANG_COUNTRY_AVAILABLE) {
+                mTts.setLanguage(Locale.getDefault());
+            } else if (mTts.isLanguageAvailable(Locale.ENGLISH) == TextToSpeech.LANG_COUNTRY_AVAILABLE) {
+                mTts.setLanguage(Locale.ENGLISH);
+            }
+            mTts.setSpeechRate(1); // 1 est la valeur par défaut. Une valeur inférieure rendra l'énonciation plus lente, une valeur supérieure la rendra plus rapide.
+            mTts.setPitch(1); // 1 est la valeur par défaut. Une valeur inférieure rendra l'énonciation plus grave, une valeur supérieure la rendra plus aigue.
+            //} else {
+            // Echec, aucun moteur n'a été trouvé, on propose à l'utilisateur d'en installer un depuis le Market
+            //    Intent installIntent = new Intent();
+            //    installIntent.setAction(TextToSpeech.Engine.ACTION_INSTALL_TTS_DATA);
+            //    startActivity(installIntent);
         }
-        mTts.setSpeechRate(1); // 1 est la valeur par défaut. Une valeur inférieure rendra l'énonciation plus lente, une valeur supérieure la rendra plus rapide.
-        mTts.setPitch(1); // 1 est la valeur par défaut. Une valeur inférieure rendra l'énonciation plus grave, une valeur supérieure la rendra plus aigue.
-        //} else {
-        // Echec, aucun moteur n'a été trouvé, on propose à l'utilisateur d'en installer un depuis le Market
-        //    Intent installIntent = new Intent();
-        //    installIntent.setAction(TextToSpeech.Engine.ACTION_INSTALL_TTS_DATA);
-        //    startActivity(installIntent);
     }
 
     public PathWrapper getRoutePath() {
