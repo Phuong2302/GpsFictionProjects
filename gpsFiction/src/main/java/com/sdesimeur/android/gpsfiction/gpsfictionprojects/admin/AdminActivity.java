@@ -31,6 +31,7 @@ import android.widget.Switch;
 import android.widget.Toast;
 
 import com.sdesimeur.android.gpsfiction.R;
+import com.sdesimeur.android.gpsfiction.activities.GpsFictionActivity;
 import com.sdesimeur.android.gpsfiction.gpsfictionprojects.player.GamesActivity;
 
 import org.apache.commons.codec.binary.Hex;
@@ -53,33 +54,32 @@ public class AdminActivity extends Activity {
     public static final String HOMEDEFAULTACTIVITY = "loadHomeDefaultActivityName";
     public static final String LOCALE = "com.sdesimeur.android.gpsfiction.gpsFictionprojects.admin.locale";
     public static final String PASSWORD = "com.sdesimeur.android.gpsfiction.gpsFictionprojects.admin.password";
-    public static final String RESETGAMES = "com.sdesimeur.android.gpsfiction.intent.action.RESETGAMES";
-    public static final String ALLGPSFICTIONCATEGORY = "com.sdesimeur.android.gpsfiction.intent.category.GPSFICTIONACTIVITY";
     public static final String HOMEDEFAULTPACKAGE = "loadHomeDefaultPackageName";
     public static final String ALLREADYSTARTED = "allreadyStarted";
-    private static final String ADMINACTIVITYCLASSNAME = com.sdesimeur.android.gpsfiction.gpsfictionprojects.admin.AdminActivity.class.getName();
-    private static final String HOMEACTIVITYCLASSNAME = com.sdesimeur.android.gpsfiction.gpsfictionprojects.admin.HomeActivity.class.getName();
-    private HashMap <String, Locale> string2locale = new HashMap<>();
+    private static final String ADMINACTIVITYCLASSNAME = AdminActivity.class.getName();
+    private static final String HOMEACTIVITYCLASSNAME = HomeActivity.class.getName();
+    private HashMap<String, Locale> string2locale = new HashMap<>();
     private Spinner languageLocaleSpinner;
     private Switch sw;
 
     public static boolean isLocationEnabled(Context context) {
-	    int locationMode = 0;
-	    String locationProviders;
-	    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT){
-	        try {
-	            locationMode = Settings.Secure.getInt(context.getContentResolver(), Settings.Secure.LOCATION_MODE);
-	        } catch (Settings.SettingNotFoundException e) {
-	            e.printStackTrace();
-	            return false;
-	        }
-	        return ((locationMode != Settings.Secure.LOCATION_MODE_OFF) && (locationMode == Settings.Secure.LOCATION_MODE_SENSORS_ONLY));
-	    }else{
-	        locationProviders = Settings.Secure.getString(context.getContentResolver(), Settings.Secure.LOCATION_PROVIDERS_ALLOWED);
-	        return !TextUtils.isEmpty(locationProviders);
-	    }
+        int locationMode = 0;
+        String locationProviders;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            try {
+                locationMode = Settings.Secure.getInt(context.getContentResolver(), Settings.Secure.LOCATION_MODE);
+            } catch (Settings.SettingNotFoundException e) {
+                e.printStackTrace();
+                return false;
+            }
+            return ((locationMode != Settings.Secure.LOCATION_MODE_OFF) && (locationMode == Settings.Secure.LOCATION_MODE_SENSORS_ONLY));
+        } else {
+            locationProviders = Settings.Secure.getString(context.getContentResolver(), Settings.Secure.LOCATION_PROVIDERS_ALLOWED);
+            return !TextUtils.isEmpty(locationProviders);
+        }
     }
-    private void testLocation () {
+
+    private void testLocation() {
 //        LocationManager lm = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
 //        if(!lm.getAllProviders().contains(LocationManager.GPS_PROVIDER)) {
         if (!isLocationEnabled(this)) {
@@ -89,7 +89,7 @@ public class AdminActivity extends Activity {
             dialog.setPositiveButton(getResources().getString(R.string.open_location_settings), new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface paramDialogInterface, int paramInt) {
-                    Intent myIntent = new Intent( Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                    Intent myIntent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
                     startActivity(myIntent);
                     testLocation();
                 }
@@ -98,8 +98,8 @@ public class AdminActivity extends Activity {
         }
     }
 
-    public void changeHomeActivityInPref (View v) {
-        final HashMap <String, ActivityInfo> string2activityinfo = new HashMap<>();
+    public void changeHomeActivityInPref(View v) {
+        final HashMap<String, ActivityInfo> string2activityinfo = new HashMap<>();
         ArrayList<String> homeActivities = new ArrayList<>();
         ArrayAdapter adapter = new ArrayAdapter(this, R.layout.spinnerhomeactivityselect, homeActivities);
         Intent intent = new Intent(Intent.ACTION_MAIN);
@@ -109,15 +109,15 @@ public class AdminActivity extends Activity {
         Iterator<ResolveInfo> it = list.iterator();
         while (it.hasNext()) {
             ActivityInfo act = it.next().activityInfo;
-            if (! act.name.equals(HOMEACTIVITYCLASSNAME)) {
+            if (!act.name.equals(HOMEACTIVITYCLASSNAME)) {
                 String st = (String) act.loadLabel(pm);
                 adapter.add(st);
-                string2activityinfo.put(st,act);
+                string2activityinfo.put(st, act);
             }
         }
 
         LayoutInflater inflater = getLayoutInflater();
-        final Spinner spinner = (Spinner) inflater.inflate(R.layout.homeactivitychooser,null);
+        final Spinner spinner = (Spinner) inflater.inflate(R.layout.homeactivitychooser, null);
         AlertDialog.Builder dialog = new AlertDialog.Builder(this);
         dialog.setView(spinner);
         spinner.setAdapter(adapter);
@@ -132,7 +132,7 @@ public class AdminActivity extends Activity {
                 ActivityInfo resolveInfo = string2activityinfo.get(spinner.getSelectedItem());
                 String homePackageName = resolveInfo.applicationInfo.packageName;
                 String homeActivityName = resolveInfo.name;
-                if ( ! homePackageName.equals(getPackageName())) {
+                if (!homePackageName.equals(getPackageName())) {
                     ed.putString(HOMEDEFAULTPACKAGE, homePackageName);
                     ed.putString(HOMEDEFAULTACTIVITY, homeActivityName);
                 }
@@ -144,7 +144,7 @@ public class AdminActivity extends Activity {
     }
 
     private void launchAppChooser() {
-        if (! isMyAppLauncherDefault()) {
+        if (!isMyAppLauncherDefault()) {
             //PackageManager p = getPackageManager();
             //ComponentName cN = new ComponentName(this, HomeActivity.class);
             //p.setComponentEnabledSetting(cN, PackageManager.COMPONENT_ENABLED_STATE_ENABLED, PackageManager.DONT_KILL_APP);
@@ -177,16 +177,46 @@ public class AdminActivity extends Activity {
         }
         return false;
     }
+
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)
     @Override
     protected void onResume() {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
         Boolean temp = settings.getBoolean(ALLREADYSTARTED, false);
-        if  (temp) {
-            startGamesActivity();
-            finish();
+        if (temp) {
+            AlertDialog.Builder dialogBox = new AlertDialog.Builder(this);
+            dialogBox.setTitle(R.string.askpasstitlereturn);
+            dialogBox.setMessage(R.string.askpassmessagereturn);
+            final EditText input = new EditText(this);
+            input.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD);
+            //input.setTransformationMethod(PasswordTransformationMethod.getInstance());
+            dialogBox.setView(input);
+            dialogBox.setPositiveButton(R.string.dialogButtonValidate, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(AdminActivity.this);
+                    String passsave = settings.getString(AdminActivity.PASSWORD, new String(Hex.encodeHex(DigestUtils.sha(""))));
+                    String passsha = new String(Hex.encodeHex(DigestUtils.sha(input.getText().toString())));
+                    if (passsha.equals(passsave)) {
+                        SharedPreferences.Editor ed = settings.edit();
+                        ed.putBoolean(AdminActivity.ALLREADYSTARTED, false);
+                        ed.commit();
+                    } else {
+                        Toast.makeText(AdminActivity.this, R.string.passwd_different, Toast.LENGTH_LONG).show();
+                        startGamesActivity();
+                        finish();
+                    }
+                }
+            });
+            dialogBox.setNegativeButton(R.string.dialogButtonCancel, null);
+            Configuration cfg = getResources().getConfiguration();
+            cfg.setLocale(Locale.getDefault());
+            dialogBox.getContext().getResources().updateConfiguration(cfg, getResources().getDisplayMetrics());
+            dialogBox.show();
         }
         super.onResume();
     }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         MultiDex.install(this);
@@ -202,9 +232,9 @@ public class AdminActivity extends Activity {
         launchAppChooser();
         testLocation();
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION|View.SYSTEM_UI_FLAG_LOW_PROFILE);
+        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_LOW_PROFILE);
         super.onCreate(savedInstanceState);
-       // mContentView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN|View.SYSTEM_UI_FLAG_LOW_PROFILE|View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
+        // mContentView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN|View.SYSTEM_UI_FLAG_LOW_PROFILE|View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
         setContentView(R.layout.adminactivity);
         languageLocaleSpinner = (Spinner) findViewById(R.id.LanguageListSpinner);
         languageLocaleSpinner.setFocusable(true);
@@ -212,7 +242,7 @@ public class AdminActivity extends Activity {
         languageLocaleSpinner.requestFocus();
         sw = (Switch) findViewById(R.id.ResetGames);
         Set<String> codeCountryArray = new HashSet<>();
-        Collections.addAll(codeCountryArray,getResources().getStringArray(R.array.countryCodeArray));
+        Collections.addAll(codeCountryArray, getResources().getStringArray(R.array.countryCodeArray));
         /*
         for ( String s : getResources().getStringArray(R.array.countryCodeArray)) {
             codeCountryArray.add(s);
@@ -221,15 +251,15 @@ public class AdminActivity extends Activity {
         Locale[] locale = Locale.getAvailableLocales();
         ArrayList<String> langs = new ArrayList<>();
         String lang;
-        int i=0;
-        for( Locale loc : locale ){
+        int i = 0;
+        for (Locale loc : locale) {
             lang = loc.getDisplayLanguage();
-            if( codeCountryArray.contains(loc.toString()) && !langs.contains(lang) ){
+            if (codeCountryArray.contains(loc.toString()) && !langs.contains(lang)) {
                 if (loc.toString().equals(Locale.getDefault().toString())) {
-                    i=langs.size();
+                    i = langs.size();
                 }
-                langs.add( lang );
-                string2locale.put(lang,loc);
+                langs.add(lang);
+                string2locale.put(lang, loc);
             }
         }
         Collections.sort(langs, String.CASE_INSENSITIVE_ORDER);
@@ -251,29 +281,30 @@ public class AdminActivity extends Activity {
         dialogBox.setPositiveButton(R.string.dialogButtonValidate, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                String shaHex = new String (Hex.encodeHex(DigestUtils.sha(input.getText().toString())));
-                ed.putString(PASSWORD,shaHex);
+                String shaHex = new String(Hex.encodeHex(DigestUtils.sha(input.getText().toString())));
+                ed.putString(PASSWORD, shaHex);
                 ed.commit();
             }
         });
-        dialogBox.setNegativeButton(R.string.dialogButtonCancel,null);
+        dialogBox.setNegativeButton(R.string.dialogButtonCancel, null);
         dialogBox.show();
 
         //EditText ed1 = (EditText) findViewById(R.id.pass1);
         //String shaHex= new String(Hex.encodeHex(DigestUtils.sha(ed1.getText().toString())));
         //ed.putString(PASSWORD,shaHex);
         //ed.commit();
-        Toast.makeText(this, R.string.passwd_saved,Toast.LENGTH_LONG).show();
+        Toast.makeText(this, R.string.passwd_saved, Toast.LENGTH_LONG).show();
         //ed1.setText("");
     }
+
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)
-    public void startGames (View v) {
+    public void startGames(View v) {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
         final SharedPreferences.Editor ed = settings.edit();
         Locale locale = string2locale.get(languageLocaleSpinner.getSelectedItem());
         String localeString = locale.toString();
-        ed.putString(LOCALE,localeString);
-        ed.putBoolean(RESETGAMES,sw.isChecked());
+        ed.putString(LOCALE, localeString);
+        ed.putBoolean(GpsFictionActivity.RESETGAMES, sw.isChecked());
         ed.commit();
         AlertDialog.Builder dialogBox = new AlertDialog.Builder(this);
         dialogBox.setTitle(R.string.askpasstitle);
@@ -285,42 +316,59 @@ public class AdminActivity extends Activity {
         dialogBox.setPositiveButton(R.string.dialogButtonValidate, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                String passsave = settings.getString(PASSWORD,"&é(-è_çà)=");
-                String passsha = new String (Hex.encodeHex(DigestUtils.sha(input.getText().toString())));
+                String passsave = settings.getString(PASSWORD, "&é(-è_çà)=");
+                String passsha = new String(Hex.encodeHex(DigestUtils.sha(input.getText().toString())));
                 if (passsha.equals(passsave)) {
-                    ed.putBoolean(ALLREADYSTARTED,true);
+                    ed.putBoolean(ALLREADYSTARTED, true);
                     ed.commit();
                     startGamesActivity();
                 } else {
-                    Toast.makeText(AdminActivity.this, R.string.passwd_different,Toast.LENGTH_LONG).show();
+                    Toast.makeText(AdminActivity.this, R.string.passwd_different, Toast.LENGTH_LONG).show();
                 }
             }
         });
-        dialogBox.setNegativeButton(R.string.dialogButtonCancel,null);
+        dialogBox.setNegativeButton(R.string.dialogButtonCancel, null);
         Configuration cfg = getResources().getConfiguration();
         cfg.setLocale(Locale.getDefault());
-        dialogBox.getContext().getResources().updateConfiguration(cfg,getResources().getDisplayMetrics());
+        dialogBox.getContext().getResources().updateConfiguration(cfg, getResources().getDisplayMetrics());
         dialogBox.show();
     }
-    public void startGamesActivity () {
+
+    public void startGamesActivity() {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
         Bundle extras = new Bundle();
-        extras.putString(PASSWORD,settings.getString(PASSWORD,""));
-        extras.putBoolean(RESETGAMES,settings.getBoolean(RESETGAMES,false));
-        extras.putString(LOCALE,settings.getString(LOCALE,"fr_FR"));
+        extras.putBoolean(GpsFictionActivity.RESETGAMES, settings.getBoolean(GpsFictionActivity.RESETGAMES, false));
+        extras.putString(LOCALE, settings.getString(LOCALE, "fr_FR"));
         Intent intent = new Intent(Intent.ACTION_MAIN);
-        ComponentName cn = new ComponentName(GamesActivity.class.getPackage().getName(),GamesActivity.class.getCanonicalName());
+        ComponentName cn = new ComponentName(GamesActivity.class.getPackage().getName(), GamesActivity.class.getCanonicalName());
         intent.putExtras(extras);
         intent.setComponent(cn);
         startActivity(intent);
     }
+
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == 0x01) {
             if (resultCode != TextToSpeech.Engine.CHECK_VOICE_DATA_PASS) {
                 ///// TODO send result to CalcRouteAndSpeakService which "startTts"
-                Toast.makeText(this,R.string.nottsengine,Toast.LENGTH_LONG);
+                Toast.makeText(this, R.string.nottsengine, Toast.LENGTH_LONG);
             }
         }
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
     }
 }
 

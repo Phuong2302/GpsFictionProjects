@@ -20,6 +20,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.sdesimeur.android.gpsfiction.R;
+import com.sdesimeur.android.gpsfiction.activities.GpsFictionActivity;
 import com.sdesimeur.android.gpsfiction.gpsfictionprojects.admin.AdminActivity;
 
 import java.util.ArrayList;
@@ -84,7 +85,7 @@ public class GameFragment extends Fragment {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
             Intent intent = new Intent(Intent.ACTION_RUN, null);
-            intent.addCategory(AdminActivity.ALLGPSFICTIONCATEGORY);
+            intent.addCategory(GpsFictionActivity.ALLGPSFICTIONCATEGORY);
             PackageManager pm = getActivity().getPackageManager();
             List<ResolveInfo> list = pm.queryIntentActivities(intent, 0);
             List <GameItem> contentList = new ArrayList<>();

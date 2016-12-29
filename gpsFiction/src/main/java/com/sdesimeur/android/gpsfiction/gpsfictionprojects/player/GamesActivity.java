@@ -1,9 +1,7 @@
 package com.sdesimeur.android.gpsfiction.gpsfictionprojects.player;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.ComponentName;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -14,15 +12,10 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.RequiresApi;
 import android.support.multidex.MultiDex;
-import android.text.InputType;
-import android.widget.EditText;
-import android.widget.Toast;
 
 import com.sdesimeur.android.gpsfiction.R;
+import com.sdesimeur.android.gpsfiction.activities.GpsFictionActivity;
 import com.sdesimeur.android.gpsfiction.gpsfictionprojects.admin.AdminActivity;
-
-import org.apache.commons.codec.binary.Hex;
-import org.apache.commons.codec.digest.DigestUtils;
 
 import java.util.Iterator;
 import java.util.List;
@@ -35,21 +28,19 @@ public class GamesActivity extends Activity implements GameFragment.OnListFragme
     private void parseExtras (Bundle extras) {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
         SharedPreferences.Editor ed = settings.edit();
-        String tmp = extras.getString(AdminActivity.PASSWORD,null);
-        if (tmp != null) ed.putString(AdminActivity.PASSWORD,tmp);
-        tmp = extras.getString(AdminActivity.LOCALE,null);
+        String tmp = extras.getString(AdminActivity.LOCALE,null);
         if (tmp != null) ed.putString(AdminActivity.LOCALE,tmp);
-        Boolean resetAll = extras.getBoolean(AdminActivity.RESETGAMES,false);
+        Boolean resetAll = extras.getBoolean(GpsFictionActivity.RESETGAMES,false);
         if (resetAll) {
             Intent intent = new Intent(Intent.ACTION_MAIN, null);
-            intent.addCategory(AdminActivity.ALLGPSFICTIONCATEGORY);
+            intent.addCategory(GpsFictionActivity.ALLGPSFICTIONCATEGORY);
             PackageManager pm = getPackageManager();
             List<ResolveInfo> list = pm.queryIntentActivities(intent, 0);
             Iterator iterator = list.iterator();
             while (iterator.hasNext()) {
                 ResolveInfo re = (ResolveInfo) iterator.next();
                 ComponentName theComponentName = new ComponentName(re.activityInfo.applicationInfo.packageName, re.activityInfo.name);
-                Intent intent1 = new Intent(AdminActivity.RESETGAMES);
+                Intent intent1 = new Intent(GpsFictionActivity.RESETGAMES);
                 intent1.setComponent(theComponentName);
                 startActivity(intent1);
             }
@@ -87,39 +78,6 @@ public class GamesActivity extends Activity implements GameFragment.OnListFragme
         recreate();
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)
-    @Override
-    public void onBackPressed() {
-        AlertDialog.Builder dialogBox = new AlertDialog.Builder(this);
-        dialogBox.setTitle(R.string.askpasstitlereturn);
-        dialogBox.setMessage(R.string.askpassmessagereturn);
-        final EditText input = new EditText(this);
-        input.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD);
-        //input.setTransformationMethod(PasswordTransformationMethod.getInstance());
-        dialogBox.setView(input);
-        dialogBox.setPositiveButton(R.string.dialogButtonValidate, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(GamesActivity.this);
-                String passsave = settings.getString(AdminActivity.PASSWORD,"&é(-è_çà)=");
-                String passsha = new String (Hex.encodeHex(DigestUtils.sha(input.getText().toString())));
-                if (passsha.equals(passsave)) {
-                    SharedPreferences.Editor ed = settings.edit();
-                    ed.putBoolean(AdminActivity.ALLREADYSTARTED,false);
-                    ed.commit();
-                    GamesActivity.this.finish();
-                } else {
-                    Toast.makeText(GamesActivity.this, R.string.passwd_different,Toast.LENGTH_LONG).show();
-                }
-            }
-        });
-        dialogBox.setNegativeButton(R.string.dialogButtonCancel,null);
-        Configuration cfg = getResources().getConfiguration();
-        cfg.setLocale(Locale.getDefault());
-        dialogBox.getContext().getResources().updateConfiguration(cfg,getResources().getDisplayMetrics());
-        dialogBox.show();
-        return;
-    }
     @Override
     public void onListFragmentInteraction(GameFragment.GameItem item) {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);

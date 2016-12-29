@@ -45,6 +45,8 @@ import java.util.Locale;
 
 
 public class GpsFictionActivity extends Activity {
+    public static final String RESETGAMES = "com.sdesimeur.android.gpsfiction.intent.action.RESETGAMES";
+    public static final String ALLGPSFICTIONCATEGORY = "com.sdesimeur.android.gpsfiction.intent.category.GPSFICTIONACTIVITY";
     private static final String TAGFONT = "FONT";
     private static final String BUNDLEASJSON = "BundleAsJson";
     private static final String LASTSELECTEDFRAGMENTID  = "LastSelectedFragmentId";
@@ -213,7 +215,7 @@ public class GpsFictionActivity extends Activity {
         //this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         MultiDex.install(this);
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
-        if (getIntent().getAction().equals(AdminActivity.RESETGAMES)) {
+        if (getIntent().getAction().equals(RESETGAMES)) {
             SharedPreferences.Editor ed = settings.edit();
             ed.putString(JSonStrings.ALLDATA,"");
             finish();
