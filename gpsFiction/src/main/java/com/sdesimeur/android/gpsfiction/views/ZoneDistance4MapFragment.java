@@ -6,7 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.sdesimeur.android.gpsfiction.R;
+import com.sdesimeur.android.gpsfiction.activities.R;
 import com.sdesimeur.android.gpsfiction.classes.DistanceByRouteListener;
 import com.sdesimeur.android.gpsfiction.classes.GpsFictionControler;
 import com.sdesimeur.android.gpsfiction.helpers.DistanceToTextHelper;

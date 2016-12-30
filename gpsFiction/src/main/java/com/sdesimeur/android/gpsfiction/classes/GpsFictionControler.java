@@ -9,6 +9,7 @@ import android.content.res.Resources;
 import android.os.IBinder;
 
 import com.sdesimeur.android.gpsfiction.activities.CalcRouteAndSpeakService;
+import com.sdesimeur.android.gpsfiction.activities.MyLocationListenerService;
 import com.sdesimeur.android.gpsfiction.geopoint.MyGeoPoint;
 import com.sdesimeur.android.gpsfiction.gpx.GPXParser;
 import com.sdesimeur.android.gpsfiction.gpx.beans.GPX;

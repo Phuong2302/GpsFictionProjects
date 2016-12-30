@@ -3,7 +3,7 @@ package com.sdesimeur.android.gpsfiction.classes;
 import android.content.res.Resources;
 import android.support.annotation.CallSuper;
 
-import com.sdesimeur.android.gpsfiction.R;
+import com.sdesimeur.android.gpsfiction.activities.R;
 
 import org.json.JSONArray;
 import org.json.JSONException;

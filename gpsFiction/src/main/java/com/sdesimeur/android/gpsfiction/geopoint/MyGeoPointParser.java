@@ -2,7 +2,7 @@ package com.sdesimeur.android.gpsfiction.geopoint;
 
 import android.text.TextUtils;
 
-import com.sdesimeur.android.gpsfiction.R;
+import com.sdesimeur.android.gpsfiction.activities.R;
 import com.sdesimeur.android.gpsfiction.geopoint.MyGeoPoint.MyGeoPointException;
 
 import java.util.regex.Matcher;

@@ -9,8 +9,8 @@ android {
 //        preDexLibraries = false
 //    }
     defaultConfig {
-        applicationId "com.sdesimeur.android.gpsfiction.enigmealaon"
-        minSdkVersion 15
+        applicationId "com.sdesimeur.android.gpsfiction.activities.enigmealaon"
+        minSdkVersion 17
         targetSdkVersion 25
         versionCode 1
         versionName "1.0"

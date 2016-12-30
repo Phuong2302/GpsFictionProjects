@@ -4,8 +4,8 @@ android {
     compileSdkVersion 25
     buildToolsVersion '25.0.2'
     defaultConfig {
-        applicationId "com.sdesimeur.android.gpsfiction.gpsfictionprojects.player"
-        minSdkVersion 15
+        applicationId "com.sdesimeur.android.gpsfiction.forall.player"
+        minSdkVersion 17
         targetSdkVersion 25
         versionCode 1
         versionName "1.0"
@@ -30,5 +30,6 @@ android {
 
 dependencies {
     compile project(':gpsFiction')
+    compile 'com.android.support:multidex:1.0.1'
 }
 

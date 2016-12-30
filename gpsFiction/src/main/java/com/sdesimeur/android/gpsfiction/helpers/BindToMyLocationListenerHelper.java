@@ -6,7 +6,7 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.IBinder;
 
-import com.sdesimeur.android.gpsfiction.classes.MyLocationListenerService;
+import com.sdesimeur.android.gpsfiction.activities.MyLocationListenerService;
 
 /**
  * Created by sam on 20/11/16.
@@ -31,6 +31,7 @@ public abstract class BindToMyLocationListenerHelper {
 
         @Override
         public void onServiceDisconnected(ComponentName name) {
+            onUnBindWithMyLocationListener();
             mMyLocationListenerService = null;
             isBoundToMyLocationListenerService = false;
         }

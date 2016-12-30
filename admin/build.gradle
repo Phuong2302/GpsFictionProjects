@@ -3,10 +3,9 @@ apply plugin: 'com.android.application'
 android {
     compileSdkVersion 25
     buildToolsVersion "25.0.2"
-
     defaultConfig {
-        applicationId "com.sdesimeur.android.gpsfiction.gpsfictions.admin"
-        minSdkVersion 15
+        applicationId "com.sdesimeur.android.gpsfiction.forall.admin"
+        minSdkVersion 17
         targetSdkVersion 25
         versionCode 1
         versionName "1.0"
@@ -27,8 +26,12 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+    productFlavors {
+    }
 }
 
 dependencies {
+    compile 'com.android.support:multidex:1.0.1'
     compile project(':gpsFiction')
+    compile project(':player')
 }

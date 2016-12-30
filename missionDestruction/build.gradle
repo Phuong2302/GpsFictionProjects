@@ -8,8 +8,8 @@ android {
 //        preDexLibraries = false
 //    }
     defaultConfig {
-        applicationId "com.sdesimeur.android.gpsfiction.missiondestruction"
-        minSdkVersion 15
+        applicationId "com.sdesimeur.android.gpsfiction.activities.missiondestruction"
+        minSdkVersion 17
         targetSdkVersion 25
         jackOptions {
             enabled true

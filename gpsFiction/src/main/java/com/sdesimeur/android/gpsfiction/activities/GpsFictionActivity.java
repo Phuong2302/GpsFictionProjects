@@ -26,10 +26,11 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 
-import com.sdesimeur.android.gpsfiction.R;
 import com.sdesimeur.android.gpsfiction.classes.GpsFictionControler;
 import com.sdesimeur.android.gpsfiction.classes.JSonStrings;
-import com.sdesimeur.android.gpsfiction.gpsfictionprojects.admin.AdminActivity;
+import com.sdesimeur.android.gpsfiction.fragments.MyDialogFragment;
+import com.sdesimeur.android.gpsfiction.fragments.MyTabFragmentImpl;
+import com.sdesimeur.android.gpsfiction.forall.admin.AdminActivity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -46,6 +47,7 @@ import java.util.Locale;
 
 public class GpsFictionActivity extends Activity {
     public static final String RESETGAMES = "com.sdesimeur.android.gpsfiction.intent.action.RESETGAMES";
+    public static final String STARTGAME = "com.sdesimeur.android.gpsfiction.intent.action.STARTGAME";
     public static final String ALLGPSFICTIONCATEGORY = "com.sdesimeur.android.gpsfiction.intent.category.GPSFICTIONACTIVITY";
     private static final String TAGFONT = "FONT";
     private static final String BUNDLEASJSON = "BundleAsJson";
@@ -60,7 +62,7 @@ public class GpsFictionActivity extends Activity {
     
     
     protected FragmentManager fragmentManager;
-    protected HashSet<MyDialogFragment> dialogFragments = new HashSet<>();
+    public HashSet<MyDialogFragment> dialogFragments = new HashSet<>();
     private NavigationView navigationView;
     private DrawerLayout drawerLayout;
     private HashMap<Integer, MyTabFragmentImpl> menuItem2Fragments;
@@ -80,7 +82,7 @@ public class GpsFictionActivity extends Activity {
         for (int i = 0; i < fragmentNames.length; i++) {
             String s = fragmentNames[i];
             try {
-                Class myclass = Class.forName("com.sdesimeur.android.gpsfiction.activities." + s + "Fragment");
+                Class myclass = Class.forName("com.sdesimeur.android.gpsfiction.fragments." + s + "Fragment");
                 MyTabFragmentImpl myTabFragment = (MyTabFragmentImpl) (myclass.newInstance());
                 Integer id = menuItems.getResourceId(i,0);
                 menuItem2Fragments.put(id, myTabFragment);

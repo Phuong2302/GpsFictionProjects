@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.sdesimeur.android.gpsfiction.missiondestruction"
+    package="com.sdesimeur.android.gpsfiction.activities.missiondestruction"
     xmlns:tools="http://schemas.android.com/tools"
     android:versionCode="1"
     android:versionName="1.0">
@@ -14,18 +14,20 @@
         android:theme="@style/MyAppTheme">
         <activity
             android:name=".MissionDestructionMainActivity"
-            android:label="@string/appname">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <action android:name="com.sdesimeur.android.gpsfiction.intent.action.RESETGAMES" />
-                <category android:name="com.sdesimeur.android.gpsfiction.intent.category.GPSFICTIONACTIVITY" />
-                <!--
-                <category android:name="android.intent.category.LAUNCHER" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.HOME" />
-                <category android:name="android.intent.category.MONKEY" />
-                -->
-            </intent-filter>
+            android:label="@string/appname"
+            android:exported="true"
+            >
+        <intent-filter>
+            <action android:name="com.sdesimeur.android.gpsfiction.intent.action.RESETGAMES" />
+            <category android:name="com.sdesimeur.android.gpsfiction.intent.category.GPSFICTIONACTIVITY" />
+            <!--
+            <action android:name="android.intent.action.MAIN" />
+            <category android:name="android.intent.category.LAUNCHER" />
+            <category android:name="android.intent.category.DEFAULT" />
+            <category android:name="android.intent.category.HOME" />
+            <category android:name="android.intent.category.MONKEY" />
+            -->
+        </intent-filter>
         </activity>
         <!--  <uses-library android:required="true" android:name="com.sdesimeur.android.gpsfiction" /> -->
     </application>

@@ -2,7 +2,7 @@ package com.sdesimeur.android.gpsfiction.classes;
 
 import android.location.Location;
 
-import com.sdesimeur.android.gpsfiction.R;
+import com.sdesimeur.android.gpsfiction.activities.R;
 import com.sdesimeur.android.gpsfiction.geopoint.MyGeoPoint;
 import com.sdesimeur.android.gpsfiction.gpx.beans.Waypoint;
 import com.sdesimeur.android.gpsfiction.helpers.DistanceToTextHelper;

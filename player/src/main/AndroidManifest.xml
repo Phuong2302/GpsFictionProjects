@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.sdesimeur.android.gpsfiction.gpsfictionprojects.player"
+    package="com.sdesimeur.android.gpsfiction.forall.player"
     xmlns:tools="http://schemas.android.com/tools"
 >
 
@@ -14,15 +14,17 @@
         <activity
             android:name=".GamesActivity"
             android:alwaysRetainTaskState="true"
-            android:configChanges="locale">
-            <intent-filter>
-                <action android:name="android.intent.action.RUN" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <!--
-                <category android:name="android.intent.category.HOME" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.MONKEY" />
-                -->
+            android:configChanges="locale"
+            android:exported="true"
+            >
+        <intent-filter>
+            <action android:name="android.intent.action.MAIN" />
+            <category android:name="android.intent.category.DEFAULT" />
+            <!--
+            <category android:name="android.intent.category.HOME" />
+            <category android:name="android.intent.category.DEFAULT" />
+            <category android:name="android.intent.category.MONKEY" />
+            -->
             </intent-filter>
         </activity>
     </application>
