@@ -1,13 +1,10 @@
 package com.sdesimeur.android.gpsfiction.polygon;
 
-import android.os.Bundle;
-
 import com.sdesimeur.android.gpsfiction.geopoint.MyGeoPoint;
 import com.sdesimeur.android.gpsfiction.math.Vector;
 
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 import org.oscim.core.GeoPoint;
 
 import java.util.Iterator;

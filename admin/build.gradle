@@ -31,7 +31,7 @@ android {
 }
 
 dependencies {
-    compile 'com.android.support:multidex:1.0.1'
     compile project(':gpsFiction')
     compile project(':player')
+    compile 'com.android.support:multidex:1.0.1'
 }

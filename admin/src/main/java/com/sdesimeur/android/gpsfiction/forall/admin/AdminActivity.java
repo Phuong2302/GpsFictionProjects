@@ -30,8 +30,8 @@ import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.Toast;
 
-import com.sdesimeur.android.gpsfiction.activities.R;
 import com.sdesimeur.android.gpsfiction.activities.GpsFictionActivity;
+import com.sdesimeur.android.gpsfiction.activities.R;
 
 import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.codec.digest.DigestUtils;
@@ -301,7 +301,7 @@ public class AdminActivity extends Activity {
         final SharedPreferences.Editor ed = settings.edit();
         Locale locale = string2locale.get(languageLocaleSpinner.getSelectedItem());
         String localeString = locale.toString();
-        ed.putString(LOCALE, localeString);
+        ed.putString(GpsFictionActivity.LOCALE, localeString);
         ed.putBoolean(GpsFictionActivity.RESETGAMES, sw.isChecked());
         ed.commit();
         AlertDialog.Builder dialogBox = new AlertDialog.Builder(this);
@@ -336,7 +336,7 @@ public class AdminActivity extends Activity {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
         Bundle extras = new Bundle();
         extras.putBoolean(GpsFictionActivity.RESETGAMES, settings.getBoolean(GpsFictionActivity.RESETGAMES, false));
-        extras.putString(LOCALE, settings.getString(LOCALE, "fr_FR"));
+        extras.putString(GpsFictionActivity.LOCALE, settings.getString(GpsFictionActivity.LOCALE, GpsFictionActivity.DEFAULTPLAYERLOCALE));
         ComponentName cn = new ComponentName(GamesActivity.class.getPackage().getName(), GamesActivity.class.getCanonicalName());
         Intent intent = new Intent();
         intent.putExtras(extras);

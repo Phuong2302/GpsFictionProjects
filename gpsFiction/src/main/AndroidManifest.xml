@@ -29,13 +29,16 @@
             >
         <intent-filter>
             <action android:name="com.sdesimeur.android.gpsfiction.intent.action.STARTGAME" />
-            <action android:name="com.sdesimeur.android.gpsfiction.intent.action.RESETGAMES" />
             <category android:name="com.sdesimeur.android.gpsfiction.intent.category.GPSFICTIONACTIVITY" />
             <!--
-            <action android:name="android.intent.action.MAIN" />
+            <action android:name="com.sdesimeur.android.gpsfiction.intent.action.STARTGAME" />
             <category android:name="android.intent.category.HOME" />
             <category android:name="android.intent.category.MONKEY" />
             -->
+            </intent-filter>
+            <intent-filter>
+                <action android:name="com.sdesimeur.android.gpsfiction.intent.action.RESETGAMES" />
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
 

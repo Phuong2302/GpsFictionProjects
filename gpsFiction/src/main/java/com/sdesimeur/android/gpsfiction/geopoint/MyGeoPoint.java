@@ -1,14 +1,12 @@
 package com.sdesimeur.android.gpsfiction.geopoint;
 
 import android.location.Location;
-import android.os.Bundle;
 
 import com.sdesimeur.android.gpsfiction.classes.JSonStrings;
 import com.sdesimeur.android.gpsfiction.gpx.beans.Waypoint;
 
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 import org.oscim.core.GeoPoint;
 
 

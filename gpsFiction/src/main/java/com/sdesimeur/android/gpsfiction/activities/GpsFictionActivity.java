@@ -30,7 +30,6 @@ import com.sdesimeur.android.gpsfiction.classes.GpsFictionControler;
 import com.sdesimeur.android.gpsfiction.classes.JSonStrings;
 import com.sdesimeur.android.gpsfiction.fragments.MyDialogFragment;
 import com.sdesimeur.android.gpsfiction.fragments.MyTabFragmentImpl;
-import com.sdesimeur.android.gpsfiction.forall.admin.AdminActivity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -46,12 +45,14 @@ import java.util.Locale;
 
 
 public class GpsFictionActivity extends Activity {
+    public static final String LOCALE = "com.sdesimeur.android.gpsfiction.activities.locale";
     public static final String RESETGAMES = "com.sdesimeur.android.gpsfiction.intent.action.RESETGAMES";
     public static final String STARTGAME = "com.sdesimeur.android.gpsfiction.intent.action.STARTGAME";
     public static final String ALLGPSFICTIONCATEGORY = "com.sdesimeur.android.gpsfiction.intent.category.GPSFICTIONACTIVITY";
     private static final String TAGFONT = "FONT";
     private static final String BUNDLEASJSON = "BundleAsJson";
     private static final String LASTSELECTEDFRAGMENTID  = "LastSelectedFragmentId";
+    public static final String DEFAULTPLAYERLOCALE = "fr_FR";
     private FloatingActionButton fabCreate;
     private int lastFabAction;
     private float dYFab;
@@ -222,13 +223,13 @@ public class GpsFictionActivity extends Activity {
             ed.putString(JSonStrings.ALLDATA,"");
             finish();
         }
-        String loc = getIntent().getStringExtra(AdminActivity.LOCALE);
+        String loc = getIntent().getStringExtra(GpsFictionActivity.LOCALE);
         if (loc != null) {
             SharedPreferences.Editor ed = settings.edit();
-            ed.putString(AdminActivity.LOCALE,loc);
+            ed.putString(GpsFictionActivity.LOCALE,loc);
             ed.commit();
         }
-        String localeString = settings.getString(AdminActivity.LOCALE,"fr_FR");
+        String localeString = settings.getString(GpsFictionActivity.LOCALE,DEFAULTPLAYERLOCALE);
         Locale locale = new Locale(localeString);
         //if (!Locale.getDefault().equals(locale)) {
         if (!getResources().getConfiguration().locale.equals(locale)) {

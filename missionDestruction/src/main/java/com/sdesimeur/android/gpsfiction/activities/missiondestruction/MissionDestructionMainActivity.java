@@ -3,10 +3,10 @@ package com.sdesimeur.android.gpsfiction.activities.missiondestruction;
 import android.os.Bundle;
 
 import com.sdesimeur.android.gpsfiction.activities.GpsFictionActivity;
-import com.sdesimeur.android.gpsfiction.fragments.MyDialogFragment;
 import com.sdesimeur.android.gpsfiction.classes.GpsFictionControler;
 import com.sdesimeur.android.gpsfiction.classes.PlayerLocationListener;
 import com.sdesimeur.android.gpsfiction.classes.Zone;
+import com.sdesimeur.android.gpsfiction.fragments.MyDialogFragment;
 import com.sdesimeur.android.gpsfiction.geopoint.MyGeoPoint;
 
 import java.util.HashSet;

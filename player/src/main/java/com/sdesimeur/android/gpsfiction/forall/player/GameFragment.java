@@ -18,6 +18,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.sdesimeur.android.gpsfiction.activities.GpsFictionActivity;
 import com.sdesimeur.android.gpsfiction.activities.R;
 
 import java.util.ArrayList;
@@ -82,7 +83,7 @@ public class GameFragment extends Fragment {
             }
             List <GameItem> contentList = new ArrayList<>();
             SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getActivity());
-            String localeString = settings.getString(GamesActivity.LOCALE,"fr_FR");
+            String localeString = settings.getString(GpsFictionActivity.LOCALE,GpsFictionActivity.DEFAULTPLAYERLOCALE);
             Locale locale = new Locale(localeString);
             Configuration cfg = new Configuration();
             cfg.setLocale(locale);
