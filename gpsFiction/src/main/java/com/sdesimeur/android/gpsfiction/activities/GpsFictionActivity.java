@@ -26,6 +26,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 
+import com.sdesimeur.android.gpsfiction.intent.GpsFictionIntent;
 import com.sdesimeur.android.gpsfiction.classes.GpsFictionControler;
 import com.sdesimeur.android.gpsfiction.classes.JSonStrings;
 import com.sdesimeur.android.gpsfiction.fragments.MyDialogFragment;
@@ -45,14 +46,9 @@ import java.util.Locale;
 
 
 public class GpsFictionActivity extends Activity {
-    public static final String LOCALE = "com.sdesimeur.android.gpsfiction.activities.locale";
-    public static final String RESETGAMES = "com.sdesimeur.android.gpsfiction.intent.action.RESETGAMES";
-    public static final String STARTGAME = "com.sdesimeur.android.gpsfiction.intent.action.STARTGAME";
-    public static final String ALLGPSFICTIONCATEGORY = "com.sdesimeur.android.gpsfiction.intent.category.GPSFICTIONACTIVITY";
     private static final String TAGFONT = "FONT";
     private static final String BUNDLEASJSON = "BundleAsJson";
     private static final String LASTSELECTEDFRAGMENTID  = "LastSelectedFragmentId";
-    public static final String DEFAULTPLAYERLOCALE = "fr_FR";
     private FloatingActionButton fabCreate;
     private int lastFabAction;
     private float dYFab;
@@ -218,18 +214,18 @@ public class GpsFictionActivity extends Activity {
         //this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         MultiDex.install(this);
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
-        if (getIntent().getAction().equals(RESETGAMES)) {
+        if (getIntent().getAction().equals(GpsFictionIntent.RESETGAMES)) {
             SharedPreferences.Editor ed = settings.edit();
             ed.putString(JSonStrings.ALLDATA,"");
             finish();
         }
-        String loc = getIntent().getStringExtra(GpsFictionActivity.LOCALE);
+        String loc = getIntent().getStringExtra(GpsFictionIntent.LOCALE);
         if (loc != null) {
             SharedPreferences.Editor ed = settings.edit();
-            ed.putString(GpsFictionActivity.LOCALE,loc);
+            ed.putString(GpsFictionIntent.LOCALE,loc);
             ed.commit();
         }
-        String localeString = settings.getString(GpsFictionActivity.LOCALE,DEFAULTPLAYERLOCALE);
+        String localeString = settings.getString(GpsFictionIntent.LOCALE,GpsFictionIntent.DEFAULTPLAYERLOCALE);
         Locale locale = new Locale(localeString);
         //if (!Locale.getDefault().equals(locale)) {
         if (!getResources().getConfiguration().locale.equals(locale)) {

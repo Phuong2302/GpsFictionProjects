@@ -11,11 +11,10 @@ import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.RequiresApi;
-import android.support.multidex.MultiDex;
+//import android.support.multidex.MultiDex;
 
-import com.sdesimeur.android.gpsfiction.activities.GpsFictionActivity;
-import com.sdesimeur.android.gpsfiction.activities.R;
 
+import com.sdesimeur.android.gpsfiction.intent.GpsFictionIntent;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
@@ -26,10 +25,10 @@ public class GamesActivity extends Activity implements GameFragment.OnListFragme
     public abstract class AllGpsFictionActivityHelper {
         PackageManager pm ;
         public void doForAllGpsFictionActivity () {
-            Intent intent = new Intent(GpsFictionActivity.STARTGAME);
+            Intent intent = new Intent(GpsFictionIntent.STARTGAME);
             //intent.setAction(GpsFictionActivity.STARTGAME);
             //intent.setAction(Intent.ACTION_MAIN);
-            intent.addCategory(GpsFictionActivity.ALLGPSFICTIONCATEGORY);
+            intent.addCategory(GpsFictionIntent.ALLGPSFICTIONCATEGORY);
             pm = getPackageManager();
             List<ResolveInfo> list = pm.queryIntentActivities(intent, 0);
             Iterator iterator = list.iterator();
@@ -45,15 +44,15 @@ public class GamesActivity extends Activity implements GameFragment.OnListFragme
     private void parseExtras (Bundle extras) {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
         SharedPreferences.Editor ed = settings.edit();
-        String tmp = extras.getString(GpsFictionActivity.LOCALE,null);
-        if (tmp != null) ed.putString(GpsFictionActivity.LOCALE,tmp);
-        Boolean resetAll = extras.getBoolean(GpsFictionActivity.RESETGAMES,false);
+        String tmp = extras.getString(GpsFictionIntent.LOCALE,null);
+        if (tmp != null) ed.putString(GpsFictionIntent.LOCALE,tmp);
+        Boolean resetAll = extras.getBoolean(GpsFictionIntent.RESETGAMES,false);
         if (resetAll) {
             AllGpsFictionActivityHelper temp = new AllGpsFictionActivityHelper() {
                 @Override
                 public void action(ResolveInfo re, ComponentName theComponentName) {
                     Intent intent1 = new Intent();
-                    intent1.setAction(GpsFictionActivity.RESETGAMES);
+                    intent1.setAction(GpsFictionIntent.RESETGAMES);
                     intent1.setComponent(theComponentName);
                     startActivity(intent1);
                 }
@@ -65,11 +64,11 @@ public class GamesActivity extends Activity implements GameFragment.OnListFragme
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        MultiDex.install(this);
+        //MultiDex.install(this);
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
         Bundle extras = getIntent().getExtras();
         if (extras != null) parseExtras(extras);
-        String localeString = settings.getString(GpsFictionActivity.LOCALE,"fr_FR");
+        String localeString = settings.getString(GpsFictionIntent.LOCALE,GpsFictionIntent.DEFAULTPLAYERLOCALE);
         Locale locale = new Locale(localeString);
         //if (!Locale.getDefault().equals(locale)) {
         if (!getResources().getConfiguration().locale.equals(locale)) {
@@ -97,11 +96,11 @@ public class GamesActivity extends Activity implements GameFragment.OnListFragme
     public void onListFragmentInteraction(GameFragment.GameItem item) {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
         // TODO  put the locale in string
-        String locale = settings.getString(GpsFictionActivity.LOCALE,"fr_FR");
+        String locale = settings.getString(GpsFictionIntent.LOCALE,GpsFictionIntent.DEFAULTPLAYERLOCALE);
         Intent intent = new Intent();
         intent.setComponent(item.theComponentName);
-        intent.setAction(GpsFictionActivity.STARTGAME);
-        intent.putExtra(GpsFictionActivity.LOCALE,locale);
+        intent.setAction(GpsFictionIntent.STARTGAME);
+        intent.putExtra(GpsFictionIntent.LOCALE,locale);
         startActivity(intent);
         //isStopped = false;
     }

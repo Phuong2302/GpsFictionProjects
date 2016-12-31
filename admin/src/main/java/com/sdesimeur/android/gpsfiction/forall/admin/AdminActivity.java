@@ -18,7 +18,7 @@ import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.speech.tts.TextToSpeech;
 import android.support.annotation.RequiresApi;
-import android.support.multidex.MultiDex;
+//import android.support.multidex.MultiDex;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -30,12 +30,11 @@ import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.Toast;
 
-import com.sdesimeur.android.gpsfiction.activities.GpsFictionActivity;
-import com.sdesimeur.android.gpsfiction.activities.R;
 
 import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.codec.digest.DigestUtils;
 
+import com.sdesimeur.android.gpsfiction.intent.GpsFictionIntent;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -144,7 +143,7 @@ public class AdminActivity extends Activity {
     private void launchAppChooser() {
         if (!isMyAppLauncherDefault()) {
             //PackageManager p = getPackageManager();
-            //ComponentName cN = new ComponentName(this, HomeActivity.class);
+            // ComponentName cN = new ComponentName(this, HomeActivity.class);
             //p.setComponentEnabledSetting(cN, PackageManager.COMPONENT_ENABLED_STATE_ENABLED, PackageManager.DONT_KILL_APP);
             Intent intent = new Intent(Intent.ACTION_MAIN);
             intent.addCategory(Intent.CATEGORY_HOME);
@@ -217,7 +216,7 @@ public class AdminActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        MultiDex.install(this);
+        //MultiDex.install(this);
         Intent checkIntent = new Intent();
         checkIntent.setAction(TextToSpeech.Engine.ACTION_CHECK_TTS_DATA);
         startActivityForResult(checkIntent, 0x01);
@@ -335,8 +334,8 @@ public class AdminActivity extends Activity {
     public void startGamesActivity() {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
         Bundle extras = new Bundle();
-        extras.putBoolean(GpsFictionActivity.RESETGAMES, settings.getBoolean(GpsFictionActivity.RESETGAMES, false));
-        extras.putString(GpsFictionActivity.LOCALE, settings.getString(GpsFictionActivity.LOCALE, GpsFictionActivity.DEFAULTPLAYERLOCALE));
+        extras.putBoolean(GpsFictionIntent.RESETGAMES, settings.getBoolean(GpsFictionIntent.RESETGAMES, false));
+        extras.putString(GpsFictionIntent.LOCALE, settings.getString(GpsFictionIntent.LOCALE, GpsFictionIntent.DEFAULTPLAYERLOCALE));
         ComponentName cn = new ComponentName(GamesActivity.class.getPackage().getName(), GamesActivity.class.getCanonicalName());
         Intent intent = new Intent();
         intent.putExtras(extras);

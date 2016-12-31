@@ -1,4 +1,9 @@
 apply plugin: 'com.android.application'
+repositories {
+    maven {
+        url "https://repo1.maven.org/maven2/"
+    }
+}
 
 android {
     compileSdkVersion 25
@@ -31,7 +36,7 @@ android {
 }
 
 dependencies {
-    compile project(':gpsFiction')
-    compile project(':player')
-    compile 'com.android.support:multidex:1.0.1'
+    compile project(':gpsfictionintent')
+    //compile project(':gpsFiction')
+    //compile 'com.android.support:multidex:1.0.1'
 }
