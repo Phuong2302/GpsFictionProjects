@@ -37,6 +37,7 @@ android {
 }
 
 dependencies {
+    compile project(':gpsfictionintent')
     compile files('libs/gpsfictionintent.jar')
     compile 'commons-codec:commons-codec:20041127.091804'
     compile 'org.mapsforge:vtm-android:0.6.0-rc1:natives-armeabi'

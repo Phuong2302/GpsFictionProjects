@@ -1,1 +1,1 @@
-include ':gpsFiction', ':missionDestruction', ':enigmeALaon', ':admin', ':player', ':gpsfictionintent'
+include ':gpsfictionintent',':gpsFiction', ':missionDestruction', ':enigmeALaon', ':admin', ':player'

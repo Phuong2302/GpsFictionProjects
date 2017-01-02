@@ -24,4 +24,8 @@
     <string name="askchangepasstitle">Changer le mot de passe</string>
     <string name="askchangepassmessage">Veuillez entrer le mot de passe</string>
     <string name="nottsengine">Pas de moteur TextToSpeech disponible</string>
+    <string name="dialogButtonYes">Oui</string>
+    <string name="dialogButtonNo">Non</string>
+    <string name="dialogButtonCancel">Annuler</string>
+    <string name="dialogButtonValidate">Valider</string>
 </resources>

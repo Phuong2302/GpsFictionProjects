@@ -18,7 +18,6 @@ import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.speech.tts.TextToSpeech;
 import android.support.annotation.RequiresApi;
-//import android.support.multidex.MultiDex;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -30,11 +29,11 @@ import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.Toast;
 
+import com.sdesimeur.android.gpsfiction.intent.GpsFictionIntent;
 
 import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.codec.digest.DigestUtils;
 
-import com.sdesimeur.android.gpsfiction.intent.GpsFictionIntent;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -43,6 +42,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
+
+//import android.support.multidex.MultiDex;
 
 /**
  * An example full-screen activity that shows and hides the system UI (i.e.
@@ -53,6 +54,7 @@ public class AdminActivity extends Activity {
     public static final String PASSWORD = "com.sdesimeur.android.gpsfiction.forall.admin.password";
     public static final String HOMEDEFAULTPACKAGE = "loadHomeDefaultPackageName";
     public static final String ALLREADYSTARTED = "allreadyStarted";
+    private static final String PACKAGE4GPSFICTIONPLAYERACTIVITY = "com.sdesimeur.android.gpsfiction.forall.player";
     private static final String ADMINACTIVITYCLASSNAME = AdminActivity.class.getName();
     private static final String HOMEACTIVITYCLASSNAME = HomeActivity.class.getName();
     private HashMap<String, Locale> string2locale = new HashMap<>();
@@ -300,8 +302,8 @@ public class AdminActivity extends Activity {
         final SharedPreferences.Editor ed = settings.edit();
         Locale locale = string2locale.get(languageLocaleSpinner.getSelectedItem());
         String localeString = locale.toString();
-        ed.putString(GpsFictionActivity.LOCALE, localeString);
-        ed.putBoolean(GpsFictionActivity.RESETGAMES, sw.isChecked());
+        ed.putString(GpsFictionIntent.LOCALE, localeString);
+        ed.putBoolean(GpsFictionIntent.RESETGAMES, sw.isChecked());
         ed.commit();
         AlertDialog.Builder dialogBox = new AlertDialog.Builder(this);
         dialogBox.setTitle(R.string.askpasstitle);
@@ -336,7 +338,7 @@ public class AdminActivity extends Activity {
         Bundle extras = new Bundle();
         extras.putBoolean(GpsFictionIntent.RESETGAMES, settings.getBoolean(GpsFictionIntent.RESETGAMES, false));
         extras.putString(GpsFictionIntent.LOCALE, settings.getString(GpsFictionIntent.LOCALE, GpsFictionIntent.DEFAULTPLAYERLOCALE));
-        ComponentName cn = new ComponentName(GamesActivity.class.getPackage().getName(), GamesActivity.class.getCanonicalName());
+        ComponentName cn = new ComponentName(PACKAGE4GPSFICTIONPLAYERACTIVITY, PACKAGE4GPSFICTIONPLAYERACTIVITY + ".GamesActivity");
         Intent intent = new Intent();
         intent.putExtras(extras);
         intent.setComponent(cn);

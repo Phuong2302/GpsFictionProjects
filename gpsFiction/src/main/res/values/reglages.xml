@@ -23,8 +23,4 @@
         <item>@id/Map</item>
         <item>@id/Tasks</item>
     </integer-array>
-    <string-array name="countryCodeArray">
-        <item>en_US</item>
-        <item>fr_FR</item>
-    </string-array>
 </resources>

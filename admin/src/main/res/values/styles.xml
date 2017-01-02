@@ -7,4 +7,60 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <color name="grey">#FFaaaaaa</color>
+    <color name="white">#FFffffff</color>
+    <color name="black">#FF000000</color>
+    <color name="tabnameofzone">#FFAAAAAA</color>
+    <color name="tabnameofzoneselected">#FFA06060</color>
+    <color name="minicompassbackground">#FFFFFFFF</color>
+    <color name="minicompassarrow">#FFff0000</color>
+    <color name="minicompasscenter">#FF000000</color>
+    <color name="compassbackground">#FFFFFFFF</color>
+    <color name="compassarrow">#FFff0000</color>
+    <color name="compassrose">#80CD853F</color>
+    <color name="compasscircle">#80095228</color>
+    <color name="compasscenter">#FF000000</color>
+    <color name="compasstext">#FF000000</color>
+    <color name="mapzoneborder">#500000FF</color>
+    <color name="mapzoneselectedborder">#50FF0000</color>
+    <color name="colorOfRouteLine">#800000FF</color>
+    <color name="colorOfZoneShapeNotSelected">#A0FFB000</color>
+    <color name="colorOfZoneShapeSelected">#A0FF0000</color>
+    <color name="colorOfZoneShapeInvisible">#00000000</color>
+    <color name="textmenuUnChecked">#FF000000</color>
+    <color name="textmenuChecked">#FF00FF00</color>
+    <color name="colorOfDistanceToZoneOnMap">#A00000FF</color>
+    <color name="pressedStateButtonColor">#FF505050</color>
+    <color name="pressedStateButtonColorText">#FFFFFFFF</color>
+    <color name="normalStateButtonColor">#FFA0A0A0</color>
+    <color name="normalStateButtonColorText">#FFFFFFFF</color>
+
+    <dimen name="compassLineWidth">5dp</dimen>
+    <dimen name="miniCompassSize">80dp</dimen>
+    <dimen name="compassSize">300dp</dimen>
+    <dimen name="titleTextSize">24sp</dimen>
+    <dimen name="normalTextSize">24sp</dimen>
+    <dimen name="bigTextSize">30sp</dimen>
+    <dimen name="tabMinHeight">40dp</dimen>
+    <dimen name="titleMinHeight">28dp</dimen>
+    <dimen name="normalTextPadding">60dp</dimen>
+    <dimen name="titleTextPadding">30dp</dimen>
+    <dimen name="dialogButtonTextSize">18sp</dimen>
+    <dimen name="dialogButtonPadding">30dp</dimen>
+    <dimen name="navigation_drawer_width">240dp</dimen>
+    <dimen name="action_button_margin">16dp</dimen>
+    <dimen name="widthOfZoneShape">2dp</dimen>
+    <dimen name="widthOfRouteLine">5dp</dimen>
+    <dimen name="buttonsPadding">8dp</dimen>
+    <dimen name="adminTextSize">18sp</dimen>
+
+    <dimen name="buttonsVehiculesPadding">4dp</dimen>
+    <dimen name="buttonsVehiculesSize">48dp</dimen>
+    <dimen name="mapzoneborderwidth">1dp</dimen>
+    <dimen name="text_margin">16dp</dimen>
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="scrollbarsize">5dp</dimen>
+    <dimen name="spacinginadminactivity">30dp</dimen>
+
 </resources>

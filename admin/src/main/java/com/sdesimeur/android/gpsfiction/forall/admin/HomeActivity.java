@@ -8,12 +8,11 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.multidex.MultiDex;
 
 public class HomeActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        MultiDex.install(this);
+        //MultiDex.install(this);
         super.onCreate(savedInstanceState);
     }
     @Override

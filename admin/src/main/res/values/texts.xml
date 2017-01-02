@@ -24,4 +24,9 @@
     <string name="askchangepasstitle">Change password</string>
     <string name="askchangepassmessage">Please enter the password</string>
     <string name="nottsengine">No TextToSpeech engine available</string>
+
+    <string name="dialogButtonYes">Yes</string>
+    <string name="dialogButtonNo">No</string>
+    <string name="dialogButtonCancel">Cancel</string>
+    <string name="dialogButtonValidate">Validate</string>
 </resources>
