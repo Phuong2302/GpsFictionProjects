@@ -26,6 +26,8 @@
             android:name=".GpsFictionActivity"
             android:alwaysRetainTaskState="true"
             android:configChanges="locale"
+            android:launchMode="singleTask"
+            android:taskAffinity="com.sdesimeur.android.gpsfiction.all"
             >
         <intent-filter>
             <action android:name="com.sdesimeur.android.gpsfiction.intent.action.STARTGAME" />
@@ -46,14 +48,18 @@
             android:name=".CalcRouteAndSpeakService"
             android:enabled="true"
             android:exported="true"
-            android:launchMode="singleTop"
-            android:persistent="true" />
+            android:launchMode="singleTask"
+            android:persistent="true"
+            android:taskAffinity="com.sdesimeur.android.gpsfiction.all"
+            />
         <service
             android:name=".MyLocationListenerService"
             android:enabled="true"
             android:exported="true"
-            android:launchMode="singleTop"
-            android:persistent="true" />
+            android:launchMode="singleTask"
+            android:persistent="true"
+            android:taskAffinity="com.sdesimeur.android.gpsfiction.all"
+            />
     </application>
 
 </manifest>

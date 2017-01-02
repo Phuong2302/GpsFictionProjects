@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE resources [
       <!ENTITY appname "GpsFiction Applications">
-      <!ENTITY apphomename "GpsFiction Home Applications">
       <!ENTITY author "sdesimeur">
     ]>
 <resources>
@@ -15,12 +14,9 @@
     <string name="nullstring"></string>
     <string name="distance_initiale">100 m</string>
     <string name="app_name">&appname;</string>
-    <string name="app_name_home">&apphomename;</string>
 
     <string name="distanceNull">You are in this area.</string>
     <string name="noZoneTitle">You don\'t select an area.</string>
-    <string name="noZoneBearing">--- °</string>
-    <string name="noZoneDistance">---</string>
     <string name="dialogCloseTaskTitle">To finish...</string>
     <string name="dialogCloseTaskText">Save this game ?</string>
     <string-array name="pointscardinaux">
@@ -59,23 +55,10 @@
     <string name="dialogButtonValidate">Validate</string>
 
     <string name="distanceToDest">Distance to destination</string>
-    <string name="start_games">Start Games</string>
-    <string name="reset_games_new_player">Reset Games (new Player)</string>
-    <string name="change_admin_password">Change Admin Password</string>
-    <string name="passwd_saved">Password saved</string>
-    <string name="passwd_different">Passwords don\'t match</string>
-    <string name="gps_network_not_enabled">The location by GPS isn\'t activated, please activate it</string>
-    <string name="open_location_settings">Open location settings</string>
-    <string name="askpasstitle">Starting the application</string>
-    <string name="askpassmessage">Please enter the password for verification.</string>
-    <string name="askpasstitlereturn">Stopping the application</string>
-    <string name="askpassmessagereturn">Please enter the password to leave the application</string>
-    <string name="changeToMyHomeActivity">Please choose the application \"&apphomename;\" and validate by \"always\"</string>
-    <string name="dialoghomeactivitychoosertitle">Application at startup</string>
-    <string name="dialoghomeactivitychoosermessage">Please select your preferred launcher</string>
-    <string name="changehomeactivity">Change your launcher at startup</string>
-    <string name="askchangepasstitle">Change password</string>
-    <string name="askchangepassmessage">Please enter the password</string>
-    <string name="nottsengine">No TextToSpeech engine available</string>
 
+
+
+
+    <string name="noZoneBearing">--- °</string>
+    <string name="noZoneDistance">---</string>
 </resources>

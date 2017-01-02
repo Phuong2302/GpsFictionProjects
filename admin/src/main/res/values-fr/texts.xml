@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE resources [
+    <!ENTITY appname "GpsFiction Applications">
+    <!ENTITY apphomename "GpsFiction Home Applications">
+    <!ENTITY author "sdesimeur">
+    ]>
+<resources>
+    <string name="app_name_home">&apphomename;</string>
+    <string name="start_games">Démarrer les jeux</string>
+    <string name="reset_games_new_player">RAZ des jeux (nouveau joueur)</string>
+    <string name="change_admin_password">Changer mot de passe administrateur</string>
+    <string name="passwd_saved">Mot de passe sauvegardé</string>
+    <string name="passwd_different">Mots de passe différents</string>
+    <string name="gps_network_not_enabled">La localisation par GPS n\'est pas activée, veuillez l\'activer</string>
+    <string name="open_location_settings">Ouvrir les paramètres de Localisation</string>
+    <string name="askpasstitle">Démarrage de l\'application</string>
+    <string name="askpassmessage">Veuillez entrer le mot de passe pour vérification.</string>
+    <string name="askpasstitlereturn">Arrêt de l\'application</string>
+    <string name="askpassmessagereturn">Veuillez entrer le mot de passe pour quitter l\'application</string>
+    <string name="changeToMyHomeActivity">Veuillez choisir l\'application \"&apphomename;\" et validez par \"toujours\"</string>
+    <string name="dialoghomeactivitychoosertitle">Application au démarrage</string>
+    <string name="dialoghomeactivitychoosermessage">Veuillez choisir votre launcher préféré</string>
+    <string name="changehomeactivity">Changer de launcher au démarrage</string>
+    <string name="askchangepasstitle">Changer le mot de passe</string>
+    <string name="askchangepassmessage">Veuillez entrer le mot de passe</string>
+    <string name="nottsengine">Pas de moteur TextToSpeech disponible</string>
+</resources>

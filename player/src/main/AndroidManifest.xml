@@ -7,7 +7,7 @@
         tools:replace="android:label,android:icon,android:theme"
         android:allowBackup="true"
         android:label="@string/appname"
-        android:icon="@drawable/ic_launcher"
+        android:icon="@mipmap/ic_launcher"
         android:supportsRtl="true"
         android:theme="@style/MyAppTheme" >
         <!--
@@ -18,6 +18,8 @@
             android:alwaysRetainTaskState="true"
             android:configChanges="locale"
             android:exported="true"
+            android:launchMode="singleTask"
+            android:taskAffinity="com.sdesimeur.android.gpsfiction.all"
             >
         <intent-filter>
             <action android:name="android.intent.action.MAIN" />
