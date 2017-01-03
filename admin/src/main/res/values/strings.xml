@@ -1,7 +1,7 @@
 <resources>
     <string name="appname">GpsFictionProjects Admin</string>
     <string-array name="countryCodeArray">
-        <item>en_US</item>
+        <item>en_GB</item>
         <item>fr_FR</item>
     </string-array>
 </resources>

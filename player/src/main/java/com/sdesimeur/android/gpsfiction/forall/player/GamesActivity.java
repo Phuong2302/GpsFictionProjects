@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.content.res.Configuration;
@@ -34,23 +35,26 @@ public class GamesActivity extends Activity implements GameFragment.OnListFragme
             Iterator iterator = list.iterator();
             while (iterator.hasNext()) {
                 ResolveInfo re = (ResolveInfo) iterator.next();
-                ComponentName theComponentName = new ComponentName(re.activityInfo.applicationInfo.packageName, re.activityInfo.name);
-                action(re,theComponentName);
+                action(re.activityInfo);
             }
         }
-        public abstract void action(ResolveInfo re, ComponentName theComponentName);
+        public abstract void action(ActivityInfo ai);
     }
 
     private void parseExtras (Bundle extras) {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
         SharedPreferences.Editor ed = settings.edit();
         String tmp = extras.getString(GpsFictionIntent.LOCALE,null);
-        if (tmp != null) ed.putString(GpsFictionIntent.LOCALE,tmp);
+        if (tmp != null) {
+            ed.putString(GpsFictionIntent.LOCALE,tmp);
+            ed.commit();
+        }
         Boolean resetAll = extras.getBoolean(GpsFictionIntent.RESETGAMES,false);
         if (resetAll) {
             AllGpsFictionActivityHelper temp = new AllGpsFictionActivityHelper() {
                 @Override
-                public void action(ResolveInfo re, ComponentName theComponentName) {
+                public void action (ActivityInfo ai) {
+                    ComponentName theComponentName = new ComponentName(ai.applicationInfo.packageName, ai.name);
                     Intent intent1 = new Intent();
                     intent1.setAction(GpsFictionIntent.RESETGAMES);
                     intent1.setComponent(theComponentName);
@@ -85,12 +89,6 @@ public class GamesActivity extends Activity implements GameFragment.OnListFragme
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_games);
     }
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        // refresh your views here
-        super.onConfigurationChanged(newConfig);
-        recreate();
-    }
 
     @Override
     public void onListFragmentInteraction(GameFragment.GameItem item) {
@@ -98,7 +96,8 @@ public class GamesActivity extends Activity implements GameFragment.OnListFragme
         // TODO  put the locale in string
         String locale = settings.getString(GpsFictionIntent.LOCALE,GpsFictionIntent.DEFAULTPLAYERLOCALE);
         Intent intent = new Intent();
-        intent.setComponent(item.theComponentName);
+        ComponentName theComponentName = new ComponentName(item.activityInfo.applicationInfo.packageName, item.activityInfo.name);
+        intent.setComponent(theComponentName);
         intent.setAction(GpsFictionIntent.STARTGAME);
         intent.putExtra(GpsFictionIntent.LOCALE,locale);
         startActivity(intent);

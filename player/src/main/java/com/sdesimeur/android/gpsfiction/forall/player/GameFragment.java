@@ -1,16 +1,14 @@
 package com.sdesimeur.android.gpsfiction.forall.player;
 
 import android.app.Fragment;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
 import android.content.res.Configuration;
-import android.os.Build;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.annotation.RequiresApi;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -65,7 +63,6 @@ public class GameFragment extends Fragment {
         }
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -88,16 +85,23 @@ public class GameFragment extends Fragment {
             cfg.setLocale(locale);
             GamesActivity.AllGpsFictionActivityHelper temp = ((GamesActivity)getActivity()).new AllGpsFictionActivityHelper() {
                 @Override
-                public void action(ResolveInfo re, ComponentName theComponentName) {
+                public void action(ActivityInfo ai) {
+                    GameFragment.GameItem gi = new GameFragment.GameItem();
                     try {
-                        pm.getResourcesForApplication(re.activityInfo.applicationInfo).updateConfiguration(cfg,getActivity().getResources().getDisplayMetrics());
+                        //Context thisapp = getActivity().getApplicationContext();
+                        //Context newapp = thisapp.createPackageContext(ai.packageName,thisapp.CONTEXT_IGNORE_SECURITY);
+                        //newapp.getResources().updateConfiguration(cfg,getActivity().getResources().getDisplayMetrics());
+                        Resources res = pm.getResourcesForApplication(ai.applicationInfo);
+                        res.updateConfiguration(cfg,getActivity().getResources().getDisplayMetrics());
+                        //gi.name = ai.applicationInfo.loadLabel(pm).toString();
+                        gi.name = res.getString(ai.applicationInfo.labelRes);
+                        //gi.desc = ai.applicationInfo.loadDescription(pm).toString();
+                        gi.desc = res.getString(ai.applicationInfo.descriptionRes);
+                        gi.activityInfo = ai;
                     } catch (PackageManager.NameNotFoundException e) {
                         e.printStackTrace();
                     }
-                    GameFragment.GameItem gi = new GameFragment.GameItem();
-                    gi.name = (String) re.activityInfo.applicationInfo.loadLabel(pm);
-                    gi.desc = (String) re.activityInfo.applicationInfo.loadDescription(pm);
-                    gi.theComponentName = theComponentName;
+                    //gi.name = (String) pm.getApplicationLabel(ai.applicationInfo);
                     contentList.add(gi);
                 }
             };
@@ -110,7 +114,7 @@ public class GameFragment extends Fragment {
     public class GameItem {
         public String name;
         public String desc;
-        public ComponentName theComponentName;
+        public ActivityInfo activityInfo;
     }
 
     @Override
