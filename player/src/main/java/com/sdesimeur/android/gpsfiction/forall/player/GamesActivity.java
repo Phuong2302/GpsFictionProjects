@@ -12,13 +12,15 @@ import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.RequiresApi;
-//import android.support.multidex.MultiDex;
-
+import android.support.multidex.MultiDex;
 
 import com.sdesimeur.android.gpsfiction.intent.GpsFictionIntent;
+
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
+
+//import android.support.multidex.MultiDex;
 
 public class GamesActivity extends Activity implements GameFragment.OnListFragmentInteractionListener {
 
@@ -68,7 +70,7 @@ public class GamesActivity extends Activity implements GameFragment.OnListFragme
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        //MultiDex.install(this);
+        MultiDex.install(this);
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
         Bundle extras = getIntent().getExtras();
         if (extras != null) parseExtras(extras);

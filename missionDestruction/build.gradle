@@ -11,6 +11,7 @@ android {
         applicationId "com.sdesimeur.android.gpsfiction.activities.missiondestruction"
         minSdkVersion 17
         targetSdkVersion 25
+        multiDexEnabled true
         jackOptions {
             enabled true
             multiDexEnabled true
@@ -23,6 +24,9 @@ android {
         }
     }
     productFlavors {
+    }
+    compileOptions {
+        targetCompatibility JavaVersion.VERSION_1_8
     }
 }
 

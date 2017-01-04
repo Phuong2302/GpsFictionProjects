@@ -12,8 +12,7 @@ android {
         applicationId "com.sdesimeur.android.gpsfiction.activities.enigmealaon"
         minSdkVersion 17
         targetSdkVersion 25
-        versionCode 1
-        versionName "1.0"
+        multiDexEnabled true
         jackOptions {
             enabled true
             multiDexEnabled true
@@ -28,7 +27,6 @@ android {
     productFlavors {
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
 }

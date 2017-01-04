@@ -28,12 +28,12 @@ android {
     productFlavors {
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
 }
 
 dependencies {
+    compile 'com.android.support:multidex:1.0.1'
     compile project(':gpsfictionintent')
     compile files('libs/gpsfictionintent.jar')
     compile 'commons-codec:commons-codec:20041127.091804'

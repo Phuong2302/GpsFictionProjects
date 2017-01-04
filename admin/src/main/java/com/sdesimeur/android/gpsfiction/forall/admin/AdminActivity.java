@@ -16,6 +16,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.speech.tts.TextToSpeech;
+import android.support.multidex.MultiDex;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -220,7 +221,7 @@ public class AdminActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        //MultiDex.install(this);
+        MultiDex.install(this);
         Intent checkIntent = new Intent();
         checkIntent.setAction(TextToSpeech.Engine.ACTION_CHECK_TTS_DATA);
         startActivityForResult(checkIntent, 0x01);

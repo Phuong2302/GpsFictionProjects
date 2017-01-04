@@ -8,6 +8,7 @@
         android:label="@string/appname"
         android:icon="@mipmap/ic_launcher"
         android:supportsRtl="true"
+        android:name="android.support.multidex.MultiDexApplication"
         android:theme="@style/MyAppTheme" >
         <!--
         android:name="android.support.multidex.MultiDexApplication"
