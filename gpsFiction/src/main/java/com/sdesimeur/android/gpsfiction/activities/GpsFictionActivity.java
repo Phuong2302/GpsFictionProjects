@@ -10,10 +10,8 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.Typeface;
-import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.annotation.RequiresApi;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.multidex.MultiDex;
@@ -26,11 +24,11 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 
-import com.sdesimeur.android.gpsfiction.intent.GpsFictionIntent;
 import com.sdesimeur.android.gpsfiction.classes.GpsFictionControler;
 import com.sdesimeur.android.gpsfiction.classes.JSonStrings;
 import com.sdesimeur.android.gpsfiction.fragments.MyDialogFragment;
 import com.sdesimeur.android.gpsfiction.fragments.MyTabFragmentImpl;
+import com.sdesimeur.android.gpsfiction.intent.GpsFictionIntent;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -208,7 +206,6 @@ public class GpsFictionActivity extends Activity {
         }
         return super.onOptionsItemSelected(item);
     }
-    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)
     @Override
     public void onCreate(Bundle savedInstanceState) {
         //this.requestWindowFeature(Window.FEATURE_NO_TITLE);

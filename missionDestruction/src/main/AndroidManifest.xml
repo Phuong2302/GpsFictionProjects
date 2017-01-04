@@ -18,7 +18,7 @@
             android:exported="true"
             >
         <intent-filter>
-            <action android:name="com.sdesimeur.android.gpsfiction.intent.action.RESETGAMES" />
+            <action android:name="com.sdesimeur.android.gpsfiction.intent.action.STARTGAME" />
             <category android:name="com.sdesimeur.android.gpsfiction.intent.category.GPSFICTIONACTIVITY" />
             <!--
             <action android:name="android.intent.action.MAIN" />

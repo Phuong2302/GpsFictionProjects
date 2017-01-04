@@ -33,6 +33,7 @@ public class MissionDestructionMainActivity extends GpsFictionActivity implement
     private int angle = 0;
     private boolean firstDialogBoxAllreadyOpened = false;
 
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (savedInstanceState != null) {

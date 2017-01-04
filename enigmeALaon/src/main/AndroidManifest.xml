@@ -15,17 +15,17 @@
             android:label="@string/appname"
             android:exported="true"
             >
-            <!--
         <intent-filter>
-            <action android:name="com.sdesimeur.android.gpsfiction.intent.action.RESETGAMES" />
+            <action android:name="com.sdesimeur.android.gpsfiction.intent.action.STARTGAME" />
             <category android:name="com.sdesimeur.android.gpsfiction.intent.category.GPSFICTIONACTIVITY" />
+            <!--
             <action android:name="android.intent.action.MAIN" />
             <category android:name="android.intent.category.HOME" />
             <category android:name="android.intent.category.LAUNCHER" />
             <category android:name="android.intent.category.DEFAULT" />
             <category android:name="android.intent.category.MONKEY" />
-            </intent-filter>
             -->
+            </intent-filter>
         </activity>
     </application>
 
