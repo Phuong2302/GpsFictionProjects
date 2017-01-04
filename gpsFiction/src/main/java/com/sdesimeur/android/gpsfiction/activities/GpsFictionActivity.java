@@ -217,6 +217,7 @@ public class GpsFictionActivity extends Activity {
         if (getIntent().getAction().equals(GpsFictionIntent.RESETGAMES)) {
             SharedPreferences.Editor ed = settings.edit();
             ed.putString(JSonStrings.ALLDATA,"");
+            ed.commit();
             finish();
         }
         String loc = getIntent().getStringExtra(GpsFictionIntent.LOCALE);
@@ -243,8 +244,8 @@ public class GpsFictionActivity extends Activity {
         if (savedInstanceState != null) {
             selectedFragmentId = savedInstanceState.getInt(LASTSELECTEDFRAGMENTID, R.id.Zones);
         }
-        String tmp = settings.getString(JSonStrings.ALLDATA, null);
-        if (tmp != null) {
+        String tmp = settings.getString(JSonStrings.ALLDATA, "");
+        if (!tmp.equals("")) {
             try {
                 mGpsFictionControler.getmGpsFictionData().setJson(new JSONObject(tmp));
             } catch (JSONException e) {

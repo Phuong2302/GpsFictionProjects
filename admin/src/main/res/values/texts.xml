@@ -15,8 +15,8 @@
     <string name="open_location_settings">Open location settings</string>
     <string name="askpasstitle">Starting the application</string>
     <string name="askpassmessage">Please enter the password for verification.</string>
-    <string name="askpasstitlereturn">Stopping the application</string>
-    <string name="askpassmessagereturn">Please enter the password to leave the application</string>
+    <string name="askpasstitlereturn">The admin application</string>
+    <string name="askpassmessagereturn">Please enter the password to Stopping to open the admin application</string>
     <string name="changeToMyHomeActivity">Please choose the application \"&apphomename;\" and validate by \"always\"</string>
     <string name="dialoghomeactivitychoosertitle">Application at startup</string>
     <string name="dialoghomeactivitychoosermessage">Please select your preferred launcher</string>
@@ -29,4 +29,6 @@
     <string name="dialogButtonNo">No</string>
     <string name="dialogButtonCancel">Cancel</string>
     <string name="dialogButtonValidate">Validate</string>
+    <string name="homechoosertittle">Choose a launcher</string>
+    <string name="homechoosermessage">In the next dialog, select forever the application &apphomename;</string>
 </resources>

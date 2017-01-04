@@ -24,8 +24,8 @@
         >
         <activity
             android:name=".GpsFictionActivity"
-            android:alwaysRetainTaskState="true"
             android:configChanges="locale"
+            android:finishOnTaskLaunch="true"
             >
         <intent-filter>
             <action android:name="com.sdesimeur.android.gpsfiction.intent.action.STARTGAME" />

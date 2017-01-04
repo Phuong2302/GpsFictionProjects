@@ -11,13 +11,11 @@ import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
-import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.speech.tts.TextToSpeech;
-import android.support.annotation.RequiresApi;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -55,8 +53,8 @@ public class AdminActivity extends Activity {
     public static final String HOMEDEFAULTPACKAGE = "loadHomeDefaultPackageName";
     public static final String ALLREADYSTARTED = "allreadyStarted";
     private static final String PACKAGE4GPSFICTIONPLAYERACTIVITY = "com.sdesimeur.android.gpsfiction.forall.player";
-    private static final String ADMINACTIVITYCLASSNAME = AdminActivity.class.getName();
-    private static final String HOMEACTIVITYCLASSNAME = HomeActivity.class.getName();
+    public static final String ADMINACTIVITYCLASSNAME = AdminActivity.class.getName();
+    public static final String HOMEACTIVITYCLASSNAME = HomeActivity.class.getName();
     private HashMap<String, Locale> string2locale = new HashMap<>();
     private Spinner languageLocaleSpinner;
     private Switch sw;
@@ -114,7 +112,6 @@ public class AdminActivity extends Activity {
                 string2activityinfo.put(st, act);
             }
         }
-
         LayoutInflater inflater = getLayoutInflater();
         final Spinner spinner = (Spinner) inflater.inflate(R.layout.homeactivitychooser, null);
         AlertDialog.Builder dialog = new AlertDialog.Builder(this);
@@ -139,36 +136,36 @@ public class AdminActivity extends Activity {
             }
         });
         dialog.show();
-
     }
 
     private void launchAppChooser() {
         if (!isMyAppLauncherDefault()) {
-            //PackageManager p = getPackageManager();
-            // ComponentName cN = new ComponentName(this, HomeActivity.class);
-            //p.setComponentEnabledSetting(cN, PackageManager.COMPONENT_ENABLED_STATE_ENABLED, PackageManager.DONT_KILL_APP);
-            Intent intent = new Intent(Intent.ACTION_MAIN);
-            intent.addCategory(Intent.CATEGORY_HOME);
-            //intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            //startActivity(intent);
-            startActivity(Intent.createChooser(intent, getString(R.string.changeToMyHomeActivity)));
-            //p.setComponentEnabledSetting(cN, PackageManager.COMPONENT_ENABLED_STATE_DISABLED, PackageManager.DONT_KILL_APP);
+            AlertDialog.Builder dialogBox = new AlertDialog.Builder(this);
+            dialogBox.setTitle(R.string.homechoosertittle);
+            dialogBox.setMessage(R.string.homechoosermessage);
+            dialogBox.setPositiveButton(R.string.dialogButtonValidate, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    Intent intent = new Intent(Intent.ACTION_MAIN);
+                    intent.addCategory(Intent.CATEGORY_HOME);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
+                }
+            });
+            dialogBox.show();
+
+            //startActivity(Intent.createChooser(intent, getString(R.string.changeToMyHomeActivity)));
         }
     }
 
     private boolean isMyAppLauncherDefault() {
         final IntentFilter filter = new IntentFilter(Intent.ACTION_MAIN);
         filter.addCategory(Intent.CATEGORY_HOME);
-
         List<IntentFilter> filters = new ArrayList<>();
         filters.add(filter);
-
         List<ComponentName> activities = new ArrayList<ComponentName>();
         final PackageManager packageManager = (PackageManager) getPackageManager();
-
         packageManager.getPreferredActivities(filters, activities, null);
-
         for (ComponentName activity : activities) {
             if (activity.getClassName().equals(HOMEACTIVITYCLASSNAME)) {
                 return true;
@@ -177,10 +174,14 @@ public class AdminActivity extends Activity {
         return false;
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)
     @Override
     protected void onResume() {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
+        //SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences.Editor ed = settings.edit();
+        ed.putString(HOMEDEFAULTPACKAGE, getPackageName());
+        ed.putString(HOMEDEFAULTACTIVITY, ADMINACTIVITYCLASSNAME);
+        ed.commit();
         Boolean temp = settings.getBoolean(ALLREADYSTARTED, false);
         if (temp) {
             AlertDialog.Builder dialogBox = new AlertDialog.Builder(this);
@@ -203,14 +204,15 @@ public class AdminActivity extends Activity {
                     } else {
                         Toast.makeText(AdminActivity.this, R.string.passwd_different, Toast.LENGTH_LONG).show();
                         startGamesActivity();
-                        finish();
                     }
                 }
             });
-            dialogBox.setNegativeButton(R.string.dialogButtonCancel, null);
-            Configuration cfg = getResources().getConfiguration();
-            cfg.setLocale(Locale.getDefault());
-            dialogBox.getContext().getResources().updateConfiguration(cfg, getResources().getDisplayMetrics());
+            dialogBox.setNegativeButton(R.string.dialogButtonCancel, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    startGamesActivity();
+                }
+            });
             dialogBox.show();
         }
         super.onResume();
@@ -223,11 +225,6 @@ public class AdminActivity extends Activity {
         checkIntent.setAction(TextToSpeech.Engine.ACTION_CHECK_TTS_DATA);
         startActivityForResult(checkIntent, 0x01);
 
-        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
-        SharedPreferences.Editor ed = settings.edit();
-        ed.putString(HOMEDEFAULTPACKAGE, getPackageName());
-        ed.putString(HOMEDEFAULTACTIVITY, ADMINACTIVITYCLASSNAME);
-        ed.commit();
         launchAppChooser();
         testLocation();
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
@@ -283,20 +280,13 @@ public class AdminActivity extends Activity {
                 String shaHex = new String(Hex.encodeHex(DigestUtils.sha(input.getText().toString())));
                 ed.putString(PASSWORD, shaHex);
                 ed.commit();
+                Toast.makeText(getApplicationContext(), R.string.passwd_saved, Toast.LENGTH_LONG).show();
             }
         });
         dialogBox.setNegativeButton(R.string.dialogButtonCancel, null);
         dialogBox.show();
-
-        //EditText ed1 = (EditText) findViewById(R.id.pass1);
-        //String shaHex= new String(Hex.encodeHex(DigestUtils.sha(ed1.getText().toString())));
-        //ed.putString(PASSWORD,shaHex);
-        //ed.commit();
-        Toast.makeText(this, R.string.passwd_saved, Toast.LENGTH_LONG).show();
-        //ed1.setText("");
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)
     public void startGames(View v) {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
         final SharedPreferences.Editor ed = settings.edit();
@@ -310,7 +300,6 @@ public class AdminActivity extends Activity {
         dialogBox.setMessage(R.string.askpassmessage);
         final EditText input = new EditText(this);
         input.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD);
-        //input.setTransformationMethod(PasswordTransformationMethod.getInstance());
         dialogBox.setView(input);
         dialogBox.setPositiveButton(R.string.dialogButtonValidate, new DialogInterface.OnClickListener() {
             @Override
@@ -327,9 +316,6 @@ public class AdminActivity extends Activity {
             }
         });
         dialogBox.setNegativeButton(R.string.dialogButtonCancel, null);
-        Configuration cfg = getResources().getConfiguration();
-        cfg.setLocale(Locale.getDefault());
-        dialogBox.getContext().getResources().updateConfiguration(cfg, getResources().getDisplayMetrics());
         dialogBox.show();
     }
 

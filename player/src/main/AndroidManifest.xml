@@ -18,6 +18,8 @@
             android:alwaysRetainTaskState="true"
             android:configChanges="locale"
             android:exported="true"
+            android:clearTaskOnLaunch="true"
+            android:finishOnTaskLaunch="true"
             >
         <intent-filter>
             <action android:name="android.intent.action.MAIN" />
