@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.Resources;
@@ -65,6 +66,7 @@ public class GpsFictionActivity extends Activity {
     private int selectedFragmentId = R.id.Zones;
 
     protected GpsFictionControler mGpsFictionControler;
+    private boolean toSave = true;
 
     public GpsFictionControler getmGpsFictionControler() {
         return mGpsFictionControler;
@@ -206,15 +208,19 @@ public class GpsFictionActivity extends Activity {
         }
         return super.onOptionsItemSelected(item);
     }
+    private void resetAllData() {
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences.Editor ed = settings.edit();
+        ed.putString(JSonStrings.ALLDATA,"");
+        ed.commit();
+    }
     @Override
     public void onCreate(Bundle savedInstanceState) {
         //this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         MultiDex.install(this);
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
         if (getIntent().getAction().equals(GpsFictionIntent.RESETGAMES)) {
-            SharedPreferences.Editor ed = settings.edit();
-            ed.putString(JSonStrings.ALLDATA,"");
-            ed.commit();
+            resetAllData();
             finish();
         }
         String loc = getIntent().getStringExtra(GpsFictionIntent.LOCALE);
@@ -261,13 +267,25 @@ public class GpsFictionActivity extends Activity {
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         navigationView = (NavigationView) findViewById(R.id.navigation_view);
         navigationView.getMenu().findItem(selectedFragmentId).setChecked(true);
+
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(MenuItem menuItem) {
-                menuItem.setChecked(true);
-                selectedFragmentId = menuItem.getItemId();
-                setFragmentInContainer();
-                drawerLayout.closeDrawer(Gravity.LEFT);
+                if (menuItem.getGroupId()==R.id.menuGroupTabs) {
+                    menuItem.setChecked(true);
+                    selectedFragmentId = menuItem.getItemId();
+                    setFragmentInContainer();
+                    drawerLayout.closeDrawer(Gravity.LEFT);
+                }
+                if (menuItem.getItemId()==R.id.itemResetAll) {
+                    resetAllData();
+                    toSave = false;
+                    Intent myIntent = getIntent();
+                    myIntent.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                    myIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    finish();
+                    startActivity(myIntent);
+                }
                 return true;
             }
         });
@@ -334,14 +352,16 @@ public class GpsFictionActivity extends Activity {
 
     @Override
     public void onPause() {
-        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
-        SharedPreferences.Editor ed = settings.edit();
-        try {
-            ed.putString(JSonStrings.ALLDATA,getmGpsFictionControler().getmGpsFictionData().getJson().toString());
-        } catch (JSONException e) {
-            e.printStackTrace();
+        if (toSave) {
+            SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
+            SharedPreferences.Editor ed = settings.edit();
+            try {
+                ed.putString(JSonStrings.ALLDATA, getmGpsFictionControler().getmGpsFictionData().getJson().toString());
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            ed.commit();
         }
-        ed.commit();
         super.onPause();
     }
 
