@@ -18,7 +18,6 @@
             android:alwaysRetainTaskState="true"
             android:configChanges="locale"
             android:label="@string/appname"
-            android:clearTaskOnLaunch="true"
             android:launchMode="singleTask"
         >
             <intent-filter>

@@ -8,10 +8,8 @@ import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.content.res.Configuration;
-import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.annotation.RequiresApi;
 import android.support.multidex.MultiDex;
 
 import com.sdesimeur.android.gpsfiction.intent.GpsFictionIntent;
@@ -67,7 +65,6 @@ public class GamesActivity extends Activity implements GameFragment.OnListFragme
         }
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         MultiDex.install(this);
