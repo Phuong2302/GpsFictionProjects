@@ -176,9 +176,8 @@ public class AdminActivity extends Activity {
     }
 
     @Override
-    protected void onResume() {
+    protected void onStart() {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
-        //SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
         SharedPreferences.Editor ed = settings.edit();
         ed.putString(HOMEDEFAULTPACKAGE, getPackageName());
         ed.putString(HOMEDEFAULTACTIVITY, ADMINACTIVITYCLASSNAME);
@@ -204,19 +203,19 @@ public class AdminActivity extends Activity {
                         ed.commit();
                     } else {
                         Toast.makeText(AdminActivity.this, R.string.passwd_different, Toast.LENGTH_LONG).show();
-                        startGamesActivity();
+                        startGamesActivity(true);
                     }
                 }
             });
             dialogBox.setNegativeButton(R.string.dialogButtonCancel, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
-                    startGamesActivity();
+                    startGamesActivity(true);
                 }
             });
             dialogBox.show();
         }
-        super.onResume();
+        super.onStart();
     }
 
     @Override
@@ -310,7 +309,7 @@ public class AdminActivity extends Activity {
                 if (passsha.equals(passsave)) {
                     ed.putBoolean(ALLREADYSTARTED, true);
                     ed.commit();
-                    startGamesActivity();
+                    startGamesActivity(false);
                 } else {
                     Toast.makeText(AdminActivity.this, R.string.passwd_different, Toast.LENGTH_LONG).show();
                 }
@@ -320,10 +319,10 @@ public class AdminActivity extends Activity {
         dialogBox.show();
     }
 
-    public void startGamesActivity() {
+    public void startGamesActivity(Boolean noReset) {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
         Bundle extras = new Bundle();
-        extras.putBoolean(GpsFictionIntent.RESETGAMES, settings.getBoolean(GpsFictionIntent.RESETGAMES, false));
+        extras.putBoolean(GpsFictionIntent.RESETGAMES, (noReset)?false:settings.getBoolean(GpsFictionIntent.RESETGAMES, false));
         extras.putString(GpsFictionIntent.LOCALE, settings.getString(GpsFictionIntent.LOCALE, GpsFictionIntent.DEFAULTPLAYERLOCALE));
         ComponentName cn = new ComponentName(PACKAGE4GPSFICTIONPLAYERACTIVITY, PACKAGE4GPSFICTIONPLAYERACTIVITY + ".GamesActivity");
         Intent intent = new Intent();
@@ -339,14 +338,6 @@ public class AdminActivity extends Activity {
                 Toast.makeText(this, R.string.nottsengine, Toast.LENGTH_LONG);
             }
         }
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
     }
 
     @Override
