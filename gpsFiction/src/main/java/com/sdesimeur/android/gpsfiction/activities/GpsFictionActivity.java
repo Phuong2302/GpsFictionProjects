@@ -59,7 +59,6 @@ public class GpsFictionActivity extends Activity {
     
     protected FragmentManager fragmentManager;
     public HashSet<MyDialogFragment> dialogFragments = new HashSet<>();
-    private NavigationView navigationView;
     private DrawerLayout drawerLayout;
     private HashMap<Integer, MyTabFragmentImpl> menuItem2Fragments;
 
@@ -105,7 +104,6 @@ public class GpsFictionActivity extends Activity {
         MyTabFragmentImpl mtf = menuItem2Fragments.get(selectedFragmentId);
         fragTransaction.replace(R.id.container, (Fragment)mtf);
         fragTransaction.commit();
-        //	navigationView.getMenu().findItem(selectedFragmentId).setChecked(true);
     }
 
     public void getReponseFromMyDialogFragment(int why, int reponse) {
@@ -265,18 +263,26 @@ public class GpsFictionActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_view);
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        navigationView = (NavigationView) findViewById(R.id.navigation_view);
+        NavigationView navigationView;
+        navigationView = (NavigationView) findViewById(R.id.navigation_drawer);
         navigationView.getMenu().findItem(selectedFragmentId).setChecked(true);
 
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(MenuItem menuItem) {
-                if (menuItem.getGroupId()==R.id.menuGroupTabs) {
+               // if (menuItem.getGroupId()==R.id.menuGroupTabs) {
                     menuItem.setChecked(true);
                     selectedFragmentId = menuItem.getItemId();
                     setFragmentInContainer();
                     drawerLayout.closeDrawer(Gravity.LEFT);
-                }
+               // }
+                return true;
+            }
+        });
+        navigationView = (NavigationView) findViewById(R.id.navigation_drawer_bottom);
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(MenuItem menuItem) {
                 if (menuItem.getItemId()==R.id.itemResetAll) {
                     resetAllData();
                     toSave = false;

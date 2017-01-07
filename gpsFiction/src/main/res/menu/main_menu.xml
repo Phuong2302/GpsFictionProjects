@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    >
     <group android:checkableBehavior="single"
         android:id="@+id/menuGroupTabs">
         <item
@@ -17,9 +21,5 @@
         <item
             android:id="@+id/Tasks"
             android:title="@string/titleTasks" />
-    </group>
-    <group android:id="@+id/menuGroupOtherFunctions">
-        <item android:id="@+id/itemResetAll"
-            android:title="@string/resetAll"/>
     </group>
 </menu>
