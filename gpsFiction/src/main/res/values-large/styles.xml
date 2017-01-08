@@ -3,6 +3,7 @@
     <dimen name="compassLineWidth">5dip</dimen>
     <dimen name="miniCompassSize">80dip</dimen>
     <dimen name="titleTextSize">24sp</dimen>
+    <dimen name="smallTextSize">18sp</dimen>
     <dimen name="normalTextSize">24sp</dimen>
     <dimen name="bigTextSize">36sp</dimen>
     <dimen name="tabMinHeight">55dp</dimen>

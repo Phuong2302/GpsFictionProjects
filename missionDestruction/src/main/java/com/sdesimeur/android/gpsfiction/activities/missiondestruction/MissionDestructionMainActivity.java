@@ -1,12 +1,13 @@
 package com.sdesimeur.android.gpsfiction.activities.missiondestruction;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 
 import com.sdesimeur.android.gpsfiction.activities.GpsFictionActivity;
 import com.sdesimeur.android.gpsfiction.classes.GpsFictionControler;
 import com.sdesimeur.android.gpsfiction.classes.PlayerLocationListener;
 import com.sdesimeur.android.gpsfiction.classes.Zone;
-import com.sdesimeur.android.gpsfiction.fragments.MyDialogFragment;
 import com.sdesimeur.android.gpsfiction.geopoint.MyGeoPoint;
 
 import java.util.HashSet;
@@ -53,33 +54,33 @@ public class MissionDestructionMainActivity extends GpsFictionActivity implement
     @Override
     public void onLocationPlayerChanged(MyGeoPoint playerLocation) {
         if (!(mGpsFictionControler.isAllreadyConfigured()) && !firstDialogBoxAllreadyOpened) {
-            MyDialogFragment df = new MyDialogFragment();
-            df.init(R.string.dialogFirstTaskTitle, R.string.dialogFirstTaskText);
-            df.getButtonsListIds().add(R.string.dialogButtonYes);
-            df.getButtonsListIds().add(R.string.dialogButtonNo);
-            //firstDialogBoxNotClose = true;
+            AlertDialog.Builder dialogBox = new AlertDialog.Builder(this);
+            dialogBox.setTitle(R.string.dialogFirstTaskTitle);
+            dialogBox.setMessage(R.string.dialogFirstTaskText);
+            //final EditText input = new EditText(this);
+            //input.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD);
+            //dialogBox.setView(input);
+            dialogBox.setPositiveButton(R.string.dialogButtonYes, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    angle = ((int) Math.round(360 * Math.random()));
+                    createAllZoneAmi();
+                    createAllZoneEnnemi();
+                    //mGpsFictionControler.firePlayerLocationListener();
+                    mGpsFictionControler.setAllreadyConfigured(true);
+                }
+            });
+            dialogBox.setNegativeButton(R.string.dialogButtonNo, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    MissionDestructionMainActivity.this.finish();
+                }
+            });
             firstDialogBoxAllreadyOpened = true;
-            df.show(fragmentManager);
+            dialogBox.show();
         } else {
             mGpsFictionControler.removePlayerLocationListener(GpsFictionControler.REGISTER.FRAGMENT,this);
         }
-    }
-
-    public void getReponseFromMyDialogFragment(int why, int reponse) {
-        if (why == R.string.dialogFirstTaskTitle) {
-//            firstDialogBoxAllreadyOpened = false;
-            if (reponse == R.string.dialogButtonYes) {
-                angle = ((int) Math.round(360 * Math.random()));
-                createAllZoneAmi();
-                createAllZoneEnnemi();
-                //mGpsFictionControler.firePlayerLocationListener();
-                mGpsFictionControler.setAllreadyConfigured(true);
-            }
-            if (reponse == R.string.dialogButtonNo) {
-                finish();
-            }
-        }
-        super.getReponseFromMyDialogFragment(why, reponse);
     }
 
     public void createAllZoneEnnemi() {

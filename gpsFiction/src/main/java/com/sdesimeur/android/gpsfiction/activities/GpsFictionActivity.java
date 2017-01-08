@@ -27,7 +27,6 @@ import android.view.WindowManager;
 
 import com.sdesimeur.android.gpsfiction.classes.GpsFictionControler;
 import com.sdesimeur.android.gpsfiction.classes.JSonStrings;
-import com.sdesimeur.android.gpsfiction.fragments.MyDialogFragment;
 import com.sdesimeur.android.gpsfiction.fragments.MyTabFragmentImpl;
 import com.sdesimeur.android.gpsfiction.intent.GpsFictionIntent;
 
@@ -40,7 +39,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Locale;
 
 
@@ -58,7 +56,6 @@ public class GpsFictionActivity extends Activity {
     
     
     protected FragmentManager fragmentManager;
-    public HashSet<MyDialogFragment> dialogFragments = new HashSet<>();
     private DrawerLayout drawerLayout;
     private HashMap<Integer, MyTabFragmentImpl> menuItem2Fragments;
 
@@ -105,16 +102,6 @@ public class GpsFictionActivity extends Activity {
         fragTransaction.replace(R.id.container, (Fragment)mtf);
         fragTransaction.commit();
     }
-
-    public void getReponseFromMyDialogFragment(int why, int reponse) {
-        if (why == R.string.dialogCloseTaskTitle) {
-            if (reponse == R.string.dialogButtonNo) {
-            //    mGpsFictionData.toSave = false;
-                finish();
-            }
-        }
-    }
-
 
     public Typeface getFontFromRes(int resource) {
         Typeface tf = null;
@@ -173,9 +160,9 @@ public class GpsFictionActivity extends Activity {
         }
         return super.dispatchKeyEvent(event);
     }
-    public void floatingAction(View view) {
+  //  public void floatingAction(View view) {
    //     drawerLayout.openDrawer(Gravity.LEFT);
-    }
+    //}
 
         /*
     @Override
@@ -284,6 +271,8 @@ public class GpsFictionActivity extends Activity {
             @Override
             public boolean onNavigationItemSelected(MenuItem menuItem) {
                 if (menuItem.getItemId()==R.id.itemResetAll) {
+                    // ASK CONFIRMATION
+
                     resetAllData();
                     toSave = false;
                     Intent myIntent = getIntent();

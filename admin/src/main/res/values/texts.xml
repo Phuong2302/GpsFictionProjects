@@ -31,4 +31,5 @@
     <string name="dialogButtonValidate">Validate</string>
     <string name="homechoosertittle">Choose a launcher</string>
     <string name="homechoosermessage">In the next dialog, select forever the application &apphomename;</string>
+    <string name="startmockgps">Start MockGPS</string>
 </resources>

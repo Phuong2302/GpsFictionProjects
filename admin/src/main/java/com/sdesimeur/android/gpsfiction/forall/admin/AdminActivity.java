@@ -264,6 +264,13 @@ public class AdminActivity extends Activity {
         languageLocaleSpinner.setSelection(i);
     }
 
+    public void startMockGps (View v) {
+        ComponentName cn = new ComponentName("com.sdesimeur.android.mockgps", "com.sdesimeur.android.mockgps.MockGpsProviderActivity");
+        Intent intent = new Intent();
+        intent.setComponent(cn);
+        startActivity(intent);
+    }
+
     public void changeAdminPassword(View v) {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
         final SharedPreferences.Editor ed = settings.edit();
@@ -343,9 +350,6 @@ public class AdminActivity extends Activity {
     @Override
     public void onStop() {
         super.onStop();
-
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
     }
 }
 

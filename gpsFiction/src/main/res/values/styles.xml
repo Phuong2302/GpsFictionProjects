@@ -83,12 +83,19 @@
         <item name="android:textColor">@drawable/color4textmenu</item>
         <item name="android:itemBackground">@drawable/background4menu</item>
     </style>
+    <style name="NavigationViewFooter">
+        <item name="android:textSize">@dimen/smallTextSize</item>
+        <item name="android:textStyle">normal</item>
+        <!-- <item name="android:textColor">@drawable/color4textmenu</item> -->
+        <item name="android:itemBackground">@drawable/background4menu</item>
+    </style>
 
     <!--<integer name="compassFont">@raw/font_dancing</integer>-->
     <dimen name="compassLineWidth">5dp</dimen>
     <dimen name="miniCompassSize">80dp</dimen>
     <dimen name="compassSize">300dp</dimen>
     <dimen name="titleTextSize">24sp</dimen>
+    <dimen name="smallTextSize">18sp</dimen>
     <dimen name="normalTextSize">24sp</dimen>
     <dimen name="bigTextSize">30sp</dimen>
     <dimen name="tabMinHeight">40dp</dimen>
