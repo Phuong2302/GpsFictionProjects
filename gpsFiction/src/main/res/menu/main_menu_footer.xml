@@ -6,7 +6,7 @@
     >
     <group android:id="@+id/menuGroupOtherFunctions">
         <item android:id="@+id/itemResetAll"
-            android:title="@string/resetAll"/>
+            android:title="@string/resetThisGame"/>
     </group>
 
 </menu>

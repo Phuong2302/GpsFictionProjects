@@ -55,5 +55,6 @@
     <string name="dialogButtonValidate">Validate</string>
 
     <string name="distanceToDest">Distance to destination</string>
-    <string name="resetAll">Reset this game</string>
+    <string name="resetThisGame">Reset this game</string>
+    <string name="dialogConfirmResetText">Do you confirm the reset of this game?</string>
 </resources>

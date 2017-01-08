@@ -2,9 +2,11 @@ package com.sdesimeur.android.gpsfiction.activities;
 
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
@@ -24,6 +26,7 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.Toast;
 
 import com.sdesimeur.android.gpsfiction.classes.GpsFictionControler;
 import com.sdesimeur.android.gpsfiction.classes.JSonStrings;
@@ -271,15 +274,24 @@ public class GpsFictionActivity extends Activity {
             @Override
             public boolean onNavigationItemSelected(MenuItem menuItem) {
                 if (menuItem.getItemId()==R.id.itemResetAll) {
-                    // ASK CONFIRMATION
-
-                    resetAllData();
-                    toSave = false;
-                    Intent myIntent = getIntent();
-                    myIntent.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                    myIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    finish();
-                    startActivity(myIntent);
+                    AlertDialog.Builder dialogBox = new AlertDialog.Builder(GpsFictionActivity.this);
+                    dialogBox.setTitle(R.string.resetThisGame);
+                    dialogBox.setMessage(R.string.dialogConfirmResetText);
+                    dialogBox.setPositiveButton(R.string.dialogButtonYes, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            resetAllData();
+                            Toast.makeText(getApplicationContext(),R.string.resetThisGame,Toast.LENGTH_LONG).show();
+                            toSave = false;
+                            Intent myIntent = getIntent();
+                            myIntent.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                            myIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            finish();
+                            startActivity(myIntent);
+                        }
+                    });
+                    dialogBox.setNegativeButton(R.string.dialogButtonNo, null);
+                    dialogBox.show();
                 }
                 return true;
             }

@@ -55,5 +55,6 @@
     <string name="dialogButtonValidate">Valider</string>
 
     <string name="distanceToDest">Distance à destination</string>
-    <string name="resetAll">Remise à zéro du jeu</string>
+    <string name="resetThisGame">Remise à zéro du jeu</string>
+    <string name="dialogConfirmResetText">Confirmez vous la remise à zéro de ce jeu?</string>
 </resources>
