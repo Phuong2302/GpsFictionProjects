@@ -490,7 +490,8 @@ public class MapFragment
 
     @Override
     public void onZoneChanged(Zone zone) {
-        MarkerSymbol zoneMarkerSymbol = new MarkerSymbol(drawableToBitmap(getResources(),zone.getIconId()), HotspotPlace.CENTER);
+        //MarkerSymbol zoneMarkerSymbol = new MarkerSymbol(drawableToBitmap(getResources(),zone.getIconId()), HotspotPlace.BOTTOM_CENTER);
+        MarkerSymbol zoneMarkerSymbol = new MarkerSymbol(drawableToBitmap(getResources(),zone.getIconId()), 0.25f, 0.9f);
         ZoneViewHelper zvh = zoneViewHelperHashMap.get(zone);
         if (zvh == null) {
             zvh = new ZoneViewHelper(zone);
