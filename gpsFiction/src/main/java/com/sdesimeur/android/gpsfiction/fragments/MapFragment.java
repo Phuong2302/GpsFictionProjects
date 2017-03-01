@@ -67,6 +67,7 @@ public class MapFragment
         extends MyTabFragment
         implements PlayerBearingListener, ZoneChangeListener, PlayerLocationListener, ZoneSelectListener, ItemizedLayer.OnItemGestureListener<MarkerItem> {
     private static final float MINMOVE = 20;
+    private static final int CENTERZONEICON = R.mipmap.flag;
     MapView mapView;
     Map mMap;
     //MapPreferences mPrefs;
@@ -217,7 +218,8 @@ public class MapFragment
             }
         });
         zoneViewHelperHashMap = new HashMap<>();
-        playerBitmap = BitmapFactory.decodeResource(getResources(),R.drawable.player_marker);
+        //playerBitmap = BitmapFactory.decodeResource(getResources(),R.drawable.player_marker);
+        playerBitmap = BitmapFactory.decodeResource(getResources(),R.mipmap.player_marker);
         MarkerSymbol ms = new MarkerSymbol(drawableToBitmap(getResources(),R.drawable.transparent), HotspotPlace.CENTER);
         mMarkerLayer = new ItemizedLayer<>(mMap, new ArrayList<MarkerItem>(), ms , this);
         if (playerMarkerItem == null) {
@@ -491,7 +493,7 @@ public class MapFragment
     @Override
     public void onZoneChanged(Zone zone) {
         //MarkerSymbol zoneMarkerSymbol = new MarkerSymbol(drawableToBitmap(getResources(),zone.getIconId()), HotspotPlace.BOTTOM_CENTER);
-        MarkerSymbol zoneMarkerSymbol = new MarkerSymbol(drawableToBitmap(getResources(),zone.getIconId()), 0.25f, 0.9f);
+        MarkerSymbol zoneMarkerSymbol = new MarkerSymbol(drawableToBitmap(getResources(),CENTERZONEICON), 0.25f, 0.9f);
         ZoneViewHelper zvh = zoneViewHelperHashMap.get(zone);
         if (zvh == null) {
             zvh = new ZoneViewHelper(zone);

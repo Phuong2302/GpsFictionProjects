@@ -18,21 +18,27 @@ public abstract class GpsFictionThing {
         public int replacementNameInLongId = 0;
         public int numInTable4LongId = -1;
         public int definitionId = 0;
-        public int iconId = R.drawable.flag_green;
+        public int iconId = R.mipmap.flag;
+        public int imageId = R.mipmap.flag;
+        public int assetId = R.mipmap.flag;
         public void setJsonArray (JSONArray arr) throws JSONException {
-                nameId = arr.getInt(0);
-                replacementNameInLongId = arr.getInt(1);
-                numInTable4LongId = arr.getInt(2);
-                definitionId = arr.getInt(3);
-                iconId = arr.getInt(4);
+            nameId = arr.getInt(0);
+            replacementNameInLongId = arr.getInt(1);
+            numInTable4LongId = arr.getInt(2);
+            definitionId = arr.getInt(3);
+            iconId = arr.getInt(4);
+            imageId = arr.getInt(5);
+            assetId = arr.getInt(6);
         }
         public JSONArray getJsonArray () throws JSONException {
             JSONArray arr = new JSONArray();
-                arr.put(0,nameId);
-                arr.put(1,replacementNameInLongId);
-                arr.put(2,numInTable4LongId);
-                arr.put(3,definitionId);
-                arr.put(4,iconId);
+            arr.put(0,nameId);
+            arr.put(1,replacementNameInLongId);
+            arr.put(2,numInTable4LongId);
+            arr.put(3,definitionId);
+            arr.put(4,iconId);
+            arr.put(5,imageId);
+            arr.put(6,assetId);
             return arr;
         }
 
