@@ -4,10 +4,10 @@
     <item name="gpsFictionControlerId" type="id" />
     <item name="attachedZoneId" type="id" />
     <integer-array name="vehicules_array">
-        <item>@drawable/compass</item>
-        <item>@drawable/pieton</item>
-        <item>@drawable/cycle</item>
-        <item>@drawable/auto</item>
+        <item>@mipmap/compass</item>
+        <item>@mipmap/pieton</item>
+        <item>@mipmap/cycle</item>
+        <item>@mipmap/auto</item>
     </integer-array>
     <string-array name="fragmentsNames">
         <item>Zones</item>

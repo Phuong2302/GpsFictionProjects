@@ -112,7 +112,7 @@
     <dimen name="adminTextSize">18sp</dimen>
 
     <dimen name="buttonsVehiculesPadding">4dp</dimen>
-    <dimen name="buttonsVehiculesSize">48dp</dimen>
+    <dimen name="buttonsVehiculesSize">64dp</dimen>
     <dimen name="mapzoneborderwidth">1dp</dimen>
     <dimen name="text_margin">16dp</dimen>
     <dimen name="activity_horizontal_margin">16dp</dimen>

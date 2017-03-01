@@ -63,7 +63,7 @@ public class MyLocationListenerService extends Service implements LocationListen
                 Notification notification = null;
                 if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN) {
                     notification = new Notification.Builder(this)
-                            .setSmallIcon(R.drawable.bearing)
+                            .setSmallIcon(R.mipmap.bearing)
                             .setContentTitle("MyLocationListenerService")
                             .setContentText("Started")
                             .setWhen(System.currentTimeMillis())

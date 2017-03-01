@@ -220,11 +220,13 @@ public class MapFragment
         zoneViewHelperHashMap = new HashMap<>();
         //playerBitmap = BitmapFactory.decodeResource(getResources(),R.drawable.player_marker);
         playerBitmap = BitmapFactory.decodeResource(getResources(),R.mipmap.player_marker);
-        MarkerSymbol ms = new MarkerSymbol(drawableToBitmap(getResources(),R.drawable.transparent), HotspotPlace.CENTER);
+        //MarkerSymbol ms = new MarkerSymbol(drawableToBitmap(getResources(),R.drawable.transparent), HotspotPlace.CENTER);
+        MarkerSymbol ms = new MarkerSymbol(drawableToBitmap(getResources(),R.drawable.transparent), 0.5f, 0.75f);
         mMarkerLayer = new ItemizedLayer<>(mMap, new ArrayList<MarkerItem>(), ms , this);
         if (playerMarkerItem == null) {
             playerMarkerItem = new MarkerItem("Player", "Player", new MyGeoPoint(90,0));
-            playerMarkerItem.setMarker(getMarkerSymbolWithBitmap(getRotatedBitmap(playerBitmap,0f,false),HotspotPlace.CENTER,false));
+            //playerMarkerItem.setMarker(getMarkerSymbolWithBitmap(getRotatedBitmap(playerBitmap,0f,false),HotspotPlace.CENTER,false));
+            playerMarkerItem.setMarker(getMarkerSymbolWithBitmap(getRotatedBitmap(playerBitmap,0f,false),0.5f, 0.75f,false));
             mMarkerLayer.addItem(playerMarkerItem);
         }
         mMap.layers().add(mMarkerLayer);
@@ -389,7 +391,7 @@ public class MapFragment
                 gfc.addVehiculeSelectedIdListener((VehiculeSelectedIdListener) img);
             }
         } else {
-            setVehiculeSelectedId(vehicules.getResourceId(0,R.drawable.compass));
+            setVehiculeSelectedId(vehicules.getResourceId(0,R.mipmap.compass));
         }
 
     }
@@ -420,7 +422,7 @@ public class MapFragment
     }
     private void addViewForMapDirection(ViewGroup vg) {
         viewForMapDirection = (ImageView) vg.findViewById(R.id.forMapDirectionButtons);
-        viewForMapDirection.setImageDrawable(getDrawable(getActivity(),R.drawable.bearing));
+        viewForMapDirection.setImageDrawable(getDrawable(getActivity(),R.mipmap.bearing));
         viewForMapDirection.setTag(MapDirection.PLAYER);
         viewForMapDirection.setOnClickListener(new OnClickListener() {
             @Override
@@ -445,7 +447,7 @@ public class MapFragment
     private void fixViewForMapDirection () {
         int id = (int) viewForMapDirection.getTag();
         if (id == MapDirection.PLAYER) {
-            viewForMapDirection.setImageDrawable(getDrawable(getActivity(),R.drawable.bearing));
+            viewForMapDirection.setImageDrawable(getDrawable(getActivity(),R.mipmap.bearing));
         } else if (id == MapDirection.FIX) {
             viewForMapDirection.setImageBitmap(getRotatedBitmap(BitmapFactory.decodeResource(getResources(),R.drawable.nobearing),mMap.getMapPosition().getBearing(),true));
         } else if (id == MapDirection.NORTH) {
@@ -493,7 +495,7 @@ public class MapFragment
     @Override
     public void onZoneChanged(Zone zone) {
         //MarkerSymbol zoneMarkerSymbol = new MarkerSymbol(drawableToBitmap(getResources(),zone.getIconId()), HotspotPlace.BOTTOM_CENTER);
-        MarkerSymbol zoneMarkerSymbol = new MarkerSymbol(drawableToBitmap(getResources(),CENTERZONEICON), 0.25f, 0.9f);
+        MarkerSymbol zoneMarkerSymbol = new MarkerSymbol(drawableToBitmap(getResources(),CENTERZONEICON), 58.0f/225.0f, 214.0f/225.0f);
         ZoneViewHelper zvh = zoneViewHelperHashMap.get(zone);
         if (zvh == null) {
             zvh = new ZoneViewHelper(zone);
@@ -553,6 +555,10 @@ public class MapFragment
     private MarkerSymbol getMarkerSymbolWithBitmap (Bitmap bitmap, HotspotPlace hp, boolean bill) {
         AndroidBitmap ab = new AndroidBitmap(bitmap);
         return new MarkerSymbol(ab, hp, bill);
+    }
+    private MarkerSymbol getMarkerSymbolWithBitmap (Bitmap bitmap, float x , float y, boolean bill) {
+        AndroidBitmap ab = new AndroidBitmap(bitmap);
+        return new MarkerSymbol(ab, x, y, bill);
     }
     private Bitmap textAsBitmap(String text, float textSize, int textColor) {
         Paint paint = new Paint(Paint.DITHER_FLAG|Paint.ANTI_ALIAS_FLAG| Paint.FILTER_BITMAP_FLAG);

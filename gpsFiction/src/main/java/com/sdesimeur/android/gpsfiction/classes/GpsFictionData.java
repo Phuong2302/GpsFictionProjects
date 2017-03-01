@@ -29,7 +29,7 @@ public class GpsFictionData {
     private transient Resources resources;
 
     protected boolean allreadyConfigured = false; // Parcel
-    private int vehiculeSelectedId = R.drawable.compass;
+    private int vehiculeSelectedId = R.mipmap.compass;
     private HashSet<GpsFictionThing> gpsFictionThings = new HashSet<>();
     private int zoomLevel = INITZOOMLEVEL;
 

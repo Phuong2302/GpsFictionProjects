@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <integer-array name="vehicules_array">
-        <item>@drawable/compass</item>
-        <item>@drawable/pieton</item>
-        <item>@drawable/cycle</item>
+        <item>@mipmap/compass</item>
+        <item>@mipmap/pieton</item>
+        <item>@mipmap/cycle</item>
     </integer-array>
 </resources>

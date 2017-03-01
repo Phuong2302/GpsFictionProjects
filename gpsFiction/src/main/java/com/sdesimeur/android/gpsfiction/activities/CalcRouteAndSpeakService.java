@@ -115,12 +115,12 @@ public class CalcRouteAndSpeakService extends Service implements TextToSpeech.On
     private volatile boolean prepareInProgress = false;
     private PathWrapper routePath = null;
     private HashMap<Integer, FlagEncoder> vehiculeGHEncoding = new HashMap<Integer, FlagEncoder>() {{
-        put(R.drawable.compass, null);
-        put(R.drawable.pieton, new FootFlagEncoder());
-        put(R.drawable.cycle, new BikeFlagEncoder());
-        put(R.drawable.auto, new CarFlagEncoder());
+        put(R.mipmap.compass, null);
+        put(R.mipmap.pieton, new FootFlagEncoder());
+        put(R.mipmap.cycle, new BikeFlagEncoder());
+        put(R.mipmap.auto, new CarFlagEncoder());
     }};
-    private int vehiculeSelectedId = R.drawable.compass;
+    private int vehiculeSelectedId = R.mipmap.compass;
     private float deltaDistMax = 0.050f;
 
 
@@ -201,7 +201,7 @@ public class CalcRouteAndSpeakService extends Service implements TextToSpeech.On
                 Notification notification = null;
                 if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN) {
                     notification = new Notification.Builder(this)
-                        .setSmallIcon(R.drawable.bearing)
+                        .setSmallIcon(R.mipmap.bearing)
                         .setContentTitle("GpsFictionService")
                         .setContentText("Started")
                         .setWhen(System.currentTimeMillis())
@@ -241,7 +241,7 @@ public class CalcRouteAndSpeakService extends Service implements TextToSpeech.On
     }
     public void calcPathIfNecessar() {
         if ((playerLocation != null) && (destLocation != null)) {
-            if (vehiculeSelectedId == R.drawable.compass) {
+            if (vehiculeSelectedId == R.mipmap.compass) {
                 calcLinePath();
             } else {
                 if (listOfPoints.size() == 0) {
@@ -374,7 +374,7 @@ public class CalcRouteAndSpeakService extends Service implements TextToSpeech.On
     }
 
     public void cleanListOfPoints() {
-        if ((listOfPoints.size() !=0) && (vehiculeSelectedId!=R.drawable.compass))
+        if ((listOfPoints.size() !=0) && (vehiculeSelectedId!=R.mipmap.compass))
             if (listOfPoints.pointDistanceMin(playerLocation).distanceTo(playerLocation) > deltaDistMax) {
                 listOfPoints.clear();
                 calcPathIfNecessar();
