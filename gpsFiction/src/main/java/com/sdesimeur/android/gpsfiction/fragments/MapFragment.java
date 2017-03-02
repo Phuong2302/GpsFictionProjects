@@ -67,7 +67,6 @@ public class MapFragment
         extends MyTabFragment
         implements PlayerBearingListener, ZoneChangeListener, PlayerLocationListener, ZoneSelectListener, ItemizedLayer.OnItemGestureListener<MarkerItem> {
     private static final float MINMOVE = 20;
-    private static final int CENTERZONEICON = R.mipmap.flag;
     MapView mapView;
     Map mMap;
     //MapPreferences mPrefs;
@@ -495,7 +494,7 @@ public class MapFragment
     @Override
     public void onZoneChanged(Zone zone) {
         //MarkerSymbol zoneMarkerSymbol = new MarkerSymbol(drawableToBitmap(getResources(),zone.getIconId()), HotspotPlace.BOTTOM_CENTER);
-        MarkerSymbol zoneMarkerSymbol = new MarkerSymbol(drawableToBitmap(getResources(),CENTERZONEICON), 58.0f/225.0f, 214.0f/225.0f);
+        MarkerSymbol zoneMarkerSymbol = new MarkerSymbol(drawableToBitmap(getResources(),R.mipmap.flag), 58.0f/192.0f, 171.0f/192.0f);
         ZoneViewHelper zvh = zoneViewHelperHashMap.get(zone);
         if (zvh == null) {
             zvh = new ZoneViewHelper(zone);
