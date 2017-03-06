@@ -203,7 +203,7 @@ public class MapFragment
                         if ((Math.abs(dX2-event.getX())<MINMOVE) && (Math.abs(dY2 - event.getY())<MINMOVE)) break;
                     case MotionEvent.ACTION_UP:
                           if ((Math.abs(dX1-event.getRawX())<MINMOVE) && (Math.abs(dY1 - event.getRawY())<MINMOVE)) break;
-                                  viewForMapPosition.setTag(R.drawable.mapwithoutfollow);
+                                  viewForMapPosition.setTag(R.mipmap.mapwithoutfollow);
                                   fixViewForMapPosition();
                                   onLocationPlayerChanged(getPlayerLocation());
                                   viewForMapDirection.setTag(MapDirection.FIX);
@@ -397,17 +397,17 @@ public class MapFragment
 
     private void addViewForMapPosition(ViewGroup vg) {
         viewForMapPosition = (ImageView) vg.findViewById(R.id.forMapPositionButtons);
-        viewForMapPosition.setImageDrawable(getDrawable(getActivity(),R.drawable.mapwithfollow));
-        viewForMapPosition.setTag(R.drawable.mapwithfollow);
+        viewForMapPosition.setImageDrawable(getDrawable(getActivity(),R.mipmap.mapwithfollow));
+        viewForMapPosition.setTag(R.mipmap.mapwithfollow);
         viewForMapPosition.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 int id = (int) viewForMapPosition.getTag();
-                if (id == R.drawable.mapwithfollow) {
-                    viewForMapPosition.setTag(R.drawable.mapwithoutfollow);
+                if (id == R.mipmap.mapwithfollow) {
+                    viewForMapPosition.setTag(R.mipmap.mapwithoutfollow);
                     viewForMapDirection.setTag(MapDirection.FIX);
-                } else if (id == R.drawable.mapwithoutfollow) {
-                    viewForMapPosition.setTag(R.drawable.mapwithfollow);
+                } else if (id == R.mipmap.mapwithoutfollow) {
+                    viewForMapPosition.setTag(R.mipmap.mapwithfollow);
                 }
                 fixViewForMapPosition();
                 fixViewForMapDirection();
@@ -433,7 +433,7 @@ public class MapFragment
                     viewForMapDirection.setTag(MapDirection.NORTH);
                 } else if (id == MapDirection.NORTH) {
                     viewForMapDirection.setTag(MapDirection.PLAYER);
-                    viewForMapPosition.setTag(R.drawable.mapwithfollow);
+                    viewForMapPosition.setTag(R.mipmap.mapwithfollow);
                 }
                 fixViewForMapDirection();
                 fixViewForMapPosition();
@@ -448,9 +448,9 @@ public class MapFragment
         if (id == MapDirection.PLAYER) {
             viewForMapDirection.setImageDrawable(getDrawable(getActivity(),R.mipmap.bearing));
         } else if (id == MapDirection.FIX) {
-            viewForMapDirection.setImageBitmap(getRotatedBitmap(BitmapFactory.decodeResource(getResources(),R.drawable.nobearing),mMap.getMapPosition().getBearing(),true));
+            viewForMapDirection.setImageBitmap(getRotatedBitmap(BitmapFactory.decodeResource(getResources(),R.mipmap.nobearing),mMap.getMapPosition().getBearing(),true));
         } else if (id == MapDirection.NORTH) {
-            viewForMapDirection.setImageDrawable(getDrawable(getActivity(),R.drawable.nobearing));
+            viewForMapDirection.setImageDrawable(getDrawable(getActivity(),R.mipmap.nobearing));
         }
     }
 
@@ -464,7 +464,7 @@ public class MapFragment
         if (playerLocation != null) {
             playerMarkerItem.geoPoint=playerLocation;
             mMarkerLayer.populate();
-            if (((int)viewForMapPosition.getTag()) != R.drawable.mapwithoutfollow) {
+            if (((int)viewForMapPosition.getTag()) != R.mipmap.mapwithoutfollow) {
                 MapPosition pos = mMap.getMapPosition();
                 pos.setPosition(playerLocation);
                 mMap.setMapPosition(pos);
