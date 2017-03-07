@@ -11,17 +11,26 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <com.sdesimeur.android.gpsfiction.views.ZoneName4ListView
-            android:id="@+id/textNameOfZone"
-            style="@style/TabOneLineTitle"
-            android:clickable="true"
-            android:focusable="true"
-            android:focusableInTouchMode="true"
-            android:background="@drawable/color4zoneselected"
+        <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:gravity="center_vertical" />
-
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+			<ImageView
+				android:id="@+id/iconOfZone"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content" />
+	        <com.sdesimeur.android.gpsfiction.views.ZoneName4ListView
+	            android:id="@+id/textNameOfZone"
+	            style="@style/TabOneLineTitle"
+	            android:clickable="true"
+	            android:focusable="true"
+	            android:focusableInTouchMode="true"
+	            android:background="@drawable/color4zoneselected"
+	            android:layout_width="fill_parent"
+	            android:layout_height="wrap_content"
+	            android:gravity="center_vertical" />
+        </LinearLayout>
         <LinearLayout
             android:id="@+id/contentDistanceDirectionForEachZone"
             android:layout_width="fill_parent"

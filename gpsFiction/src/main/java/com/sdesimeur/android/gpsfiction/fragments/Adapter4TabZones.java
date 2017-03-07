@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import com.sdesimeur.android.gpsfiction.activities.R;
 import com.sdesimeur.android.gpsfiction.classes.GpsFictionControler;
@@ -58,6 +59,8 @@ public class Adapter4TabZones extends RecyclerView.Adapter<Adapter4TabZones.View
         holder.distanceToZoneView.setTag(id,zn);
         holder.zoneTitleView.setTag(id,zn);
         holder.zoneTitleView.setText(zn.getName());
+        holder.iconOfZone.setTag(id,zn);
+        holder.iconOfZone.setImageResource(zn.getIconId());
     }
 
     @Override
@@ -114,6 +117,7 @@ public class Adapter4TabZones extends RecyclerView.Adapter<Adapter4TabZones.View
         public ZoneName4ListView zoneTitleView = null;
         public ZoneDistance4ListView distanceToZoneView = null;
         public MiniCompass4ListView miniCompassView = null;
+        public ImageView iconOfZone = null;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -125,6 +129,8 @@ public class Adapter4TabZones extends RecyclerView.Adapter<Adapter4TabZones.View
             distanceToZoneView.setTag(id,gfc);
             miniCompassView = (MiniCompass4ListView) itemView.findViewById(R.id.miniCompassDirection);
             miniCompassView.setTag(id,gfc);
+            iconOfZone = (ImageView) itemView.findViewById(R.id.iconOfZone);
+            iconOfZone.setTag(id, gfc);
         }
     }
 }
