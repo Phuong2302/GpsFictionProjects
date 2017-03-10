@@ -1,8 +1,11 @@
-apply plugin: 'java'
+apply plugin: 'com.android.library'
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
 }
-
+android {
+    compileSdkVersion 25
+    buildToolsVersion '25.0.2'
+}
 sourceCompatibility = "1.8"
 targetCompatibility = "1.8"
