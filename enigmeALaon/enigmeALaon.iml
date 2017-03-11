@@ -106,6 +106,7 @@
     <orderEntry type="library" exported="" name="support-core-utils-25.2.0" level="project" />
     <orderEntry type="library" exported="" name="support-fragment-25.2.0" level="project" />
     <orderEntry type="library" exported="" name="animated-vector-drawable-25.2.0" level="project" />
+    <orderEntry type="library" exported="" name="gpsfictionintent-unspecified" level="project" />
     <orderEntry type="module" module-name="gpsFiction" exported="" />
     <orderEntry type="library" exported="" name="vtm-android-0.7.0-rc2-natives-armeabi-v7a" level="project" />
     <orderEntry type="library" exported="" name="vtm-android-0.7.0-rc2-natives-armeabi" level="project" />
