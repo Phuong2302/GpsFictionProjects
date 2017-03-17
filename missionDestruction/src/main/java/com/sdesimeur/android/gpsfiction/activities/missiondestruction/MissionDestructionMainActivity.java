@@ -89,14 +89,17 @@ public class MissionDestructionMainActivity extends GpsFictionActivity implement
         ZoneEnnemie ze = null;
         for (int i = 0; i < MissionDestructionMainActivity.NBZONESENNEMIES; i++) {
             zm = new ZoneMine();
+            zm.setIconId(R.mipmap.mine);
             zm.setIdAdverseNum(i);
             zm.initnew(mGpsFictionControler.getmGpsFictionData());
             zoneMultiples.add(zm);
             zce = new ZoneCibleEnnemie();
+            zce.setIconId(R.mipmap.bunker);
             zce.setIdAdverseNum(i);
             zce.initnew(mGpsFictionControler.getmGpsFictionData());
             zoneMultiples.add(zce);
             ze = new ZoneEnnemie();
+            ze.setIconId(R.mipmap.soldier);
             ze.setIdAdverseNum(i);
             ze.initnew(mGpsFictionControler.getmGpsFictionData());
             zoneMultiples.add(ze);
@@ -157,6 +160,7 @@ public class MissionDestructionMainActivity extends GpsFictionActivity implement
         nameId = R.string.zoneArme;
         radius = radius_zone_arme;
         zoneArme = new ZoneArme();
+        zoneArme.setIconId(R.mipmap.weapon);
         zoneArme.init(mGpsFictionControler.getmGpsFictionData());
         zoneArme.setId(nameId);
         createZoneAmi(zoneArme, radius);
@@ -165,6 +169,7 @@ public class MissionDestructionMainActivity extends GpsFictionActivity implement
         nameId = R.string.zoneExplosifs;
         radius = radius_zone_explosifs;
         zoneExplosifs = new ZoneExplosifs();
+        zoneExplosifs.setIconId(R.mipmap.grenade);
         zoneExplosifs.init(mGpsFictionControler.getmGpsFictionData());
         zoneExplosifs.setId(nameId);
         createZoneAmi(zoneExplosifs, radius);
@@ -173,6 +178,7 @@ public class MissionDestructionMainActivity extends GpsFictionActivity implement
         nameId = R.string.zoneMunitions;
         radius = radius_zone_munitions;
         zoneMunitions = new ZoneMunitions();
+        zoneMunitions.setIconId(R.mipmap.munitions);
         zoneMunitions.init(mGpsFictionControler.getmGpsFictionData());
         zoneMunitions.setId(nameId);
         createZoneAmi(zoneMunitions, radius);
@@ -181,6 +187,7 @@ public class MissionDestructionMainActivity extends GpsFictionActivity implement
         nameId = R.string.zoneClef;
         radius = radius_zone_clef;
         zoneClef = new ZoneClef();
+        zoneClef.setIconId(R.mipmap.key);
         zoneClef.init(mGpsFictionControler.getmGpsFictionData());
         zoneClef.setId(nameId);
         createZoneAmi(zoneClef, radius);
@@ -189,6 +196,7 @@ public class MissionDestructionMainActivity extends GpsFictionActivity implement
         ZonePrendreClef zpc;
         nameId = R.string.zonePrendreClef;
         zpc = new ZonePrendreClef();
+        zpc.setIconId(R.mipmap.key);
         zpc.init(mGpsFictionControler.getmGpsFictionData());
         zpc.setId(nameId);
         zpc.setVisible(false);
