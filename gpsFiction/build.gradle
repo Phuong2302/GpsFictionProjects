@@ -1,8 +1,7 @@
 apply plugin: 'com.android.library'
 repositories {
-    maven {
-        url "https://repo1.maven.org/maven2/"
-    }
+    //maven { url "https://repo1.maven.org/maven2/" }
+    maven { url "https://jitpack.io" }
 }
 android {
     compileSdkVersion 25
@@ -37,21 +36,21 @@ android {
 dependencies {
     compile 'com.android.support:multidex:1.0.1'
     compile 'commons-codec:commons-codec:20041127.091804'
-    compile project(':gpsfictionintent')
+    compile project(':GpsFictionIntent')
     compile 'org.slf4j:slf4j-android:1.7.22'
     compile 'net.sf.trove4j:trove4j:3.0.3'
     compile files('libs/graphhopper-core.jar')
     compile 'com.caverock:androidsvg:1.2.2-beta-1'
-    compile 'org.mapsforge:vtm-android:0.7.0-rc2:natives-armeabi'
-    compile 'org.mapsforge:vtm-android:0.7.0-rc2:natives-armeabi-v7a'
-    compile 'org.mapsforge:vtm-android:0.7.0-rc2:natives-x86'
+    compile 'org.mapsforge:vtm-android:0.7.0:natives-armeabi'
+    compile 'org.mapsforge:vtm-android:0.7.0:natives-armeabi-v7a'
+    compile 'org.mapsforge:vtm-android:0.7.0:natives-x86'
     testCompile 'junit:junit:4.12'
     compile 'com.carrotsearch:hppc:0.7.2'
-    compile 'org.mapsforge:vtm-themes:0.7.0-rc2'
-    compile 'org.mapsforge:vtm-android:0.7.0-rc2'
-    compile 'org.mapsforge:vtm:0.7.0-rc2'
-    compile 'org.mapsforge:vtm-jts:0.7.0-rc2'
-    compile 'org.mapsforge:vtm-android:0.7.0-rc2'
+    compile 'org.mapsforge:vtm-themes:0.7.0'
+    compile 'org.mapsforge:vtm-android:0.7.0'
+    compile 'org.mapsforge:vtm:0.7.0'
+    compile 'org.mapsforge:vtm-jts:0.7.0'
+    compile 'org.mapsforge:vtm-android:0.7.0'
     compile 'com.android.support:recyclerview-v7:25.2.0'
     compile 'com.android.support:gridlayout-v7:25.2.0'
     compile 'com.android.support:support-v4:25.2.0'

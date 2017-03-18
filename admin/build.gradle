@@ -1,8 +1,7 @@
 apply plugin: 'com.android.application'
 repositories {
-    maven {
-        url "https://repo1.maven.org/maven2/"
-    }
+    //maven { url "https://repo1.maven.org/maven2/" }
+    maven { url 'https://jitpack.io' }
 }
 
 android {
@@ -36,7 +35,7 @@ android {
 
 dependencies {
     compile 'com.android.support:multidex:1.0.1'
-    compile project(':gpsfictionintent')
+    compile project(':GpsFictionIntent')
     compile 'commons-codec:commons-codec:20041127.091804'
     compile 'com.android.support:design:25.1.0'
     //compile 'com.android.support:multidex:1.0.1'
