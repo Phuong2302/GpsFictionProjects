@@ -39,7 +39,6 @@ dependencies {
     compile project(':GpsFictionIntent')
     compile 'org.slf4j:slf4j-android:1.7.22'
     compile 'net.sf.trove4j:trove4j:3.0.3'
-    compile files('libs/graphhopper-core.jar')
     compile 'com.caverock:androidsvg:1.2.2-beta-1'
     compile 'org.mapsforge:vtm-android:0.7.0:natives-armeabi'
     compile 'org.mapsforge:vtm-android:0.7.0:natives-armeabi-v7a'
@@ -51,8 +50,9 @@ dependencies {
     compile 'org.mapsforge:vtm:0.7.0'
     compile 'org.mapsforge:vtm-jts:0.7.0'
     compile 'org.mapsforge:vtm-android:0.7.0'
-    compile 'com.android.support:recyclerview-v7:25.2.0'
-    compile 'com.android.support:gridlayout-v7:25.2.0'
-    compile 'com.android.support:support-v4:25.2.0'
-    compile 'com.android.support:design:25.2.0'
+    compile 'com.android.support:recyclerview-v7:26.0.0-alpha1'
+    compile 'com.android.support:gridlayout-v7:26.0.0-alpha1'
+    compile 'com.android.support:support-v4:26.0.0-alpha1'
+    compile 'com.android.support:design:26.0.0-alpha1'
+    compile files('libs/graphhopper-core-0.10-SNAPSHOT.jar')
 }

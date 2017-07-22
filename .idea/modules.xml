@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/GpsFictionIntent/GpsFictionIntent.iml" filepath="$PROJECT_DIR$/GpsFictionIntent/GpsFictionIntent.iml" />
       <module fileurl="file://$PROJECT_DIR$/GpsFictionProjects.iml" filepath="$PROJECT_DIR$/GpsFictionProjects.iml" />
       <module fileurl="file://$PROJECT_DIR$/admin/admin.iml" filepath="$PROJECT_DIR$/admin/admin.iml" />
       <module fileurl="file://$PROJECT_DIR$/enigmeALaon/enigmeALaon.iml" filepath="$PROJECT_DIR$/enigmeALaon/enigmeALaon.iml" />
