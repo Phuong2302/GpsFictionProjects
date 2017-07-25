@@ -5,12 +5,12 @@ repositories {
 }
 
 android {
-    compileSdkVersion 25
+    compileSdkVersion 26
     buildToolsVersion '25.0.2'
     defaultConfig {
         applicationId "com.sdesimeur.android.gpsfiction.forall.player"
         minSdkVersion 17
-        targetSdkVersion 25
+        targetSdkVersion 26
         versionCode 1
         versionName "1.0"
         jackOptions {
@@ -35,11 +35,11 @@ dependencies {
     compile 'com.android.support:multidex:1.0.1'
     compile project(':GpsFictionIntent')
     compile 'commons-codec:commons-codec:20041127.091804'
-    compile 'com.android.support:design:25.1.0'
-    compile 'com.android.support:recyclerview-v7:25.1.0'
-    compile 'com.android.support:gridlayout-v7:25.1.0'
+    compile 'com.android.support:recyclerview-v7:26.0.0-alpha1'
+    compile 'com.android.support:gridlayout-v7:26.0.0-alpha1'
     //compile project(':gpsFiction')
     //compile 'com.android.support:multidex:1.0.1'
-    compile 'com.android.support:appcompat-v7:25.1.0'
+    compile 'com.android.support:appcompat-v7:26.0.0-alpha1'
+    compile 'com.android.support:design:26.0.0-alpha1'
 }
 

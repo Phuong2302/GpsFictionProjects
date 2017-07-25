@@ -4,7 +4,7 @@ repositories {
     maven { url "https://jitpack.io" }
 }
 android {
-    compileSdkVersion 25
+    compileSdkVersion 26
     buildToolsVersion '25.0.2'
 //    dexOptions {
 //        maxProcessCount 4 // this is the default value
@@ -14,7 +14,7 @@ android {
 
     defaultConfig {
         minSdkVersion 17
-        targetSdkVersion 25
+        targetSdkVersion 26
         multiDexEnabled true
         /*
         jackOptions {

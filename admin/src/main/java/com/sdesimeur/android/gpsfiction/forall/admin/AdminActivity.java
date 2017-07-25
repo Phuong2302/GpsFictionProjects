@@ -16,7 +16,6 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.speech.tts.TextToSpeech;
-import android.support.multidex.MultiDex;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -52,7 +51,7 @@ public class AdminActivity extends Activity {
     public static final String HOMEDEFAULTACTIVITY = "loadHomeDefaultActivityName";
     public static final String PASSWORD = "com.sdesimeur.android.gpsfiction.forall.admin.password";
     public static final String HOMEDEFAULTPACKAGE = "loadHomeDefaultPackageName";
-    public static final String ALLREADYSTARTED = "allreadyStarted";
+    public static final String PLAYERAPPALLREADYSTARTED = "playerAppAllreadyStarted";
     private static final String PACKAGE4GPSFICTIONPLAYERACTIVITY = "com.sdesimeur.android.gpsfiction.forall.player";
     public static final String ADMINACTIVITYCLASSNAME = AdminActivity.class.getName();
     public static final String HOMEACTIVITYCLASSNAME = HomeActivity.class.getName();
@@ -99,7 +98,7 @@ public class AdminActivity extends Activity {
     public void changeHomeActivityInPref(View v) {
         final HashMap<String, ActivityInfo> string2activityinfo = new HashMap<>();
         ArrayList<String> homeActivities = new ArrayList<>();
-        ArrayAdapter adapter = new ArrayAdapter(this, R.layout.spinnerhomeactivityselect, homeActivities);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.spinnerhomeactivityselect, homeActivities);
         Intent intent = new Intent(Intent.ACTION_MAIN);
         intent.addCategory(Intent.CATEGORY_HOME);
         PackageManager pm = getPackageManager();
@@ -107,11 +106,11 @@ public class AdminActivity extends Activity {
         Iterator<ResolveInfo> it = list.iterator();
         while (it.hasNext()) {
             ActivityInfo act = it.next().activityInfo;
-            if (!act.name.equals(HOMEACTIVITYCLASSNAME)) {
+            //if (!act.name.equals(HOMEACTIVITYCLASSNAME)) {
                 String st = (String) act.loadLabel(pm);
                 adapter.add(st);
                 string2activityinfo.put(st, act);
-            }
+            //}
         }
         LayoutInflater inflater = getLayoutInflater();
         final Spinner spinner = (Spinner) inflater.inflate(R.layout.homeactivitychooser, null);
@@ -160,6 +159,7 @@ public class AdminActivity extends Activity {
     }
 
     private boolean isMyAppLauncherDefault() {
+        Boolean test = false;
         final IntentFilter filter = new IntentFilter(Intent.ACTION_MAIN);
         filter.addCategory(Intent.CATEGORY_HOME);
         List<IntentFilter> filters = new ArrayList<>();
@@ -167,12 +167,23 @@ public class AdminActivity extends Activity {
         List<ComponentName> activities = new ArrayList<ComponentName>();
         final PackageManager packageManager = (PackageManager) getPackageManager();
         packageManager.getPreferredActivities(filters, activities, null);
+        //Intent[] others = new Intent[activities.size()];
+        //int i = 0;
         for (ComponentName activity : activities) {
+            //Intent other = new Intent(Intent.ACTION_MAIN);
+            //other.addCategory(Intent.CATEGORY_HOME);
+            //other.addCategory(Intent.CATEGORY_DEFAULT);
+            //other.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
+            //others[i]=other;
+            //startActivity(other);
+            //i++;
             if (activity.getClassName().equals(HOMEACTIVITYCLASSNAME)) {
-                return true;
+                test = true;
             }
         }
-        return false;
+        //startActivities(others);
+
+        return test;
     }
 
     @Override
@@ -182,8 +193,8 @@ public class AdminActivity extends Activity {
         ed.putString(HOMEDEFAULTPACKAGE, getPackageName());
         ed.putString(HOMEDEFAULTACTIVITY, ADMINACTIVITYCLASSNAME);
         ed.commit();
-        Boolean temp = settings.getBoolean(ALLREADYSTARTED, false);
-        if (temp) {
+        Boolean temp = settings.getBoolean(PLAYERAPPALLREADYSTARTED, false);
+        if ( temp ) {
             AlertDialog.Builder dialogBox = new AlertDialog.Builder(this);
             dialogBox.setTitle(R.string.askpasstitlereturn);
             dialogBox.setMessage(R.string.askpassmessagereturn);
@@ -199,7 +210,7 @@ public class AdminActivity extends Activity {
                     String passsha = new String(Hex.encodeHex(DigestUtils.sha(input.getText().toString())));
                     if (passsha.equals(passsave)) {
                         SharedPreferences.Editor ed = settings.edit();
-                        ed.putBoolean(AdminActivity.ALLREADYSTARTED, false);
+                        ed.putBoolean(AdminActivity.PLAYERAPPALLREADYSTARTED, false);
                         ed.commit();
                     } else {
                         Toast.makeText(AdminActivity.this, R.string.passwd_different, Toast.LENGTH_LONG).show();
@@ -220,7 +231,7 @@ public class AdminActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        MultiDex.install(this);
+      //  MultiDex.install(this);
         Intent checkIntent = new Intent();
         checkIntent.setAction(TextToSpeech.Engine.ACTION_CHECK_TTS_DATA);
         startActivityForResult(checkIntent, 0x01);
@@ -259,7 +270,7 @@ public class AdminActivity extends Activity {
             }
         }
         Collections.sort(langs, String.CASE_INSENSITIVE_ORDER);
-        ArrayAdapter adapter = new ArrayAdapter(this, R.layout.spinnerlanguageselect, langs);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.spinnerlanguageselect, langs);
         languageLocaleSpinner.setAdapter(adapter);
         languageLocaleSpinner.setSelection(i);
     }
@@ -314,7 +325,7 @@ public class AdminActivity extends Activity {
                 String passsave = settings.getString(PASSWORD, "&é(-è_çà)=");
                 String passsha = new String(Hex.encodeHex(DigestUtils.sha(input.getText().toString())));
                 if (passsha.equals(passsave)) {
-                    ed.putBoolean(ALLREADYSTARTED, true);
+                    ed.putBoolean(PLAYERAPPALLREADYSTARTED, true);
                     ed.commit();
                     startGamesActivity(false);
                 } else {

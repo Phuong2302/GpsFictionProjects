@@ -167,7 +167,7 @@ public class SmoothCanvas extends Canvas {
     public boolean clipPath(Path path) {
         return this.delegate.clipPath(path);
     }
-
+/*
     @SuppressWarnings("deprecation")
     @Override
     public boolean clipRegion(Region region, Region.Op op) {
@@ -179,7 +179,7 @@ public class SmoothCanvas extends Canvas {
     public boolean clipRegion(Region region) {
         return this.delegate.clipRegion(region);
     }
-
+*/
     @Override
     public DrawFilter getDrawFilter() {
         return this.delegate.getDrawFilter();

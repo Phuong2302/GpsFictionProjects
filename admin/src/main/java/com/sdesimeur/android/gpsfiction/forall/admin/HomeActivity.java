@@ -14,7 +14,8 @@ public class HomeActivity extends Activity {
         super.onCreate(savedInstanceState);
     }
     @Override
-    public void onResume () {
+    public void onStart () {
+        super.onStart();
         /*
         Intent intent = new Intent(Intent.ACTION_MAIN);
         intent.addCategory(Intent.CATEGORY_HOME);
@@ -28,12 +29,13 @@ public class HomeActivity extends Activity {
         String homeDefaultPackageName = settings.getString(AdminActivity.HOMEDEFAULTPACKAGE,packageName);
         String homeDefaultActivityName = settings.getString(AdminActivity.HOMEDEFAULTACTIVITY,name);
         Intent homeIntent = new Intent(Intent.ACTION_MAIN);
+        homeIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);
         //homeIntent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-        homeIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        homeIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        //homeIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        //homeIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         homeIntent.setComponent(new ComponentName(homeDefaultPackageName,homeDefaultActivityName));
         startActivity(homeIntent);
-        super.onResume();
+        this.finish();
     }
 
 }
