@@ -14,8 +14,7 @@ public class HomeActivity extends Activity {
         super.onCreate(savedInstanceState);
     }
     @Override
-    public void onStart () {
-        super.onStart();
+    public void onResume () {
         /*
         Intent intent = new Intent(Intent.ACTION_MAIN);
         intent.addCategory(Intent.CATEGORY_HOME);
@@ -36,6 +35,7 @@ public class HomeActivity extends Activity {
         homeIntent.setComponent(new ComponentName(homeDefaultPackageName,homeDefaultActivityName));
         startActivity(homeIntent);
         this.finish();
+        super.onResume();
     }
 
 }
