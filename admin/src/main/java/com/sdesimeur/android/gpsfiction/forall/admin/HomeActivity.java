@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.view.KeyEvent;
 
 public class HomeActivity extends Activity {
     @Override
@@ -14,7 +15,7 @@ public class HomeActivity extends Activity {
         super.onCreate(savedInstanceState);
     }
     @Override
-    public void onResume () {
+    public void onStart () {
         /*
         Intent intent = new Intent(Intent.ACTION_MAIN);
         intent.addCategory(Intent.CATEGORY_HOME);
@@ -35,7 +36,24 @@ public class HomeActivity extends Activity {
         homeIntent.setComponent(new ComponentName(homeDefaultPackageName,homeDefaultActivityName));
         startActivity(homeIntent);
         this.finish();
-        super.onResume();
+        super.onStart();
+    }
+    @Override
+    public void onBackPressed() {
+    }
+    @Override
+    public boolean onKeyDown (int keyCode, KeyEvent event) {
+        boolean handled = super.onKeyDown(keyCode,event);
+        if ((keyCode==KeyEvent.KEYCODE_HOME) && (event.isLongPress())) {
+            return true;
+        }
+        if ((keyCode==KeyEvent.KEYCODE_MENU) && (event.isLongPress())) {
+            return true;
+        }
+        if (keyCode==KeyEvent.KEYCODE_BACK) {
+            return true;
+        }
+        return handled;
     }
 
 }

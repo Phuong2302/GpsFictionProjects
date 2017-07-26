@@ -18,6 +18,7 @@ import android.provider.Settings;
 import android.speech.tts.TextToSpeech;
 import android.text.InputType;
 import android.text.TextUtils;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
@@ -361,6 +362,25 @@ public class AdminActivity extends Activity {
     @Override
     public void onStop() {
         super.onStop();
+    }
+    @Override
+    public void onBackPressed() {
+    }
+    @Override
+    public boolean onKeyDown (int keyCode, KeyEvent event) {
+        boolean handled = super.onKeyDown(keyCode,event);
+        if (event.isLongPress()) {
+            if (keyCode == KeyEvent.KEYCODE_HOME) {
+                return true;
+            }
+            if (keyCode == KeyEvent.KEYCODE_MENU) {
+                return true;
+            }
+        }
+        if (keyCode==KeyEvent.KEYCODE_BACK) {
+            return true;
+        }
+        return handled;
     }
 }
 
