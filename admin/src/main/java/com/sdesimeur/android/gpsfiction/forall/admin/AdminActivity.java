@@ -367,17 +367,15 @@ public class AdminActivity extends Activity {
     public void onBackPressed() {
     }
     @Override
-    public boolean onKeyDown (int keyCode, KeyEvent event) {
-        boolean handled = super.onKeyDown(keyCode,event);
-        if (event.isLongPress()) {
-            if (keyCode == KeyEvent.KEYCODE_HOME) {
+    public boolean dispatchKeyEvent ( KeyEvent event) {
+        boolean handled = super.dispatchKeyEvent(event);
+            if (event.getKeyCode() == KeyEvent.KEYCODE_HOME) {
                 return true;
             }
-            if (keyCode == KeyEvent.KEYCODE_MENU) {
+            if (event.getKeyCode() == KeyEvent.KEYCODE_MENU) {
                 return true;
             }
-        }
-        if (keyCode==KeyEvent.KEYCODE_BACK) {
+        if (event.getKeyCode()==KeyEvent.KEYCODE_BACK) {
             return true;
         }
         return handled;

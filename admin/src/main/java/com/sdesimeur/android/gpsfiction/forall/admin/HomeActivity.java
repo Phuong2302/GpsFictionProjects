@@ -15,7 +15,8 @@ public class HomeActivity extends Activity {
         super.onCreate(savedInstanceState);
     }
     @Override
-    public void onStart () {
+    public void onResume () {
+        super.onResume();
         /*
         Intent intent = new Intent(Intent.ACTION_MAIN);
         intent.addCategory(Intent.CATEGORY_HOME);
@@ -35,22 +36,21 @@ public class HomeActivity extends Activity {
         //homeIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         homeIntent.setComponent(new ComponentName(homeDefaultPackageName,homeDefaultActivityName));
         startActivity(homeIntent);
-        this.finish();
-        super.onStart();
+        //this.finish();
     }
     @Override
     public void onBackPressed() {
     }
     @Override
-    public boolean onKeyDown (int keyCode, KeyEvent event) {
-        boolean handled = super.onKeyDown(keyCode,event);
-        if ((keyCode==KeyEvent.KEYCODE_HOME) && (event.isLongPress())) {
-            return true;
-        }
-        if ((keyCode==KeyEvent.KEYCODE_MENU) && (event.isLongPress())) {
-            return true;
-        }
-        if (keyCode==KeyEvent.KEYCODE_BACK) {
+    public boolean dispatchKeyEvent ( KeyEvent event) {
+        boolean handled = super.dispatchKeyEvent(event);
+            if (event.getKeyCode() == KeyEvent.KEYCODE_HOME) {
+                return true;
+            }
+            if (event.getKeyCode() == KeyEvent.KEYCODE_MENU) {
+                return true;
+            }
+        if (event.getKeyCode()==KeyEvent.KEYCODE_BACK) {
             return true;
         }
         return handled;

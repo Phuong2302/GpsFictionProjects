@@ -19,8 +19,9 @@
             android:label="@string/appname"
             android:configChanges="locale"
             android:noHistory="true"
-            android:launchMode="singleTask"
             android:parentActivityName=".HomeActivity"
+            android:launchMode="singleTask"
+            android:lockTaskMode="always"
         >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -36,7 +37,7 @@
             android:label="@string/app_name_home"
             android:noHistory="true"
             android:clearTaskOnLaunch="true"
-            android:launchMode="singleTop"
+            android:launchMode="singleTask"
             android:parentActivityName=".HomeActivity"
             android:stateNotNeeded="true"
         >
