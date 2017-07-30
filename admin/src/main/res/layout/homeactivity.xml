@@ -96,7 +96,7 @@ android:layout_width="match_parent"
             android:layout_margin="@dimen/buttonsPadding"
             android:textSize="@dimen/adminTextSize"
             android:background="@drawable/buttonstate"
-            android:onClick="changeHomeActivityInPref"
+            android:onClick="changeHomeActivity"
             />
 
         <Button

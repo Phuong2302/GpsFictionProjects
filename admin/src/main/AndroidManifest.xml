@@ -14,27 +14,22 @@
         android:name="android.support.multidex.MultiDexApplication"
         -->
         <activity
-            android:name=".AdminActivity"
+            android:label="@string/app_name_home"
+            android:name=".HomeActivity"
             android:alwaysRetainTaskState="true"
-            android:label="@string/appname"
             android:configChanges="locale"
             android:noHistory="true"
-            android:parentActivityName=".HomeActivity"
             android:launchMode="singleTask"
             android:lockTaskMode="always"
         >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.HOME" />
                 <category android:name="android.intent.category.DEFAULT" />
-                <!--
-            <category android:name="android.intent.category.HOME" />
-            <category android:name="android.intent.category.MONKEY" />
-                -->
             </intent-filter>
         </activity>
-        <activity android:name=".HomeActivity"
-            android:label="@string/app_name_home"
+        <activity android:name=".ChangeHomeActivity"
+            android:label="@string/appname"
             android:noHistory="true"
             android:clearTaskOnLaunch="true"
             android:launchMode="singleTask"
@@ -46,11 +41,7 @@
             -->
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.HOME" />
-                <!--
-                <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.LAUNCHER" />
-                -->
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
 

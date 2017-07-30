@@ -9,7 +9,7 @@ android {
     buildToolsVersion '25.0.2'
     defaultConfig {
         applicationId "com.sdesimeur.android.gpsfiction.forall.player"
-        minSdkVersion 17
+        minSdkVersion 19
         targetSdkVersion 26
         versionCode 1
         versionName "1.0"

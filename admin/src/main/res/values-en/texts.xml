@@ -20,7 +20,7 @@
     <string name="changeToMyHomeActivity">Please choose the application \"&apphomename;\" and validate by \"always\"</string>
     <string name="dialoghomeactivitychoosertitle">Application at startup</string>
     <string name="dialoghomeactivitychoosermessage">Please select your preferred launcher</string>
-    <string name="changehomeactivity">Change your launcher at startup</string>
+    <string name="changehomeactivity">Change your launcher</string>
     <string name="askchangepasstitle">Change password</string>
     <string name="askchangepassmessage">Please enter the password</string>
     <string name="nottsengine">No TextToSpeech engine available</string>

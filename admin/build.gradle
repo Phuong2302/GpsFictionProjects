@@ -9,7 +9,7 @@ android {
     buildToolsVersion "25.0.2"
     defaultConfig {
         applicationId "com.sdesimeur.android.gpsfiction.forall.admin"
-        minSdkVersion 17
+        minSdkVersion 19
         targetSdkVersion 26
         versionCode 1
         versionName "1.0"
@@ -34,7 +34,7 @@ android {
 }
 
 dependencies {
-  //  compile 'com.android.support:multidex:1.0.1'
+    //  compile 'com.android.support:multidex:1.0.1'
     compile project(':GpsFictionIntent')
     compile 'commons-codec:commons-codec:20041127.091804'
     compile 'com.android.support:appcompat-v7:26.0.0-alpha1'
