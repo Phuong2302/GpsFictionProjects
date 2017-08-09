@@ -148,9 +148,25 @@ public class HomeActivity extends Activity {
     }
     @Override
     protected void onResume() {
-        String activityName = this.getIntent().getStringExtra(HomeActivity.HOMEDEFAULTACTIVITY);
-        String packageName = this.getIntent().getStringExtra(HomeActivity.HOMEDEFAULTPACKAGE);
-        if ( activityName!=null ) if ((!activityName.isEmpty()) && (!activityName.contains(HomeActivity.class.getName()))) {
+        String activityName = null;
+        String packageName = null;
+        if (getIntent().hasExtra(HomeActivity.HOMEDEFAULTACTIVITY)) {
+            activityName = this.getIntent().getStringExtra(HomeActivity.HOMEDEFAULTACTIVITY);
+            packageName = this.getIntent().getStringExtra(HomeActivity.HOMEDEFAULTPACKAGE);
+        } else {
+            SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
+            activityName = settings.getString(HomeActivity.HOMEDEFAULTACTIVITY,null);
+            packageName = settings.getString(HomeActivity.HOMEDEFAULTPACKAGE,null);
+            if ( activityName == null ) {
+                activityName = HomeActivity.class.getName();
+                packageName = getPackageName();
+                SharedPreferences.Editor editor = settings.edit();
+                editor.putString(HomeActivity.HOMEDEFAULTACTIVITY,activityName);
+                editor.putString(HomeActivity.HOMEDEFAULTPACKAGE,packageName);
+                editor.commit();
+            }
+        }
+        if (!activityName.contains(HomeActivity.class.getName())) {
             Intent homeIntent = new Intent(Intent.ACTION_MAIN);
             homeIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);
             homeIntent.setComponent(new ComponentName(packageName,activityName));

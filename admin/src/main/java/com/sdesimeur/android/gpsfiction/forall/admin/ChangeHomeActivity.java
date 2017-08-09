@@ -49,7 +49,7 @@ public class ChangeHomeActivity extends Activity {
         String homePackageName = resolveInfo.applicationInfo.packageName;
         String homeActivityName = resolveInfo.name;
         String packageName = getPackageName();
-        String activityName = HomeActivity.class.getName();;
+        String activityName = HomeActivity.class.getName();
         Intent homeIntent = new Intent(Intent.ACTION_MAIN);
         homeIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);
         homeIntent.setComponent(new ComponentName(packageName,activityName));
