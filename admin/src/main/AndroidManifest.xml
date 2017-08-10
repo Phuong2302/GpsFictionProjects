@@ -17,6 +17,7 @@
             android:label="@string/app_name_home"
             android:name=".HomeActivity"
             android:alwaysRetainTaskState="true"
+            android:clearTaskOnLaunch="true"
             android:configChanges="locale"
             android:noHistory="true"
             android:launchMode="singleTask"
