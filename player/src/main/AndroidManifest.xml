@@ -2,6 +2,7 @@
     package="com.sdesimeur.android.gpsfiction.forall.player"
     xmlns:tools="http://schemas.android.com/tools"
 >
+    <uses-permission android:name="android.permission.KILL_BACKGROUND_PROCESSES"/>
 
     <application
         tools:replace="android:label,android:icon,android:theme"

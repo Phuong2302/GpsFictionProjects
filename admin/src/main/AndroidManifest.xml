@@ -2,7 +2,10 @@
     package="com.sdesimeur.android.gpsfiction.forall.admin"
     xmlns:tools="http://schemas.android.com/tools"
     android:installLocation="internalOnly"
->
+    >
+    <uses-permission android:name="android.permission.KILL_BACKGROUND_PROCESSES"/>
+    <uses-permission android:name="android.permission.GET_TASKS" />
+    <uses-permission android:name="android.permission.REORDER_TASKS" />
 
     <application
         tools:replace="android:label,android:icon,android:theme"

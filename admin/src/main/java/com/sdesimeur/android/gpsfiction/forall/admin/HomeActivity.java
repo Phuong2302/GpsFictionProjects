@@ -139,7 +139,6 @@ public class HomeActivity extends Activity {
 
         return test;
     }
-
     public void changeHomeActivity(View view) {
         Intent changeHomeIntent = new Intent(Intent.ACTION_MAIN);
         //changeHomeIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);
