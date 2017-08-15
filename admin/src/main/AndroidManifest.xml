@@ -3,11 +3,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:installLocation="internalOnly"
     >
-    <uses-permission android:name="android.permission.KILL_BACKGROUND_PROCESSES"/>
-    <uses-permission android:name="android.permission.GET_TASKS" />
-    <uses-permission android:name="android.permission.REORDER_TASKS" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.GET_TASKS"/>
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
 
     <application
+        android:name=".AppContext"
         tools:replace="android:label,android:icon,android:theme"
         android:label="@string/appname"
         android:icon="@mipmap/ic_launcher"
@@ -50,6 +52,12 @@
             </intent-filter>
 
         </activity>
+        <receiver android:name=".BootReceiver">
+            <intent-filter >
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+            </intent-filter>
+        </receiver>
+        <service android:name=".KioskService" android:exported="false"/>
 
     </application>
 

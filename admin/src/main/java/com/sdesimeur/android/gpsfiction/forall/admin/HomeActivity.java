@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.PixelFormat;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -16,9 +17,11 @@ import android.provider.Settings;
 import android.speech.tts.TextToSpeech;
 import android.text.InputType;
 import android.text.TextUtils;
+import android.view.Gravity;
 import android.view.KeyEvent;
-import android.view.SearchEvent;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
@@ -32,6 +35,7 @@ import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.codec.digest.DigestUtils;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -226,9 +230,11 @@ public class HomeActivity extends Activity {
         testLocation();
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_LOW_PROFILE);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD);
         super.onCreate(savedInstanceState);
         // mContentView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN|View.SYSTEM_UI_FLAG_LOW_PROFILE|View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
         setContentView(R.layout.homeactivity);
+        preventStatusBarExpansion(this);
         languageLocaleSpinner = (Spinner) findViewById(R.id.LanguageListSpinner);
         languageLocaleSpinner.setFocusable(true);
         languageLocaleSpinner.setFocusableInTouchMode(true);
@@ -352,26 +358,64 @@ public class HomeActivity extends Activity {
     public void onBackPressed() {
     }
     @Override
-    public boolean dispatchKeyEvent ( KeyEvent event) {
-        boolean handled = super.dispatchKeyEvent(event);
-            if (event.getKeyCode() == KeyEvent.KEYCODE_HOME) {
-                return true;
-            }
-            //if (event.getKeyCode() == KeyEvent.KEYCODE_MENU) {
-            //    return true;
-            //}
-        if (event.getKeyCode()==KeyEvent.KEYCODE_BACK) {
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        if(!hasFocus) {
+            // Close every kind of system dialog
+            Intent closeDialog = new Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS);
+            sendBroadcast(closeDialog);
+        }
+    }
+
+    private final List blockedKeys = new ArrayList(Arrays.asList(KeyEvent.KEYCODE_VOLUME_DOWN, KeyEvent.KEYCODE_VOLUME_UP));
+    @Override
+    public boolean dispatchKeyEvent(KeyEvent event) {
+        if (blockedKeys.contains(event.getKeyCode())) {
+            return true;
+        } else {
+            return super.dispatchKeyEvent(event);
+        }
+    }
+    public static void preventStatusBarExpansion(Context context) {
+        WindowManager manager = ((WindowManager) context.getApplicationContext().getSystemService(Context.WINDOW_SERVICE));
+
+        WindowManager.LayoutParams localLayoutParams = new WindowManager.LayoutParams();
+        localLayoutParams.type = WindowManager.LayoutParams.TYPE_SYSTEM_ERROR;
+        localLayoutParams.gravity = Gravity.TOP;
+        localLayoutParams.flags = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE|WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL|WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN;
+
+        localLayoutParams.width = WindowManager.LayoutParams.MATCH_PARENT;
+
+        int resId = context.getResources().getIdentifier("status_bar_height", "dimen", "android");
+        int result = 0;
+        if (resId > 0) {
+            result = context.getResources().getDimensionPixelSize(resId);
+        } else {
+            // Use Fallback size:
+            result = 60; // 60px Fallback
+        }
+
+        localLayoutParams.height = result;
+        localLayoutParams.format = PixelFormat.TRANSPARENT;
+
+        CustomViewGroup view = new CustomViewGroup(context);
+        manager.addView(view, localLayoutParams);
+    }
+
+    public static class CustomViewGroup extends ViewGroup {
+        public CustomViewGroup(Context context) {
+            super(context);
+        }
+
+        @Override
+        protected void onLayout(boolean changed, int l, int t, int r, int b) {
+        }
+
+        @Override
+        public boolean onInterceptTouchEvent(MotionEvent ev) {
+            // Intercepted touch!
             return true;
         }
-        return handled;
-    }
-    @Override
-    public boolean onSearchRequested () {
-        return true;
-    }
-    @Override
-    public boolean onSearchRequested (SearchEvent searchEvent) {
-        return true;
     }
 }
 
