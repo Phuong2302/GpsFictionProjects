@@ -50,11 +50,13 @@ import java.util.Set;
  * status bar and navigation/system bar) with user interaction.
  */
 public class HomeActivity extends Activity {
+    private static WindowManager.LayoutParams preventStatusBarExpansionLayoutParams;
     public static final String HOMEDEFAULTACTIVITY = "loadHomeDefaultActivityName";
     public static final String HOMEDEFAULTPACKAGE = "loadHomeDefaultPackageName";
     public static final String PASSWORD = "com.sdesimeur.android.gpsfiction.forall.admin.password";
     public static final String PLAYERAPPALLREADYSTARTED = "playerAppAllreadyStarted";
     private static final String PACKAGE4GPSFICTIONPLAYERACTIVITY = "com.sdesimeur.android.gpsfiction.forall.player";
+    private static CustomViewGroup preventStatusBarExpansionview;
     private HashMap<String, Locale> string2locale = new HashMap<>();
     private Spinner languageLocaleSpinner;
     private Switch sw;
@@ -151,6 +153,7 @@ public class HomeActivity extends Activity {
     }
     @Override
     protected void onResume() {
+        WindowManager manager = ((WindowManager) this.getApplicationContext().getSystemService(Context.WINDOW_SERVICE));
         String activityName = null;
         String packageName = null;
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
@@ -170,12 +173,14 @@ public class HomeActivity extends Activity {
         editor.putString(HomeActivity.HOMEDEFAULTPACKAGE,packageName);
         editor.commit();
         if (!activityName.contains(HomeActivity.class.getName())) {
+            manager.removeView(preventStatusBarExpansionview);
             Intent homeIntent = new Intent(Intent.ACTION_MAIN);
             homeIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);
             homeIntent.setComponent(new ComponentName(packageName,activityName));
             startActivity(homeIntent);
             this.finish();
         } else {
+            manager.addView(preventStatusBarExpansionview, preventStatusBarExpansionLayoutParams);
         }
         super.onResume();
     }
@@ -377,14 +382,12 @@ public class HomeActivity extends Activity {
         }
     }
     public static void preventStatusBarExpansion(Context context) {
-        WindowManager manager = ((WindowManager) context.getApplicationContext().getSystemService(Context.WINDOW_SERVICE));
+        preventStatusBarExpansionLayoutParams = new WindowManager.LayoutParams();
+        preventStatusBarExpansionLayoutParams.type = WindowManager.LayoutParams.TYPE_SYSTEM_ERROR;
+        preventStatusBarExpansionLayoutParams.gravity = Gravity.TOP;
+        preventStatusBarExpansionLayoutParams.flags = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE|WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL|WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN;
 
-        WindowManager.LayoutParams localLayoutParams = new WindowManager.LayoutParams();
-        localLayoutParams.type = WindowManager.LayoutParams.TYPE_SYSTEM_ERROR;
-        localLayoutParams.gravity = Gravity.TOP;
-        localLayoutParams.flags = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE|WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL|WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN;
-
-        localLayoutParams.width = WindowManager.LayoutParams.MATCH_PARENT;
+        preventStatusBarExpansionLayoutParams.width = WindowManager.LayoutParams.MATCH_PARENT;
 
         int resId = context.getResources().getIdentifier("status_bar_height", "dimen", "android");
         int result = 0;
@@ -395,11 +398,10 @@ public class HomeActivity extends Activity {
             result = 60; // 60px Fallback
         }
 
-        localLayoutParams.height = result;
-        localLayoutParams.format = PixelFormat.TRANSPARENT;
+        preventStatusBarExpansionLayoutParams.height = result;
+        preventStatusBarExpansionLayoutParams.format = PixelFormat.TRANSPARENT;
 
-        CustomViewGroup view = new CustomViewGroup(context);
-        manager.addView(view, localLayoutParams);
+        preventStatusBarExpansionview = new CustomViewGroup(context);
     }
 
     public static class CustomViewGroup extends ViewGroup {

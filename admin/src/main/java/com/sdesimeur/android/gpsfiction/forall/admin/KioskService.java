@@ -86,7 +86,7 @@ public class KioskService extends Service {
 
     public boolean isKioskModeActive(final Context context) {
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
-        return sp.getBoolean(PREF_KIOSK_MODE, false);
+        return sp.getString(HomeActivity.HOMEDEFAULTPACKAGE, null).equals(getPackageName());
     }
 
     @Override
