@@ -74,7 +74,7 @@ public class KioskService extends Service {
 
         List<ActivityManager.RunningTaskInfo> taskInfo = am.getRunningTasks(1);
         ComponentName componentInfo = taskInfo.get(0).topActivity;
-        return (!ctx.getApplicationContext().getPackageName().equals(componentInfo.getPackageName()));
+        return (!componentInfo.getPackageName().contains("com.sdesimeur.android.gpsfiction"));
     }
 
     private void restoreApp() {
