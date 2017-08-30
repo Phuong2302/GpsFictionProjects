@@ -207,10 +207,6 @@ public class GpsFictionActivity extends Activity {
         //this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         MultiDex.install(this);
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
-        if (getIntent().getAction().equals(GpsFictionIntent.RESETGAMES)) {
-            resetAllData();
-            finish();
-        }
         String loc = getIntent().getStringExtra(GpsFictionIntent.LOCALE);
         if (loc != null) {
             SharedPreferences.Editor ed = settings.edit();
@@ -284,10 +280,9 @@ public class GpsFictionActivity extends Activity {
                             Toast.makeText(getApplicationContext(),R.string.resetThisGame,Toast.LENGTH_LONG).show();
                             toSave = false;
                             Intent myIntent = getIntent();
-                            myIntent.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                            myIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                            finish();
+                            myIntent.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION|Intent.FLAG_ACTIVITY_CLEAR_TOP);
                             startActivity(myIntent);
+                            finish();
                         }
                     });
                     dialogBox.setNegativeButton(R.string.dialogButtonNo, null);
@@ -349,6 +344,10 @@ public class GpsFictionActivity extends Activity {
 
     @Override
     public void onResume() {
+        if (getIntent().getAction().equals(GpsFictionIntent.RESETGAMES)) {
+            resetAllData();
+            finish();
+        }
         super.onResume();
     }
 

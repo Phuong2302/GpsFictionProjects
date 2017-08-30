@@ -1,4 +1,4 @@
-package com.sdesimeur.android.gpsfiction.forall.admin;
+package com.sdesimeur.android.gpsfiction.forall;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -18,7 +18,6 @@ import android.speech.tts.TextToSpeech;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.view.Gravity;
-import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,7 +34,6 @@ import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.codec.digest.DigestUtils;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -83,8 +81,8 @@ public class HomeActivity extends Activity {
         if (!isLocationEnabled(this)) {
             // notify user
             AlertDialog.Builder dialog = new AlertDialog.Builder(this);
-            dialog.setMessage(getResources().getString(R.string.gps_network_not_enabled));
-            dialog.setPositiveButton(getResources().getString(R.string.open_location_settings), new DialogInterface.OnClickListener() {
+            dialog.setMessage(getResources().getString(com.sdesimeur.android.gpsfiction.forall.admin.R.string.gps_network_not_enabled));
+            dialog.setPositiveButton(getResources().getString(com.sdesimeur.android.gpsfiction.forall.admin.R.string.open_location_settings), new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface paramDialogInterface, int paramInt) {
                     Intent myIntent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
@@ -100,9 +98,9 @@ public class HomeActivity extends Activity {
     private void launchAppChooser() {
         if (!isMyAppLauncherDefault()) {
             AlertDialog.Builder dialogBox = new AlertDialog.Builder(this);
-            dialogBox.setTitle(R.string.homechoosertittle);
-            dialogBox.setMessage(R.string.homechoosermessage);
-            dialogBox.setPositiveButton(R.string.dialogButtonValidate, new DialogInterface.OnClickListener() {
+            dialogBox.setTitle(com.sdesimeur.android.gpsfiction.forall.admin.R.string.homechoosertittle);
+            dialogBox.setMessage(com.sdesimeur.android.gpsfiction.forall.admin.R.string.homechoosermessage);
+            dialogBox.setPositiveButton(com.sdesimeur.android.gpsfiction.forall.admin.R.string.dialogButtonValidate, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
                     Intent intent = new Intent(Intent.ACTION_MAIN);
@@ -171,24 +169,19 @@ public class HomeActivity extends Activity {
         editor.putString(HomeActivity.HOMEDEFAULTACTIVITY,activityName);
         editor.putString(HomeActivity.HOMEDEFAULTPACKAGE,packageName);
         editor.commit();
-        if (activityName.contains(HomeActivity.class.getName())) {
-            if (preventStatusBarExpansionView == null) {
-                preventStatusBarExpansion(this);
-            }
-        } else {
+        if (! activityName.contains(HomeActivity.class.getName())) {
             /* WindowManager.LayoutParams removeStatusBarExpansionLayoutParams = new WindowManager.LayoutParams();
             removeStatusBarExpansionLayoutParams.copyFrom(preventStatusBarExpansionLayoutParams);
             removeStatusBarExpansionLayoutParams.height = 0;
             manager.updateViewLayout(preventStatusBarExpansionView,removeStatusBarExpansionLayoutParams); */
-            if (preventStatusBarExpansionView != null) {
-                manager.removeView(preventStatusBarExpansionView);
-                preventStatusBarExpansionView = null;
-            }
             Intent homeIntent = new Intent(Intent.ACTION_MAIN);
             homeIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);
             homeIntent.setComponent(new ComponentName(packageName,activityName));
             startActivity(homeIntent);
             this.finish();
+        } else if (preventStatusBarExpansionView != null) {
+            manager.removeView(preventStatusBarExpansionView);
+            preventStatusBarExpansionView = null;
         }
         super.onResume();
     }
@@ -199,13 +192,13 @@ public class HomeActivity extends Activity {
         Boolean temp = settings.getBoolean(PLAYERAPPALLREADYSTARTED, false);
         if ( temp ) {
             AlertDialog.Builder dialogBox = new AlertDialog.Builder(this);
-            dialogBox.setTitle(R.string.askpasstitlereturn);
-            dialogBox.setMessage(R.string.askpassmessagereturn);
+            dialogBox.setTitle(com.sdesimeur.android.gpsfiction.forall.admin.R.string.askpasstitlereturn);
+            dialogBox.setMessage(com.sdesimeur.android.gpsfiction.forall.admin.R.string.askpassmessagereturn);
             final EditText input = new EditText(this);
             input.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD);
             //input.setTransformationMethod(PasswordTransformationMethod.getInstance());
             dialogBox.setView(input);
-            dialogBox.setPositiveButton(R.string.dialogButtonValidate, new DialogInterface.OnClickListener() {
+            dialogBox.setPositiveButton(com.sdesimeur.android.gpsfiction.forall.admin.R.string.dialogButtonValidate, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
                     SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(HomeActivity.this);
@@ -216,18 +209,19 @@ public class HomeActivity extends Activity {
                         ed.putBoolean(HomeActivity.PLAYERAPPALLREADYSTARTED, false);
                         ed.commit();
                     } else {
-                        Toast.makeText(HomeActivity.this, R.string.passwd_different, Toast.LENGTH_LONG).show();
+                        Toast.makeText(HomeActivity.this, com.sdesimeur.android.gpsfiction.forall.admin.R.string.passwd_different, Toast.LENGTH_LONG).show();
                         startGamesActivity(true);
                     }
                 }
             });
-            dialogBox.setNegativeButton(R.string.dialogButtonCancel, new DialogInterface.OnClickListener() {
+            dialogBox.setNegativeButton(com.sdesimeur.android.gpsfiction.forall.admin.R.string.dialogButtonCancel, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
                     startGamesActivity(true);
                 }
             });
             dialogBox.show();
+            input.requestFocus();
         }
         super.onStart();
     }
@@ -246,15 +240,15 @@ public class HomeActivity extends Activity {
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD);
         super.onCreate(savedInstanceState);
         // mContentView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN|View.SYSTEM_UI_FLAG_LOW_PROFILE|View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
-        setContentView(R.layout.homeactivity);
+        setContentView(com.sdesimeur.android.gpsfiction.forall.admin.R.layout.homeactivity);
         //preventStatusBarExpansion(this);
-        languageLocaleSpinner = (Spinner) findViewById(R.id.LanguageListSpinner);
+        languageLocaleSpinner = (Spinner) findViewById(com.sdesimeur.android.gpsfiction.forall.admin.R.id.LanguageListSpinner);
         languageLocaleSpinner.setFocusable(true);
         languageLocaleSpinner.setFocusableInTouchMode(true);
         languageLocaleSpinner.requestFocus();
-        sw = (Switch) findViewById(R.id.ResetGames);
+        sw = (Switch) findViewById(com.sdesimeur.android.gpsfiction.forall.admin.R.id.ResetGames);
         Set<String> codeCountryArray = new HashSet<>();
-        Collections.addAll(codeCountryArray, getResources().getStringArray(R.array.countryCodeArray));
+        Collections.addAll(codeCountryArray, getResources().getStringArray(com.sdesimeur.android.gpsfiction.forall.admin.R.array.countryCodeArray));
         /*
         for ( String s : getResources().getStringArray(R.array.countryCodeArray)) {
             codeCountryArray.add(s);
@@ -275,7 +269,7 @@ public class HomeActivity extends Activity {
             }
         }
         Collections.sort(langs, String.CASE_INSENSITIVE_ORDER);
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.spinnerlanguageselect, langs);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, com.sdesimeur.android.gpsfiction.forall.admin.R.layout.spinnerlanguageselect, langs);
         languageLocaleSpinner.setAdapter(adapter);
         languageLocaleSpinner.setSelection(i);
     }
@@ -291,22 +285,22 @@ public class HomeActivity extends Activity {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
         final SharedPreferences.Editor ed = settings.edit();
         AlertDialog.Builder dialogBox = new AlertDialog.Builder(this);
-        dialogBox.setTitle(R.string.askchangepasstitle);
-        dialogBox.setMessage(R.string.askchangepassmessage);
+        dialogBox.setTitle(com.sdesimeur.android.gpsfiction.forall.admin.R.string.askchangepasstitle);
+        dialogBox.setMessage(com.sdesimeur.android.gpsfiction.forall.admin.R.string.askchangepassmessage);
         final EditText input = new EditText(this);
         input.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD);
         //input.setTransformationMethod(PasswordTransformationMethod.getInstance());
         dialogBox.setView(input);
-        dialogBox.setPositiveButton(R.string.dialogButtonValidate, new DialogInterface.OnClickListener() {
+        dialogBox.setPositiveButton(com.sdesimeur.android.gpsfiction.forall.admin.R.string.dialogButtonValidate, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 String shaHex = new String(Hex.encodeHex(DigestUtils.sha(input.getText().toString())));
                 ed.putString(PASSWORD, shaHex);
                 ed.commit();
-                Toast.makeText(getApplicationContext(), R.string.passwd_saved, Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), com.sdesimeur.android.gpsfiction.forall.admin.R.string.passwd_saved, Toast.LENGTH_LONG).show();
             }
         });
-        dialogBox.setNegativeButton(R.string.dialogButtonCancel, null);
+        dialogBox.setNegativeButton(com.sdesimeur.android.gpsfiction.forall.admin.R.string.dialogButtonCancel, null);
         dialogBox.show();
     }
 
@@ -319,12 +313,12 @@ public class HomeActivity extends Activity {
         ed.putBoolean(GpsFictionIntent.RESETGAMES, sw.isChecked());
         ed.commit();
         AlertDialog.Builder dialogBox = new AlertDialog.Builder(this);
-        dialogBox.setTitle(R.string.askpasstitle);
-        dialogBox.setMessage(R.string.askpassmessage);
+        dialogBox.setTitle(com.sdesimeur.android.gpsfiction.forall.admin.R.string.askpasstitle);
+        dialogBox.setMessage(com.sdesimeur.android.gpsfiction.forall.admin.R.string.askpassmessage);
         final EditText input = new EditText(this);
         input.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD);
         dialogBox.setView(input);
-        dialogBox.setPositiveButton(R.string.dialogButtonValidate, new DialogInterface.OnClickListener() {
+        dialogBox.setPositiveButton(com.sdesimeur.android.gpsfiction.forall.admin.R.string.dialogButtonValidate, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 String passsave = settings.getString(PASSWORD, "&é(-è_çà)=");
@@ -334,15 +328,19 @@ public class HomeActivity extends Activity {
                     ed.commit();
                     startGamesActivity(false);
                 } else {
-                    Toast.makeText(HomeActivity.this, R.string.passwd_different, Toast.LENGTH_LONG).show();
+                    Toast.makeText(HomeActivity.this, com.sdesimeur.android.gpsfiction.forall.admin.R.string.passwd_different, Toast.LENGTH_LONG).show();
                 }
             }
         });
-        dialogBox.setNegativeButton(R.string.dialogButtonCancel, null);
+        dialogBox.setNegativeButton(com.sdesimeur.android.gpsfiction.forall.admin.R.string.dialogButtonCancel, null);
         dialogBox.show();
+        input.requestFocus();
     }
 
     public void startGamesActivity(Boolean noReset) {
+        if (preventStatusBarExpansionView == null) {
+            preventStatusBarExpansion(this);
+        }
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
         Bundle extras = new Bundle();
         extras.putBoolean(GpsFictionIntent.RESETGAMES, (noReset)?false:settings.getBoolean(GpsFictionIntent.RESETGAMES, false));
@@ -358,7 +356,7 @@ public class HomeActivity extends Activity {
         if (requestCode == 0x01) {
             if (resultCode != TextToSpeech.Engine.CHECK_VOICE_DATA_PASS) {
                 ///// TODO send result to CalcRouteAndSpeakService which "startTts"
-                Toast.makeText(this, R.string.nottsengine, Toast.LENGTH_LONG);
+                Toast.makeText(this, com.sdesimeur.android.gpsfiction.forall.admin.R.string.nottsengine, Toast.LENGTH_LONG);
             }
         }
     }
@@ -370,17 +368,8 @@ public class HomeActivity extends Activity {
     @Override
     public void onBackPressed() {
     }
-    @Override
-    public void onWindowFocusChanged(boolean hasFocus) {
-        super.onWindowFocusChanged(hasFocus);
-        if(!hasFocus) {
-            // Close every kind of system dialog
-            Intent closeDialog = new Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS);
-            sendBroadcast(closeDialog);
-        }
-    }
 
-    private final List blockedKeys = new ArrayList(Arrays.asList(KeyEvent.KEYCODE_VOLUME_DOWN, KeyEvent.KEYCODE_VOLUME_UP));
+    /*private final List blockedKeys = new ArrayList(Arrays.asList(KeyEvent.KEYCODE_VOLUME_DOWN, KeyEvent.KEYCODE_VOLUME_UP));
     @Override
     public boolean dispatchKeyEvent(KeyEvent event) {
         if (blockedKeys.contains(event.getKeyCode())) {
@@ -388,7 +377,7 @@ public class HomeActivity extends Activity {
         } else {
             return super.dispatchKeyEvent(event);
         }
-    }
+    }*/
     public static void preventStatusBarExpansion(Context context) {
         WindowManager manager = ((WindowManager) context.getApplicationContext().getSystemService(Context.WINDOW_SERVICE));
         WindowManager.LayoutParams preventStatusBarExpansionLayoutParams;

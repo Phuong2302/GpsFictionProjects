@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.sdesimeur.android.gpsfiction.forall.admin"
+    package="com.sdesimeur.android.gpsfiction.forall"
     xmlns:tools="http://schemas.android.com/tools"
     android:installLocation="internalOnly"
     >
@@ -58,6 +58,25 @@
             </intent-filter>
         </receiver>
         <service android:name=".KioskService" android:exported="false"/>
+        <activity
+            android:name="com.sdesimeur.android.gpsfiction.forall.GamesActivity"
+            android:alwaysRetainTaskState="true"
+            android:configChanges="locale"
+            android:exported="true"
+            android:clearTaskOnLaunch="true"
+            android:finishOnTaskLaunch="true"
+            >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <!--
+                <category android:name="android.intent.category.HOME" />
+                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.MONKEY" />
+                -->
+            </intent-filter>
+        </activity>
 
     </application>
 

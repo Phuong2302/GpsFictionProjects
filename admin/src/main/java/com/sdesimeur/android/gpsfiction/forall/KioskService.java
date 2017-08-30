@@ -1,4 +1,4 @@
-package com.sdesimeur.android.gpsfiction.forall.admin;
+package com.sdesimeur.android.gpsfiction.forall;
 
 import android.app.ActivityManager;
 import android.app.Service;

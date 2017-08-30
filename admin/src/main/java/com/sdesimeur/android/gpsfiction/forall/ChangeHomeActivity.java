@@ -1,4 +1,4 @@
-package com.sdesimeur.android.gpsfiction.forall.admin;
+package com.sdesimeur.android.gpsfiction.forall;
 
 import android.app.Activity;
 import android.content.ComponentName;
@@ -22,9 +22,9 @@ public class ChangeHomeActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.changehomeactivity);
+        setContentView(com.sdesimeur.android.gpsfiction.forall.admin.R.layout.changehomeactivity);
         ArrayList<String> homeActivities = new ArrayList<>();
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.spinnerhomeactivityselect, homeActivities);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, com.sdesimeur.android.gpsfiction.forall.admin.R.layout.spinnerhomeactivityselect, homeActivities);
         Intent intent = new Intent(Intent.ACTION_MAIN);
         intent.addCategory(Intent.CATEGORY_HOME);
         PackageManager pm = getPackageManager();
@@ -38,13 +38,13 @@ public class ChangeHomeActivity extends Activity {
             string2activityinfo.put(st, act);
             //}
         }
-        Spinner sp = findViewById(R.id.HomeActivityListSpinner);
+        Spinner sp = findViewById(com.sdesimeur.android.gpsfiction.forall.admin.R.id.HomeActivityListSpinner);
         sp.setAdapter(adapter);
 
     }
 
     public void changeHomeActivity(View view) {
-        Spinner spinner = findViewById(R.id.HomeActivityListSpinner);
+        Spinner spinner = findViewById(com.sdesimeur.android.gpsfiction.forall.admin.R.id.HomeActivityListSpinner);
         ActivityInfo resolveInfo = string2activityinfo.get(spinner.getSelectedItem());
         String homePackageName = resolveInfo.applicationInfo.packageName;
         String homeActivityName = resolveInfo.name;

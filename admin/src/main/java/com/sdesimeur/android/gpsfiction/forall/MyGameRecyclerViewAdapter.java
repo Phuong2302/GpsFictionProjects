@@ -1,4 +1,4 @@
-package com.sdesimeur.android.gpsfiction.forall.player;
+package com.sdesimeur.android.gpsfiction.forall;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -27,7 +27,7 @@ public class MyGameRecyclerViewAdapter extends RecyclerView.Adapter<MyGameRecycl
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.fragment_game, parent, false);
+                .inflate(com.sdesimeur.android.gpsfiction.forall.admin.R.layout.fragment_game, parent, false);
         return new ViewHolder(view);
     }
 
@@ -63,8 +63,8 @@ public class MyGameRecyclerViewAdapter extends RecyclerView.Adapter<MyGameRecycl
         public ViewHolder(View view) {
             super(view);
             mView = view;
-            mGameNameView = (Button) view.findViewById(R.id.gameNameView);
-            mGameDescriptionView = (TextView) view.findViewById(R.id.gameDescriptionView);
+            mGameNameView = (Button) view.findViewById(com.sdesimeur.android.gpsfiction.forall.admin.R.id.gameNameView);
+            mGameDescriptionView = (TextView) view.findViewById(com.sdesimeur.android.gpsfiction.forall.admin.R.id.gameDescriptionView);
         }
 
         @Override

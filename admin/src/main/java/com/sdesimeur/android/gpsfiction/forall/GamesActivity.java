@@ -1,4 +1,4 @@
-package com.sdesimeur.android.gpsfiction.forall.player;
+package com.sdesimeur.android.gpsfiction.forall;
 
 import android.app.Activity;
 import android.content.ComponentName;
@@ -110,5 +110,24 @@ public class GamesActivity extends Activity implements GameFragment.OnListFragme
         //    startService(myIntent2);
         //}
         super.onDestroy();
+    }
+    @Override
+    public void onBackPressed() {
+        String packageName = getPackageName();
+        String activityName = HomeActivity.class.getName();
+        Intent homeIntent = new Intent(Intent.ACTION_MAIN);
+        homeIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);
+        homeIntent.setComponent(new ComponentName(packageName,activityName));
+        startActivity(homeIntent);
+        finish();
+    }
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        if(!hasFocus) {
+            // Close every kind of system dialog
+            Intent closeDialog = new Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS);
+            sendBroadcast(closeDialog);
+        }
     }
 }

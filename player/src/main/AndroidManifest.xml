@@ -15,7 +15,7 @@
         android:name="android.support.multidex.MultiDexApplication"
         -->
         <activity
-            android:name=".GamesActivity"
+            android:name="com.sdesimeur.android.gpsfiction.forall.GamesActivity"
             android:alwaysRetainTaskState="true"
             android:configChanges="locale"
             android:exported="true"
