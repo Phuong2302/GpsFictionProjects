@@ -3,6 +3,10 @@
     <item name="zeroIds" format="boolean" type="bool">true</item>
     <item name="gpsFictionControlerId" type="id" />
     <item name="attachedZoneId" type="id" />
+    <item name="ifAutoSelectedMapLock" type="id" />
+    <item name="ifAutoSelectedMapNoLock" type="id" />
+    <item name="ifAutoSelectedMapNoManualLock" type="id" />
+    <item name="ifAutoSelectedMapLockMode" type="id">@id/ifAutoSelectedMapNoLock</item>
     <integer-array name="vehicules_array">
         <item>@mipmap/compass</item>
         <item>@mipmap/pieton</item>
