@@ -8,7 +8,6 @@
       <module fileurl="file://$PROJECT_DIR$/enigmeALaon/enigmeALaon.iml" filepath="$PROJECT_DIR$/enigmeALaon/enigmeALaon.iml" />
       <module fileurl="file://$PROJECT_DIR$/gpsFiction/gpsFiction.iml" filepath="$PROJECT_DIR$/gpsFiction/gpsFiction.iml" />
       <module fileurl="file://$PROJECT_DIR$/missionDestruction/missionDestruction.iml" filepath="$PROJECT_DIR$/missionDestruction/missionDestruction.iml" />
-      <module fileurl="file://$PROJECT_DIR$/player/player.iml" filepath="$PROJECT_DIR$/player/player.iml" />
     </modules>
   </component>
 </project>
