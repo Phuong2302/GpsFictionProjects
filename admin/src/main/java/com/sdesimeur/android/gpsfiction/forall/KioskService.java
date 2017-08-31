@@ -20,7 +20,6 @@ import java.util.concurrent.TimeUnit;
 public class KioskService extends Service {
     private static final long INTERVAL = TimeUnit.SECONDS.toMillis(2); // periodic interval to check in seconds -> 2 seconds
     private static final String TAG = KioskService.class.getSimpleName();
-    private static final String PREF_KIOSK_MODE = "pref_kiosk_mode";
 
     private Thread t = null;
     private Context ctx = null;
@@ -86,7 +85,7 @@ public class KioskService extends Service {
 
     public boolean isKioskModeActive(final Context context) {
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
-        return sp.getString(HomeActivity.HOMEDEFAULTPACKAGE, null).equals(getPackageName());
+        return (sp.getBoolean(HomeActivity.PLAYERAPPALLREADYSTARTED, false) && sp.getString(HomeActivity.HOMEDEFAULTPACKAGE, null).equals(getPackageName()));
     }
 
     @Override

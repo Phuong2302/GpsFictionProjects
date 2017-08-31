@@ -35,7 +35,6 @@ public class GameFragment extends Fragment {
     // TODO: Customize parameters
     private int mColumnCount = 1;
     private OnListFragmentInteractionListener mListener;
-    private boolean isStopped=true;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -66,7 +65,7 @@ public class GameFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(com.sdesimeur.android.gpsfiction.forall.admin.R.layout.fragment_game_list, container, false);
+        View view = inflater.inflate(R.layout.fragment_game_list, container, false);
 
         // Set the adapter
         if (view instanceof RecyclerView) {

@@ -12,7 +12,7 @@ import android.os.PowerManager;
 
 public class AppContext extends Application {
 
-    private AppContext instance;
+    //private AppContext instance;
     private PowerManager.WakeLock wakeLock;
     private OnScreenOffReceiver onScreenOffReceiver;
 
@@ -20,7 +20,7 @@ public class AppContext extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        instance = this;
+        //instance = this;
         registerKioskModeScreenOffReceiver();
         startKioskService();
     }

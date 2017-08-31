@@ -22,6 +22,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -52,7 +53,6 @@ public class HomeActivity extends Activity {
     public static final String HOMEDEFAULTPACKAGE = "loadHomeDefaultPackageName";
     public static final String PASSWORD = "com.sdesimeur.android.gpsfiction.forall.admin.password";
     public static final String PLAYERAPPALLREADYSTARTED = "playerAppAllreadyStarted";
-    private static final String PACKAGE4GPSFICTIONPLAYERACTIVITY = "com.sdesimeur.android.gpsfiction.forall.player";
     private static CustomViewGroup preventStatusBarExpansionView = null;
     private HashMap<String, Locale> string2locale = new HashMap<>();
     private Spinner languageLocaleSpinner;
@@ -81,8 +81,8 @@ public class HomeActivity extends Activity {
         if (!isLocationEnabled(this)) {
             // notify user
             AlertDialog.Builder dialog = new AlertDialog.Builder(this);
-            dialog.setMessage(getResources().getString(com.sdesimeur.android.gpsfiction.forall.admin.R.string.gps_network_not_enabled));
-            dialog.setPositiveButton(getResources().getString(com.sdesimeur.android.gpsfiction.forall.admin.R.string.open_location_settings), new DialogInterface.OnClickListener() {
+            dialog.setMessage(getResources().getString(R.string.gps_network_not_enabled));
+            dialog.setPositiveButton(getResources().getString(R.string.open_location_settings), new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface paramDialogInterface, int paramInt) {
                     Intent myIntent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
@@ -98,9 +98,9 @@ public class HomeActivity extends Activity {
     private void launchAppChooser() {
         if (!isMyAppLauncherDefault()) {
             AlertDialog.Builder dialogBox = new AlertDialog.Builder(this);
-            dialogBox.setTitle(com.sdesimeur.android.gpsfiction.forall.admin.R.string.homechoosertittle);
-            dialogBox.setMessage(com.sdesimeur.android.gpsfiction.forall.admin.R.string.homechoosermessage);
-            dialogBox.setPositiveButton(com.sdesimeur.android.gpsfiction.forall.admin.R.string.dialogButtonValidate, new DialogInterface.OnClickListener() {
+            dialogBox.setTitle(R.string.homechoosertittle);
+            dialogBox.setMessage(R.string.homechoosermessage);
+            dialogBox.setPositiveButton(R.string.dialogButtonValidate, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
                     Intent intent = new Intent(Intent.ACTION_MAIN);
@@ -150,10 +150,11 @@ public class HomeActivity extends Activity {
     }
     @Override
     protected void onResume() {
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences.Editor editor = settings.edit();
         WindowManager manager = ((WindowManager) this.getApplicationContext().getSystemService(Context.WINDOW_SERVICE));
         String activityName = null;
         String packageName = null;
-        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
         if (getIntent().hasExtra(HomeActivity.HOMEDEFAULTACTIVITY)) {
             activityName = this.getIntent().getStringExtra(HomeActivity.HOMEDEFAULTACTIVITY);
             packageName = this.getIntent().getStringExtra(HomeActivity.HOMEDEFAULTPACKAGE);
@@ -165,7 +166,6 @@ public class HomeActivity extends Activity {
                 packageName = getPackageName();
             }
         }
-        SharedPreferences.Editor editor = settings.edit();
         editor.putString(HomeActivity.HOMEDEFAULTACTIVITY,activityName);
         editor.putString(HomeActivity.HOMEDEFAULTPACKAGE,packageName);
         editor.commit();
@@ -189,39 +189,46 @@ public class HomeActivity extends Activity {
     @Override
     protected void onStart() {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
-        Boolean temp = settings.getBoolean(PLAYERAPPALLREADYSTARTED, false);
-        if ( temp ) {
+        SharedPreferences.Editor editor = settings.edit();
+        if (settings.getBoolean(PLAYERAPPALLREADYSTARTED, false)) {
             AlertDialog.Builder dialogBox = new AlertDialog.Builder(this);
-            dialogBox.setTitle(com.sdesimeur.android.gpsfiction.forall.admin.R.string.askpasstitlereturn);
-            dialogBox.setMessage(com.sdesimeur.android.gpsfiction.forall.admin.R.string.askpassmessagereturn);
+            dialogBox.setTitle(R.string.askpasstitlereturn);
+            dialogBox.setMessage(R.string.askpassmessagereturn);
             final EditText input = new EditText(this);
             input.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD);
             //input.setTransformationMethod(PasswordTransformationMethod.getInstance());
             dialogBox.setView(input);
-            dialogBox.setPositiveButton(com.sdesimeur.android.gpsfiction.forall.admin.R.string.dialogButtonValidate, new DialogInterface.OnClickListener() {
+            dialogBox.setPositiveButton(R.string.dialogButtonValidate, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
-                    SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(HomeActivity.this);
+                    //SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(HomeActivity.this);
                     String passsave = settings.getString(HomeActivity.PASSWORD, new String(Hex.encodeHex(DigestUtils.sha(""))));
                     String passsha = new String(Hex.encodeHex(DigestUtils.sha(input.getText().toString())));
                     if (passsha.equals(passsave)) {
-                        SharedPreferences.Editor ed = settings.edit();
-                        ed.putBoolean(HomeActivity.PLAYERAPPALLREADYSTARTED, false);
-                        ed.commit();
+                        //SharedPreferences.Editor editor = settings.edit();
+                        editor.putBoolean(HomeActivity.PLAYERAPPALLREADYSTARTED, false);
+                        editor.commit();
                     } else {
-                        Toast.makeText(HomeActivity.this, com.sdesimeur.android.gpsfiction.forall.admin.R.string.passwd_different, Toast.LENGTH_LONG).show();
+                        Toast.makeText(HomeActivity.this, R.string.passwd_different, Toast.LENGTH_LONG).show();
                         startGamesActivity(true);
                     }
                 }
             });
-            dialogBox.setNegativeButton(com.sdesimeur.android.gpsfiction.forall.admin.R.string.dialogButtonCancel, new DialogInterface.OnClickListener() {
+            dialogBox.setNegativeButton(R.string.dialogButtonCancel, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
                     startGamesActivity(true);
                 }
             });
+            input.post(new Runnable() {
+                @Override
+                public void run() {
+                    input.requestFocus();
+                    InputMethodManager inputMethodManager =  (InputMethodManager)getSystemService(INPUT_METHOD_SERVICE);
+                    inputMethodManager.showSoftInput(input, 0);
+                }
+            });
             dialogBox.show();
-            input.requestFocus();
         }
         super.onStart();
     }
@@ -240,15 +247,15 @@ public class HomeActivity extends Activity {
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD);
         super.onCreate(savedInstanceState);
         // mContentView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN|View.SYSTEM_UI_FLAG_LOW_PROFILE|View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
-        setContentView(com.sdesimeur.android.gpsfiction.forall.admin.R.layout.homeactivity);
+        setContentView(R.layout.homeactivity);
         //preventStatusBarExpansion(this);
-        languageLocaleSpinner = (Spinner) findViewById(com.sdesimeur.android.gpsfiction.forall.admin.R.id.LanguageListSpinner);
+        languageLocaleSpinner = (Spinner) findViewById(R.id.LanguageListSpinner);
         languageLocaleSpinner.setFocusable(true);
         languageLocaleSpinner.setFocusableInTouchMode(true);
         languageLocaleSpinner.requestFocus();
-        sw = (Switch) findViewById(com.sdesimeur.android.gpsfiction.forall.admin.R.id.ResetGames);
+        sw = (Switch) findViewById(R.id.ResetGames);
         Set<String> codeCountryArray = new HashSet<>();
-        Collections.addAll(codeCountryArray, getResources().getStringArray(com.sdesimeur.android.gpsfiction.forall.admin.R.array.countryCodeArray));
+        Collections.addAll(codeCountryArray, getResources().getStringArray(R.array.countryCodeArray));
         /*
         for ( String s : getResources().getStringArray(R.array.countryCodeArray)) {
             codeCountryArray.add(s);
@@ -269,7 +276,7 @@ public class HomeActivity extends Activity {
             }
         }
         Collections.sort(langs, String.CASE_INSENSITIVE_ORDER);
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, com.sdesimeur.android.gpsfiction.forall.admin.R.layout.spinnerlanguageselect, langs);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.spinnerlanguageselect, langs);
         languageLocaleSpinner.setAdapter(adapter);
         languageLocaleSpinner.setSelection(i);
     }
@@ -283,58 +290,73 @@ public class HomeActivity extends Activity {
 
     public void changeAdminPassword(View v) {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
-        final SharedPreferences.Editor ed = settings.edit();
+        final SharedPreferences.Editor editor = settings.edit();
         AlertDialog.Builder dialogBox = new AlertDialog.Builder(this);
-        dialogBox.setTitle(com.sdesimeur.android.gpsfiction.forall.admin.R.string.askchangepasstitle);
-        dialogBox.setMessage(com.sdesimeur.android.gpsfiction.forall.admin.R.string.askchangepassmessage);
+        dialogBox.setTitle(R.string.askchangepasstitle);
+        dialogBox.setMessage(R.string.askchangepassmessage);
         final EditText input = new EditText(this);
         input.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD);
         //input.setTransformationMethod(PasswordTransformationMethod.getInstance());
         dialogBox.setView(input);
-        dialogBox.setPositiveButton(com.sdesimeur.android.gpsfiction.forall.admin.R.string.dialogButtonValidate, new DialogInterface.OnClickListener() {
+        dialogBox.setPositiveButton(R.string.dialogButtonValidate, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 String shaHex = new String(Hex.encodeHex(DigestUtils.sha(input.getText().toString())));
-                ed.putString(PASSWORD, shaHex);
-                ed.commit();
-                Toast.makeText(getApplicationContext(), com.sdesimeur.android.gpsfiction.forall.admin.R.string.passwd_saved, Toast.LENGTH_LONG).show();
+                editor.putString(PASSWORD, shaHex);
+                editor.commit();
+                Toast.makeText(getApplicationContext(), R.string.passwd_saved, Toast.LENGTH_LONG).show();
             }
         });
-        dialogBox.setNegativeButton(com.sdesimeur.android.gpsfiction.forall.admin.R.string.dialogButtonCancel, null);
+        dialogBox.setNegativeButton(R.string.dialogButtonCancel, null);
+        input.post(new Runnable() {
+            @Override
+            public void run() {
+                input.requestFocus();
+                InputMethodManager inputMethodManager =  (InputMethodManager)getSystemService(INPUT_METHOD_SERVICE);
+                inputMethodManager.showSoftInput(input, 0);
+            }
+        });
         dialogBox.show();
     }
 
     public void startGames(View v) {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
-        final SharedPreferences.Editor ed = settings.edit();
+        final SharedPreferences.Editor editor = settings.edit();
         Locale locale = string2locale.get(languageLocaleSpinner.getSelectedItem());
         String localeString = locale.toString();
-        ed.putString(GpsFictionIntent.LOCALE, localeString);
-        ed.putBoolean(GpsFictionIntent.RESETGAMES, sw.isChecked());
-        ed.commit();
+        editor.putString(GpsFictionIntent.LOCALE, localeString);
+        editor.putBoolean(GpsFictionIntent.RESETGAMES, sw.isChecked());
+        editor.commit();
         AlertDialog.Builder dialogBox = new AlertDialog.Builder(this);
-        dialogBox.setTitle(com.sdesimeur.android.gpsfiction.forall.admin.R.string.askpasstitle);
-        dialogBox.setMessage(com.sdesimeur.android.gpsfiction.forall.admin.R.string.askpassmessage);
+        dialogBox.setTitle(R.string.askpasstitle);
+        dialogBox.setMessage(R.string.askpassmessage);
         final EditText input = new EditText(this);
         input.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD);
         dialogBox.setView(input);
-        dialogBox.setPositiveButton(com.sdesimeur.android.gpsfiction.forall.admin.R.string.dialogButtonValidate, new DialogInterface.OnClickListener() {
+        dialogBox.setPositiveButton(R.string.dialogButtonValidate, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 String passsave = settings.getString(PASSWORD, "&é(-è_çà)=");
                 String passsha = new String(Hex.encodeHex(DigestUtils.sha(input.getText().toString())));
                 if (passsha.equals(passsave)) {
-                    ed.putBoolean(PLAYERAPPALLREADYSTARTED, true);
-                    ed.commit();
+                    editor.putBoolean(PLAYERAPPALLREADYSTARTED, true);
+                    editor.commit();
                     startGamesActivity(false);
                 } else {
-                    Toast.makeText(HomeActivity.this, com.sdesimeur.android.gpsfiction.forall.admin.R.string.passwd_different, Toast.LENGTH_LONG).show();
+                    Toast.makeText(HomeActivity.this, R.string.passwd_different, Toast.LENGTH_LONG).show();
                 }
             }
         });
-        dialogBox.setNegativeButton(com.sdesimeur.android.gpsfiction.forall.admin.R.string.dialogButtonCancel, null);
+        dialogBox.setNegativeButton(R.string.dialogButtonCancel, null);
+        input.post(new Runnable() {
+            @Override
+            public void run() {
+                input.requestFocus();
+                InputMethodManager inputMethodManager =  (InputMethodManager)getSystemService(INPUT_METHOD_SERVICE);
+                inputMethodManager.showSoftInput(input, 0);
+            }
+        });
         dialogBox.show();
-        input.requestFocus();
     }
 
     public void startGamesActivity(Boolean noReset) {
@@ -345,10 +367,10 @@ public class HomeActivity extends Activity {
         Bundle extras = new Bundle();
         extras.putBoolean(GpsFictionIntent.RESETGAMES, (noReset)?false:settings.getBoolean(GpsFictionIntent.RESETGAMES, false));
         extras.putString(GpsFictionIntent.LOCALE, settings.getString(GpsFictionIntent.LOCALE, GpsFictionIntent.DEFAULTPLAYERLOCALE));
-        ComponentName cn = new ComponentName(PACKAGE4GPSFICTIONPLAYERACTIVITY, PACKAGE4GPSFICTIONPLAYERACTIVITY + ".GamesActivity");
-        Intent intent = new Intent();
+        //ComponentName cn = new ComponentName(getPackageName(), GamesActivity.class.getName());
+        Intent intent = new Intent(this,GamesActivity.class);
         intent.putExtras(extras);
-        intent.setComponent(cn);
+        //intent.setComponent(cn);
         startActivity(intent);
     }
 
@@ -356,7 +378,7 @@ public class HomeActivity extends Activity {
         if (requestCode == 0x01) {
             if (resultCode != TextToSpeech.Engine.CHECK_VOICE_DATA_PASS) {
                 ///// TODO send result to CalcRouteAndSpeakService which "startTts"
-                Toast.makeText(this, com.sdesimeur.android.gpsfiction.forall.admin.R.string.nottsengine, Toast.LENGTH_LONG);
+                Toast.makeText(this, R.string.nottsengine, Toast.LENGTH_LONG);
             }
         }
     }
