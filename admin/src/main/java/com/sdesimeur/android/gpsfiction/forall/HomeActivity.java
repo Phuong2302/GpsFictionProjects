@@ -188,8 +188,8 @@ public class HomeActivity extends Activity {
 
     @Override
     protected void onStart() {
-        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
-        SharedPreferences.Editor editor = settings.edit();
+        final SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
+        final SharedPreferences.Editor editor = settings.edit();
         if (settings.getBoolean(PLAYERAPPALLREADYSTARTED, false)) {
             AlertDialog.Builder dialogBox = new AlertDialog.Builder(this);
             dialogBox.setTitle(R.string.askpasstitlereturn);
@@ -320,7 +320,7 @@ public class HomeActivity extends Activity {
     }
 
     public void startGames(View v) {
-        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
+        final SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
         final SharedPreferences.Editor editor = settings.edit();
         Locale locale = string2locale.get(languageLocaleSpinner.getSelectedItem());
         String localeString = locale.toString();

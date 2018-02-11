@@ -6,17 +6,17 @@ repositories {
 
 android {
     compileSdkVersion 26
-    buildToolsVersion "25.0.2"
+//    buildToolsVersion "25.0.2"
     defaultConfig {
         applicationId "com.sdesimeur.android.gpsfiction.forall.admin"
         minSdkVersion 19
         targetSdkVersion 26
         versionCode 1
         versionName "1.0"
-        jackOptions {
+/*        jackOptions {
             enabled true
         //    multiDexEnabled true
-        }
+        }*/
 
 
     }
@@ -28,20 +28,22 @@ android {
     }
     compileOptions {
         targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_1_7
     }
     productFlavors {
     }
+    buildToolsVersion '26.0.2'
 }
 
 dependencies {
     //  compile 'com.android.support:multidex:1.0.1'
-    compile 'com.android.support:multidex:1.0.1'
-    compile project(':GpsFictionIntent')
-    compile 'commons-codec:commons-codec:20041127.091804'
-    compile 'com.android.support:recyclerview-v7:26.0.0-alpha1'
-    compile 'com.android.support:gridlayout-v7:26.0.0-alpha1'
+    implementation 'com.android.support:multidex:1.0.1'
+    implementation project(':GpsFictionIntent')
+    implementation 'commons-codec:commons-codec:20041127.091804'
     //compile project(':gpsFiction')
     //compile 'com.android.support:multidex:1.0.1'
-    compile 'com.android.support:appcompat-v7:26.0.0-alpha1'
-    compile 'com.android.support:design:26.0.0-alpha1'
+    implementation 'com.android.support:design:27.0.2'
+    implementation 'com.android.support:appcompat-v7:27.0.2'
+    implementation 'com.android.support:gridlayout-v7:27.0.2'
+    implementation 'com.android.support:recyclerview-v7:27.0.2'
 }

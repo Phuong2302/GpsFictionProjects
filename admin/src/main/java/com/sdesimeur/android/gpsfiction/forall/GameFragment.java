@@ -76,11 +76,11 @@ public class GameFragment extends Fragment {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            List <GameItem> contentList = new ArrayList<>();
+            final List <GameItem> contentList = new ArrayList<>();
             SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getActivity());
             String localeString = settings.getString(GpsFictionIntent.LOCALE, GpsFictionIntent.DEFAULTPLAYERLOCALE);
             Locale locale = new Locale(localeString);
-            Configuration cfg = new Configuration();
+            final Configuration cfg = new Configuration();
             cfg.setLocale(locale);
             GamesActivity.AllGpsFictionActivityHelper temp = ((GamesActivity)getActivity()).new AllGpsFictionActivityHelper() {
                 @Override

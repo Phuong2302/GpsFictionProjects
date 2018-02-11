@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 26
-    buildToolsVersion '25.0.2'
+//    buildToolsVersion '25.0.2'
 //    dexOptions {
 //        maxProcessCount 4 // this is the default value
 //        javaMaxHeapSize "2g"
@@ -13,10 +13,10 @@ android {
         minSdkVersion 19
         targetSdkVersion 26
         multiDexEnabled true
-        jackOptions {
+/*        jackOptions {
             enabled true
             multiDexEnabled true
-        }
+        }*/
     }
     buildTypes {
         release {
@@ -28,9 +28,11 @@ android {
     }
     compileOptions {
         targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_1_7
     }
+    buildToolsVersion '26.0.2'
 }
 
 dependencies {
-    compile project(':gpsFiction')
+    implementation project(':gpsFiction')
 }
